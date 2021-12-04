@@ -1,6 +1,12 @@
 /* Importaciones */
 %{
-
+  function Nodo(nombre, valor, hijos, linea, columna) {
+    this.nombre = nombre
+    this.valor = valor
+    this.hijos = hijos
+    this.linea = linea
+    this.columna = columna
+  }
 %}
 %lex
 %options case-insensitive
@@ -68,7 +74,7 @@
 /* Area de Simbolo */
 "["                     %{ return '['; %}
 "]"                     %{ return ']'; %}
-","                     %{ return '['; %}
+","                     %{ return ','; %}
 "{"                     %{ return '{'; %}
 "}"                     %{ return '}'; %}
 "=="                    %{ return '=='; %}
@@ -127,20 +133,26 @@
 
 /* Gramatica */
 inicio: globales principal EOF
+{
+    $$ = 'Finalizo'
+    return $$;
+}
+    ;
 
 principal: FUNCTION VOID MAIN '(' ')' '{' instrucciones '}'
     ;
 
 globales: globales global
     | global
+    ;
 
 global: declaracion_funcion
     | declaracion_variable
     | declaracion_struct
     ;
 
-declaracion_funcion: FUNCTION TIPO IDENTIFICADOR '(' parametros ')' '{' instrucciones '}'
-    | FUNCTION TIPO IDENTIFICADOR '(' ')' '{' instrucciones '}'
+declaracion_funcion: FUNCTION tipo IDENTIFICADOR '(' lista_declaracion ')' '{' instrucciones '}'
+    | FUNCTION tipo IDENTIFICADOR '(' ')' '{' instrucciones '}'
     ;
 
 declaracion_variable: tipo IDENTIFICADOR '=' expresion
@@ -154,6 +166,7 @@ declaracion_struct: STRUCT IDENTIFICADOR '{' lista_declaracion '}'
 
 lista_declaracion: lista_declaracion ',' tipo IDENTIFICADOR
     | tipo IDENTIFICADOR
+    ;
 
 lista_id: lista_id ',' IDENTIFICADOR
     | IDENTIFICADOR
@@ -190,7 +203,55 @@ instruccion: llamadaFuncion
     | func_println
     ;
 
-func_if: 
+func_if: IF '(' expresion ')' '{' instrucciones '}' func_else
+    | IF '(' expresion ')' '{' instrucciones '}'
+    ;
+
+func_else: ELSEIF '(' expresion ')' '{' instrucciones '}' func_else
+    | ELSE '(' expresion ')' '{' instrucciones '}'
+    ;
+
+func_switch: SWITCH '(' expresion ')' '{' lista_case '}'
+    ;
+
+lista_case: lista_case t_case
+    | t_case
+    ;
+
+t_case: CASE dato ':' instrucciones
+    | DEFAULT ':' instrucciones
+    ;
+
+func_while: WHILE '(' expresion ')' '{' instrucciones '}'
+    ;
+
+func_do: DO '{' instrucciones '}' WHILE '(' expresion ')'
+    ;
+
+func_print: PRINT '(' lista_expresiones ')'
+    ;
+
+func_println: PRINTLN '(' lista_expresiones ')'
+    ;
+
+func_for: FOR '(' for_inicio ';' expresion ';' IDENTIFICADOR '++' ')' '{' instrucciones '}'
+    | FOR '(' for_inicio ';' expresion ';' IDENTIFICADOR '--' ')' '{' instrucciones '}'
+    | FOR IDENTIFICADOR IN expresion '{' instrucciones '}'
+    ;
+
+for_inicio: tipo IDENTIFICADOR '=' expresion
+    | IDENTIFICADOR '=' expresion
+    ;
+
+asignacion: IDENTIFICADOR '=' expresion
+    | IDENTIFICADOR accesoStructArreglo '=' expresion
+    ;
+
+accesoStructArreglo: accesoStructArreglo '.' IDENTIFICADOR
+    | accesoStructArreglo '[' expresion ']'
+    | '.' IDENTIFICADOR
+    | '[' expresion ']'
+    ;
 
 llamadaFuncion: IDENTIFICADOR '(' lista_expresiones ')'
     | IDENTIFICADOR '(' ')'
@@ -202,7 +263,6 @@ lista_expresiones: lista_expresiones ',' expresion
 
 expresion: llamadaFuncion
     | '(' expresion ')'
-    | IDENTIFICADOR
     | expresion '?' expresion ':' expresion
     | '[' lista_expresiones ']'
     | TYPEOF '(' expresion ')'
@@ -214,7 +274,7 @@ expresion: llamadaFuncion
     | expresion '#' operadorBinario expresion
     | funcionCadena
     | funcionParseo
-    | primitivo
+    | dato
     | funcionActualizacion
     | operacionesUnarias
     | BEGIN
@@ -248,11 +308,13 @@ funcionCadena: IDENTIFICADOR '.' CARACTEROFPOSITION '(' expresion ')'
     | IDENTIFICADOR '.' TOLOWERCASE '(' ')'
     ;
 
-primitivo: ENTERO
+dato: ENTERO
     | CADENA
     | BOLEANO
     | CARACTER
     | DECIMAL
+    | IDENTIFICADOR
+    | IDENTIFICADOR accesoStructArreglo
     ;
 
 funcionTrigonometrica: SIN
