@@ -1,20 +1,89 @@
-<!DOCTYPE html>
-<html>
+</html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3860/3860232.png">
+
+    <title>Web Editor</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="index.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/codemirror.min.js" integrity="sha512-XMlgZzPyVXf1I/wbGnofk1Hfdx+zAWyZjh6c21yGo/k1zNC4Ve6xcQnTDTCHrjFGsOrVicJsBURLYktVEu/8vQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/codemirror.min.css" integrity="sha512-6sALqOPMrNSc+1p5xOhPwGIzs6kIlST+9oGWlI4Wwcbj1saaX9J3uzO3Vub016dmHV7hM+bMi/rfXLiF5DNIZg==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/mode/javascript/javascript.min.js" integrity="sha512-DJ/Flq7rxJDDhgkO49H/rmidX44jmxWot/ku3c+XXEF9XFal78KIpu7w6jEaQhK4jli1U3/yOH+Rp3cIIEYFPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/theme/base16-dark.min.css" integrity="sha512-CNZkbIVu/G4dB3YpFIZgMtE45vHp/QocgMbf6jg+DFFPLN3emncIob8ubKANmsGQ8JsnzzSVTj7WrFrnx6EgXQ==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
 </head>
 
 <body>
-    <textarea id="texto" rows="25" cols="100"></textarea>
-    <input type="text" id="resultado">
-    <button onclick="operar()">Operar</button>
+
+    <div class="d-flex h-100 p-3 flex-column">
+        <header class="masthead mb-auto">
+            <div class="inner">
+                <h3 class="masthead-brand mx-2">OLC2</h3>
+                <nav class="nav nav-masthead justify-content-center">
+                    <a class="nav-link" href="javascript:void(0)" onclick="operar()">Compilar</a>
+                    <a class="nav-link" href="javascript:void(0)">Traducir</a>
+                    <a class="nav-link" href="javascript:void(0)">Reportes</a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 for="input" class="text-muted">Entrada</h3>
+                    <textarea id="input"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <h3 for="output" class="text-muted">Salida</h3>
+                    <textarea id="output"></textarea>
+                </div>
+            </div>
+            <script>
+                var input = document.getElementById("input");
+                var editor = CodeMirror.fromTextArea(input, {
+                    lineNumbers: true,
+                    mode: "javascript",
+                    theme: "base16-dark"
+                });
+                editor.setSize(600, 800)
+
+                var output = document.getElementById("output");
+                var editor = CodeMirror.fromTextArea(output, {
+                    mode: "javascript",
+                    theme: "base16-dark",
+                    readOnly: true
+                });
+                editor.setSize(600, 800)
+            </script>
+        </div>
+
+        <footer class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p><a href="https://xvimnt.github.io/">Javier Monterroso</a>, <a href="">Jared Ozuna</a>, 2021 &copy;</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="Grammar.js"></script>
 </body>
-<script src="Grammar.js"></script>
 <script>
     function operar() {
-        var text = document.getElementById("texto").value
-        console.log(Grammar.parse(text))
+        var text = document.getElementById("input").value
+        document.getElementById("output").value = Grammar.parse(text)
     }
 </script>
 
