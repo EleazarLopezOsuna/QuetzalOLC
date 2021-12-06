@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.environment = void 0;
-class environment {
+export class environment {
     constructor(previous) {
         this.previous = previous;
         this.previous = previous;
@@ -9,4 +6,3 @@ class environment {
         this.function_map = new Map();
     }
 }
-exports.environment = environment;

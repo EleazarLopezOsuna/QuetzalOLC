@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.relational = exports.relational_type = void 0;
-const expression_1 = require("../abstract/expression");
-const type_1 = require("../system/type");
-var relational_type;
+import { expression } from "../abstract/expression.js";
+import { type } from "../system/type.js";
+export var relational_type;
 (function (relational_type) {
     relational_type[relational_type["EQUAL"] = 0] = "EQUAL";
     relational_type[relational_type["NOTEQUAL"] = 1] = "NOTEQUAL";
@@ -11,8 +8,8 @@ var relational_type;
     relational_type[relational_type["LESSOREQUAL"] = 3] = "LESSOREQUAL";
     relational_type[relational_type["GREATER"] = 4] = "GREATER";
     relational_type[relational_type["GREATEROREQUAL"] = 5] = "GREATEROREQUAL";
-})(relational_type = exports.relational_type || (exports.relational_type = {}));
-class relational extends expression_1.expression {
+})(relational_type || (relational_type = {}));
+export class relational extends expression {
     constructor(left, right, type, line, column) {
         super(line, column);
         this.left = left;
@@ -27,20 +24,19 @@ class relational extends expression_1.expression {
         const right_data = this.right.execute(environment);
         switch (this.type) {
             case relational_type.EQUAL:
-                return { value: (left_data.value == right_data.value), type: type_1.type.BOOLEAN };
+                return { value: (left_data.value == right_data.value), type: type.BOOLEAN };
             case relational_type.NOTEQUAL:
-                return { value: (left_data.value != right_data.value), type: type_1.type.BOOLEAN };
+                return { value: (left_data.value != right_data.value), type: type.BOOLEAN };
             case relational_type.GREATER:
-                return { value: (left_data.value > right_data.value), type: type_1.type.BOOLEAN };
+                return { value: (left_data.value > right_data.value), type: type.BOOLEAN };
             case relational_type.GREATEROREQUAL:
-                return { value: (left_data.value >= right_data.value), type: type_1.type.BOOLEAN };
+                return { value: (left_data.value >= right_data.value), type: type.BOOLEAN };
             case relational_type.LESS:
-                return { value: (left_data.value < right_data.value), type: type_1.type.BOOLEAN };
+                return { value: (left_data.value < right_data.value), type: type.BOOLEAN };
             case relational_type.LESSOREQUAL:
-                return { value: (left_data.value <= right_data.value), type: type_1.type.BOOLEAN };
+                return { value: (left_data.value <= right_data.value), type: type.BOOLEAN };
             default:
-                return { value: 0, type: type_1.type.INTEGER };
+                return { value: 0, type: type.INTEGER };
         }
     }
 }
-exports.relational = relational;

@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.literal = void 0;
-const node_1 = require("./node");
-class literal extends node_1.node {
+import { node } from "./node.js";
+export class literal extends node {
     get_string_value(str) {
         let result = str;
         if (str.endsWith('"'))
@@ -15,4 +12,3 @@ class literal extends node_1.node {
         return result;
     }
 }
-exports.literal = literal;

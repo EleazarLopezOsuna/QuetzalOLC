@@ -1,5 +1,5 @@
-import { type, type_tbl } from "../system/type";
-import { node } from "./node";
+import { type, type_tbl } from "../system/type.js";
+import { node } from "./node.js";
 
 export abstract class expression extends node {
 

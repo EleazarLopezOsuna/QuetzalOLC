@@ -1,7 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.instruction = void 0;
-const node_1 = require("./node");
-class instruction extends node_1.node {
+import { node } from "./node.js";
+export class instruction extends node {
 }
-exports.instruction = instruction;

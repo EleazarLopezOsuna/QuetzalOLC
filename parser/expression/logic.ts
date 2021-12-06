@@ -1,6 +1,6 @@
-import { expression } from "../abstract/expression";
-import { environment } from "../system/environment";
-import { data, type } from "../system/type";
+import { expression } from "../abstract/expression.js";
+import { environment } from "../system/environment.js";
+import { data, type } from "../system/type.js";
 
 export enum logic_type {
     AND,

@@ -1,7 +1,7 @@
-import { expression } from "../abstract/expression";
-import { environment } from "../system/environment";
-import { error, error_arr, error_type } from "../system/error";
-import { data, type } from "../system/type";
+import { expression } from "../abstract/expression.js";
+import { environment } from "../system/environment.js";
+import { error, error_arr, error_type } from "../system/error.js";
+import { data, type } from "../system/type.js";
 
 export enum arithmetic_type {
     PLUS,

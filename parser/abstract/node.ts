@@ -1,5 +1,5 @@
-import { environment } from "../system/environment";
-import { data } from "../system/type";
+import { environment } from "../system/environment.js";
+import { data } from "../system/type.js";
 
 export abstract class node {
 
