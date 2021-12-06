@@ -52,23 +52,7 @@
                     <textarea id="output"></textarea>
                 </div>
             </div>
-            <script>
-                var input = document.getElementById("input");
-                var editor = CodeMirror.fromTextArea(input, {
-                    lineNumbers: true,
-                    mode: "javascript",
-                    theme: "base16-dark"
-                });
-                editor.setSize(600, 800)
 
-                var output = document.getElementById("output");
-                var editor = CodeMirror.fromTextArea(output, {
-                    mode: "javascript",
-                    theme: "base16-dark",
-                    readOnly: true
-                });
-                editor.setSize(600, 800)
-            </script>
         </div>
 
         <footer class="mastfoot mt-auto text-center">
@@ -78,13 +62,29 @@
         </footer>
     </div>
 
-    <script src="Grammar.js"></script>
+    <script type="module" src="./parser/js/grammar/main.js"></script>
+    <script>
+        var input = document.getElementById("input");
+        var editor_1 = CodeMirror.fromTextArea(input, {
+            lineNumbers: true,
+            mode: "javascript",
+            theme: "base16-dark"
+        });
+        editor_1.setSize(600, 800)
+
+        var output = document.getElementById("output");
+        var editor_2 = CodeMirror.fromTextArea(output, {
+            mode: "javascript",
+            theme: "base16-dark",
+            readOnly: true
+        });
+        editor_2.setSize(600, 800)
+
+        function operar() {
+            console.log(editor_1.getValue())
+            main.parse(editor_1.getValue())
+        }
+    </script>
 </body>
-<script>
-    function operar() {
-        var text = document.getElementById("input").value
-        document.getElementById("output").value = Grammar.parse(text)
-    }
-</script>
 
 </html>
