@@ -1770,6 +1770,7 @@ window.exec = function (input) {
     const ast = parser.parse(input);
     const main_environment = new environment_1.environment(null);
     console.log("ast", ast);
+    console_1._console.output = "";
     for (const instr of ast) {
         try {
             console_1._console.output += instr.execute(main_environment).value;
