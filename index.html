@@ -24,6 +24,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/mode/javascript/javascript.min.js" integrity="sha512-DJ/Flq7rxJDDhgkO49H/rmidX44jmxWot/ku3c+XXEF9XFal78KIpu7w6jEaQhK4jli1U3/yOH+Rp3cIIEYFPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.3/theme/base16-dark.min.css" integrity="sha512-CNZkbIVu/G4dB3YpFIZgMtE45vHp/QocgMbf6jg+DFFPLN3emncIob8ubKANmsGQ8JsnzzSVTj7WrFrnx6EgXQ==" crossorigin="anonymous" referrerpolicy="no-referrer"
     />
+    <!-- Sweetalert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -83,7 +86,16 @@
 
         function operar() {
             let result = exec(editor_1.getValue())
-            editor_2.setValue(result)
+            console.log(result)
+            if (result == "$error$") {
+                Swal.fire(
+                    'Oh oh!',
+                    'Se han encontrado errores al ejecutar!',
+                    'error'
+                )
+            } else {
+                editor_2.setValue(result)
+            }
         }
     </script>
 </body>

@@ -8,6 +8,7 @@ var type;
     type[type["BOOLEAN"] = 2] = "BOOLEAN";
     type[type["FLOAT"] = 3] = "FLOAT";
     type[type["NULL"] = 4] = "NULL";
+    type[type["CHAR"] = 5] = "CHAR";
 })(type = exports.type || (exports.type = {}));
 /*
         INTEGER        STRING       BOOLEAN       FLOAT

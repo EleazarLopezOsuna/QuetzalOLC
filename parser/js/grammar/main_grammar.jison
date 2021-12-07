@@ -20,7 +20,7 @@
 number      [0-9]+
 decimal     [0-9]+("."[0-9]+)?
 string      ([\"][^"]*[\"])
-string2     ([\'][^\']*[\'])
+char        ([\'][^\']{1}[\'])
 id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 
 %%
@@ -40,8 +40,9 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 {number}                return 'tk_int'
 {decimal}               return 'tk_float'
 {string}                return 'tk_string'
-{string2}               return 'tk_string'
+{char}                  return 'tk_char'
 {id}                    return 'tk_id'
+"null"                  return 'tk_null'
 "true"                  return 'tk_bool'
 "false"                 return 'tk_bool'
 "^"                     return 'tk_power'
@@ -73,7 +74,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
         Options 
 **********************/
 /* Lexical Errors */
-.                   error_arr.push(new error(yylloc.first_line, yylloc.first_column, error_type.SINTACTICO,'Valor inesperado ' + yytext));  
+.                   error_arr.push(new error(yylloc.first_line, yylloc.first_column, error_type.LEXICO,'Valor inesperado ' + yytext));  
 /lex
 /* Prede */
 %left 'tk_or'
@@ -110,6 +111,9 @@ pr_instructions
 pr_instruction 
     : pr_expr {
         $$ = $1
+    }
+    | error {
+        error_arr.push(new error(@1.first_line, @1.first_column, error_type.SINTACTICO, yytext));  
     }
 ;
 
@@ -168,6 +172,12 @@ pr_native :
     }
     | tk_string {
         $$ = new native($1, type.STRING ,@1.first_line, @1.first_column);
+    }
+    | tk_null {
+        $$ = new native($1, type.NULL ,@1.first_line, @1.first_column);
+    }
+    | tk_char {
+        $$ = new native($1, type.CHAR ,@1.first_line, @1.first_column);
     }
     | tk_int {
         $$ = new native($1, type.INTEGER ,@1.first_line, @1.first_column);

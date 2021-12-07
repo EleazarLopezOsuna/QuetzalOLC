@@ -4,6 +4,7 @@ export enum type {
     BOOLEAN = 2,
     FLOAT = 3,
     NULL = 4,
+    CHAR = 5,
 }
 
 export type data = {

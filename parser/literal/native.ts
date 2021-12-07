@@ -17,6 +17,10 @@ export class native extends literal {
                 return { value: Number(this.value), type: type.FLOAT };
             case type.STRING:
                 return { value: this.get_string_value(this.value), type: type.STRING };
+            case type.CHAR:
+                return { value: this.get_string_value(this.value), type: type.CHAR };
+            case type.NULL:
+                return { value: null, type: type.NULL };
             case type.BOOLEAN:
                 return { value: (this.value === 'false') ? false : true, type: type.BOOLEAN };
             default:
