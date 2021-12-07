@@ -732,7 +732,7 @@ class expression extends node_1.node {
 }
 exports.expression = expression;
 
-},{"../system/type":16,"./node":6}],5:[function(require,module,exports){
+},{"../system/type":17,"./node":6}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.literal = void 0;
@@ -767,20 +767,20 @@ exports.node = node;
 },{}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.arithmetic = exports.arithmetic_type = void 0;
+exports.arithmetic_binary = exports.arithmetic_binary_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
-var arithmetic_type;
-(function (arithmetic_type) {
-    arithmetic_type[arithmetic_type["PLUS"] = 0] = "PLUS";
-    arithmetic_type[arithmetic_type["MINUS"] = 1] = "MINUS";
-    arithmetic_type[arithmetic_type["TIMES"] = 2] = "TIMES";
-    arithmetic_type[arithmetic_type["DIV"] = 3] = "DIV";
-    arithmetic_type[arithmetic_type["POWER"] = 4] = "POWER";
-    arithmetic_type[arithmetic_type["MOD"] = 5] = "MOD";
-})(arithmetic_type = exports.arithmetic_type || (exports.arithmetic_type = {}));
-class arithmetic extends expression_1.expression {
+var arithmetic_binary_type;
+(function (arithmetic_binary_type) {
+    arithmetic_binary_type[arithmetic_binary_type["PLUS"] = 0] = "PLUS";
+    arithmetic_binary_type[arithmetic_binary_type["MINUS"] = 1] = "MINUS";
+    arithmetic_binary_type[arithmetic_binary_type["TIMES"] = 2] = "TIMES";
+    arithmetic_binary_type[arithmetic_binary_type["DIV"] = 3] = "DIV";
+    arithmetic_binary_type[arithmetic_binary_type["POWER"] = 4] = "POWER";
+    arithmetic_binary_type[arithmetic_binary_type["MOD"] = 5] = "MOD";
+})(arithmetic_binary_type = exports.arithmetic_binary_type || (exports.arithmetic_binary_type = {}));
+class arithmetic_binary extends expression_1.expression {
     constructor(left, right, type, line, column) {
         super(line, column);
         this.left = left;
@@ -792,7 +792,7 @@ class arithmetic extends expression_1.expression {
         const right_data = this.right.execute(environment);
         const dominant_type = this.get_dominant_type(left_data.type, right_data.type);
         switch (this.type) {
-            case arithmetic_type.PLUS:
+            case arithmetic_binary_type.PLUS:
                 switch (dominant_type) {
                     case type_1.type.STRING:
                         return { value: (left_data.value.toString() + right_data.value.toString()), type: type_1.type.STRING };
@@ -802,7 +802,7 @@ class arithmetic extends expression_1.expression {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' + ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.MINUS:
+            case arithmetic_binary_type.MINUS:
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                         return { value: (left_data.value - right_data.value), type: type_1.type.INTEGER };
@@ -810,7 +810,7 @@ class arithmetic extends expression_1.expression {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' - ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.TIMES:
+            case arithmetic_binary_type.TIMES:
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                         return { value: (left_data.value * right_data.value), type: type_1.type.INTEGER };
@@ -818,7 +818,7 @@ class arithmetic extends expression_1.expression {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' * ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.POWER:
+            case arithmetic_binary_type.POWER:
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                         return { value: (Math.pow(left_data.value, right_data.value)), type: type_1.type.INTEGER };
@@ -826,7 +826,7 @@ class arithmetic extends expression_1.expression {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' ** ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.MOD:
+            case arithmetic_binary_type.MOD:
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                         return { value: (left_data.value % right_data.value), type: type_1.type.INTEGER };
@@ -834,7 +834,7 @@ class arithmetic extends expression_1.expression {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' % ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.DIV:
+            case arithmetic_binary_type.DIV:
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                         if (right_data.value == 0) {
@@ -855,9 +855,88 @@ class arithmetic extends expression_1.expression {
         throw new Error("Method not implemented.");
     }
 }
-exports.arithmetic = arithmetic;
+exports.arithmetic_binary = arithmetic_binary;
 
-},{"../abstract/expression":4,"../system/error":15,"../system/type":16}],8:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":16,"../system/type":17}],8:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.arithmetic_unary = exports.arithmetic_unary_type = void 0;
+const expression_1 = require("../abstract/expression");
+const error_1 = require("../system/error");
+const type_1 = require("../system/type");
+var arithmetic_unary_type;
+(function (arithmetic_unary_type) {
+    arithmetic_unary_type[arithmetic_unary_type["SQRT"] = 0] = "SQRT";
+    arithmetic_unary_type[arithmetic_unary_type["SIN"] = 1] = "SIN";
+    arithmetic_unary_type[arithmetic_unary_type["COS"] = 2] = "COS";
+    arithmetic_unary_type[arithmetic_unary_type["TAN"] = 3] = "TAN";
+    arithmetic_unary_type[arithmetic_unary_type["LOG10"] = 4] = "LOG10";
+})(arithmetic_unary_type = exports.arithmetic_unary_type || (exports.arithmetic_unary_type = {}));
+class arithmetic_unary extends expression_1.expression {
+    constructor(expr, type, line, column) {
+        super(line, column);
+        this.expr = expr;
+        this.type = type;
+    }
+    execute(environment) {
+        const expr_data = this.expr.execute(environment);
+        switch (this.type) {
+            case arithmetic_unary_type.SQRT:
+                switch (expr_data.type) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        return { value: (Math.sqrt(expr_data.value)), type: type_1.type.FLOAT };
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar sqrt para: ' + expr_data.value));
+                }
+                break;
+            case arithmetic_unary_type.COS:
+                switch (expr_data.type) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        return { value: (Math.cos(expr_data.value)), type: type_1.type.FLOAT };
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar cos para: ' + expr_data.value));
+                }
+                break;
+            case arithmetic_unary_type.SIN:
+                switch (expr_data.type) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        return { value: (Math.sin(expr_data.value)), type: type_1.type.FLOAT };
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar sin para: ' + expr_data.value));
+                }
+                break;
+            case arithmetic_unary_type.TAN:
+                switch (expr_data.type) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        return { value: (Math.tan(expr_data.value)), type: type_1.type.FLOAT };
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar tan para: ' + expr_data.value));
+                }
+                break;
+            case arithmetic_unary_type.LOG10:
+                switch (expr_data.type) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        return { value: (Math.log10(expr_data.value)), type: type_1.type.FLOAT };
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar log10 para: ' + expr_data.value));
+                }
+                break;
+        }
+        // Default
+        return { value: null, type: type_1.type.NULL };
+    }
+    plot(count) {
+        throw new Error("Method not implemented.");
+    }
+}
+exports.arithmetic_unary = arithmetic_unary;
+
+},{"../abstract/expression":4,"../system/error":16,"../system/type":17}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logic = exports.logic_type = void 0;
@@ -894,7 +973,7 @@ class logic extends expression_1.expression {
 }
 exports.logic = logic;
 
-},{"../abstract/expression":4,"../system/type":16}],9:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/type":17}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.relational = exports.relational_type = void 0;
@@ -942,7 +1021,7 @@ class relational extends expression_1.expression {
 }
 exports.relational = relational;
 
-},{"../abstract/expression":4,"../system/type":16}],10:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/type":17}],11:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -1018,12 +1097,12 @@ exports.relational = relational;
   }
 */
 var main_grammar = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,7],$V2=[1,8],$V3=[1,9],$V4=[1,10],$V5=[1,11],$V6=[1,12],$V7=[2,5,23,24,25,26,27,28],$V8=[1,15],$V9=[1,16],$Va=[1,17],$Vb=[1,18],$Vc=[1,19],$Vd=[1,20],$Ve=[1,21],$Vf=[1,22],$Vg=[1,23],$Vh=[1,24],$Vi=[1,25],$Vj=[1,26],$Vk=[1,27],$Vl=[2,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,23,24,25,26,27,28],$Vm=[2,5,8,9,14,15,16,17,18,19,20,21,23,24,25,26,27,28],$Vn=[2,5,8,9,10,11,13,14,15,16,17,18,19,20,21,23,24,25,26,27,28],$Vo=[2,5,14,15,16,17,18,19,20,21,23,24,25,26,27,28],$Vp=[2,5,16,17,20,21,23,24,25,26,27,28];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,7],$V3=[1,8],$V4=[1,9],$V5=[1,10],$V6=[1,11],$V7=[1,13],$V8=[1,14],$V9=[1,15],$Va=[1,16],$Vb=[1,17],$Vc=[1,18],$Vd=[2,5,13,17,18,19,20,21,31,32,33,34,35,36],$Ve=[1,21],$Vf=[1,22],$Vg=[1,23],$Vh=[1,24],$Vi=[1,25],$Vj=[1,26],$Vk=[1,27],$Vl=[1,28],$Vm=[1,29],$Vn=[1,30],$Vo=[1,31],$Vp=[1,32],$Vq=[1,33],$Vr=[2,5,8,9,10,11,12,13,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36],$Vs=[2,5,8,9,13,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36],$Vt=[2,5,13,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36],$Vu=[2,5,13,15,16,17,18,19,20,21,24,25,28,29,31,32,33,34,35,36];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"pr_init":3,"pr_instructions":4,"EOF":5,"pr_instruction":6,"pr_expr":7,"tk_plus":8,"tk_minus":9,"tk_times":10,"tk_division":11,"tk_power":12,"tk_mod":13,"tk_less_equal":14,"tk_greater_equal":15,"tk_double_equal":16,"tk_not_equal":17,"tk_greater":18,"tk_less":19,"tk_and":20,"tk_or":21,"pr_native":22,"tk_float":23,"tk_string":24,"tk_null":25,"tk_char":26,"tk_int":27,"tk_bool":28,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"tk_plus",9:"tk_minus",10:"tk_times",11:"tk_division",12:"tk_power",13:"tk_mod",14:"tk_less_equal",15:"tk_greater_equal",16:"tk_double_equal",17:"tk_not_equal",18:"tk_greater",19:"tk_less",20:"tk_and",21:"tk_or",23:"tk_float",24:"tk_string",25:"tk_null",26:"tk_char",27:"tk_int",28:"tk_bool"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,1],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1]],
+symbols_: {"error":2,"pr_init":3,"pr_instructions":4,"EOF":5,"pr_instruction":6,"pr_expr":7,"tk_plus":8,"tk_minus":9,"tk_times":10,"tk_division":11,"tk_mod":12,"tk_power":13,"tk_par_o":14,"tk_comma":15,"tk_par_c":16,"tk_sqrt":17,"tk_sin":18,"tk_cos":19,"tk_tan":20,"tk_log10":21,"tk_less_equal":22,"tk_greater_equal":23,"tk_double_equal":24,"tk_not_equal":25,"tk_greater":26,"tk_less":27,"tk_and":28,"tk_or":29,"pr_native":30,"tk_float":31,"tk_string":32,"tk_null":33,"tk_char":34,"tk_int":35,"tk_bool":36,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"tk_plus",9:"tk_minus",10:"tk_times",11:"tk_division",12:"tk_mod",13:"tk_power",14:"tk_par_o",15:"tk_comma",16:"tk_par_c",17:"tk_sqrt",18:"tk_sin",19:"tk_cos",20:"tk_tan",21:"tk_log10",22:"tk_less_equal",23:"tk_greater_equal",24:"tk_double_equal",25:"tk_not_equal",26:"tk_greater",27:"tk_less",28:"tk_and",29:"tk_or",31:"tk_float",32:"tk_string",33:"tk_null",34:"tk_char",35:"tk_int",36:"tk_bool"},
+productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[7,3],[7,3],[7,3],[7,3],[7,3],[7,6],[7,4],[7,4],[7,4],[7,4],[7,4],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,3],[7,1],[30,1],[30,1],[30,1],[30,1],[30,1],[30,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -1045,7 +1124,7 @@ case 3:
         this.$ = [$$[$0]]
     
 break;
-case 4: case 20:
+case 4: case 25:
 
         this.$ = $$[$0]
     
@@ -1057,108 +1136,133 @@ case 5:
 break;
 case 6:
 
-        this.$ = new arithmetic($$[$0-2], $$[$0], arithmetic_type.PLUS, _$[$0-2].first_line,_$[$0-2].first_column);
+        this.$ = new arithmetic_binary($$[$0-2], $$[$0], arithmetic_binary_type.PLUS, _$[$0-2].first_line,_$[$0-2].first_column);
     
 break;
 case 7:
 
-        this.$ = new arithmetic($$[$0-2], $$[$0], arithmetic_type.MINUS, _$[$0-2].first_line,_$[$0-2].first_column);
+        this.$ = new arithmetic_binary($$[$0-2], $$[$0], arithmetic_binary_type.MINUS, _$[$0-2].first_line,_$[$0-2].first_column);
     
 break;
 case 8:
  
-        this.$ = new arithmetic($$[$0-2], $$[$0], arithmetic_type.TIMES, _$[$0-2].first_line,_$[$0-2].first_column);
+        this.$ = new arithmetic_binary($$[$0-2], $$[$0], arithmetic_binary_type.TIMES, _$[$0-2].first_line,_$[$0-2].first_column);
     
 break;
 case 9:
 
-        this.$ = new arithmetic($$[$0-2], $$[$0], arithmetic_type.DIV, _$[$0-2].first_line,_$[$0-2].first_column);
+        this.$ = new arithmetic_binary($$[$0-2], $$[$0], arithmetic_binary_type.DIV, _$[$0-2].first_line,_$[$0-2].first_column);
     
 break;
 case 10:
 
-        this.$ = new arithmetic($$[$0-2], $$[$0], arithmetic_type.POWER, _$[$0-2].first_line,_$[$0-2].first_column);
+        this.$ = new arithmetic_binary($$[$0-2], $$[$0], arithmetic_binary_type.MOD, _$[$0-2].first_line,_$[$0-2].first_column);
     
 break;
 case 11:
 
-        this.$ = new arithmetic($$[$0-2], $$[$0], arithmetic_type.MOD, _$[$0-2].first_line,_$[$0-2].first_column);
+        this.$ = new arithmetic_binary($$[$0-3], $$[$0-1], arithmetic_binary_type.POWER, _$[$0-5].first_line,_$[$0-5].first_column);
     
 break;
 case 12:
 
-        this.$ = new relational($$[$0-2], $$[$0],relational_type.LESSOREQUAL ,_$[$0-2].first_line, _$[$0-2].first_column);
+        this.$ = new arithmetic_unary($$[$0-1], arithmetic_unary_type.SQRT, _$[$0-3].first_line,_$[$0-3].first_column);
     
 break;
 case 13:
 
-        this.$ = new relational($$[$0-2], $$[$0],relational_type.GREATEROREQUAL ,_$[$0-2].first_line, _$[$0-2].first_column);
+        this.$ = new arithmetic_unary($$[$0-1], arithmetic_unary_type.SIN, _$[$0-3].first_line,_$[$0-3].first_column);
     
 break;
 case 14:
 
-        this.$ = new relational($$[$0-2], $$[$0],relational_type.EQUAL ,_$[$0-2].first_line, _$[$0-2].first_column);
+        this.$ = new arithmetic_unary($$[$0-1], arithmetic_unary_type.COS, _$[$0-3].first_line,_$[$0-3].first_column);
     
 break;
 case 15:
 
-        this.$ = new relational($$[$0-2], $$[$0],relational_type.NOTEQUAL ,_$[$0-2].first_line, _$[$0-2].first_column);
+        this.$ = new arithmetic_unary($$[$0-1], arithmetic_unary_type.TAN, _$[$0-3].first_line,_$[$0-3].first_column);
     
 break;
 case 16:
 
-        this.$ = new relational($$[$0-2], $$[$0],relational_type.GREATER ,_$[$0-2].first_line, _$[$0-2].first_column);
+        this.$ = new arithmetic_unary($$[$0-1], arithmetic_unary_type.LOG10, _$[$0-3].first_line,_$[$0-3].first_column);
     
 break;
 case 17:
 
-        this.$ = new relational($$[$0-2], $$[$0],relational_type.LESS, _$[$0-2].first_line, _$[$0-2].first_column);
+        this.$ = new relational($$[$0-2], $$[$0],relational_type.LESSOREQUAL ,_$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
 case 18:
 
-        this.$ = new logic($$[$0-2], $$[$0],logic_type.AND ,_$[$0-2].first_line, _$[$0-2].first_column);
+        this.$ = new relational($$[$0-2], $$[$0],relational_type.GREATEROREQUAL ,_$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
 case 19:
 
-        this.$ = new logic($$[$0-2], $$[$0],logic_type.OR ,_$[$0-2].first_line, _$[$0-2].first_column);
+        this.$ = new relational($$[$0-2], $$[$0],relational_type.EQUAL ,_$[$0-2].first_line, _$[$0-2].first_column);
+    
+break;
+case 20:
+
+        this.$ = new relational($$[$0-2], $$[$0],relational_type.NOTEQUAL ,_$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
 case 21:
 
-        this.$ = new native($$[$0], type.FLOAT ,_$[$0].first_line, _$[$0].first_column);
+        this.$ = new relational($$[$0-2], $$[$0],relational_type.GREATER ,_$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
 case 22:
 
-        this.$ = new native($$[$0], type.STRING ,_$[$0].first_line, _$[$0].first_column);
+        this.$ = new relational($$[$0-2], $$[$0],relational_type.LESS, _$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
 case 23:
 
-        this.$ = new native($$[$0], type.NULL ,_$[$0].first_line, _$[$0].first_column);
+        this.$ = new logic($$[$0-2], $$[$0],logic_type.AND ,_$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
 case 24:
 
+        this.$ = new logic($$[$0-2], $$[$0],logic_type.OR ,_$[$0-2].first_line, _$[$0-2].first_column);
+    
+break;
+case 26:
+
+        this.$ = new native($$[$0], type.FLOAT ,_$[$0].first_line, _$[$0].first_column);
+    
+break;
+case 27:
+
+        this.$ = new native($$[$0], type.STRING ,_$[$0].first_line, _$[$0].first_column);
+    
+break;
+case 28:
+
+        this.$ = new native($$[$0], type.NULL ,_$[$0].first_line, _$[$0].first_column);
+    
+break;
+case 29:
+
         this.$ = new native($$[$0], type.CHAR ,_$[$0].first_line, _$[$0].first_column);
     
 break;
-case 25:
+case 30:
 
         this.$ = new native($$[$0], type.INTEGER ,_$[$0].first_line, _$[$0].first_column);
     
 break;
-case 26:
+case 31:
 
         this.$ = new native($$[$0], type.BOOLEAN ,_$[$0].first_line, _$[$0].first_column);
     
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:3,7:4,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{1:[3]},{2:$V0,5:[1,13],6:14,7:4,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},o($V7,[2,3]),o($V7,[2,4],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd,14:$Ve,15:$Vf,16:$Vg,17:$Vh,18:$Vi,19:$Vj,20:$Vk,21:[1,28]}),o($V7,[2,5]),o($Vl,[2,20]),o($Vl,[2,21]),o($Vl,[2,22]),o($Vl,[2,23]),o($Vl,[2,24]),o($Vl,[2,25]),o($Vl,[2,26]),{1:[2,1]},o($V7,[2,2]),{7:29,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:30,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:31,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:32,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:33,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:34,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:35,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:36,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:37,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:38,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:39,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:40,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:41,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},{7:42,22:6,23:$V1,24:$V2,25:$V3,26:$V4,27:$V5,28:$V6},o($Vm,[2,6],{10:$Va,11:$Vb,12:$Vc,13:$Vd}),o($Vm,[2,7],{10:$Va,11:$Vb,12:$Vc,13:$Vd}),o($Vn,[2,8],{12:$Vc}),o($Vn,[2,9],{12:$Vc}),o($Vl,[2,10]),o($Vn,[2,11],{12:$Vc}),o($Vo,[2,12],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd}),o($Vo,[2,13],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd}),o($Vp,[2,14],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd,14:$Ve,15:$Vf,18:$Vi,19:$Vj}),o($Vp,[2,15],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd,14:$Ve,15:$Vf,18:$Vi,19:$Vj}),o($Vo,[2,16],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd}),o($Vo,[2,17],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd}),o([2,5,20,21,23,24,25,26,27,28],[2,18],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd,14:$Ve,15:$Vf,16:$Vg,17:$Vh,18:$Vi,19:$Vj}),o([2,5,21,23,24,25,26,27,28],[2,19],{8:$V8,9:$V9,10:$Va,11:$Vb,12:$Vc,13:$Vd,14:$Ve,15:$Vf,16:$Vg,17:$Vh,18:$Vi,19:$Vj,20:$Vk})],
-defaultActions: {13:[2,1]},
+table: [{2:$V0,3:1,4:2,6:3,7:4,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{1:[3]},{2:$V0,5:[1,19],6:20,7:4,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},o($Vd,[2,3]),o($Vd,[2,4],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp,29:$Vq}),o($Vd,[2,5]),{14:[1,34]},{14:[1,35]},{14:[1,36]},{14:[1,37]},{14:[1,38]},{14:[1,39]},o($Vr,[2,25]),o($Vr,[2,26]),o($Vr,[2,27]),o($Vr,[2,28]),o($Vr,[2,29]),o($Vr,[2,30]),o($Vr,[2,31]),{1:[2,1]},o($Vd,[2,2]),{7:40,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:41,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:42,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:43,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:44,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:45,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:46,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:47,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:48,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:49,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:50,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:51,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:52,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:53,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:54,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:55,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:56,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:57,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},{7:58,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},o($Vs,[2,6],{10:$Vg,11:$Vh,12:$Vi}),o($Vs,[2,7],{10:$Vg,11:$Vh,12:$Vi}),o($Vr,[2,8]),o($Vr,[2,9]),o($Vr,[2,10]),o($Vt,[2,17],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi}),o($Vt,[2,18],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi}),o($Vu,[2,19],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,22:$Vj,23:$Vk,26:$Vn,27:$Vo}),o($Vu,[2,20],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,22:$Vj,23:$Vk,26:$Vn,27:$Vo}),o($Vt,[2,21],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi}),o($Vt,[2,22],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi}),o([2,5,13,15,16,17,18,19,20,21,28,29,31,32,33,34,35,36],[2,23],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo}),o([2,5,13,15,16,17,18,19,20,21,29,31,32,33,34,35,36],[2,24],{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp}),{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,15:[1,59],22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp,29:$Vq},{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,16:[1,60],22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp,29:$Vq},{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,16:[1,61],22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp,29:$Vq},{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,16:[1,62],22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp,29:$Vq},{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,16:[1,63],22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp,29:$Vq},{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,16:[1,64],22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp,29:$Vq},{7:65,13:$V1,17:$V2,18:$V3,19:$V4,20:$V5,21:$V6,30:12,31:$V7,32:$V8,33:$V9,34:$Va,35:$Vb,36:$Vc},o($Vr,[2,12]),o($Vr,[2,13]),o($Vr,[2,14]),o($Vr,[2,15]),o($Vr,[2,16]),{8:$Ve,9:$Vf,10:$Vg,11:$Vh,12:$Vi,16:[1,66],22:$Vj,23:$Vk,24:$Vl,25:$Vm,26:$Vn,27:$Vo,28:$Vp,29:$Vq},o($Vr,[2,11])],
+defaultActions: {19:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -1410,7 +1514,8 @@ _handle_error:
     const {type} = require("../system/type") ;
     const { error, error_arr, error_type }= require("../system/error");
 
-    const {arithmetic, arithmetic_type} = require('../expression/arithmetic');
+    const {arithmetic_binary, arithmetic_binary_type} = require('../expression/arithmetic_binary');
+    const {arithmetic_unary, arithmetic_unary_type} = require('../expression/arithmetic_unary');
     const {relational, relational_type} = require('../expression/relational');
     const {logic, logic_type} = require('../expression/logic');
 
@@ -1749,74 +1854,86 @@ case 1:/* Comments */
 break;
 case 2:/* Multiline Comments */
 break;
-case 3:return 27
+case 3:return 33
 break;
-case 4:return 23
+case 4:return 36
 break;
-case 5:return 24
+case 5:return 36
 break;
-case 6:return 26
+case 6:return 13
 break;
-case 7:return 'tk_id'
+case 7:return 17
 break;
-case 8:return 25
+case 8:return 18
 break;
-case 9:return 28
+case 9:return 19
 break;
-case 10:return 28
+case 10:return 20
 break;
-case 11:return 12
+case 11:return 21
 break;
-case 12:return 10
+case 12:return 35
 break;
-case 13:return 11
+case 13:return 31
 break;
-case 14:return 8
+case 14:return 32
 break;
-case 15:return 9
+case 15:return 34
 break;
-case 16:return 13
+case 16:return 'tk_id'
 break;
-case 17:return 14
+case 17:return 10
 break;
-case 18:return 15
+case 18:return 11
 break;
-case 19:return 19
+case 19:return 8
 break;
-case 20:return 18
+case 20:return 9
 break;
-case 21:return 16
+case 21:return 12
 break;
-case 22:return 17
+case 22:return 22
 break;
-case 23:return 21
+case 23:return 23
 break;
-case 24:return 20
+case 24:return 27
 break;
-case 25:return 'tk_not'
+case 25:return 26
 break;
-case 26:return 'tk_equal'
+case 26:return 24
 break;
-case 27:return 'tk_par_o'
+case 27:return 25
 break;
-case 28:return 'tk_par_c' 
+case 28:return 29
 break;
-case 29:return 'tk_cbra_o'
+case 29:return 28
 break;
-case 30:return 'tk_cbra_c'
+case 30:return 'tk_not'
 break;
-case 31:return 'tk_bra_o'
+case 31:return 'tk_equal'
 break;
-case 32:return 'tk_bra_c'
+case 32:return 14
 break;
-case 33:return 5
+case 33:return 16 
 break;
-case 34:error_arr.push(new error(yy_.yylloc.first_line, yy_.yylloc.first_column, error_type.LEXICO,'Valor inesperado ' + yy_.yytext));  
+case 34:return 'tk_cbra_o'
+break;
+case 35:return 'tk_cbra_c'
+break;
+case 36:return 'tk_bra_o'
+break;
+case 37:return 'tk_bra_c'
+break;
+case 38:return 15
+break;
+case 39:return 5
+break;
+case 40:error_arr.push(new error(yy_.yylloc.first_line, yy_.yylloc.first_column, error_type.LEXICO,'Valor inesperado ' + yy_.yytext));  
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/,/^(?:([0-9]+))/,/^(?:([0-9]+(\.[0-9]+)?))/,/^(?:(([\"][^"]*[\"])))/,/^(?:(([\'][^\']{1}[\'])))/,/^(?:(([a-zA-Z_])[a-zA-Z0-9_ñÑ]*))/,/^(?:null\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:\^)/,/^(?:\*)/,/^(?:\/)/,/^(?:\+)/,/^(?:-)/,/^(?:%)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:==)/,/^(?:!=)/,/^(?:\|\|)/,/^(?:&&)/,/^(?:!)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:$)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/,/^(?:null\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:pow\b)/,/^(?:sqrt\b)/,/^(?:sin\b)/,/^(?:cos\b)/,/^(?:tan\b)/,/^(?:log10\b)/,/^(?:([0-9]+))/,/^(?:([0-9]+(\.[0-9]+)?))/,/^(?:(([\"][^"]*[\"])))/,/^(?:(([\'][^\']{1}[\'])))/,/^(?:(([a-zA-Z_])[a-zA-Z0-9_ñÑ]*))/,/^(?:\*)/,/^(?:\/)/,/^(?:\+)/,/^(?:-)/,/^(?:%)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:==)/,/^(?:!=)/,/^(?:\|\|)/,/^(?:&&)/,/^(?:!)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:,)/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40],"inclusive":true}}
 });
 return lexer;
 })();
@@ -1846,7 +1963,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"../expression/arithmetic":7,"../expression/logic":8,"../expression/relational":9,"../literal/native":11,"../system/error":15,"../system/type":16,"_process":3,"fs":1,"path":2}],11:[function(require,module,exports){
+},{"../expression/arithmetic_binary":7,"../expression/arithmetic_unary":8,"../expression/logic":9,"../expression/relational":10,"../literal/native":12,"../system/error":16,"../system/type":17,"_process":3,"fs":1,"path":2}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native = void 0;
@@ -1882,7 +1999,7 @@ class native extends literal_1.literal {
 }
 exports.native = native;
 
-},{"../abstract/literal":5,"../system/type":16}],12:[function(require,module,exports){
+},{"../abstract/literal":5,"../system/type":17}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const parser = require("./grammar/main_grammar");
@@ -1897,7 +2014,7 @@ window.exec = function (input) {
         console_1._console.output = "";
         for (const instr of ast) {
             try {
-                console_1._console.output += instr.execute(main_environment).value;
+                console_1._console.output += instr.execute(main_environment).value + "\n";
             }
             catch (error) {
                 console.log(error);
@@ -1913,7 +2030,7 @@ window.exec = function (input) {
     return console_1._console.output;
 };
 
-},{"./grammar/main_grammar":10,"./system/console":13,"./system/environment":14,"./system/error":15}],13:[function(require,module,exports){
+},{"./grammar/main_grammar":11,"./system/console":14,"./system/environment":15,"./system/error":16}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._console = void 0;
@@ -1934,7 +2051,7 @@ class console {
 }
 exports._console = new console();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
@@ -1948,7 +2065,7 @@ class environment {
 }
 exports.environment = environment;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.error_arr = exports.error_type = exports.error = void 0;
@@ -1976,7 +2093,7 @@ var error_type;
 })(error_type = exports.error_type || (exports.error_type = {}));
 exports.error_arr = [];
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.type_tbl = exports.type = void 0;
@@ -2010,4 +2127,4 @@ exports.type_tbl = [
     ]
 ];
 
-},{}]},{},[12]);
+},{}]},{},[13]);

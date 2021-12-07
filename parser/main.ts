@@ -10,7 +10,7 @@ import { error_arr } from "./system/error";
         _console.output = ""
         for (const instr of ast) {
             try {
-                _console.output += instr.execute(main_environment).value;
+                _console.output += instr.execute(main_environment).value + "\n";
             } catch (error) {
                 console.log(error);
             }

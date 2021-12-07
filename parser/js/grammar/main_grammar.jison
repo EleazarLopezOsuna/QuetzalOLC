@@ -3,7 +3,8 @@
     const {type} = require("../system/type") ;
     const { error, error_arr, error_type }= require("../system/error");
 
-    const {arithmetic, arithmetic_type} = require('../expression/arithmetic');
+    const {arithmetic_binary, arithmetic_binary_type} = require('../expression/arithmetic_binary');
+    const {arithmetic_unary, arithmetic_unary_type} = require('../expression/arithmetic_unary');
     const {relational, relational_type} = require('../expression/relational');
     const {logic, logic_type} = require('../expression/logic');
 
@@ -37,15 +38,20 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
         Tokens 
 **********************/
 
+"null"                  return 'tk_null'
+"true"                  return 'tk_bool'
+"false"                 return 'tk_bool'
+"pow"                   return 'tk_power'
+"sqrt"                  return 'tk_sqrt'
+"sin"                   return 'tk_sin'
+"cos"                   return 'tk_cos'
+"tan"                   return 'tk_tan'
+"log10"                 return 'tk_log10'
 {number}                return 'tk_int'
 {decimal}               return 'tk_float'
 {string}                return 'tk_string'
 {char}                  return 'tk_char'
 {id}                    return 'tk_id'
-"null"                  return 'tk_null'
-"true"                  return 'tk_bool'
-"false"                 return 'tk_bool'
-"^"                     return 'tk_power'
 "*"                     return 'tk_times'
 "/"                     return 'tk_division'
 "+"                     return 'tk_plus'
@@ -67,6 +73,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "}"                     return 'tk_cbra_c'
 "["                     return 'tk_bra_o'
 "]"                     return 'tk_bra_c'
+","                     return 'tk_comma'
 <<EOF>>		            return 'EOF'
 
 
@@ -83,7 +90,6 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %left 'tk_greater_equal', 'tk_less_equal', 'tk_less', 'tk_greater'
 %left 'tk_plus' 'tk_minus'
 %left 'tk_times' 'tk_division' 'tk_mod'
-%left 'tk_power'
 /* Start production */
 %start pr_init
 
@@ -120,22 +126,37 @@ pr_instruction
 
 pr_expr
     : pr_expr tk_plus pr_expr {
-        $$ = new arithmetic($1, $3, arithmetic_type.PLUS, @1.first_line,@1.first_column);
+        $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.PLUS, @1.first_line,@1.first_column);
     }       
     | pr_expr tk_minus pr_expr {
-        $$ = new arithmetic($1, $3, arithmetic_type.MINUS, @1.first_line,@1.first_column);
+        $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.MINUS, @1.first_line,@1.first_column);
     }
     | pr_expr tk_times pr_expr { 
-        $$ = new arithmetic($1, $3, arithmetic_type.TIMES, @1.first_line,@1.first_column);
+        $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.TIMES, @1.first_line,@1.first_column);
     }       
     | pr_expr tk_division pr_expr {
-        $$ = new arithmetic($1, $3, arithmetic_type.DIV, @1.first_line,@1.first_column);
-    }
-    | pr_expr tk_power pr_expr {
-        $$ = new arithmetic($1, $3, arithmetic_type.POWER, @1.first_line,@1.first_column);
+        $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.DIV, @1.first_line,@1.first_column);
     }
     | pr_expr tk_mod pr_expr {
-        $$ = new arithmetic($1, $3, arithmetic_type.MOD, @1.first_line,@1.first_column);
+        $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.MOD, @1.first_line,@1.first_column);
+    }
+    | tk_power tk_par_o pr_expr tk_comma pr_expr tk_par_c {
+        $$ = new arithmetic_binary($3, $5, arithmetic_binary_type.POWER, @1.first_line,@1.first_column);
+    }
+    | tk_sqrt tk_par_o pr_expr tk_par_c {
+        $$ = new arithmetic_unary($3, arithmetic_unary_type.SQRT, @1.first_line,@1.first_column);
+    }
+    | tk_sin tk_par_o pr_expr tk_par_c {
+        $$ = new arithmetic_unary($3, arithmetic_unary_type.SIN, @1.first_line,@1.first_column);
+    }
+    | tk_cos tk_par_o pr_expr tk_par_c {
+        $$ = new arithmetic_unary($3, arithmetic_unary_type.COS, @1.first_line,@1.first_column);
+    }
+    | tk_tan tk_par_o pr_expr tk_par_c {
+        $$ = new arithmetic_unary($3, arithmetic_unary_type.TAN, @1.first_line,@1.first_column);
+    }
+    | tk_log10 tk_par_o pr_expr tk_par_c {
+        $$ = new arithmetic_unary($3, arithmetic_unary_type.LOG10, @1.first_line,@1.first_column);
     }
     | pr_expr tk_less_equal pr_expr {
         $$ = new relational($1, $3,relational_type.LESSOREQUAL ,@1.first_line, @1.first_column);

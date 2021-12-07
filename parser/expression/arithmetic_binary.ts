@@ -3,7 +3,7 @@ import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
 
-export enum arithmetic_type {
+export enum arithmetic_binary_type {
     PLUS,
     MINUS,
     TIMES,
@@ -12,9 +12,9 @@ export enum arithmetic_type {
     MOD
 }
 
-export class arithmetic extends expression {
+export class arithmetic_binary extends expression {
 
-    constructor(public left: expression, public right: expression, public type: arithmetic_type, line: number, column: number) {
+    constructor(public left: expression, public right: expression, public type: arithmetic_binary_type, line: number, column: number) {
         super(line, column);
     }
 
@@ -24,7 +24,7 @@ export class arithmetic extends expression {
         const dominant_type = this.get_dominant_type(left_data.type, right_data.type);
 
         switch (this.type) {
-            case arithmetic_type.PLUS:
+            case arithmetic_binary_type.PLUS:
                 switch (dominant_type) {
                     case type.STRING:
                         return { value: (left_data.value.toString() + right_data.value.toString()), type: type.STRING };
@@ -34,7 +34,7 @@ export class arithmetic extends expression {
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' + ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.MINUS:
+            case arithmetic_binary_type.MINUS:
                 switch (dominant_type) {
                      case type.INTEGER:
                         return { value: (left_data.value - right_data.value), type: type.INTEGER };
@@ -42,7 +42,7 @@ export class arithmetic extends expression {
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' - ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.TIMES:
+            case arithmetic_binary_type.TIMES:
                 switch (dominant_type) {
                     case type.INTEGER:
                         return { value: (left_data.value * right_data.value), type: type.INTEGER };
@@ -50,7 +50,7 @@ export class arithmetic extends expression {
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' * ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.POWER:
+            case arithmetic_binary_type.POWER:
                 switch (dominant_type) {
                     case type.INTEGER:
                         return { value: (Math.pow(left_data.value, right_data.value)), type: type.INTEGER };
@@ -58,7 +58,7 @@ export class arithmetic extends expression {
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' ** ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.MOD:
+            case arithmetic_binary_type.MOD:
                 switch (dominant_type) {
                     case type.INTEGER:
                         return { value: (left_data.value % right_data.value), type: type.INTEGER };
@@ -66,7 +66,7 @@ export class arithmetic extends expression {
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' % ' + right_data.type));
                 }
                 break;
-            case arithmetic_type.DIV:
+            case arithmetic_binary_type.DIV:
                 switch (dominant_type) {
                     case type.INTEGER:
                         if (right_data.value == 0) {

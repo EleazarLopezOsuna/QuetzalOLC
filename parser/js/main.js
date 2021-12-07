@@ -12,7 +12,7 @@ window.exec = function (input) {
         console_1._console.output = "";
         for (const instr of ast) {
             try {
-                console_1._console.output += instr.execute(main_environment).value;
+                console_1._console.output += instr.execute(main_environment).value + "\n";
             }
             catch (error) {
                 console.log(error);
