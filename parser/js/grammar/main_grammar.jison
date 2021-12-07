@@ -7,6 +7,7 @@
     const {arithmetic_unary, arithmetic_unary_type} = require('../expression/arithmetic_unary');
     const {relational, relational_type} = require('../expression/relational');
     const {logic, logic_type} = require('../expression/logic');
+    const {unary, unary_type} = require('../expression/unary');
 
     const {native} = require('../literal/native');
 %}
@@ -90,6 +91,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %left 'tk_greater_equal', 'tk_less_equal', 'tk_less', 'tk_greater'
 %left 'tk_plus' 'tk_minus'
 %left 'tk_times' 'tk_division' 'tk_mod'
+%right 'tk_not' 
 /* Start production */
 %start pr_init
 
@@ -182,8 +184,20 @@ pr_expr
     | pr_expr tk_or pr_expr {
         $$ = new logic($1, $3,logic_type.OR ,@1.first_line, @1.first_column);
     }
+    | pr_unary {
+        $$ = $1
+    }
+;
+
+pr_unary :
+    tk_not pr_unary {
+        $$ = new unary($2, unary_type.LOGIC ,@1.first_line, @1.first_column);
+    }
     | pr_native {
         $$ = $1
+    }
+    | tk_par_o pr_expr tk_par_c {
+        $$ = $2
     }
 ;
 
