@@ -22,7 +22,7 @@ class string_ternary extends expression_1.expression {
         const third_data = this.third.execute(environment);
         switch (this.type) {
             case string_ternary_type.SUBSTRING:
-                if (first_data.type == type_1.type.STRING && second_data.type == type_1.type.INTEGER && second_data.type == type_1.type.INTEGER) {
+                if (first_data.type == type_1.type.STRING && second_data.type == type_1.type.INTEGER && third_data.type == type_1.type.INTEGER) {
                     let string_return = first_data.value.toString();
                     return { value: string_return.substr(second_data.value, third_data.value), type: type_1.type.STRING };
                 }

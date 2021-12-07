@@ -8,6 +8,7 @@
     const {relational, relational_type} = require('../expression/relational');
     const {logic, logic_type} = require('../expression/logic');
     const {unary, unary_type} = require('../expression/unary');
+    const {ternary} = require('../expression/ternary');
     const {string_unary, string_unary_type} = require('../expression/string_unary');
     const {string_binary, string_binary_type} = require('../expression/string_binary');
     const {string_ternary, string_ternary_type} = require('../expression/string_ternary');
@@ -143,6 +144,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 /lex
 /* Prede */
 %left 'tk_concat' 'tk_repeat' 'tk_dot'
+%left 'tk_ternary'
 %left 'tk_or'
 %left 'tk_and'
 %left 'tk_double_equal', 'tk_not_equal'
@@ -265,6 +267,9 @@ pr_expr
     }
     | pr_expr tk_dot tk_substring tk_par_o pr_expr tk_comma pr_expr tk_par_c {
         $$ = new string_ternary($1, $5, $7, string_ternary_type.SUBSTRING ,@1.first_line, @1.first_column);
+    }
+    | pr_expr tk_ternary pr_expr tk_colon pr_expr {
+        $$ = new ternary($1, $3, $5, @1.first_line, @1.first_column);
     }
     | pr_unary {
         $$ = $1

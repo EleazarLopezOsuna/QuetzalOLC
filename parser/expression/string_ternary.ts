@@ -20,7 +20,7 @@ export class string_ternary extends expression {
 
         switch (this.type) {
             case string_ternary_type.SUBSTRING:
-                if (first_data.type == type.STRING && second_data.type == type.INTEGER && second_data.type == type.INTEGER) {
+                if (first_data.type == type.STRING && second_data.type == type.INTEGER && third_data.type == type.INTEGER) {
                     let string_return:String = first_data.value.toString()
                     return { value: string_return.substr(second_data.value,third_data.value), type: type.STRING };
                 } else {
