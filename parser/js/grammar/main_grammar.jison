@@ -7,6 +7,7 @@
     const {arithmetic_unary, arithmetic_unary_type} = require('../expression/arithmetic_unary');
     const {relational, relational_type} = require('../expression/relational');
     const {logic, logic_type} = require('../expression/logic');
+    const {unary, unary_type} = require('../expression/unary');
 
     const {native} = require('../literal/native');
 %}
@@ -146,6 +147,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %right 'tk_not'
 %right 'tk_double_plus' 'tk_double_minus'
 %left UMINUS
+%right 'tk_not' 
 /* Start production */
 %start pr_init
 
@@ -238,9 +240,6 @@ pr_expr
     | pr_expr tk_or pr_expr {
         $$ = new logic($1, $3,logic_type.OR ,@1.first_line, @1.first_column);
     }
-    | pr_native {
-        $$ = $1
-    }
     | pr_unary {
         $$ = $1
     }
@@ -259,6 +258,9 @@ pr_unary :
     | tk_minus pr_expr %prec UMINUS {
         $$ = new unary($2, unary_type.ARITHMETIC, @1.first_line,@1.first_column);
     } 
+    | tk_par_o pr_expr tk_par_c {
+        $$ = $2
+    }
 ;
 
 pr_native :
