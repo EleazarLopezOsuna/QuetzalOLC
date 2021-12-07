@@ -92,16 +92,27 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %%
 
 pr_init    
-    : pr_instr EOF {
+    : pr_instructions EOF {
         return $1;
     } 
 ;
 
-pr_instr
+pr_instructions
+    : pr_instructions pr_instruction {
+        $1.push($2)
+        $$ = $1
+    }
+    | pr_instruction {
+        $$ = [$1]
+    }
+;
+
+pr_instruction 
     : pr_expr {
         $$ = $1
     }
 ;
+
 
 pr_expr
     : pr_expr tk_plus pr_expr {

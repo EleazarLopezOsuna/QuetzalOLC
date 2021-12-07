@@ -65,10 +65,6 @@
     <script src="parser/bundle.js">
     </script>
     <script>
-        $(document).ready(function() {
-            console.log(12)
-            exec("something")
-        });
         var input = document.getElementById("input");
         var editor_1 = CodeMirror.fromTextArea(input, {
             lineNumbers: true,
@@ -87,7 +83,7 @@
 
         function operar() {
             let result = exec(editor_1.getValue())
-            console.log(result)
+            editor_2.setValue(result)
         }
     </script>
 </body>
