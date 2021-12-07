@@ -8,6 +8,9 @@
     const {relational, relational_type} = require('../expression/relational');
     const {logic, logic_type} = require('../expression/logic');
     const {unary, unary_type} = require('../expression/unary');
+    const {string_unary, string_unary_type} = require('../expression/string_unary');
+    const {string_binary, string_binary_type} = require('../expression/string_binary');
+    const {string_ternary, string_ternary_type} = require('../expression/string_ternary');
 
     const {native} = require('../literal/native');
 %}
@@ -39,6 +42,11 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
         Tokens 
 **********************/
 
+"caracterOfPosition"    return 'tk_position'
+"subString"             return 'tk_substring'
+"length"                return 'tk_length'
+"toUppercase"           return 'tk_uppercase'
+"toLowercase"           return 'tk_lowercase'
 "null"                  return 'tk_null'
 "true"                  return 'tk_bool'
 "false"                 return 'tk_bool'
@@ -65,6 +73,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "=="                    return 'tk_double_equal'
 "!="                    return 'tk_not_equal'
 "||"                    return 'tk_or'
+"&"                     return 'tk_concat'
 "&&"                    return 'tk_and'
 "!"                     return 'tk_not'
 "="                     return 'tk_equal'
@@ -75,6 +84,8 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "["                     return 'tk_bra_o'
 "]"                     return 'tk_bra_c'
 ","                     return 'tk_comma'
+"."                     return 'tk_dot'
+"^"                     return 'tk_repeat'
 <<EOF>>		            return 'EOF'
 
 
@@ -85,6 +96,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 .                   error_arr.push(new error(yylloc.first_line, yylloc.first_column, error_type.LEXICO,'Valor inesperado ' + yytext));  
 /lex
 /* Prede */
+%left 'tk_concat' 'tk_repeat' 'tk_dot'
 %left 'tk_or'
 %left 'tk_and'
 %left 'tk_double_equal', 'tk_not_equal'
@@ -183,6 +195,27 @@ pr_expr
     }
     | pr_expr tk_or pr_expr {
         $$ = new logic($1, $3,logic_type.OR ,@1.first_line, @1.first_column);
+    }
+    | pr_expr tk_dot tk_length tk_par_o tk_par_c {
+        $$ = new string_unary($1,string_unary_type.LENGTH ,@1.first_line, @1.first_column);
+    }
+    | pr_expr tk_dot tk_uppercase tk_par_o tk_par_c {
+        $$ = new string_unary($1,string_unary_type.UPPERCASE ,@1.first_line, @1.first_column);
+    }
+    | pr_expr tk_dot tk_lowercase tk_par_o tk_par_c {
+        $$ = new string_unary($1,string_unary_type.LOWERCASE ,@1.first_line, @1.first_column);
+    }
+    | pr_expr tk_concat pr_expr {
+        $$ = new string_binary($1, $3,string_binary_type.CONCAT ,@1.first_line, @1.first_column);
+    }
+    | pr_expr tk_repeat pr_expr {
+        $$ = new string_binary($1, $3,string_binary_type.REPEAT ,@1.first_line, @1.first_column);
+    }
+    | pr_expr tk_dot tk_position tk_par_o pr_expr tk_par_c {
+        $$ = new string_binary($1, $5,string_binary_type.POSITION ,@1.first_line, @1.first_column);
+    }
+    | pr_expr tk_dot tk_substring tk_par_o pr_expr tk_comma pr_expr tk_par_c {
+        $$ = new string_ternary($1, $5, $7, string_ternary_type.SUBSTRING ,@1.first_line, @1.first_column);
     }
     | pr_unary {
         $$ = $1
