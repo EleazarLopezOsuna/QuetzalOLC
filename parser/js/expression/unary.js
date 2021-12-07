@@ -22,7 +22,7 @@ class unary extends expression_1.expression {
                 switch (expr_data.type) {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
-                        return { value: (Number(expr_data.value) * -1), type: type_1.type.FLOAT };
+                        return { value: (Number(expr_data.value) * -1), type: expr_data.type };
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar - para: ' + expr_data.value));
                 }
