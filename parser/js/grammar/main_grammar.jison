@@ -286,6 +286,9 @@ pr_unary :
     | tk_par_o pr_expr tk_par_c {
         $$ = $2
     }   
+    | tk_minus pr_expr %prec UMINUS {
+        $$ = new unary($2, unary_type.ARITHMETIC, @1.first_line,@1.first_column);
+    } 
 ;
 
 pr_native :

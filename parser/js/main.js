@@ -23,6 +23,7 @@ window.exec = function (input) {
         console.log(error);
     }
     if (error_1.error_arr.length > 0) {
+        console.log(error_1.error_arr);
         return "$error$";
     }
     return console_1._console.output;
