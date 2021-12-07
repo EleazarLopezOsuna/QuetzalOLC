@@ -1,8 +1,8 @@
-import { literal } from "../abstract/literal.js";
-import { environment } from "../system/environment.js";
-import { data, type } from "../system/type.js";
+import { literal } from "../abstract/literal";
+import { environment } from "../system/environment";
+import { data, type } from "../system/type";
 
-export default class native extends literal {
+export class native extends literal {
 
     constructor(public value: any, public type: type, line: number, column: number) {
         super(line, column);

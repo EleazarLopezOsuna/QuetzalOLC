@@ -1,5 +1,8 @@
-import { node } from "./node.js";
-export class literal extends node {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.literal = void 0;
+const node_1 = require("./node");
+class literal extends node_1.node {
     get_string_value(str) {
         let result = str;
         if (str.endsWith('"'))
@@ -12,3 +15,5 @@ export class literal extends node {
         return result;
     }
 }
+exports.literal = literal;
+//# sourceMappingURL=literal.js.map

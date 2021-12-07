@@ -1,4 +1,4 @@
-import { node } from "./node.js";
+import { node } from "./node";
 
 export abstract class literal extends node {
 

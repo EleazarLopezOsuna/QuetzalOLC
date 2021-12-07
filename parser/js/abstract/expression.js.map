@@ -1,0 +1,1 @@
+{"version":3,"file":"expression.js","sourceRoot":"","sources":["../../abstract/expression.ts"],"names":[],"mappings":";;;AAAA,yCAAgD;AAChD,iCAA8B;AAE9B,MAAsB,UAAW,SAAQ,WAAI;IAElC,iBAAiB,CAAC,UAAgB,EAAE,WAAiB;QACxD,OAAO,eAAQ,CAAC,UAAU,CAAC,CAAC,WAAW,CAAC,CAAC;IAC7C,CAAC;CAEJ;AAND,gCAMC"}
