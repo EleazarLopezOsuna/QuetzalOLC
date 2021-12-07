@@ -20,6 +20,7 @@ import { error_arr } from "./system/error";
     }
 
     if (error_arr.length > 0) {
+        console.log(error_arr)
         return "$error$"
     }
     return _console.output
