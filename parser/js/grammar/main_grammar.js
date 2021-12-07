@@ -219,7 +219,7 @@ case 27:
         this.$ = new string_unary($$[$0-4],string_unary_type.LOWERCASE ,_$[$0-4].first_line, _$[$0-4].first_column);
     
 break;
-case 28: case 30:
+case 28:
 
         this.$ = new string_binary($$[$0-2], $$[$0],string_binary_type.CONCAT ,_$[$0-2].first_line, _$[$0-2].first_column);
     
@@ -229,12 +229,12 @@ case 29:
         this.$ = new string_binary($$[$0-2], $$[$0],string_binary_type.REPEAT ,_$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
-case 32:
+case 30:
 
         this.$ = new string_binary($$[$0-5], $$[$0-1],string_binary_type.POSITION ,_$[$0-5].first_line, _$[$0-5].first_column);
     
 break;
-case 33:
+case 31:
 
         this.$ = new string_ternary($$[$0-7], $$[$0-3], $$[$0-1], string_ternary_type.SUBSTRING ,_$[$0-7].first_line, _$[$0-7].first_column);
     
@@ -882,39 +882,39 @@ case 3:/* Comments */
 break;
 case 4:/* Multiline Comments */
 break;
-case 5:return 35
+case 5:return 36
 break;
-case 6:return 38
+case 6:return 37
 break;
-case 7:return 38
+case 7:return 31
 break;
-case 8:return 13
+case 8:return 32
 break;
-case 9:return 17
+case 9:return 33
 break;
-case 10:return 18
+case 10:return 43
 break;
-case 11:return 19
+case 11:return 46
 break;
-case 12:return 20
+case 12:return 46
 break;
-case 13:return 21
+case 13:return 13
 break;
-case 14:return 37
+case 14:return 17
 break;
-case 15:return 33
+case 15:return 18
 break;
-case 16:return 34
+case 16:return 19
 break;
-case 17:return 36
+case 17:return 20
 break;
-case 18:return 'tk_id'
+case 18:return 21
 break;
-case 19:return 37
+case 19:return 45
 break;
 case 20:return 'tk_double'
 break;
-case 21:return 36
+case 21:return 44
 break;
 case 22:return 'tk_string_type'
 break;
@@ -950,132 +950,116 @@ case 37:return 'tk_return'
 break;
 case 38:return 'tk_struct'
 break;
-case 39:return 'tk_caracterOfPosition'
+case 39:return 'tk_parse'
 break;
-case 40:return 'tk_subString'
+case 40:return 'tk_toInt'
 break;
-case 41:return 'tk_length'
+case 41:return 'tk_toDouble'
 break;
-case 42:return 'tk_toUpperCase'
+case 42:return 42
 break;
-case 43:return 'tk_toLowerCase'
+case 43:return 'tk_typeof'
 break;
-case 44:return 'tk_parse'
+case 44:return 'tk_function'
 break;
-case 45:return 'tk_toInt'
+case 45:return 'tk_elseif'
 break;
-case 46:return 'tk_toDouble'
+case 46:return 'tk_break'
 break;
-case 47:return 34
+case 47:return 'tk_continue'
 break;
-case 48:return 'tk_typeof'
+case 48:return 'tk_in'
 break;
-case 49:return 'tk_function'
+case 49:return 'tk_begin'
 break;
-case 50:return 'tk_elseif'
+case 50:return 'tk_end'
 break;
-case 51:return 'tk_break'
+case 51:return 'tk_push'
 break;
-case 52:return 'tk_continue'
+case 52:return 'tk_pop'
 break;
-case 53:return 'tk_in'
+case 53:return 43
 break;
-case 3:return 36
+case 54:return 45
 break;
-case 4:return 37
+case 55:return 41
 break;
-case 5:return 31
+case 56:return 42
 break;
-case 6:return 32
+case 57:return 44
 break;
-case 7:return 33
+case 58:return 'tk_id'
 break;
-case 8:return 43
+case 59:return 10
 break;
-case 9:return 46
+case 60:return 11
 break;
-case 10:return 46
+case 61:return 'tk_double_plus'
 break;
-case 11:return 13
+case 62:return 'tk_double_minus'
 break;
-case 12:return 17
+case 63:return 8
 break;
-case 13:return 18
+case 64:return 9
 break;
-case 14:return 19
+case 65:return 12
 break;
-case 15:return 20
+case 66:return 22
 break;
-case 16:return 21
+case 67:return 23
 break;
-case 17:return 45
+case 68:return 27
 break;
-case 18:return 41
+case 69:return 26
 break;
-case 19:return 42
+case 70:return 24
 break;
-case 20:return 44
+case 71:return 25
 break;
-case 21:return 'tk_id'
+case 72:return 29
 break;
-case 22:return 10
+case 73:return 34
 break;
-case 23:return 11
+case 74:return 28
 break;
-case 24:return 8
+case 75:return 39
 break;
-case 25:return 9
+case 76:return 'tk_equal'
 break;
-case 26:return 12
+case 77:return 14
 break;
-case 27:return 22
+case 78:return 16 
 break;
-case 28:return 23
+case 79:return 'tk_cbra_o'
 break;
-case 29:return 27
+case 80:return 'tk_cbra_c'
 break;
-case 30:return 26
+case 81:return 'tk_bra_o'
 break;
-case 31:return 24
+case 82:return 'tk_bra_c'
 break;
-case 32:return 25
+case 83:return 15
 break;
-case 33:return 29
+case 84:return 35
 break;
-case 34:return 34
+case 85:return 30
 break;
-case 35:return 28
+case 86:return 'tk_ternary'
 break;
-case 36:return 39
+case 87:return 'tk_colon'
 break;
-case 37:return 'tk_equal'
+case 88:return 'tk_semicolon'
 break;
-case 38:return 14
+case 89:return 'tk_hash'
 break;
-case 39:return 16 
+case 90:return 5
 break;
-case 40:return 'tk_cbra_o'
-break;
-case 41:return 'tk_cbra_c'
-break;
-case 42:return 'tk_bra_o'
-break;
-case 43:return 'tk_bra_c'
-break;
-case 44:return 15
-break;
-case 45:return 30
-break;
-case 46:return 35
-break;
-case 47:return 5
-break;
-case 48:error_arr.push(new error(yy_.yylloc.first_line, yy_.yylloc.first_column, error_type.LEXICO,'Valor inesperado ' + yy_.yytext));  
+case 91:error_arr.push(new error(yy_.yylloc.first_line, yy_.yylloc.first_column, error_type.LEXICO,'Valor inesperado ' + yy_.yytext));  
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/,/^(?:caracterOfPosition\b)/,/^(?:subString\b)/,/^(?:length\b)/,/^(?:toUppercase\b)/,/^(?:toLowercase\b)/,/^(?:null\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:pow\b)/,/^(?:sqrt\b)/,/^(?:sin\b)/,/^(?:cos\b)/,/^(?:tan\b)/,/^(?:log10\b)/,/^(?:([0-9]+))/,/^(?:([0-9]+(\.[0-9]+)?))/,/^(?:(([\"][^"]*[\"])))/,/^(?:(([\'][^\']{1}[\'])))/,/^(?:(([a-zA-Z_])[a-zA-Z0-9_ñÑ]*))/,/^(?:\*)/,/^(?:\/)/,/^(?:\+)/,/^(?:-)/,/^(?:%)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:==)/,/^(?:!=)/,/^(?:\|\|)/,/^(?:&)/,/^(?:&&)/,/^(?:!)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:,)/,/^(?:\.)/,/^(?:\^)/,/^(?:$)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:\t)/,/^(?:\r)/,/^(?:\/\/.*)/,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/,/^(?:caracterOfPosition\b)/,/^(?:subString\b)/,/^(?:length\b)/,/^(?:toUppercase\b)/,/^(?:toLowercase\b)/,/^(?:null\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:pow\b)/,/^(?:sqrt\b)/,/^(?:sin\b)/,/^(?:cos\b)/,/^(?:tan\b)/,/^(?:log10\b)/,/^(?:int\b)/,/^(?:double\b)/,/^(?:char\b)/,/^(?:String\b)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:switch\b)/,/^(?:case\b)/,/^(?:default\b)/,/^(?:break\b)/,/^(?:continue\b)/,/^(?:while\b)/,/^(?:do\b)/,/^(?:for\b)/,/^(?:void\b)/,/^(?:main\b)/,/^(?:println\b)/,/^(?:print\b)/,/^(?:return\b)/,/^(?:struct\b)/,/^(?:parse\b)/,/^(?:toInt\b)/,/^(?:toDouble\b)/,/^(?:string\b)/,/^(?:typeof\b)/,/^(?:function\b)/,/^(?:elseif\b)/,/^(?:break\b)/,/^(?:continue\b)/,/^(?:in\b)/,/^(?:begin\b)/,/^(?:end\b)/,/^(?:push\b)/,/^(?:pop\b)/,/^(?:null\b)/,/^(?:([0-9]+))/,/^(?:([0-9]+(\.[0-9]+)?))/,/^(?:(([\"][^"]*[\"])))/,/^(?:(([\'][^\']{1}[\'])))/,/^(?:(([a-zA-Z_])[a-zA-Z0-9_ñÑ]*))/,/^(?:\*)/,/^(?:\/)/,/^(?:\+\+)/,/^(?:--)/,/^(?:\+)/,/^(?:-)/,/^(?:%)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:==)/,/^(?:!=)/,/^(?:\|\|)/,/^(?:&)/,/^(?:&&)/,/^(?:!)/,/^(?:=)/,/^(?:\()/,/^(?:\))/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:,)/,/^(?:\^)/,/^(?:\.)/,/^(?:\?)/,/^(?::)/,/^(?:;)/,/^(?:#)/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91],"inclusive":true}}
 });
 return lexer;
 })();

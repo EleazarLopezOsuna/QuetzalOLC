@@ -58,11 +58,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "cos"                   return 'tk_cos'
 "tan"                   return 'tk_tan'
 "log10"                 return 'tk_log10'
-{number}                return 'tk_int'
-{decimal}               return 'tk_float'
-{string}                return 'tk_string'
-{char}                  return 'tk_char'
-{id}                    return 'tk_id'
+
 "int"                   return 'tk_int'
 "double"                return 'tk_double'
 "char"                  return 'tk_char'
@@ -83,11 +79,6 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "print"                 return 'tk_print'
 "return"                return 'tk_return'
 "struct"                return 'tk_struct'
-"caracterOfPosition"    return 'tk_caracterOfPosition'
-"subString"             return 'tk_subString'
-"length"                return 'tk_length'
-"toUpperCase"           return 'tk_toUpperCase'
-"toLowerCase"           return 'tk_toLowerCase'
 "parse"                 return 'tk_parse'
 "toInt"                 return 'tk_toInt'
 "toDouble"              return 'tk_toDouble'
@@ -103,6 +94,12 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "push"                  return 'tk_push'
 "pop"                   return 'tk_pop'
 "null"                  return 'tk_null'
+
+{number}                return 'tk_int'
+{decimal}               return 'tk_float'
+{string}                return 'tk_string'
+{char}                  return 'tk_char'
+{id}                    return 'tk_id'
 "*"                     return 'tk_times'
 "/"                     return 'tk_division'
 "++"                    return 'tk_double_plus'
@@ -128,9 +125,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "["                     return 'tk_bra_o'
 "]"                     return 'tk_bra_c'
 ","                     return 'tk_comma'
-"."                     return 'tk_dot'
 "^"                     return 'tk_repeat'
-"&"                     return 'tk_string_concat'
 "."                     return 'tk_dot'
 "?"                     return 'tk_ternary'
 ":"                     return 'tk_colon'
@@ -155,7 +150,6 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %left 'tk_plus' 'tk_minus'
 %left 'tk_times' 'tk_division' 'tk_mod'
 %left 'tk_pow'
-%right 'tk_not'
 %right 'tk_double_plus' 'tk_double_minus'
 %left UMINUS
 %right 'tk_not' 
@@ -287,12 +281,6 @@ pr_unary :
     | tk_par_o pr_expr tk_par_c {
         $$ = $2
     }   
-    | tk_minus pr_expr %prec UMINUS {
-        $$ = new unary($2, unary_type.ARITHMETIC, @1.first_line,@1.first_column);
-    } 
-    | tk_par_o pr_expr tk_par_c {
-        $$ = $2
-    }
 ;
 
 pr_native :
