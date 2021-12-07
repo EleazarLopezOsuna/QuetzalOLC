@@ -35,6 +35,8 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 **********************/
 
 \s+                                     /* Skip Whitespace */
+\t                                      /* Skip tabs */
+\r                                      /* Skip return */
 "//".*                                  /* Comments */
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     /* Multiline Comments */
 
@@ -61,8 +63,50 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 {string}                return 'tk_string'
 {char}                  return 'tk_char'
 {id}                    return 'tk_id'
+"int"                   return 'tk_int'
+"double"                return 'tk_double'
+"char"                  return 'tk_char'
+"String"                return 'tk_string_type'
+"if"                    return 'tk_if'
+"else"                  return 'tk_else'
+"switch"                return 'tk_switch'
+"case"                  return 'tk_case'
+"default"               return 'tk_default'
+"break"                 return 'tk_break'
+"continue"              return 'tk_continue'
+"while"                 return 'tk_while'
+"do"                    return 'tk_do'
+"for"                   return 'tk_for'
+"void"                  return 'tk_void'
+"main"                  return 'tk_main'
+"println"               return 'tk_println'
+"print"                 return 'tk_print'
+"return"                return 'tk_return'
+"struct"                return 'tk_struct'
+"caracterOfPosition"    return 'tk_caracterOfPosition'
+"subString"             return 'tk_subString'
+"length"                return 'tk_length'
+"toUpperCase"           return 'tk_toUpperCase'
+"toLowerCase"           return 'tk_toLowerCase'
+"parse"                 return 'tk_parse'
+"toInt"                 return 'tk_toInt'
+"toDouble"              return 'tk_toDouble'
+"string"                return 'tk_string'
+"typeof"                return 'tk_typeof'
+"function"              return 'tk_function'
+"elseif"                return 'tk_elseif'
+"break"                 return 'tk_break'
+"continue"              return 'tk_continue'
+"in"                    return 'tk_in'
+"begin"                 return 'tk_begin'
+"end"                   return 'tk_end'
+"push"                  return 'tk_push'
+"pop"                   return 'tk_pop'
+"null"                  return 'tk_null'
 "*"                     return 'tk_times'
 "/"                     return 'tk_division'
+"++"                    return 'tk_double_plus'
+"--"                    return 'tk_double_minus'
 "+"                     return 'tk_plus'
 "-"                     return 'tk_minus'
 "%"                     return 'tk_mod'
@@ -86,6 +130,13 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 ","                     return 'tk_comma'
 "."                     return 'tk_dot'
 "^"                     return 'tk_repeat'
+"&"                     return 'tk_string_concat'
+"."                     return 'tk_dot'
+"?"                     return 'tk_ternary'
+":"                     return 'tk_colon'
+";"                     return 'tk_semicolon'
+"#"                     return 'tk_hash'
+
 <<EOF>>		            return 'EOF'
 
 
@@ -103,6 +154,10 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %left 'tk_greater_equal', 'tk_less_equal', 'tk_less', 'tk_greater'
 %left 'tk_plus' 'tk_minus'
 %left 'tk_times' 'tk_division' 'tk_mod'
+%left 'tk_pow'
+%right 'tk_not'
+%right 'tk_double_plus' 'tk_double_minus'
+%left UMINUS
 %right 'tk_not' 
 /* Start production */
 %start pr_init
@@ -141,7 +196,7 @@ pr_instruction
 pr_expr
     : pr_expr tk_plus pr_expr {
         $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.PLUS, @1.first_line,@1.first_column);
-    }       
+    }   
     | pr_expr tk_minus pr_expr {
         $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.MINUS, @1.first_line,@1.first_column);
     }
@@ -229,6 +284,12 @@ pr_unary :
     | pr_native {
         $$ = $1
     }
+    | tk_par_o pr_expr tk_par_c {
+        $$ = $2
+    }   
+    | tk_minus pr_expr %prec UMINUS {
+        $$ = new unary($2, unary_type.ARITHMETIC, @1.first_line,@1.first_column);
+    } 
     | tk_par_o pr_expr tk_par_c {
         $$ = $2
     }

@@ -219,7 +219,7 @@ case 27:
         this.$ = new string_unary($$[$0-4],string_unary_type.LOWERCASE ,_$[$0-4].first_line, _$[$0-4].first_column);
     
 break;
-case 28:
+case 28: case 30:
 
         this.$ = new string_binary($$[$0-2], $$[$0],string_binary_type.CONCAT ,_$[$0-2].first_line, _$[$0-2].first_column);
     
@@ -229,12 +229,12 @@ case 29:
         this.$ = new string_binary($$[$0-2], $$[$0],string_binary_type.REPEAT ,_$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
-case 30:
+case 32:
 
         this.$ = new string_binary($$[$0-5], $$[$0-1],string_binary_type.POSITION ,_$[$0-5].first_line, _$[$0-5].first_column);
     
 break;
-case 31:
+case 33:
 
         this.$ = new string_ternary($$[$0-7], $$[$0-3], $$[$0-1], string_ternary_type.SUBSTRING ,_$[$0-7].first_line, _$[$0-7].first_column);
     
@@ -874,9 +874,111 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* Skip Whitespace */
 break;
-case 1:/* Comments */
+case 1:/* Skip tabs */
 break;
-case 2:/* Multiline Comments */
+case 2:/* Skip return */
+break;
+case 3:/* Comments */
+break;
+case 4:/* Multiline Comments */
+break;
+case 5:return 35
+break;
+case 6:return 38
+break;
+case 7:return 38
+break;
+case 8:return 13
+break;
+case 9:return 17
+break;
+case 10:return 18
+break;
+case 11:return 19
+break;
+case 12:return 20
+break;
+case 13:return 21
+break;
+case 14:return 37
+break;
+case 15:return 33
+break;
+case 16:return 34
+break;
+case 17:return 36
+break;
+case 18:return 'tk_id'
+break;
+case 19:return 37
+break;
+case 20:return 'tk_double'
+break;
+case 21:return 36
+break;
+case 22:return 'tk_string_type'
+break;
+case 23:return 'tk_if'
+break;
+case 24:return 'tk_else'
+break;
+case 25:return 'tk_switch'
+break;
+case 26:return 'tk_case'
+break;
+case 27:return 'tk_default'
+break;
+case 28:return 'tk_break'
+break;
+case 29:return 'tk_continue'
+break;
+case 30:return 'tk_while'
+break;
+case 31:return 'tk_do'
+break;
+case 32:return 'tk_for'
+break;
+case 33:return 'tk_void'
+break;
+case 34:return 'tk_main'
+break;
+case 35:return 'tk_println'
+break;
+case 36:return 'tk_print'
+break;
+case 37:return 'tk_return'
+break;
+case 38:return 'tk_struct'
+break;
+case 39:return 'tk_caracterOfPosition'
+break;
+case 40:return 'tk_subString'
+break;
+case 41:return 'tk_length'
+break;
+case 42:return 'tk_toUpperCase'
+break;
+case 43:return 'tk_toLowerCase'
+break;
+case 44:return 'tk_parse'
+break;
+case 45:return 'tk_toInt'
+break;
+case 46:return 'tk_toDouble'
+break;
+case 47:return 34
+break;
+case 48:return 'tk_typeof'
+break;
+case 49:return 'tk_function'
+break;
+case 50:return 'tk_elseif'
+break;
+case 51:return 'tk_break'
+break;
+case 52:return 'tk_continue'
+break;
+case 53:return 'tk_in'
 break;
 case 3:return 36
 break;
