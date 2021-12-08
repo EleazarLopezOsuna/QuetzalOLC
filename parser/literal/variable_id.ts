@@ -21,7 +21,7 @@ export class variable_id extends literal {
 
     public execute(environment: environment): data {
         let return_data = environment.get_variable(this.id)
-        if(return_data.type != null) {
+        if(return_data.type != type.NULL) {
             return return_data
         } else {
             error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable no definida: ' + this.id));

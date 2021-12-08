@@ -2716,7 +2716,7 @@ class variable_id extends literal_1.literal {
     }
     execute(environment) {
         let return_data = environment.get_variable(this.id);
-        if (return_data.type != null) {
+        if (return_data.type != type_1.type.NULL) {
             return return_data;
         }
         else {
