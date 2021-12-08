@@ -60,9 +60,10 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "tan"                   return 'tk_tan'
 "log10"                 return 'tk_log10'
 
-"int"                   return 'tk_int'
+"int"                   return 'tk_integer'
 "double"                return 'tk_double'
 "char"                  return 'tk_char'
+"boolean"               return 'tk_boolean'
 "String"                return 'tk_string_type'
 "if"                    return 'tk_if'
 "else"                  return 'tk_else'
@@ -83,9 +84,8 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "parse"                 return 'tk_parse'
 "toInt"                 return 'tk_toInt'
 "toDouble"              return 'tk_toDouble'
-"string"                return 'tk_string'
+"string"                return 'tk_string_func'
 "typeof"                return 'tk_typeof'
-"function"              return 'tk_function'
 "elseif"                return 'tk_elseif'
 "break"                 return 'tk_break'
 "continue"              return 'tk_continue'
@@ -163,12 +163,89 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 **********************/
 %%
 
+/*
+Produccion Cambiada
 pr_init    
     : pr_instructions EOF {
         return $1;
     } 
 ;
+*/
+pr_init    
+    : pr_globals EOF
+;
 
+pr_main
+    : tk_void tk_main tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+;
+
+pr_globals
+    : pr_globals pr_global
+    | pr_globals pr_main
+    | pr_global
+    | pr_main
+;
+
+pr_global
+    : pr_newSubProgram
+    | pr_newVariable tk_semicolon
+    | pr_newStruct tk_semicolon
+;
+
+/* Funciones y metodos, 2 producciones para cada uno (trae o no parametros) */
+pr_newSubProgram
+    : pr_type tk_id tk_par_o pr_declarations tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+    | pr_type tk_id tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+    | tk_void tk_id tk_par_o pr_declarations tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+    | tk_void tk_id tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+;
+
+/* int numero1, int numero2 <- Sirve para declaracion de parametros y atributos de struct */
+pr_declarations
+    : pr_declarations tk_comma pr_type tk_id
+    | pr_type tk_id
+;
+
+/*
+    int numero = ...
+    int[] numero = ...
+    int numero(, id)+
+*/
+pr_newVariable
+    : pr_type tk_id tk_equal pr_expr
+    | pr_type tk_bra_o tk_bra_c tk_id tk_equal pr_expr
+    | pr_type pr_ids
+;
+
+/*
+    id, id, id, id
+*/
+pr_ids
+    : pr_ids tk_comma tk_id
+    | tk_id
+;
+
+/*
+    struct persona{
+        int edad,
+        Strint nombre
+    }
+*/
+pr_newStruct
+    : tk_struct tk_id tk_cbra_o pr_declarations tk_cbra_c
+;
+
+pr_type
+    : tk_integer
+    | tk_double
+    | tk_string_type
+    | tk_boolean
+    | tk_char 
+    | tk_id 
+;
+
+/*
+Produccion Cambiada
 pr_instructions
     : pr_instructions pr_instruction {
         $1.push($2)
@@ -178,7 +255,15 @@ pr_instructions
         $$ = [$1]
     }
 ;
+*/
 
+pr_instructions
+    : pr_instructions pr_instruction
+    | pr_instruction
+;
+
+/*
+Produccion Cambiada
 pr_instruction 
     : pr_expr {
         $$ = $1
@@ -187,7 +272,143 @@ pr_instruction
         error_arr.push(new error(@1.first_line, @1.first_column, error_type.SINTACTICO, yytext));  
     }
 ;
+*/
 
+pr_instruction 
+    : pr_if
+    | pr_switch
+    | pr_while
+    | pr_do
+    | pr_for
+    | pr_assignment tk_semicolon
+    | pr_subProgramCall tk_semicolon
+    | pr_newVariable tk_semicolon
+    | pr_newStruct tk_semicolon
+    | tk_break tk_semicolon
+    | tk_continue tk_semicolon
+    | tk_id tk_double_plus tk_semicolon
+    | tk_id tk_double_minus tk_semicolon
+    | tk_return pr_expr tk_semicolon
+    | pr_print tk_semicolon
+    | pr_println tk_semicolon
+    | error
+;
+
+pr_print
+    : tk_print tk_par_o pr_exprList tk_par_c
+;
+
+pr_println
+    : tk_println tk_par_o pr_exprList tk_par_c
+;
+
+/*
+    id = expression
+    id[x][y].attribute.attribute = expression
+*/
+pr_assignment
+    : tk_id tk_equal pr_expr
+    | tk_id pr_access tk_equal pr_expr
+;
+
+/*
+    ... .attribute
+    ... [expression]
+    .attribute
+    .expression
+*/
+pr_access
+    : pr_access tk_dot tk_id
+    | pr_access tk_bra_o pr_expr tk_bra_c
+    | tk_dot tk_id
+    | tk_bra_o pr_expr tk_bra_c
+;
+
+/*
+    id(exp, exp, exp)
+    id()
+*/
+pr_subProgramCall
+    : tk_id tk_par_o pr_exprList tk_par_c
+    | tkid tk_par_o tk_par_c
+;
+
+/*
+    ... , expression
+    expression
+*/
+pr_exprList
+    : pr_exprList tk_comma pr_expr
+    | pr_expr
+;
+
+/*
+    for(start;expression;expression){instructions}
+    for letra in expression {instructions}
+*/
+pr_for
+    : tk_for tk_par_o pr_forStart tk_semicolon pr_expr tk_semicolon pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+    | tk_for tk_id tk_in pr_expr tk_cbra_o pr_instructions tk_cbra_c
+;
+
+/*
+    int iterador = expression
+    iterador = expression
+*/
+pr_forStart
+    : pr_type tk_id tk_equal pr_expr
+    | tk_id tk_equal pr_expr
+;
+
+/* while(expression){instructions} */
+pr_while
+    : tk_while tk_par_o pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+;
+
+/* do{instructions}while(expression); */
+pr_do
+    : tk_do tk_cbra_o pr_instructions tk_cbra_c tk_while tk_par_o pr_expr tk_par_c tk_semicolon
+;
+
+/* switch(expression){cases} */
+pr_switch
+    : tk_switch tk_par_o pr_expr tk_par_c tk_cbra_o pr_cases tk_cbra_c
+;
+
+pr_cases
+    : pr_cases pr_case
+    | pr_case
+;
+
+/*
+    case type: instructions
+    default: instructions
+*/
+pr_case
+    : tk_case pr_type tk_colon pr_instructions
+    | tk_default tk_colon pr_instructions
+;
+
+/*
+    if(expression){instructions}..else..
+    if(expression){instructions}
+*/
+pr_if
+    : tk_if tk_par_o pr_expr tk_cbra_o pr_instructions tk_cbra_c pr_else
+    | tk_if tk_par_o pr_expr tk_cbra_o pr_instructions tk_cbra_c
+;
+
+/*
+    La recursividad va al final para evitar else-elseif, al momento de detectar un else termina la recursividad
+    elseif(expression){instructions}..else..
+    elseif(expression){instructions}
+    else{instructions}
+*/
+pr_else
+    : tk_elseif tk_par_o pr_expr tk_cbra_o pr_instructions tk_cbra_c pr_else
+    | tk_elseif tk_par_o pr_expr tk_cbra_o pr_instructions tk_cbra_c
+    | tk_else tk_cbra_o pr_instructions tk_cbra_c
+;
 
 pr_expr
     : pr_expr tk_plus pr_expr {
@@ -274,6 +495,8 @@ pr_expr
     | pr_unary {
         $$ = $1
     }
+    | tk_id
+    | tk_id tk_hash
 ;
 
 pr_unary :
