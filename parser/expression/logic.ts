@@ -9,7 +9,7 @@ export enum logic_type {
 }
 
 export class logic extends expression {
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
     

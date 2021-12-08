@@ -15,7 +15,7 @@ export enum arithmetic_binary_type {
 
 export class arithmetic_binary extends expression {
 
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
 

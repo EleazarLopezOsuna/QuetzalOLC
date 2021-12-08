@@ -2589,7 +2589,7 @@ class print extends instruction_1.instruction {
     translate(environment) {
         this.expresions.forEach(element => {
         });
-        return { value: null, type: type_1.type.NULL };
+        return type_1.type.NULL;
     }
     execute(environment) {
         this.expresions.forEach(element => {
@@ -2618,6 +2618,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.native = void 0;
 const literal_1 = require("../abstract/literal");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 class native extends literal_1.literal {
     constructor(value, type, line, column) {
         super(line, column);
@@ -2625,7 +2626,37 @@ class native extends literal_1.literal {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        switch (this.type) {
+            case type_1.type.INTEGER:
+            case type_1.type.FLOAT:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = ' + this.value + ';\n';
+                break;
+            case type_1.type.STRING:
+            case type_1.type.CHAR:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = HP;//Save start position\n';
+                let content = this.get_string_value(this.value);
+                for (let i = 0; i < content.length; i++) {
+                    console_1._3dCode.output += 'HEAP[(int)HP] = ' + content.charAt(i).charCodeAt(0) + ';//Save character ' + content.charAt(i) + ' in heap\n';
+                    console_1._3dCode.output += 'HP = HP + 1;//Increase HP\n';
+                }
+                console_1._3dCode.output += 'HEAP[(int)HP] = 36;//Save end of string in heap\n';
+                console_1._3dCode.output += 'HP = HP + 1;//Increase HP\n';
+                break;
+            case type_1.type.NULL:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' =  -1;\n';
+                break;
+            case type_1.type.BOOLEAN:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += (this.value === 'false') ? 'T' + console_1._3dCode.actualTemp + ' = 0;\n' : 'T' + console_1._3dCode.actualTemp + ' = 1;\n';
+                break;
+            default:
+                console.log(this.value);
+                return type_1.type.STRING;
+        }
+        return this.type;
     }
     execute(environment) {
         switch (this.type) {
@@ -2651,6 +2682,7 @@ class native extends literal_1.literal {
 }
 exports.native = native;
 
+<<<<<<< HEAD
 },{"../abstract/literal":6,"../system/type":26}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -2670,6 +2702,9 @@ class _symbol {
 exports._symbol = _symbol;
 
 },{}],23:[function(require,module,exports){
+=======
+},{"../abstract/literal":6,"../system/console":20,"../system/type":23}],20:[function(require,module,exports){
+>>>>>>> 574ba2ebbdb9cb5e9bfffa356114a212d702afd7
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._3dCode = exports._console = void 0;
@@ -2679,8 +2714,11 @@ class console {
         this.symbols = new Map();
         this.stack = new Array;
         this.heap = new Array;
-        this.lastTemp = 0;
-        this.lastTag = 0;
+        this.actualTemp = 0;
+        this.actualTag = 0;
+        this.trueTag = 0;
+        this.falseTag = 0;
+        this.exitTag = 0;
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -2693,6 +2731,11 @@ class console {
         this.symbols = new Map();
         this.stack = [];
         this.heap = [];
+        this.actualTemp = 0;
+        this.actualTag = 0;
+        this.trueTag = 0;
+        this.falseTag = 0;
+        this.exitTag = 0;
     }
 }
 exports._console = new console();
@@ -2790,7 +2833,7 @@ const environment_1 = require("./system/environment");
 const console_1 = require("./system/console");
 const error_1 = require("./system/error");
 window.translate = function (input) {
-    console_1._console.clean();
+    console_1._3dCode.clean();
     try {
         const ast = parser.parse(input);
         const main_environment = new environment_1.environment(null);
@@ -2811,7 +2854,7 @@ window.translate = function (input) {
         console.log(error_1.error_arr);
         return "$error$";
     }
-    console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output;
+    console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output + '}';
     console.log(console_1._3dCode.output);
     return console_1._console.output;
 };
@@ -2822,7 +2865,7 @@ function generateHeader() {
     code += 'float HP;\n';
     code += 'float SP;\n';
     code += 'float ';
-    for (let i = 0; i <= console_1._3dCode.lastTemp; i++) {
+    for (let i = 0; i <= console_1._3dCode.actualTemp; i++) {
         if (i == 0)
             code += 'T' + i;
         else
@@ -2841,6 +2884,7 @@ function generateDefaultFunctions() {
     code += generateStringTimes();
     code += generateNumberPower();
     code += generateIntToString();
+    code += 'void main(){\n';
     return code;
 }
 function generateStringConcat() {

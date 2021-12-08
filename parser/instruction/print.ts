@@ -11,11 +11,11 @@ export enum print_type {
 
 export class print extends instruction {
 
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         this.expresions.forEach(element => {
             
         });
-        return { value: null, type: type.NULL }
+        return type.NULL
     }
 
     constructor(public expresions: [instruction], public type: print_type, line: number, column: number) {
