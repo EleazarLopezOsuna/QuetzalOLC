@@ -65,7 +65,9 @@
         </footer>
     </div>
 
-    <script src="parser/bundle.js">
+    <script src="parser/exec.js">
+    </script>
+    <script src="parser/translate.js">
     </script>
     <script>
         var input = document.getElementById("input");
@@ -99,7 +101,7 @@
         }
 
         function traducir() {
-            let result = exec(editor_1.getValue())
+            let result = translate(editor_1.getValue())
             console.log(result)
             if (result == "$error$") {
                 Swal.fire(

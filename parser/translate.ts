@@ -1,45 +1,43 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const parser = require("./grammar/main_grammar");
-const environment_1 = require("./system/environment");
-const console_1 = require("./system/console");
-const error_1 = require("./system/error");
-window.exec = function (input) {
-    console_1._console.clean();
+const parser = require("./grammar/main_grammar")
+import { environment } from "./system/environment";
+import { _console, _3dCode } from "./system/console"
+import { error_arr } from "./system/error";
+
+(<any>window).translate = function (input: string): string {
+    _console.clean();
     try {
         const ast = parser.parse(input);
-        const main_environment = new environment_1.environment(null);
-        console.log("ast", ast);
+        const main_environment = new environment(null);
+        console.log("ast", ast)
         for (const instr of ast) {
             try {
-                instr.execute(main_environment);
-                instr.translate(main_environment);
-            }
-            catch (error) {
+                instr.translate(main_environment)
+            } catch (error) {
                 console.log(error);
             }
         }
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
     }
-    if (error_1.error_arr.length > 0) {
-        console.log(error_1.error_arr);
-        return "$error$";
+
+    if (error_arr.length > 0) {
+        console.log(error_arr)
+        return "$error$"
     }
-    console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output;
-    console.log(console_1._3dCode.output);
-    return console_1._console.output;
-};
-function generateHeader() {
+    _3dCode.output = generateHeader() + generateDefaultFunctions() + _3dCode.output;
+    console.log(_3dCode.output)
+    return _console.output
+}
+
+function generateHeader(){
     let code = '#include <stdio.h>\n';
     code += 'float HEAP[16384];\n';
     code += 'float STACK[16384];\n';
     code += 'float HP;\n';
     code += 'float SP;\n';
     code += 'float ';
-    for (let i = 0; i <= console_1._3dCode.lastTemp; i++) {
-        if (i == 0)
+    for(let i = 0; i <= _3dCode.lastTemp; i++){
+        if(i == 0)
             code += 'T' + i;
         else
             code += ', T' + 1;
@@ -47,7 +45,8 @@ function generateHeader() {
     code += ';\n';
     return code;
 }
-function generateDefaultFunctions() {
+
+function generateDefaultFunctions(){
     let code = generateStringConcat();
     code += generateStringPrint();
     code += generateOutOfBounds();
@@ -59,7 +58,8 @@ function generateDefaultFunctions() {
     code += generateIntToString();
     return code;
 }
-function generateStringConcat() {
+
+function generateStringConcat(){
     let code = 'void StringConcat(){\n';
     code += 'T0 = SP + 1;//Get stack position of first string\n';
     code += 'T0 = STACK[(int)T0];//Get heap position of first string\n';
@@ -90,7 +90,8 @@ function generateStringConcat() {
     code += '}\n';
     return code;
 }
-function generateStringPrint() {
+
+function generateStringPrint(){
     let code = 'void StringPrint(){\n';
     code += 'T0 = SP + 0;\n';
     code += 'T0 = STACK[(int)T0];\n';
@@ -105,7 +106,8 @@ function generateStringPrint() {
     code += '}\n';
     return code;
 }
-function generateOutOfBounds() {
+
+function generateOutOfBounds(){
     let code = 'void OutOfBounds(){\n';
     code += 'printf("%c", 79); //O\n';
     code += 'printf("%c", 117); //u\n';
@@ -124,7 +126,8 @@ function generateOutOfBounds() {
     code += '}\n';
     return code;
 }
-function generateDivisionBy0() {
+
+function generateDivisionBy0(){
     let code = 'void DivisionBy0(){\n';
     code += 'printf("%c", 68); //D\n';
     code += 'printf("%c", 105); //i\n';
@@ -143,8 +146,9 @@ function generateDivisionBy0() {
     code += '}\n';
     return code;
 }
-function generateLowerCase() {
-    let code = 'void StringLowerCase(){\n';
+
+function generateLowerCase(){
+    let code = 'void StringLowerCase(){\n'
     code += 'T0 = SP + 1;//Get stack position of string\n';
     code += 'T0 = STACK[(int)T0];//Get heap position\n';
     code += 'T1 = HP;//Save position of new string\n';
@@ -168,8 +172,9 @@ function generateLowerCase() {
     code += '}\n';
     return code;
 }
-function generateUpperCase() {
-    let code = 'void StringUpperCase(){\n';
+
+function generateUpperCase(){
+    let code = 'void StringUpperCase(){\n'
     code += 'T0 = SP + 1;//Get stack position of string\n';
     code += 'T0 = STACK[(int)T0];//Get heap position\n';
     code += 'T1 = HP;//Save position of new string\n';
@@ -193,18 +198,19 @@ function generateUpperCase() {
     code += '}\n';
     return code;
 }
-function generateStringTimes() {
+
+function generateStringTimes(){
     let code = 'void StringTimes(){\n';
     code += 'T0 = SP + 1;//Get stack position of string\n';
     code += 'T0 = STACK[(int)T0];//Get heap position of string\n';
     code += 'T1 = SP + 2;//Get number position\n';
-    code += 'T1 = STACK[(int)T1];//Get number of times the string will repeat\n';
+    code += 'T1 = STACK[(int)T1];//Get number of times the string will repeat\n'
     code += 'T2 = HP;//Save start position of new string\n';
     code += 'L0://Loop tag\n';
     code += 'if(T1 < 1) goto L3;//Check if finish\n';
     code += 'L1://Second loop tag\n';
     code += 'T3 = HEAP[(int)T0];//Get character in heap\n';
-    code += 'if(T3 == 36) goto L2;//Check if character is end of string\n';
+    code += 'if(T3 == 36) goto L2;//Check if character is end of string\n'
     code += 'HEAP[(int)HP] = T3;//Save character in heap\n';
     code += 'HP = HP + 1;//Increase HP\n';
     code += 'T0 = T0 + 1;//Increase iterator\n';
@@ -220,10 +226,11 @@ function generateStringTimes() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T2;//Set return\n';
     code += 'return;//\n';
-    code += '}';
+    code += '}'
     return code;
 }
-function generateNumberPower() {
+
+function generateNumberPower(){
     let code = 'void NumberPower(){\n';
     code += 'T0 = SP + 1;//Get base index\n';
     code += 'T0 = STACK[(int)T0];//Get base value\n';
@@ -239,38 +246,38 @@ function generateNumberPower() {
     code += 'T0 = SP + 0;//Set return index\n';
     code += 'STACK[(int)T0] = T2;//Set return value\n';
     code += 'return;//Go back\n';
-    code += '}';
+    code += '}'
     return code;
 }
-function generateIntToString() {
-    let code = 'void intToString(){\n';
-    code += 'T0 = SP + 1; //Get number position\n';
-    code += 'T0 = STACK[(int)T0]; //Get number\n';
-    code += 'T1 = T0; //Make a copy\n';
-    code += 'T2 = 1; //counter\n';
-    code += 'L0:\n';
-    code += 'if(T1 < 10) goto L1;\n';
-    code += 'T3 = (int)T1 % 10; //temp%10\n';
-    code += 'T1 = T1 - T3; //temp -= temp%10\n';
-    code += 'T1 = T1 / 10; //temp /= 10\n';
-    code += 'T2 = T2 * 10; //contador *= 10\n';
-    code += 'goto L0;\n';
-    code += 'L1:\n';
-    code += 'T3 = T1 + 48; //Get ascii for number\n';
-    code += 'HEAP[(int)HP] = T3;\n';
-    code += 'HP = HP + 1;\n';
-    code += 'if(T0 > 9) goto L2;\n';
-    code += 'goto L3;\n';
-    code += 'L2:\n';
-    code += 'T1 = (int)T0 % (int)T2; //num %= contador\n';
-    code += 'T0 = SP + 1; //Get number position\n';
-    code += 'STACK[(int)T0] = T1;\n';
-    code += 'intToString();\n';
-    code += 'L3:\n';
-    code += 'HEAP[(int)HP] = 36; //Set end of string\n';
-    code += 'HP = HP + 1; //Increase HP\n';
-    code += 'return;\n';
-    code += '}\n';
+
+function generateIntToString(){
+    let code = 'void intToString(){\n'
+    code += 'T0 = SP + 1; //Get number position\n'
+    code += 'T0 = STACK[(int)T0]; //Get number\n'
+    code += 'T1 = T0; //Make a copy\n'
+    code += 'T2 = 1; //counter\n'
+    code += 'L0:\n'
+    code += 'if(T1 < 10) goto L1;\n'
+    code += 'T3 = (int)T1 % 10; //temp%10\n'
+    code += 'T1 = T1 - T3; //temp -= temp%10\n'
+    code += 'T1 = T1 / 10; //temp /= 10\n'
+    code += 'T2 = T2 * 10; //contador *= 10\n'
+    code += 'goto L0;\n'
+    code += 'L1:\n'
+    code += 'T3 = T1 + 48; //Get ascii for number\n'
+    code += 'HEAP[(int)HP] = T3;\n'
+    code += 'HP = HP + 1;\n'
+    code += 'if(T0 > 9) goto L2;\n'
+    code += 'goto L3;\n'
+    code += 'L2:\n'
+    code += 'T1 = (int)T0 % (int)T2; //num %= contador\n'
+    code += 'T0 = SP + 1; //Get number position\n'
+    code += 'STACK[(int)T0] = T1;\n'
+    code += 'intToString();\n'
+    code += 'L3:\n'
+    code += 'HEAP[(int)HP] = 36; //Set end of string\n'
+    code += 'HP = HP + 1; //Increase HP\n'
+    code += 'return;\n'
+    code += '}\n'
     return code;
 }
-//# sourceMappingURL=main.js.map
