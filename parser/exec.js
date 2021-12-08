@@ -732,7 +732,7 @@ class expression extends node_1.node {
 }
 exports.expression = expression;
 
-},{"../system/type":28,"./node":7}],5:[function(require,module,exports){
+},{"../system/type":29,"./node":7}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.instruction = void 0;
@@ -806,7 +806,7 @@ window.exec = function (input) {
     return console_1._console.output;
 };
 
-},{"./grammar/main_grammar":18,"./system/console":25,"./system/environment":26,"./system/error":27}],9:[function(require,module,exports){
+},{"./grammar/main_grammar":18,"./system/console":26,"./system/environment":27,"./system/error":28}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_binary = exports.arithmetic_binary_type = void 0;
@@ -1072,7 +1072,7 @@ class arithmetic_binary extends expression_1.expression {
 }
 exports.arithmetic_binary = arithmetic_binary;
 
-},{"../abstract/expression":4,"../system/console":25,"../system/error":27,"../system/type":28}],10:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":26,"../system/error":28,"../system/type":29}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_unary = exports.arithmetic_unary_type = void 0;
@@ -1154,7 +1154,7 @@ class arithmetic_unary extends expression_1.expression {
 }
 exports.arithmetic_unary = arithmetic_unary;
 
-},{"../abstract/expression":4,"../system/error":27,"../system/type":28}],11:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":28,"../system/type":29}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logic = exports.logic_type = void 0;
@@ -1194,7 +1194,7 @@ class logic extends expression_1.expression {
 }
 exports.logic = logic;
 
-},{"../abstract/expression":4,"../system/type":28}],12:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/type":29}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.relational = exports.relational_type = void 0;
@@ -1245,7 +1245,7 @@ class relational extends expression_1.expression {
 }
 exports.relational = relational;
 
-},{"../abstract/expression":4,"../system/type":28}],13:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/type":29}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_binary = exports.string_binary_type = void 0;
@@ -1316,7 +1316,7 @@ class string_binary extends expression_1.expression {
 }
 exports.string_binary = string_binary;
 
-},{"../abstract/expression":4,"../system/error":27,"../system/type":28}],14:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":28,"../system/type":29}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_ternary = exports.string_ternary_type = void 0;
@@ -1362,7 +1362,7 @@ class string_ternary extends expression_1.expression {
 }
 exports.string_ternary = string_ternary;
 
-},{"../abstract/expression":4,"../system/error":27,"../system/type":28}],15:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":28,"../system/type":29}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_unary = exports.string_unary_type = void 0;
@@ -1424,7 +1424,7 @@ class string_unary extends expression_1.expression {
 }
 exports.string_unary = string_unary;
 
-},{"../abstract/expression":4,"../system/error":27,"../system/type":28}],16:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":28,"../system/type":29}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ternary = void 0;
@@ -1460,7 +1460,7 @@ class ternary extends expression_1.expression {
 }
 exports.ternary = ternary;
 
-},{"../abstract/expression":4,"../system/error":27,"../system/type":28}],17:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":28,"../system/type":29}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unary = exports.unary_type = void 0;
@@ -1511,7 +1511,7 @@ class unary extends expression_1.expression {
 }
 exports.unary = unary;
 
-},{"../abstract/expression":4,"../system/error":27,"../system/type":28}],18:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":28,"../system/type":29}],18:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -1590,7 +1590,7 @@ var main_grammar = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,18],$V1=[1,15],$V2=[1,26],$V3=[1,29],$V4=[1,30],$V5=[1,31],$V6=[1,32],$V7=[1,33],$V8=[1,13],$V9=[1,14],$Va=[1,16],$Vb=[1,27],$Vc=[1,28],$Vd=[1,24],$Ve=[1,23],$Vf=[1,21],$Vg=[1,22],$Vh=[1,20],$Vi=[1,19],$Vj=[2,5,14,20,28,29,30,31,32,33,42,43,46,48,50,53,54,57,58,59,62,64,65],$Vk=[1,61],$Vl=[1,58],$Vm=[1,51],$Vn=[1,52],$Vo=[1,53],$Vp=[1,54],$Vq=[1,55],$Vr=[1,56],$Vs=[1,59],$Vt=[1,62],$Vu=[1,63],$Vv=[1,64],$Vw=[1,65],$Vx=[1,66],$Vy=[1,67],$Vz=[1,77],$VA=[1,78],$VB=[14,20,22,26,63],$VC=[1,107],$VD=[1,94],$VE=[1,95],$VF=[1,96],$VG=[1,97],$VH=[1,98],$VI=[1,99],$VJ=[1,100],$VK=[1,101],$VL=[1,102],$VM=[1,103],$VN=[1,104],$VO=[1,105],$VP=[1,106],$VQ=[1,108],$VR=[1,109],$VS=[1,110],$VT=[12,13,17,22,27,52,63,69,70,71,72,73,80,81,82,83,84,85,86,87,91,92,95],$VU=[17,22],$VV=[1,138],$VW=[12,22],$VX=[24,26,52],$VY=[12,13,17,22,27,52,63,69,70,80,81,82,83,84,85,86,87,91,92,95],$VZ=[12,13,17,22,27,52,63,80,81,82,83,84,85,86,87,91,92,95],$V_=[12,13,17,22,27,52,63,82,83,86,87,91,92,95],$V$=[12,13,17,22,27,52,63,91,92],$V01=[14,22],$V11=[1,217],$V21=[1,218],$V31=[1,230],$V41=[1,231],$V51=[14,62,64];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"pr_init":3,"pr_instructions":4,"EOF":5,"pr_globals":6,"pr_global":7,"pr_main":8,"tk_void":9,"tk_main":10,"tk_par_o":11,"tk_par_c":12,"tk_cbra_o":13,"tk_cbra_c":14,"pr_newSubProgram":15,"pr_declaration_item":16,"tk_semicolon":17,"pr_declare_struct":18,"pr_type":19,"tk_id":20,"pr_declarations":21,"tk_comma":22,"pr_declaration_list":23,"tk_equal":24,"pr_expr":25,"tk_bra_o":26,"tk_bra_c":27,"tk_struct":28,"tk_integer_type":29,"tk_double_type":30,"tk_string_type":31,"tk_boolean_type":32,"tk_char_type":33,"pr_instruction":34,"pr_if":35,"pr_switch":36,"pr_while":37,"pr_do":38,"pr_for":39,"pr_assignment":40,"pr_call":41,"tk_break":42,"tk_continue":43,"tk_double_plus":44,"tk_double_minus":45,"tk_return":46,"pr_print":47,"tk_print":48,"pr_exprList":49,"tk_println":50,"pr_access":51,"tk_dot":52,"tkid":53,"tk_for":54,"pr_forStart":55,"tk_in":56,"tk_while":57,"tk_do":58,"tk_switch":59,"pr_cases":60,"pr_case":61,"tk_case":62,"tk_colon":63,"tk_default":64,"tk_if":65,"pr_else":66,"tk_elseif":67,"tk_else":68,"tk_plus":69,"tk_minus":70,"tk_times":71,"tk_division":72,"tk_mod":73,"tk_power":74,"tk_sqrt":75,"tk_sin":76,"tk_cos":77,"tk_tan":78,"tk_log10":79,"tk_less_equal":80,"tk_greater_equal":81,"tk_double_equal":82,"tk_not_equal":83,"tk_greater":84,"tk_less":85,"tk_and":86,"tk_or":87,"tk_length":88,"tk_uppercase":89,"tk_lowercase":90,"tk_concat":91,"tk_repeat":92,"tk_position":93,"tk_substring":94,"tk_ternary":95,"pr_unary":96,"tk_hash":97,"tk_not":98,"pr_native":99,"tk_float":100,"tk_string":101,"tk_null":102,"tk_char":103,"tk_int":104,"tk_bool":105,"$accept":0,"$end":1},
+symbols_: {"error":2,"pr_init":3,"pr_instructions":4,"EOF":5,"pr_globals":6,"pr_global":7,"pr_main":8,"tk_void":9,"tk_main":10,"tk_par_o":11,"tk_par_c":12,"tk_cbra_o":13,"tk_cbra_c":14,"pr_newSubProgram":15,"pr_declaration_item":16,"tk_semicolon":17,"pr_declare_struct":18,"pr_type":19,"tk_id":20,"pr_declarations":21,"tk_comma":22,"pr_declaration_list":23,"tk_equal":24,"pr_expr":25,"tk_bra_o":26,"tk_bra_c":27,"tk_struct":28,"tk_integer_type":29,"tk_double_type":30,"tk_string_type":31,"tk_boolean_type":32,"tk_char_type":33,"pr_instruction":34,"pr_if":35,"pr_switch":36,"pr_while":37,"pr_do":38,"pr_for":39,"pr_assignation":40,"pr_call":41,"tk_break":42,"tk_continue":43,"tk_double_plus":44,"tk_double_minus":45,"tk_return":46,"pr_print":47,"tk_print":48,"pr_exprList":49,"tk_println":50,"pr_access":51,"tk_dot":52,"tkid":53,"tk_for":54,"pr_forStart":55,"tk_in":56,"tk_while":57,"tk_do":58,"tk_switch":59,"pr_cases":60,"pr_case":61,"tk_case":62,"tk_colon":63,"tk_default":64,"tk_if":65,"pr_else":66,"tk_elseif":67,"tk_else":68,"tk_plus":69,"tk_minus":70,"tk_times":71,"tk_division":72,"tk_mod":73,"tk_power":74,"tk_sqrt":75,"tk_sin":76,"tk_cos":77,"tk_tan":78,"tk_log10":79,"tk_less_equal":80,"tk_greater_equal":81,"tk_double_equal":82,"tk_not_equal":83,"tk_greater":84,"tk_less":85,"tk_and":86,"tk_or":87,"tk_length":88,"tk_uppercase":89,"tk_lowercase":90,"tk_concat":91,"tk_repeat":92,"tk_position":93,"tk_substring":94,"tk_ternary":95,"pr_unary":96,"tk_hash":97,"tk_not":98,"pr_native":99,"tk_float":100,"tk_string":101,"tk_null":102,"tk_char":103,"tk_int":104,"tk_bool":105,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",9:"tk_void",10:"tk_main",11:"tk_par_o",12:"tk_par_c",13:"tk_cbra_o",14:"tk_cbra_c",17:"tk_semicolon",20:"tk_id",22:"tk_comma",24:"tk_equal",26:"tk_bra_o",27:"tk_bra_c",28:"tk_struct",29:"tk_integer_type",30:"tk_double_type",31:"tk_string_type",32:"tk_boolean_type",33:"tk_char_type",42:"tk_break",43:"tk_continue",44:"tk_double_plus",45:"tk_double_minus",46:"tk_return",48:"tk_print",50:"tk_println",52:"tk_dot",53:"tkid",54:"tk_for",56:"tk_in",57:"tk_while",58:"tk_do",59:"tk_switch",62:"tk_case",63:"tk_colon",64:"tk_default",65:"tk_if",67:"tk_elseif",68:"tk_else",69:"tk_plus",70:"tk_minus",71:"tk_times",72:"tk_division",73:"tk_mod",74:"tk_power",75:"tk_sqrt",76:"tk_sin",77:"tk_cos",78:"tk_tan",79:"tk_log10",80:"tk_less_equal",81:"tk_greater_equal",82:"tk_double_equal",83:"tk_not_equal",84:"tk_greater",85:"tk_less",86:"tk_and",87:"tk_or",88:"tk_length",89:"tk_uppercase",90:"tk_lowercase",91:"tk_concat",92:"tk_repeat",93:"tk_position",94:"tk_substring",95:"tk_ternary",97:"tk_hash",98:"tk_not",100:"tk_float",101:"tk_string",102:"tk_null",103:"tk_char",104:"tk_int",105:"tk_bool"},
 productions_: [0,[3,2],[6,2],[6,2],[6,1],[6,1],[8,7],[7,1],[7,2],[7,2],[15,8],[15,7],[15,8],[15,7],[21,4],[21,1],[23,3],[23,2],[16,3],[16,1],[16,5],[18,5],[19,1],[19,1],[19,1],[19,1],[19,1],[4,2],[4,1],[34,1],[34,1],[34,1],[34,1],[34,1],[34,2],[34,2],[34,2],[34,2],[34,2],[34,2],[34,3],[34,3],[34,3],[34,2],[34,1],[47,4],[47,4],[40,3],[40,4],[51,3],[51,4],[51,2],[51,3],[41,4],[41,3],[49,3],[49,1],[39,11],[39,7],[55,4],[55,3],[37,7],[38,9],[36,7],[60,2],[60,1],[61,4],[61,3],[35,7],[35,6],[66,7],[66,6],[66,4],[25,3],[25,3],[25,3],[25,3],[25,3],[25,6],[25,4],[25,4],[25,4],[25,4],[25,4],[25,3],[25,3],[25,3],[25,3],[25,3],[25,3],[25,3],[25,3],[25,5],[25,5],[25,5],[25,3],[25,3],[25,6],[25,8],[25,5],[25,1],[25,1],[25,2],[96,2],[96,1],[96,3],[99,1],[99,1],[99,1],[99,1],[99,1],[99,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
@@ -1654,6 +1654,11 @@ break;
 case 46:
  
         this.$ = new print($$[$0-1], print_type.PRINTLN, _$[$0-3].first_line,_$[$0-3].first_column);
+    
+break;
+case 47:
+
+        this.$ = new assignation_unary($$[$0-2], $$[$0], _$[$0-2].first_line,_$[$0-2].first_column);
     
 break;
 case 55:
@@ -2116,6 +2121,7 @@ _handle_error:
     const {print, print_type} = require('../instruction/print');
     const {declaration_list} = require('../instruction/declaration_list');
     const {declaration_item} = require('../instruction/declaration_item');
+    const {assignation_unary} = require('../instruction/assignation_unary');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -2664,7 +2670,49 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"../expression/arithmetic_binary":9,"../expression/arithmetic_unary":10,"../expression/logic":11,"../expression/relational":12,"../expression/string_binary":13,"../expression/string_ternary":14,"../expression/string_unary":15,"../expression/ternary":16,"../expression/unary":17,"../instruction/declaration_item":19,"../instruction/declaration_list":20,"../instruction/print":21,"../literal/native":22,"../literal/variable_id":23,"../system/error":27,"../system/type":28,"_process":3,"fs":1,"path":2}],19:[function(require,module,exports){
+},{"../expression/arithmetic_binary":9,"../expression/arithmetic_unary":10,"../expression/logic":11,"../expression/relational":12,"../expression/string_binary":13,"../expression/string_ternary":14,"../expression/string_unary":15,"../expression/ternary":16,"../expression/unary":17,"../instruction/assignation_unary":19,"../instruction/declaration_item":20,"../instruction/declaration_list":21,"../instruction/print":22,"../literal/native":23,"../literal/variable_id":24,"../system/error":28,"../system/type":29,"_process":3,"fs":1,"path":2}],19:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.assignation_unary = void 0;
+const expression_1 = require("../abstract/expression");
+const error_1 = require("../system/error");
+const type_1 = require("../system/type");
+class assignation_unary extends expression_1.expression {
+    constructor(id, expr, line, column) {
+        super(line, column);
+        this.id = id;
+        this.expr = expr;
+    }
+    translate(environment) {
+        throw new Error("Method not implemented.");
+    }
+    execute(environment) {
+        const expr_data = this.expr.execute(environment);
+        // validate that exists
+        let saved_variable = environment.get_variable(this.id);
+        if (saved_variable.type != type_1.type.NULL) {
+            // validate the type
+            if (saved_variable.type == expr_data.type) {
+                // assign the value
+                environment.save_variable(this.id, expr_data);
+            }
+            else {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Tipo diferente, no se puede asignar'));
+            }
+        }
+        else {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no inicializada'));
+        }
+        // Default
+        return { value: null, type: type_1.type.NULL };
+    }
+    plot(count) {
+        throw new Error("Method not implemented.");
+    }
+}
+exports.assignation_unary = assignation_unary;
+
+},{"../abstract/expression":4,"../system/error":28,"../system/type":29}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_item = void 0;
@@ -2694,7 +2742,7 @@ class declaration_item extends expression_1.expression {
 }
 exports.declaration_item = declaration_item;
 
-},{"../abstract/expression":4,"../abstract/literal":6,"../system/type":28}],20:[function(require,module,exports){
+},{"../abstract/expression":4,"../abstract/literal":6,"../system/type":29}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_list = void 0;
@@ -2730,7 +2778,12 @@ class declaration_list extends expression_1.expression {
                     if (validate_item[1] == this.native_type) {
                         // Save the variable 
                         item_data.type = validate_item[0];
-                        environment.save_variable(item.variable_id, item_data);
+                        if (environment.get_variable(item.variable_id).type != type_1.type.NULL) {
+                            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
+                        }
+                        else {
+                            environment.save_variable(item.variable_id, item_data);
+                        }
                         return;
                     }
                 });
@@ -2750,7 +2803,12 @@ class declaration_list extends expression_1.expression {
                 }
                 else {
                     // Save the variable 
-                    environment.save_variable(item.variable_id, item_data);
+                    if (environment.get_variable(item.variable_id).type != type_1.type.NULL) {
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
+                    }
+                    else {
+                        environment.save_variable(item.variable_id, item_data);
+                    }
                 }
             }
         });
@@ -2763,7 +2821,7 @@ class declaration_list extends expression_1.expression {
 }
 exports.declaration_list = declaration_list;
 
-},{"../abstract/expression":4,"../system/error":27,"../system/type":28}],21:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":28,"../system/type":29}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.print = exports.print_type = void 0;
@@ -2807,7 +2865,7 @@ class print extends instruction_1.instruction {
 }
 exports.print = print;
 
-},{"../abstract/instruction":5,"../system/console":25,"../system/type":28}],22:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":26,"../system/type":29}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native = void 0;
@@ -2877,7 +2935,7 @@ class native extends literal_1.literal {
 }
 exports.native = native;
 
-},{"../abstract/literal":6,"../system/console":25,"../system/type":28}],23:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/console":26,"../system/type":29}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.variable_id = exports.variable_id_type = void 0;
@@ -2914,7 +2972,7 @@ class variable_id extends literal_1.literal {
 }
 exports.variable_id = variable_id;
 
-},{"../abstract/literal":6,"../system/error":27,"../system/type":28}],24:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/error":28,"../system/type":29}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._symbol = exports.scope = void 0;
@@ -2932,7 +2990,7 @@ class _symbol {
 }
 exports._symbol = _symbol;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._3dCode = exports._console = void 0;
@@ -2963,7 +3021,7 @@ class console {
 exports._console = new console();
 exports._3dCode = new console();
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
@@ -2995,7 +3053,7 @@ class environment {
 }
 exports.environment = environment;
 
-},{"./_symbol":24,"./type":28}],27:[function(require,module,exports){
+},{"./_symbol":25,"./type":29}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.error_arr = exports.error_type = exports.error = void 0;
@@ -3023,7 +3081,7 @@ var error_type;
 })(error_type = exports.error_type || (exports.error_type = {}));
 exports.error_arr = [];
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.type_tbl = exports.type = void 0;

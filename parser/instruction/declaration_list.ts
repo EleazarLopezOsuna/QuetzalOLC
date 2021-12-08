@@ -24,7 +24,7 @@ export class declaration_list extends expression {
             let item_data = item.execute(environment);
 
             // match the type in the system and the string type
-            let validation_arr: Array<Array<type|string>> = [
+            let validation_arr: Array<Array<type | string>> = [
                 [type.BOOLEAN, "boolean"],
                 [type.CHAR, "char"],
                 [type.FLOAT, "double"],
@@ -37,8 +37,12 @@ export class declaration_list extends expression {
                 validation_arr.forEach(validate_item => {
                     if (validate_item[1] == this.native_type) {
                         // Save the variable 
-                        item_data.type = validate_item[0] as type; 
-                        environment.save_variable(item.variable_id, item_data)
+                        item_data.type = validate_item[0] as type;
+                        if (environment.get_variable(item.variable_id).type != type.NULL) {
+                            error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
+                        } else {
+                            environment.save_variable(item.variable_id, item_data)
+                        }
                         return
                     }
                 });
@@ -58,7 +62,11 @@ export class declaration_list extends expression {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede iniciar con distinto tipo de dato para: ' + item.variable_id));
                 } else {
                     // Save the variable 
-                    environment.save_variable(item.variable_id, item_data)
+                    if (environment.get_variable(item.variable_id).type != type.NULL) {
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
+                    } else {
+                        environment.save_variable(item.variable_id, item_data)
+                    }
                 }
             }
 

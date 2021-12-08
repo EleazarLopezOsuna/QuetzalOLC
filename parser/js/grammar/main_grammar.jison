@@ -17,6 +17,7 @@
     const {print, print_type} = require('../instruction/print');
     const {declaration_list} = require('../instruction/declaration_list');
     const {declaration_item} = require('../instruction/declaration_item');
+    const {assignation_unary} = require('../instruction/assignation_unary');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -311,7 +312,7 @@ pr_instruction
     | pr_while {$$ = $1}
     | pr_do {$$ = $1}
     | pr_for {$$ = $1}
-    | pr_assignment tk_semicolon {$$ = $1}
+    | pr_assignation tk_semicolon {$$ = $1}
     | pr_call tk_semicolon {$$ = $1}
     | pr_declaration_list tk_semicolon {$$ = $1}
     | pr_declare_struct tk_semicolon {$$ = $1}
@@ -338,8 +339,10 @@ pr_print
     id = expression
     id[x][y].attribute.attribute = expression
 */
-pr_assignment
-    : tk_id tk_equal pr_expr
+pr_assignation
+    : tk_id tk_equal pr_expr {
+        $$ = new assignation_unary($1, $3, @1.first_line,@1.first_column);
+    }
     | tk_id pr_access tk_equal pr_expr
 ;
 

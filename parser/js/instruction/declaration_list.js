@@ -33,7 +33,12 @@ class declaration_list extends expression_1.expression {
                     if (validate_item[1] == this.native_type) {
                         // Save the variable 
                         item_data.type = validate_item[0];
-                        environment.save_variable(item.variable_id, item_data);
+                        if (environment.get_variable(item.variable_id).type != type_1.type.NULL) {
+                            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
+                        }
+                        else {
+                            environment.save_variable(item.variable_id, item_data);
+                        }
                         return;
                     }
                 });
@@ -53,7 +58,12 @@ class declaration_list extends expression_1.expression {
                 }
                 else {
                     // Save the variable 
-                    environment.save_variable(item.variable_id, item_data);
+                    if (environment.get_variable(item.variable_id).type != type_1.type.NULL) {
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
+                    }
+                    else {
+                        environment.save_variable(item.variable_id, item_data);
+                    }
                 }
             }
         });
