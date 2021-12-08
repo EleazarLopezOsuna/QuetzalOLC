@@ -7,7 +7,7 @@ import { declaration_item } from "./declaration_item";
 
 export class declaration_list extends expression {
 
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
 

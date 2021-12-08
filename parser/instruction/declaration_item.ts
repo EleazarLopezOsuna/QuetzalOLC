@@ -7,7 +7,7 @@ import { literal } from "../abstract/literal";
 
 export class declaration_item extends expression {
 
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
 
