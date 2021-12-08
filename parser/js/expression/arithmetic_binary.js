@@ -45,6 +45,8 @@ class arithmetic_binary extends expression_1.expression {
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                         return { value: (left_data.value - right_data.value), type: type_1.type.INTEGER };
+                    case type_1.type.FLOAT:
+                        return { value: (left_data.value - right_data.value), type: type_1.type.FLOAT };
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' - ' + right_data.type));
                 }
@@ -53,6 +55,8 @@ class arithmetic_binary extends expression_1.expression {
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                         return { value: (left_data.value * right_data.value), type: type_1.type.INTEGER };
+                    case type_1.type.FLOAT:
+                        return { value: (left_data.value * right_data.value), type: type_1.type.FLOAT };
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' * ' + right_data.type));
                 }
@@ -69,6 +73,8 @@ class arithmetic_binary extends expression_1.expression {
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                         return { value: (left_data.value % right_data.value), type: type_1.type.INTEGER };
+                    case type_1.type.FLOAT:
+                        return { value: (left_data.value % right_data.value), type: type_1.type.FLOAT };
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' % ' + right_data.type));
                 }
@@ -82,6 +88,13 @@ class arithmetic_binary extends expression_1.expression {
                         }
                         else
                             return { value: (left_data.value / right_data.value), type: type_1.type.INTEGER };
+                    case type_1.type.FLOAT:
+                        if (right_data.value == 0) {
+                            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, "No se puede dividir entre 0"));
+                            break;
+                        }
+                        else
+                            return { value: (left_data.value / right_data.value), type: type_1.type.FLOAT };
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' / ' + right_data.type));
                 }
