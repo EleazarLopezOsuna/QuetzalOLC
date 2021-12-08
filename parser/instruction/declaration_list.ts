@@ -55,7 +55,7 @@ export class declaration_list extends expression {
 
                 // if checked type save the variable
                 if (!checked) {
-                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede iniciar con distinto tipo de dato para: ' + item_data.value));
+                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede iniciar con distinto tipo de dato para: ' + item.variable_id));
                 } else {
                     // Save the variable 
                     environment.save_variable(item.variable_id, item_data)

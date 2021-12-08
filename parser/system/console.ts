@@ -1,3 +1,5 @@
+import { error, error_arr } from "./error";
+
 class console {
     public output = "";
     public symbols = new Map();
@@ -35,6 +37,9 @@ class console {
         this.trueTag = 0;
         this.falseTag = 0;
         this.exitTag = 0;
+        while(error_arr.length > 0) {
+            error_arr.pop();
+        }
     }
 
 

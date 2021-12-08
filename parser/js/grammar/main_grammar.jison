@@ -19,6 +19,7 @@
     const {declaration_item} = require('../instruction/declaration_item');
 
     const {native} = require('../literal/native');
+    const {variable_id, variable_id_type} = require('../literal/variable_id');
 %}
 
 %lex
@@ -531,8 +532,12 @@ pr_expr
     | pr_unary {
         $$ = $1
     }
-    | tk_id
-    | tk_id tk_hash
+    | tk_id { 
+        $$ = new variable_id($1, variable_id_type.NORMAL, @1.first_line, @1.first_column);
+    }
+    | tk_id tk_hash { 
+        $$ = new variable_id($1, variable_id_type.REFERENCE, @1.first_line, @1.first_column);
+    }
 ;
 
 pr_unary :

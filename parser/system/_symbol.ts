@@ -6,7 +6,7 @@ export enum scope {
 }
 
 export class _symbol {
-    constructor( private id:any, private data:data, private scope:scope) {
+    constructor( public id:any, public data:data, public scope:scope) {
 
     }
 }

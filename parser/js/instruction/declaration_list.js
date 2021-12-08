@@ -49,7 +49,7 @@ class declaration_list extends expression_1.expression {
                 });
                 // if checked type save the variable
                 if (!checked) {
-                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede iniciar con distinto tipo de dato para: ' + item_data.value));
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede iniciar con distinto tipo de dato para: ' + item.variable_id));
                 }
                 else {
                     // Save the variable 
