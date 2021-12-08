@@ -7,8 +7,11 @@ class console {
         this.symbols = new Map();
         this.stack = new Array;
         this.heap = new Array;
-        this.lastTemp = 0;
-        this.lastTag = 0;
+        this.actualTemp = 0;
+        this.actualTag = 0;
+        this.trueTag = 0;
+        this.falseTag = 0;
+        this.exitTag = 0;
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -21,6 +24,11 @@ class console {
         this.symbols = new Map();
         this.stack = [];
         this.heap = [];
+        this.actualTemp = 0;
+        this.actualTag = 0;
+        this.trueTag = 0;
+        this.falseTag = 0;
+        this.exitTag = 0;
     }
 }
 exports._console = new console();

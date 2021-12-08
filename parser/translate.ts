@@ -4,7 +4,7 @@ import { _console, _3dCode } from "./system/console"
 import { error_arr } from "./system/error";
 
 (<any>window).translate = function (input: string): string {
-    _console.clean();
+    _3dCode.clean();
     try {
         const ast = parser.parse(input);
         const main_environment = new environment(null);
@@ -24,7 +24,7 @@ import { error_arr } from "./system/error";
         console.log(error_arr)
         return "$error$"
     }
-    _3dCode.output = generateHeader() + generateDefaultFunctions() + _3dCode.output;
+    _3dCode.output = generateHeader() + generateDefaultFunctions() + _3dCode.output + '}';
     console.log(_3dCode.output)
     return _console.output
 }
@@ -36,7 +36,7 @@ function generateHeader(){
     code += 'float HP;\n';
     code += 'float SP;\n';
     code += 'float ';
-    for(let i = 0; i <= _3dCode.lastTemp; i++){
+    for(let i = 0; i <= _3dCode.actualTemp; i++){
         if(i == 0)
             code += 'T' + i;
         else
@@ -56,6 +56,7 @@ function generateDefaultFunctions(){
     code += generateStringTimes();
     code += generateNumberPower();
     code += generateIntToString();
+    code += 'void main(){\n';
     return code;
 }
 

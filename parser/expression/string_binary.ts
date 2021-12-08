@@ -10,7 +10,7 @@ export enum string_binary_type {
 }
 
 export class string_binary extends expression {
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
 

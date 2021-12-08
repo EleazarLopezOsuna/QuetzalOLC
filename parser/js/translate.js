@@ -5,7 +5,7 @@ const environment_1 = require("./system/environment");
 const console_1 = require("./system/console");
 const error_1 = require("./system/error");
 window.translate = function (input) {
-    console_1._console.clean();
+    console_1._3dCode.clean();
     try {
         const ast = parser.parse(input);
         const main_environment = new environment_1.environment(null);
@@ -26,7 +26,7 @@ window.translate = function (input) {
         console.log(error_1.error_arr);
         return "$error$";
     }
-    console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output;
+    console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output + '}';
     console.log(console_1._3dCode.output);
     return console_1._console.output;
 };
@@ -37,7 +37,7 @@ function generateHeader() {
     code += 'float HP;\n';
     code += 'float SP;\n';
     code += 'float ';
-    for (let i = 0; i <= console_1._3dCode.lastTemp; i++) {
+    for (let i = 0; i <= console_1._3dCode.actualTemp; i++) {
         if (i == 0)
             code += 'T' + i;
         else
@@ -56,6 +56,7 @@ function generateDefaultFunctions() {
     code += generateStringTimes();
     code += generateNumberPower();
     code += generateIntToString();
+    code += 'void main(){\n';
     return code;
 }
 function generateStringConcat() {

@@ -9,7 +9,7 @@ export enum unary_type {
 }
 
 export class unary extends expression {
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
 

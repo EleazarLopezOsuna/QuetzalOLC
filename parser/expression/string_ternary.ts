@@ -8,7 +8,7 @@ export enum string_ternary_type {
 }
 
 export class string_ternary extends expression {
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
 

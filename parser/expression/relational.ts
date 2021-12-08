@@ -12,7 +12,7 @@ export enum relational_type {
 }
 
 export class relational extends expression {
-    public translate(environment: environment): data {
+    public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
     public plot(count: number): string {
