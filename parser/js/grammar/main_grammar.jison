@@ -13,6 +13,9 @@
     const {string_binary, string_binary_type} = require('../expression/string_binary');
     const {string_ternary, string_ternary_type} = require('../expression/string_ternary');
 
+    
+    const {print, print_type} = require('../instruction/print');
+
     const {native} = require('../literal/native');
 %}
 
@@ -163,33 +166,45 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 **********************/
 %%
 
-/*
-Produccion Cambiada
 pr_init    
     : pr_instructions EOF {
         return $1;
     } 
 ;
-*/
-pr_init    
-    : pr_globals EOF
+// pr_init    
+//     : pr_globals EOF {
+//         $$ = $1
+//     }
+// ;
+
+
+pr_globals
+    : pr_globals pr_global{
+        $1.push($2)
+        $$ = $1
+    }
+    | pr_globals pr_main {
+        $1.push($2)
+        $$ = $1
+    }
+    | pr_global {
+        $$ = [$1]
+    }
+    | pr_main {
+        $$ = [$1]
+    }
 ;
 
 pr_main
-    : tk_void tk_main tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c
-;
-
-pr_globals
-    : pr_globals pr_global
-    | pr_globals pr_main
-    | pr_global
-    | pr_main
+    : tk_void tk_main tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = $6
+    }
 ;
 
 pr_global
-    : pr_newSubProgram
-    | pr_newVariable tk_semicolon
-    | pr_newStruct tk_semicolon
+    : pr_newSubProgram {$$ = $1}
+    | pr_newVariable tk_semicolon {$$ = $1}
+    | pr_newStruct tk_semicolon {$$ = $1}
 ;
 
 /* Funciones y metodos, 2 producciones para cada uno (trae o no parametros) */
@@ -241,7 +256,6 @@ pr_type
     | tk_string_type
     | tk_boolean
     | tk_char 
-    | tk_id 
 ;
 
 /*
@@ -258,8 +272,13 @@ pr_instructions
 */
 
 pr_instructions
-    : pr_instructions pr_instruction
-    | pr_instruction
+    : pr_instructions pr_instruction {
+        $1.push($2)
+        $$ = $1
+    }
+    | pr_instruction {
+        $$ = [$1]
+    }
 ;
 
 /*
@@ -275,32 +294,33 @@ pr_instruction
 */
 
 pr_instruction 
-    : pr_if
-    | pr_switch
-    | pr_while
-    | pr_do
-    | pr_for
-    | pr_assignment tk_semicolon
-    | pr_subProgramCall tk_semicolon
-    | pr_newVariable tk_semicolon
-    | pr_newStruct tk_semicolon
-    | tk_break tk_semicolon
-    | tk_continue tk_semicolon
+    : pr_if {$$ = $1}
+    | pr_switch {$$ = $1}
+    | pr_while {$$ = $1}
+    | pr_do {$$ = $1}
+    | pr_for {$$ = $1}
+    | pr_assignment tk_semicolon {$$ = $1}
+    | pr_subProgramCall tk_semicolon {$$ = $1}
+    | pr_newVariable tk_semicolon {$$ = $1}
+    | pr_newStruct tk_semicolon {$$ = $1}
+    | tk_break tk_semicolon {$$ = $1}
+    | tk_continue tk_semicolon {$$ = $1}
     | tk_id tk_double_plus tk_semicolon
     | tk_id tk_double_minus tk_semicolon
     | tk_return pr_expr tk_semicolon
-    | pr_print tk_semicolon
-    | pr_println tk_semicolon
+    | pr_print tk_semicolon {$$ = $1}
     | error
 ;
 
 pr_print
-    : tk_print tk_par_o pr_exprList tk_par_c
+    : tk_print tk_par_o pr_exprList tk_par_c { 
+        $$ = new print($3, print_type.PRINT, @1.first_line,@1.first_column);
+    }
+    | tk_println tk_par_o pr_exprList tk_par_c { 
+        $$ = new print($3, print_type.PRINTLN, @1.first_line,@1.first_column);
+    }
 ;
 
-pr_println
-    : tk_println tk_par_o pr_exprList tk_par_c
-;
 
 /*
     id = expression
@@ -338,8 +358,13 @@ pr_subProgramCall
     expression
 */
 pr_exprList
-    : pr_exprList tk_comma pr_expr
-    | pr_expr
+    : pr_exprList tk_comma pr_expr {
+        $1.push($3)
+        $$ = $1
+    }
+    | pr_expr {
+        $$ = [$1]
+    }
 ;
 
 /*
