@@ -3,8 +3,8 @@ export enum type {
     STRING = 1,
     BOOLEAN = 2,
     FLOAT = 3,
-    NULL = 4,
-    CHAR = 5,
+    CHAR = 4,
+    NULL = 5,
 }
 
 export type data = {
@@ -13,22 +13,22 @@ export type data = {
 }
 
 /*
-        INTEGER        STRING       BOOLEAN       FLOAT
+        INTEGER        STRING       BOOLEAN       FLOAT     CHAR
 */
 export const type_tbl = [
     [
-        type.INTEGER, type.STRING, type.INTEGER, type.NULL
+        type.INTEGER, type.STRING, type.NULL, type.FLOAT, type.INTEGER
     ],
     [
-        type.STRING, type.STRING, type.STRING, type.STRING
+        type.STRING, type.STRING, type.STRING, type.STRING, type.STRING
     ],
     [
-        type.INTEGER, type.STRING, type.BOOLEAN, type.NULL
+        type.NULL, type.STRING, type.NULL, type.NULL, type.NULL
     ],
     [
-        type.FLOAT, type.STRING, type.NULL, type.NULL
+        type.FLOAT, type.STRING, type.NULL, type.FLOAT, type.FLOAT
     ],
     [
-        type.NULL, type.STRING, type.NULL, type.NULL
+        type.INTEGER, type.STRING, type.NULL, type.FLOAT, type.INTEGER
     ]
 ];

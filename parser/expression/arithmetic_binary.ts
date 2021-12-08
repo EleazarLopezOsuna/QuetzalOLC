@@ -29,14 +29,20 @@ export class arithmetic_binary extends expression {
                     case type.STRING:
                         return { value: (left_data.value.toString() + right_data.value.toString()), type: type.STRING };
                     case type.INTEGER:
+                        left_data.value = (left_data.type == type.CHAR) ? left_data.value.charCodeAt(0) : left_data.value
+                        right_data.value = (right_data.type == type.CHAR) ? right_data.value.charCodeAt(0) : right_data.value
                         return { value: (left_data.value + right_data.value), type: type.INTEGER };
+                    case type.FLOAT:
+                        left_data.value = (left_data.type == type.CHAR) ? left_data.value.charCodeAt(0) : left_data.value
+                        right_data.value = (right_data.type == type.CHAR) ? right_data.value.charCodeAt(0) : right_data.value
+                        return { value: (left_data.value + right_data.value), type: type.FLOAT };
                     default:
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' + ' + right_data.type));
                 }
                 break;
             case arithmetic_binary_type.MINUS:
                 switch (dominant_type) {
-                     case type.INTEGER:
+                    case type.INTEGER:
                         return { value: (left_data.value - right_data.value), type: type.INTEGER };
                     default:
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + left_data.type + ' - ' + right_data.type));

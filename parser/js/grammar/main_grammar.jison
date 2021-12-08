@@ -24,7 +24,7 @@
 **********************/
 
 number      [0-9]+
-decimal     [0-9]+("."[0-9]+)?
+decimal     [0-9]+("."[0-9]+)
 string      ([\"][^"]*[\"])
 char        ([\'][^\']{1}[\'])
 id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
@@ -96,8 +96,8 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "pop"                   return 'tk_pop'
 "null"                  return 'tk_null'
 
-{number}                return 'tk_int'
 {decimal}               return 'tk_float'
+{number}                return 'tk_int'
 {string}                return 'tk_string'
 {char}                  return 'tk_char'
 {id}                    return 'tk_id'
@@ -286,9 +286,6 @@ pr_unary :
     | tk_par_o pr_expr tk_par_c {
         $$ = $2
     }   
-    | tk_minus pr_expr %prec UMINUS {
-        $$ = new unary($2, unary_type.ARITHMETIC, @1.first_line,@1.first_column);
-    } 
 ;
 
 pr_native :

@@ -7,27 +7,27 @@ var type;
     type[type["STRING"] = 1] = "STRING";
     type[type["BOOLEAN"] = 2] = "BOOLEAN";
     type[type["FLOAT"] = 3] = "FLOAT";
-    type[type["NULL"] = 4] = "NULL";
-    type[type["CHAR"] = 5] = "CHAR";
+    type[type["CHAR"] = 4] = "CHAR";
+    type[type["NULL"] = 5] = "NULL";
 })(type = exports.type || (exports.type = {}));
 /*
-        INTEGER        STRING       BOOLEAN       FLOAT
+        INTEGER        STRING       BOOLEAN       FLOAT     CHAR
 */
 exports.type_tbl = [
     [
-        type.INTEGER, type.STRING, type.INTEGER, type.NULL
+        type.INTEGER, type.STRING, type.NULL, type.FLOAT, type.INTEGER
     ],
     [
-        type.STRING, type.STRING, type.STRING, type.STRING
+        type.STRING, type.STRING, type.STRING, type.STRING, type.STRING
     ],
     [
-        type.INTEGER, type.STRING, type.BOOLEAN, type.NULL
+        type.NULL, type.STRING, type.NULL, type.NULL, type.NULL
     ],
     [
-        type.FLOAT, type.STRING, type.NULL, type.NULL
+        type.FLOAT, type.STRING, type.NULL, type.FLOAT, type.FLOAT
     ],
     [
-        type.NULL, type.STRING, type.NULL, type.NULL
+        type.INTEGER, type.STRING, type.NULL, type.FLOAT, type.INTEGER
     ]
 ];
 //# sourceMappingURL=type.js.map
