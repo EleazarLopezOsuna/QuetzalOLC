@@ -5,18 +5,12 @@ class console {
     public heap: any[];
     public actualTemp: number;
     public actualTag: number;
-    public trueTag: number;
-    public falseTag: number;
-    public exitTag: number;
 
     constructor() {
         this.stack = new Array;
         this.heap = new Array;
-        this.actualTemp = 0;
+        this.actualTemp = 3;
         this.actualTag = 0;
-        this.trueTag = 0;
-        this.falseTag = 0;
-        this.exitTag = 0;
     }
     saveInHeap(index: number, id: any) {
         this.heap[index] = id;
@@ -30,11 +24,8 @@ class console {
         this.symbols = new Map();
         this.stack = []
         this.heap = []
-        this.actualTemp = 0;
+        this.actualTemp = 3;
         this.actualTag = 0;
-        this.trueTag = 0;
-        this.falseTag = 0;
-        this.exitTag = 0;
     }
 
 

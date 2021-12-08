@@ -41,7 +41,7 @@ function generateHeader() {
         if (i == 0)
             code += 'T' + i;
         else
-            code += ', T' + 1;
+            code += ', T' + i;
     }
     code += ';\n';
     return code;
@@ -49,13 +49,13 @@ function generateHeader() {
 function generateDefaultFunctions() {
     let code = generateStringConcat();
     code += generateStringPrint();
-    code += generateOutOfBounds();
-    code += generateDivisionBy0();
     code += generateLowerCase();
     code += generateUpperCase();
     code += generateStringTimes();
     code += generateNumberPower();
     code += generateIntToString();
+    code += generateOutOfBounds();
+    code += generateDivisionBy0();
     code += 'void main(){\n';
     return code;
 }
@@ -137,7 +137,7 @@ function generateDivisionBy0() {
     code += 'printf("%c", 32); // \n';
     code += 'printf("%c", 98); //b\n';
     code += 'printf("%c", 121); //y\n';
-    code += 'printf("%c", 38); // \n';
+    code += 'printf("%c", 32); // \n';
     code += 'printf("%c", 48); //0\n';
     code += 'return;\n';
     code += '}\n';
