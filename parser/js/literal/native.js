@@ -9,6 +9,9 @@ class native extends literal_1.literal {
         this.value = value;
         this.type = type;
     }
+    translate(environment) {
+        throw new Error("Method not implemented.");
+    }
     execute(environment) {
         switch (this.type) {
             case type_1.type.INTEGER:

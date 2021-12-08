@@ -17,6 +17,9 @@ class string_binary extends expression_1.expression {
         this.right = right;
         this.type = type;
     }
+    translate(environment) {
+        throw new Error("Method not implemented.");
+    }
     execute(environment) {
         const left_data = this.left.execute(environment);
         const right_data = this.right.execute(environment);

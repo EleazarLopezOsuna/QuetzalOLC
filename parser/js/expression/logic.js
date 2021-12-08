@@ -16,6 +16,9 @@ class logic extends expression_1.expression {
         this.right = right;
         this.type = type;
     }
+    translate(environment) {
+        throw new Error("Method not implemented.");
+    }
     plot(count) {
         throw new Error("Method not implemented.");
     }

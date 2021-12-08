@@ -3,6 +3,9 @@ import { environment } from "../system/environment";
 import { data, type } from "../system/type";
 
 export class native extends literal {
+    public translate(environment: environment): data {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(public value: any, public type: type, line: number, column: number) {
         super(line, column);

@@ -16,6 +16,9 @@ class string_unary extends expression_1.expression {
         this.expr = expr;
         this.type = type;
     }
+    translate(environment) {
+        throw new Error("Method not implemented.");
+    }
     execute(environment) {
         const expr_data = this.expr.execute(environment);
         switch (this.type) {

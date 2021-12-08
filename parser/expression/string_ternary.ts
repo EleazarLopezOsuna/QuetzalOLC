@@ -8,6 +8,9 @@ export enum string_ternary_type {
 }
 
 export class string_ternary extends expression {
+    public translate(environment: environment): data {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(public first: expression, public second: expression, public third: expression, public type: string_ternary_type, line: number, column: number) {
         super(line, column);

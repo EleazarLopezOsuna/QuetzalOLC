@@ -10,6 +10,9 @@ export enum string_unary_type {
 }
 
 export class string_unary extends expression {
+    public translate(environment: environment): data {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(public expr: expression, public type: string_unary_type, line: number, column: number) {
         super(line, column);

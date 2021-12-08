@@ -16,6 +16,9 @@ class string_ternary extends expression_1.expression {
         this.third = third;
         this.type = type;
     }
+    translate(environment) {
+        throw new Error("Method not implemented.");
+    }
     execute(environment) {
         const first_data = this.first.execute(environment);
         const second_data = this.second.execute(environment);

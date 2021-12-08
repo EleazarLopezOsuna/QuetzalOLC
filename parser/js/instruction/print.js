@@ -15,6 +15,11 @@ class print extends instruction_1.instruction {
         this.expresions = expresions;
         this.type = type;
     }
+    translate(environment) {
+        this.expresions.forEach(element => {
+        });
+        return { value: null, type: type_1.type.NULL };
+    }
     execute(environment) {
         this.expresions.forEach(element => {
             const expr_data = element.execute(environment);

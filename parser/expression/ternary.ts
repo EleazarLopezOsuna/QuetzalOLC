@@ -4,6 +4,9 @@ import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
 
 export class ternary extends expression {
+    public translate(environment: environment): data {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(public first: expression, public second: expression, public third: expression, line: number, column: number) {
         super(line, column);

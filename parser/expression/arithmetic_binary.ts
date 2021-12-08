@@ -2,6 +2,7 @@ import { expression } from "../abstract/expression";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
+import { _console } from "../system/console";
 
 export enum arithmetic_binary_type {
     PLUS,
@@ -13,6 +14,10 @@ export enum arithmetic_binary_type {
 }
 
 export class arithmetic_binary extends expression {
+
+    public translate(environment: environment): data {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(public left: expression, public right: expression, public type: arithmetic_binary_type, line: number, column: number) {
         super(line, column);

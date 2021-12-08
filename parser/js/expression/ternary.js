@@ -11,6 +11,9 @@ class ternary extends expression_1.expression {
         this.second = second;
         this.third = third;
     }
+    translate(environment) {
+        throw new Error("Method not implemented.");
+    }
     execute(environment) {
         const first_data = this.first.execute(environment);
         const second_data = this.second.execute(environment);

@@ -10,6 +10,9 @@ export enum string_binary_type {
 }
 
 export class string_binary extends expression {
+    public translate(environment: environment): data {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(public left: expression, public right: expression, public type: string_binary_type, line: number, column: number) {
         super(line, column);
