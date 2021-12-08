@@ -37,7 +37,7 @@
                 <h3 class="masthead-brand mx-2">OLC2</h3>
                 <nav class="nav nav-masthead justify-content-center">
                     <a class="nav-link" href="javascript:void(0)" onclick="operar()">Compilar</a>
-                    <a class="nav-link" href="javascript:void(0)">Traducir</a>
+                    <a class="nav-link" href="javascript:void(0)" onclick="traducir()">Traducir</a>
                     <a class="nav-link" href="javascript:void(0)">Reportes</a>
                 </nav>
             </div>
@@ -85,6 +85,20 @@
         editor_2.setSize(600, 800)
 
         function operar() {
+            let result = exec(editor_1.getValue())
+            console.log(result)
+            if (result == "$error$") {
+                Swal.fire(
+                    'Oh oh!',
+                    'Se han encontrado errores al ejecutar!',
+                    'error'
+                )
+            } else {
+                editor_2.setValue(result)
+            }
+        }
+
+        function traducir() {
             let result = exec(editor_1.getValue())
             console.log(result)
             if (result == "$error$") {
