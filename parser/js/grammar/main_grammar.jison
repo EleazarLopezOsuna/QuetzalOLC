@@ -15,6 +15,8 @@
 
     
     const {print, print_type} = require('../instruction/print');
+    const {declaration_list} = require('../instruction/declaration_list');
+    const {declaration_item} = require('../instruction/declaration_item');
 
     const {native} = require('../literal/native');
 %}
@@ -63,10 +65,10 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "tan"                   return 'tk_tan'
 "log10"                 return 'tk_log10'
 
-"int"                   return 'tk_integer'
-"double"                return 'tk_double'
-"char"                  return 'tk_char'
-"boolean"               return 'tk_boolean'
+"int"                   return 'tk_integer_type'
+"double"                return 'tk_double_type'
+"char"                  return 'tk_char_type'
+"boolean"               return 'tk_boolean_type'
 "String"                return 'tk_string_type'
 "if"                    return 'tk_if'
 "else"                  return 'tk_else'
@@ -203,8 +205,8 @@ pr_main
 
 pr_global
     : pr_newSubProgram {$$ = $1}
-    | pr_newVariable tk_semicolon {$$ = $1}
-    | pr_newStruct tk_semicolon {$$ = $1}
+    | pr_declaration_item tk_semicolon {$$ = $1}
+    | pr_declare_struct tk_semicolon {$$ = $1}
 ;
 
 /* Funciones y metodos, 2 producciones para cada uno (trae o no parametros) */
@@ -218,7 +220,20 @@ pr_newSubProgram
 /* int numero1, int numero2 <- Sirve para declaracion de parametros y atributos de struct */
 pr_declarations
     : pr_declarations tk_comma pr_type tk_id
-    | pr_type tk_id
+    | pr_type  
+;
+
+/*
+    id, id, id, id
+*/
+pr_declaration_list
+    : pr_declaration_list tk_comma pr_declaration_item {
+        $1.add_to_list($3)
+        $$ = $1
+    }
+    | pr_type pr_declaration_item {
+        $$ = new declaration_list($1, [$2], @1.first_line,@1.first_column)
+    }
 ;
 
 /*
@@ -226,18 +241,14 @@ pr_declarations
     int[] numero = ...
     int numero(, id)+
 */
-pr_newVariable
-    : pr_type tk_id tk_equal pr_expr
-    | pr_type tk_bra_o tk_bra_c tk_id tk_equal pr_expr
-    | pr_type pr_ids
-;
-
-/*
-    id, id, id, id
-*/
-pr_ids
-    : pr_ids tk_comma tk_id
-    | tk_id
+pr_declaration_item
+    : tk_id tk_equal pr_expr {
+        $$ = new declaration_item($1, $3, @1.first_line,@1.first_column);
+    }
+    | tk_id{
+        $$ = new declaration_item($1, null, @1.first_line,@1.first_column);
+    }
+    | tk_bra_o tk_bra_c tk_id tk_equal pr_expr
 ;
 
 /*
@@ -246,16 +257,16 @@ pr_ids
         Strint nombre
     }
 */
-pr_newStruct
+pr_declare_struct
     : tk_struct tk_id tk_cbra_o pr_declarations tk_cbra_c
 ;
 
 pr_type
-    : tk_integer
-    | tk_double
-    | tk_string_type
-    | tk_boolean
-    | tk_char 
+    : tk_integer_type {$$ = $1}
+    | tk_double_type {$$ = $1}
+    | tk_string_type {$$ = $1}
+    | tk_boolean_type {$$ = $1}
+    | tk_char_type {$$ = $1}
 ;
 
 /*
@@ -300,9 +311,9 @@ pr_instruction
     | pr_do {$$ = $1}
     | pr_for {$$ = $1}
     | pr_assignment tk_semicolon {$$ = $1}
-    | pr_subProgramCall tk_semicolon {$$ = $1}
-    | pr_newVariable tk_semicolon {$$ = $1}
-    | pr_newStruct tk_semicolon {$$ = $1}
+    | pr_call tk_semicolon {$$ = $1}
+    | pr_declaration_list tk_semicolon {$$ = $1}
+    | pr_declare_struct tk_semicolon {$$ = $1}
     | tk_break tk_semicolon {$$ = $1}
     | tk_continue tk_semicolon {$$ = $1}
     | tk_id tk_double_plus tk_semicolon
@@ -348,7 +359,7 @@ pr_access
     id(exp, exp, exp)
     id()
 */
-pr_subProgramCall
+pr_call
     : tk_id tk_par_o pr_exprList tk_par_c
     | tkid tk_par_o tk_par_c
 ;
