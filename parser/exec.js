@@ -1072,7 +1072,7 @@ class arithmetic_binary extends expression_1.expression {
 }
 exports.arithmetic_binary = arithmetic_binary;
 
-},{"../abstract/expression":4,"../system/error":27,"../system/type":28}],10:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":25,"../system/error":27,"../system/type":28}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_unary = exports.arithmetic_unary_type = void 0;
@@ -2936,7 +2936,6 @@ exports._symbol = _symbol;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._3dCode = exports._console = void 0;
-const error_1 = require("./error");
 class console {
     constructor() {
         this.output = "";
@@ -2959,18 +2958,12 @@ class console {
         this.heap = [];
         this.actualTemp = 3;
         this.actualTag = 0;
-        this.trueTag = 0;
-        this.falseTag = 0;
-        this.exitTag = 0;
-        while (error_1.error_arr.length > 0) {
-            error_1.error_arr.pop();
-        }
     }
 }
 exports._console = new console();
 exports._3dCode = new console();
 
-},{"./error":27}],26:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
