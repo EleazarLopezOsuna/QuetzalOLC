@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._3dCode = exports._console = void 0;
+const error_1 = require("./error");
 class console {
     constructor() {
         this.output = "";
@@ -23,6 +24,12 @@ class console {
         this.heap = [];
         this.actualTemp = 3;
         this.actualTag = 0;
+        this.trueTag = 0;
+        this.falseTag = 0;
+        this.exitTag = 0;
+        while (error_1.error_arr.length > 0) {
+            error_1.error_arr.pop();
+        }
     }
 }
 exports._console = new console();

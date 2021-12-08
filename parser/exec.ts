@@ -16,9 +16,11 @@ import { error_arr } from "./system/error";
                 console.log(error);
             }
         }
+        // console.log('environment', main_environment)
     } catch (error) {
         console.log(error);
     }
+
 
     if (error_arr.length > 0) {
         console.log(error_arr)

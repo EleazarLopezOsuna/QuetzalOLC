@@ -1,3 +1,5 @@
+import { error, error_arr } from "./error";
+
 class console {
     public output = "";
     public symbols = new Map();
