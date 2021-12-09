@@ -18,6 +18,8 @@
     const {declaration_list} = require('../instruction/declaration_list');
     const {declaration_item} = require('../instruction/declaration_item');
     const {assignation_unary} = require('../instruction/assignation_unary');
+    const {native_parse} = require('../instruction/native_parse');
+    const {native_function} = require('../instruction/native_function');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -89,8 +91,8 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "return"                return 'tk_return'
 "struct"                return 'tk_struct'
 "parse"                 return 'tk_parse'
-"toInt"                 return 'tk_toInt'
-"toDouble"              return 'tk_toDouble'
+"toInt"                 return 'tk_to_int'
+"toDouble"              return 'tk_to_double'
 "string"                return 'tk_string_func'
 "typeof"                return 'tk_typeof'
 "elseif"                return 'tk_elseif'
@@ -122,8 +124,8 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "=="                    return 'tk_double_equal'
 "!="                    return 'tk_not_equal'
 "||"                    return 'tk_or'
-"&"                     return 'tk_concat'
 "&&"                    return 'tk_and'
+"&"                     return 'tk_concat'
 "!"                     return 'tk_not'
 "="                     return 'tk_equal'
 "("                     return 'tk_par_o'
@@ -322,6 +324,7 @@ pr_instruction
     | tk_id tk_double_minus tk_semicolon
     | tk_return pr_expr tk_semicolon
     | pr_print tk_semicolon {$$ = $1}
+    | pr_native_function tk_semicolon {$$ = $1}
     | error
 ;
 
@@ -334,6 +337,32 @@ pr_print
     }
 ;
 
+/*
+    int.parse("8200")
+*/
+pr_native_function
+    : pr_type tk_dot tk_parse tk_par_o pr_expr tk_par_c { 
+        $$ = new native_parse($1, $5, @1.first_line,@1.first_column);
+    }
+    | pr_native_function_option tk_par_o pr_expr tk_par_c { 
+        $$ = new native_function($1, $3, @1.first_line,@1.first_column);
+    }
+;
+
+pr_native_function_option
+    : tk_to_int { 
+        $$ = $1
+    }
+    | tk_to_double { 
+        $$ = $1
+    }
+    | tk_string_func { 
+        $$ = $1
+    }
+    | tk_typeof { 
+        $$ = $1
+    }
+;
 
 /*
     id = expression
@@ -531,6 +560,9 @@ pr_expr
     }
     | pr_expr tk_ternary pr_expr tk_colon pr_expr {
         $$ = new ternary($1, $3, $5, @1.first_line, @1.first_column);
+    }
+    | pr_native_function {
+        $$ = $1
     }
     | pr_unary {
         $$ = $1
