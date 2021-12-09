@@ -1220,10 +1220,10 @@ class logic extends expression_1.expression {
                     console_1._3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
                     console_1._3dCode.output += 'L' + trueTag + ':\n';
                     console_1._3dCode.actualTemp++;
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;//Set value tu 0 (false)\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;//Set value to 0 (false)\n';
                     console_1._3dCode.output += 'goto L' + exitTag + ';\n';
                     console_1._3dCode.output += 'L' + falseTag + ':\n';
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;//Set value tu 1 (true)\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;//Set value to 1 (true)\n';
                     console_1._3dCode.output += 'goto L' + exitTag + ';\n';
                     console_1._3dCode.output += 'L' + exitTag + ':\n';
                 }
@@ -1236,10 +1236,10 @@ class logic extends expression_1.expression {
                     console_1._3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
                     console_1._3dCode.output += 'L' + trueTag + ':\n';
                     console_1._3dCode.actualTemp++;
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;//Set value tu 1 (true)\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;//Set value to 1 (true)\n';
                     console_1._3dCode.output += 'goto L' + exitTag + ';\n';
                     console_1._3dCode.output += 'L' + falseTag + ':\n';
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;//Set value tu 0 (false)\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;//Set value to 0 (false)\n';
                     console_1._3dCode.output += 'goto L' + exitTag + ';\n';
                     console_1._3dCode.output += 'L' + exitTag + ':\n';
                 }
@@ -1571,6 +1571,7 @@ exports.unary = exports.unary_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var unary_type;
 (function (unary_type) {
     unary_type[unary_type["ARITHMETIC"] = 0] = "ARITHMETIC";
@@ -1583,7 +1584,45 @@ class unary extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const exprType = this.expr.translate(environment);
+        const exprTemp = console_1._3dCode.actualTemp;
+        switch (this.type) {
+            case unary_type.ARITHMETIC:
+                switch (exprType) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        console_1._3dCode.output = 'T' + exprTemp + ' = T' + exprTemp + ' * -1;\n';
+                        return exprType;
+                    default:
+                }
+                break;
+            case unary_type.LOGIC:
+                console_1._3dCode.actualTag++;
+                const trueTag = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                const falseTag = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                const exitTag = console_1._3dCode.actualTag;
+                switch (exprType) {
+                    case type_1.type.BOOLEAN:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'if(T' + exprTemp + ' == 0) goto L' + trueTag + ';//Expression is false\n';
+                        console_1._3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
+                        console_1._3dCode.output += 'L' + trueTag + ':\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + exprTemp + ' = 1;//Set value to 1 (true)\n';
+                        console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                        console_1._3dCode.output += 'L' + falseTag + ':\n';
+                        console_1._3dCode.output += 'T' + exprTemp + ' = 0;//Set value to 0 (false)\n';
+                        console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                        console_1._3dCode.output += 'L' + exitTag + ':\n';
+                        return type_1.type.BOOLEAN;
+                    default:
+                }
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const expr_data = this.expr.execute(environment);
@@ -1615,7 +1654,7 @@ class unary extends expression_1.expression {
 }
 exports.unary = unary;
 
-},{"../abstract/expression":4,"../system/error":29,"../system/type":30}],17:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":27,"../system/error":29,"../system/type":30}],17:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -3447,6 +3486,8 @@ function generateDefaultFunctions() {
     code += generateIntToString();
     code += generateOutOfBounds();
     code += generateDivisionBy0();
+    code += generateStringLength();
+    code += generateStringPosition();
     code += 'void main(){\n';
     return code;
 }
@@ -3660,6 +3701,52 @@ function generateIntToString() {
     code += 'L3:\n';
     code += 'HEAP[(int)HP] = 36; //Set end of string\n';
     code += 'HP = HP + 1; //Increase HP\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+function generateStringLength() {
+    let code = 'void StringLength(){\n';
+    code += 'T0 = SP + 1;\n';
+    code += 'T0 = STACK[(int)T0];\n';
+    code += 'T2 = 0;\n';
+    code += 'L0:\n';
+    code += 'T1 = HEAP[(int)T0];\n';
+    code += 'if(T1 == 36) goto L1;\n';
+    code += 'T2 = T2 + 1;\n';
+    code += 'T0 = T0 + 1;\n';
+    code += 'goto L0;\n';
+    code += 'L1:\n';
+    code += 'T0 = SP + 0;\n';
+    code += 'STACK[(int)T0] = T2;\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+function generateStringPosition() {
+    let code = 'void StringPosition(){\n';
+    code += 'T0 = SP + 1;\n';
+    code += 'T0 = STACK[(int)T0];\n';
+    code += 'T2 = SP + 2;\n';
+    code += 'T2 = STACK[(int)T2];\n';
+    code += 'T3 = 0;\n';
+    code += 'L0:\n';
+    code += 'T1 = HEAP[(int)T0];\n';
+    code += 'if(T1 == 36) goto L1;\n';
+    code += 'if(T1 == T2) goto L2;\n';
+    code += 'T3 = T3 + 1;\n';
+    code += 'T0 = T0 + 1;\n';
+    code += 'goto L0;\n';
+    code += 'L1:\n';
+    code += 'OutOfBounds();\n';
+    code += 'return;\n';
+    code += 'L2:\n';
+    code += 'T0 = SP + 0;\n';
+    code += 'HEAP[(int)HP] = T1;\n';
+    code += 'STACK[(int)T0] = HP;\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;\n';
+    code += 'HP = HP + 1;\n';
     code += 'return;\n';
     code += '}\n';
     return code;
