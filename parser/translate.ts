@@ -25,8 +25,7 @@ import { error_arr } from "./system/error";
         return "$error$"
     }
     _3dCode.output = generateHeader() + generateDefaultFunctions() + _3dCode.output + '}';
-    console.log(_3dCode.output)
-    return _console.output
+    return _3dCode.output
 }
 
 function generateHeader(){
