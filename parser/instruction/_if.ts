@@ -6,7 +6,7 @@ import { _console } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 
-export class _if extends expression {
+export class _if extends instruction {
 
     public translate(environment: environment): type {
         throw new Error("Method not implemented.");

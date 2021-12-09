@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._if = void 0;
-const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
-class _if extends expression_1.expression {
+const instruction_1 = require("../abstract/instruction");
+class _if extends instruction_1.instruction {
     constructor(condition, code, else_statement, line, column) {
         super(line, column);
         this.condition = condition;

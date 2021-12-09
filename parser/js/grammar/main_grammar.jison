@@ -22,6 +22,7 @@
     const {native_parse} = require('../instruction/native_parse');
     const {native_function} = require('../instruction/native_function');
     const {declaration_function} = require('../instruction/declaration_function');
+    const {main} = require('../instruction/main');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -205,13 +206,13 @@ pr_globals
 
 pr_main
     : tk_void tk_main tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
-        $$ = $6
+        $$ = new main($6, @1.first_line,@1.first_column);
     }
 ;
 
 pr_global
     : pr_declaration_function {$$ = $1}
-    | pr_declaration_item tk_semicolon {$$ = $1}
+    | pr_declaration_list tk_semicolon {$$ = $1}
     | pr_declare_struct tk_semicolon {$$ = $1}
 ;
 
