@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.relational = exports.relational_type = void 0;
 const expression_1 = require("../abstract/expression");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var relational_type;
 (function (relational_type) {
     relational_type[relational_type["EQUAL"] = 0] = "EQUAL";
@@ -20,7 +21,38 @@ class relational extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const leftType = this.left.translate(environment);
+        const leftTemp = console_1._3dCode.actualTemp;
+        const rightType = this.right.translate(environment);
+        const rightTemp = console_1._3dCode.actualTemp;
+        switch (this.type) {
+            case relational_type.EQUAL:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' == T' + rightTemp + ';\n';
+                return type_1.type.BOOLEAN;
+            case relational_type.NOTEQUAL:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' != T' + rightTemp + ';\n';
+                return type_1.type.BOOLEAN;
+            case relational_type.GREATER:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' > T' + rightTemp + ';\n';
+                return type_1.type.BOOLEAN;
+            case relational_type.GREATEROREQUAL:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' >= T' + rightTemp + ';\n';
+                return type_1.type.BOOLEAN;
+            case relational_type.LESS:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' < T' + rightTemp + ';\n';
+                return type_1.type.BOOLEAN;
+            case relational_type.LESSOREQUAL:
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' <= T' + rightTemp + ';\n';
+                return type_1.type.BOOLEAN;
+            default:
+                return type_1.type.INTEGER;
+        }
     }
     plot(count) {
         throw new Error("Method not implemented.");
