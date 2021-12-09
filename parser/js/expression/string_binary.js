@@ -4,6 +4,7 @@ exports.string_binary = exports.string_binary_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var string_binary_type;
 (function (string_binary_type) {
     string_binary_type[string_binary_type["CONCAT"] = 0] = "CONCAT";
@@ -18,7 +19,52 @@ class string_binary extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const leftType = this.left.translate(environment);
+        const leftTemp = console_1._3dCode.actualTemp;
+        const rightType = this.right.translate(environment);
+        const rightTemp = console_1._3dCode.actualTemp;
+        switch (this.type) {
+            case string_binary_type.CONCAT:
+                if (leftType == type_1.type.STRING && rightType == type_1.type.STRING) {
+                    return type_1.type.STRING;
+                }
+                else {
+                }
+                break;
+            case string_binary_type.REPEAT:
+                if (leftType == type_1.type.STRING && rightType == type_1.type.INTEGER) {
+                    return type_1.type.STRING;
+                }
+                else {
+                }
+                break;
+            case string_binary_type.POSITION:
+                if (leftType == type_1.type.STRING && rightType == type_1.type.INTEGER) {
+                    console_1._3dCode.actualTemp++;
+                    const savedEnvironment = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 20;//Set StringPosition environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set String position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set String position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + rightTemp + ';//Save position\n';
+                    console_1._3dCode.output += 'StringPosition();//Call function\n';
+                    console_1._3dCode.actualTemp++;
+                    const resultTemp = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                    return type_1.type.STRING;
+                }
+                else {
+                }
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const left_data = this.left.execute(environment);

@@ -24,7 +24,7 @@ import { error_arr } from "./system/error";
         console.log(error_arr)
         return "$error$"
     }
-    _3dCode.output = generateHeader() + generateDefaultFunctions() + _3dCode.output + '}';
+    _3dCode.output = generateHeader() + generateDefaultFunctions() + _3dCode.output;
     return _3dCode.output
 }
 
@@ -58,7 +58,6 @@ function generateDefaultFunctions(){
     code += generateDivisionBy0();
     code += generateStringLength();
     code += generateStringPosition();
-    code += 'void main(){\n';
     return code;
 }
 
@@ -101,6 +100,7 @@ function generateStringPrint(){
     code += 'L0:\n';
     code += 'T1 = HEAP[(int)T0];\n';
     code += 'if(T1 == 36) goto L1;\n';
+    code += 'if(T1 == -1) goto L1;\n';
     code += 'printf("%c", (int)T1);\n';
     code += 'T0 = T0 + 1;\n';
     code += 'goto L0;\n';
@@ -314,12 +314,16 @@ function generateStringPosition(){
     code += 'L0:\n';
     code += 'T1 = HEAP[(int)T0];\n';
     code += 'if(T1 == 36) goto L1;\n';
-    code += 'if(T1 == T2) goto L2;\n';
+    code += 'if(T3 == T2) goto L2;\n';
     code += 'T3 = T3 + 1;\n';
     code += 'T0 = T0 + 1;\n';
     code += 'goto L0;\n';
     code += 'L1:\n';
     code += 'OutOfBounds();\n';
+    code += 'T0 = SP + 0;\n';
+    code += 'HEAP[(int)HP] = -1;//Set error code\n';
+    code += 'STACK[(int)T0] = HP;\n';
+    code += 'HP = HP + 1;\n';
     code += 'return;\n'
     code += 'L2:\n';
     code += 'T0 = SP + 0;\n';

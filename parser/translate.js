@@ -1403,6 +1403,7 @@ exports.string_binary = exports.string_binary_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var string_binary_type;
 (function (string_binary_type) {
     string_binary_type[string_binary_type["CONCAT"] = 0] = "CONCAT";
@@ -1417,7 +1418,52 @@ class string_binary extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const leftType = this.left.translate(environment);
+        const leftTemp = console_1._3dCode.actualTemp;
+        const rightType = this.right.translate(environment);
+        const rightTemp = console_1._3dCode.actualTemp;
+        switch (this.type) {
+            case string_binary_type.CONCAT:
+                if (leftType == type_1.type.STRING && rightType == type_1.type.STRING) {
+                    return type_1.type.STRING;
+                }
+                else {
+                }
+                break;
+            case string_binary_type.REPEAT:
+                if (leftType == type_1.type.STRING && rightType == type_1.type.INTEGER) {
+                    return type_1.type.STRING;
+                }
+                else {
+                }
+                break;
+            case string_binary_type.POSITION:
+                if (leftType == type_1.type.STRING && rightType == type_1.type.INTEGER) {
+                    console_1._3dCode.actualTemp++;
+                    const savedEnvironment = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 20;//Set StringPosition environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set String position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set String position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + rightTemp + ';//Save position\n';
+                    console_1._3dCode.output += 'StringPosition();//Call function\n';
+                    console_1._3dCode.actualTemp++;
+                    const resultTemp = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                    return type_1.type.STRING;
+                }
+                else {
+                }
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const left_data = this.left.execute(environment);
@@ -1467,7 +1513,7 @@ class string_binary extends expression_1.expression {
 }
 exports.string_binary = string_binary;
 
-},{"../abstract/expression":4,"../system/error":32,"../system/type":33}],14:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":30,"../system/error":32,"../system/type":33}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_ternary = exports.string_ternary_type = void 0;
@@ -3091,6 +3137,7 @@ exports.declaration_list = declaration_list;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class main extends instruction_1.instruction {
     constructor(code, line, column) {
@@ -3098,7 +3145,12 @@ class main extends instruction_1.instruction {
         this.code = code;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.output += 'void main(){\n';
+        this.code.forEach(element => {
+            element.translate(environment);
+        });
+        console_1._3dCode.output += '}\n';
+        return type_1.type.NULL;
     }
     execute(environment) {
         this.code.forEach(element => {
@@ -3112,7 +3164,7 @@ class main extends instruction_1.instruction {
 }
 exports.main = main;
 
-},{"../abstract/instruction":5,"../system/type":33}],24:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":30,"../system/type":33}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_function = void 0;
@@ -3606,7 +3658,7 @@ window.translate = function (input) {
         console.log(error_1.error_arr);
         return "$error$";
     }
-    console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output + '}';
+    console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output;
     return console_1._3dCode.output;
 };
 function generateHeader() {
@@ -3638,7 +3690,6 @@ function generateDefaultFunctions() {
     code += generateDivisionBy0();
     code += generateStringLength();
     code += generateStringPosition();
-    code += 'void main(){\n';
     return code;
 }
 function generateStringConcat() {
@@ -3679,6 +3730,7 @@ function generateStringPrint() {
     code += 'L0:\n';
     code += 'T1 = HEAP[(int)T0];\n';
     code += 'if(T1 == 36) goto L1;\n';
+    code += 'if(T1 == -1) goto L1;\n';
     code += 'printf("%c", (int)T1);\n';
     code += 'T0 = T0 + 1;\n';
     code += 'goto L0;\n';
@@ -3883,12 +3935,16 @@ function generateStringPosition() {
     code += 'L0:\n';
     code += 'T1 = HEAP[(int)T0];\n';
     code += 'if(T1 == 36) goto L1;\n';
-    code += 'if(T1 == T2) goto L2;\n';
+    code += 'if(T3 == T2) goto L2;\n';
     code += 'T3 = T3 + 1;\n';
     code += 'T0 = T0 + 1;\n';
     code += 'goto L0;\n';
     code += 'L1:\n';
     code += 'OutOfBounds();\n';
+    code += 'T0 = SP + 0;\n';
+    code += 'HEAP[(int)HP] = -1;//Set error code\n';
+    code += 'STACK[(int)T0] = HP;\n';
+    code += 'HP = HP + 1;\n';
     code += 'return;\n';
     code += 'L2:\n';
     code += 'T0 = SP + 0;\n';

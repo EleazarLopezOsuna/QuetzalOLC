@@ -1,12 +1,17 @@
 import { environment } from "../system/environment";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _console, _3dCode } from "../system/console";
 import { instruction } from "../abstract/instruction";
 
 export class main extends instruction {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        _3dCode.output += 'void main(){\n';
+        this.code.forEach(element => {
+            element.translate(environment)
+        });
+        _3dCode.output += '}\n';
+        return type.NULL;
     }
 
     constructor(public code: Array<instruction>, line: number, column: number) {
@@ -17,7 +22,7 @@ export class main extends instruction {
         this.code.forEach(element => {
             element.execute(environment)
         });
-        return {value: null, type: type.NULL}
+        return { value: null, type: type.NULL }
     }
 
     public plot(count: number): string {

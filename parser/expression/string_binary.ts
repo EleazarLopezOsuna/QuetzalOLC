@@ -2,6 +2,7 @@ import { expression } from "../abstract/expression";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
+import { _3dCode, _console } from "../system/console";
 
 export enum string_binary_type {
     CONCAT,
@@ -11,7 +12,54 @@ export enum string_binary_type {
 
 export class string_binary extends expression {
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        const leftType = this.left.translate(environment);
+        const leftTemp = _3dCode.actualTemp;
+        const rightType = this.right.translate(environment);
+        const rightTemp = _3dCode.actualTemp;
+
+        switch (this.type) {
+            case string_binary_type.CONCAT:
+                if (leftType == type.STRING && rightType == type.STRING) {
+                    return type.STRING;
+                } else {
+                    
+                }
+                break;
+            case string_binary_type.REPEAT:
+                if (leftType == type.STRING && rightType == type.INTEGER) {
+
+                    return type.STRING;
+                } else {
+                    
+                }
+                break;
+            case string_binary_type.POSITION:
+                if (leftType == type.STRING && rightType == type.INTEGER) {
+                    _3dCode.actualTemp++;
+                    const savedEnvironment = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    _3dCode.output += 'SP = 20;//Set StringPosition environment\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;//Set String position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 2;//Set String position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + rightTemp + ';//Save position\n';
+                    _3dCode.output += 'StringPosition();//Call function\n';
+                    _3dCode.actualTemp++;
+                    const resultTemp = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                    return type.STRING;
+                } else {
+                    
+                }
+                break;
+        }
+        // Default
+        return type.NULL;
     }
 
     constructor(public left: expression, public right: expression, public type: string_binary_type, line: number, column: number) {
