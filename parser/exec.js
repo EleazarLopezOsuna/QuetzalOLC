@@ -1077,6 +1077,7 @@ exports.arithmetic_binary = arithmetic_binary;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_unary = exports.arithmetic_unary_type = void 0;
 const expression_1 = require("../abstract/expression");
+const console_1 = require("../system/console");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
 var arithmetic_unary_type;
@@ -1094,7 +1095,62 @@ class arithmetic_unary extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const exprType = this.expr.translate(environment);
+        const exprTemp = console_1._3dCode.actualTemp;
+        switch (this.type) {
+            case arithmetic_unary_type.SQRT:
+                switch (exprType) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sqrt(T' + exprTemp + ');//Get sqrt\n';
+                        return type_1.type.FLOAT;
+                    default:
+                }
+                break;
+            case arithmetic_unary_type.COS:
+                switch (exprType) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get sqrt\n';
+                        return type_1.type.FLOAT;
+                    default:
+                }
+                break;
+            case arithmetic_unary_type.SIN:
+                switch (exprType) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sqrt\n';
+                        return type_1.type.FLOAT;
+                    default:
+                }
+                break;
+            case arithmetic_unary_type.TAN:
+                switch (exprType) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get sqrt\n';
+                        return type_1.type.FLOAT;
+                    default:
+                }
+                break;
+            case arithmetic_unary_type.LOG10:
+                switch (exprType) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get sqrt\n';
+                        return type_1.type.FLOAT;
+                    default:
+                }
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const expr_data = this.expr.execute(environment);
@@ -1154,7 +1210,7 @@ class arithmetic_unary extends expression_1.expression {
 }
 exports.arithmetic_unary = arithmetic_unary;
 
-},{"../abstract/expression":4,"../system/error":30,"../system/type":31}],11:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":28,"../system/error":30,"../system/type":31}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logic = exports.logic_type = void 0;

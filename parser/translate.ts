@@ -30,6 +30,7 @@ import { error_arr } from "./system/error";
 
 function generateHeader(){
     let code = '#include <stdio.h>\n';
+    code += '#include <math.h>\n';
     code += 'float HEAP[16384];\n';
     code += 'float STACK[16384];\n';
     code += 'float HP;\n';

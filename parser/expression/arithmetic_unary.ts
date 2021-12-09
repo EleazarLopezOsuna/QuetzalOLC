@@ -1,4 +1,5 @@
 import { expression } from "../abstract/expression";
+import { _3dCode } from "../system/console";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
@@ -13,7 +14,66 @@ export enum arithmetic_unary_type {
 
 export class arithmetic_unary extends expression {
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        const exprType = this.expr.translate(environment);
+        const exprTemp = _3dCode.actualTemp;
+
+        switch (this.type) {
+            case arithmetic_unary_type.SQRT:
+                switch (exprType) {
+                    case type.INTEGER:
+                    case type.FLOAT:
+                        _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = sqrt(T' + exprTemp + ');//Get sqrt\n';
+                        return type.FLOAT;
+                    default:
+                        
+                }
+                break;
+            case arithmetic_unary_type.COS:
+                switch (exprType) {
+                    case type.INTEGER:
+                    case type.FLOAT:
+                        _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get cos\n';
+                        return type.FLOAT;
+                    default:
+                        
+                }
+                break;
+            case arithmetic_unary_type.SIN:
+                switch (exprType) {
+                    case type.INTEGER:
+                    case type.FLOAT:_3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sin\n';
+                        return type.FLOAT;
+                    default:
+
+                }
+                break;
+            case arithmetic_unary_type.TAN:
+                switch (exprType) {
+                    case type.INTEGER:
+                    case type.FLOAT:_3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get tan\n';
+                        return type.FLOAT;
+                    default:
+
+                }
+                break;
+            case arithmetic_unary_type.LOG10:
+                switch (exprType) {
+                    case type.INTEGER:
+                    case type.FLOAT:_3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get log10\n';
+                        return type.FLOAT;
+                    default:
+                        
+                }
+                break;
+
+        }
+        // Default
+        return type.NULL;
     }
 
     constructor(public expr: expression, public type: arithmetic_unary_type, line: number, column: number) {
