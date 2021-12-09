@@ -929,9 +929,12 @@ class arithmetic_binary extends expression_1.expression {
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
-                        const trueTag = console_1._3dCode.actualTag++;
-                        const falseTag = console_1._3dCode.actualTag++;
-                        const exitTag = console_1._3dCode.actualTag++;
+                        console_1._3dCode.actualTag++;
+                        const trueTag = console_1._3dCode.actualTag;
+                        console_1._3dCode.actualTag++;
+                        const falseTag = console_1._3dCode.actualTag;
+                        console_1._3dCode.actualTag++;
+                        const exitTag = console_1._3dCode.actualTag;
                         console_1._3dCode.output += 'if(T' + rightTemp + ' == 0) goto L' + trueTag + ';//Check if division by 0\n';
                         console_1._3dCode.output += 'goto L' + falseTag + ';\n';
                         console_1._3dCode.output += 'L' + trueTag + '://True tagn\n';
@@ -1080,7 +1083,7 @@ class arithmetic_unary extends expression_1.expression {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get sqrt\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get cos\n';
                         return type_1.type.FLOAT;
                     default:
                 }
@@ -1090,7 +1093,7 @@ class arithmetic_unary extends expression_1.expression {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sqrt\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sin\n';
                         return type_1.type.FLOAT;
                     default:
                 }
@@ -1100,7 +1103,7 @@ class arithmetic_unary extends expression_1.expression {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get sqrt\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get tan\n';
                         return type_1.type.FLOAT;
                     default:
                 }
@@ -1110,7 +1113,7 @@ class arithmetic_unary extends expression_1.expression {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get sqrt\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get log10\n';
                         return type_1.type.FLOAT;
                     default:
                 }
@@ -1182,6 +1185,7 @@ exports.arithmetic_unary = arithmetic_unary;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logic = exports.logic_type = void 0;
 const expression_1 = require("../abstract/expression");
+const console_1 = require("../system/console");
 const type_1 = require("../system/type");
 var logic_type;
 (function (logic_type) {
@@ -1197,7 +1201,52 @@ class logic extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const leftType = this.left.translate(environment);
+        const leftTemp = console_1._3dCode.actualTemp;
+        const rightType = this.right.translate(environment);
+        const rightTemp = console_1._3dCode.actualTemp;
+        console_1._3dCode.actualTag++;
+        const trueTag = console_1._3dCode.actualTag;
+        console_1._3dCode.actualTag++;
+        const falseTag = console_1._3dCode.actualTag;
+        console_1._3dCode.actualTag++;
+        const exitTag = console_1._3dCode.actualTag;
+        switch (this.type) {
+            case logic_type.AND:
+                if (leftType === type_1.type.BOOLEAN && rightType == type_1.type.BOOLEAN) {
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'if(T' + leftTemp + ' == 0) goto L' + trueTag + ';//Expression is false\n';
+                    console_1._3dCode.output += 'if(T' + rightTemp + ' == 0) goto L' + trueTag + ';//Expression is false\n';
+                    console_1._3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
+                    console_1._3dCode.output += 'L' + trueTag + ':\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;//Set value tu 0 (false)\n';
+                    console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                    console_1._3dCode.output += 'L' + falseTag + ':\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;//Set value tu 1 (true)\n';
+                    console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                    console_1._3dCode.output += 'L' + exitTag + ':\n';
+                }
+                return type_1.type.BOOLEAN;
+            case logic_type.OR:
+                if (leftType === type_1.type.BOOLEAN && rightType == type_1.type.BOOLEAN) {
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'if(T' + leftTemp + ' == 1) goto L' + trueTag + ';//Expression is true\n';
+                    console_1._3dCode.output += 'if(T' + rightTemp + ' == 1) goto L' + trueTag + ';//Expression is true\n';
+                    console_1._3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
+                    console_1._3dCode.output += 'L' + trueTag + ':\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;//Set value tu 1 (true)\n';
+                    console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                    console_1._3dCode.output += 'L' + falseTag + ':\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;//Set value tu 0 (false)\n';
+                    console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                    console_1._3dCode.output += 'L' + exitTag + ':\n';
+                }
+                return type_1.type.BOOLEAN;
+            default:
+                return type_1.type.INTEGER;
+        }
     }
     plot(count) {
         throw new Error("Method not implemented.");
@@ -1217,7 +1266,7 @@ class logic extends expression_1.expression {
 }
 exports.logic = logic;
 
-},{"../abstract/expression":4,"../system/type":30}],11:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":27,"../system/type":30}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.relational = exports.relational_type = void 0;
@@ -2984,9 +3033,12 @@ class print extends instruction_1.instruction {
             const elementType = element.translate(environment);
             switch (elementType) {
                 case type_1.type.BOOLEAN:
-                    const trueTag = console_1._3dCode.actualTag++;
-                    const falseTag = console_1._3dCode.actualTag++;
-                    const exitTag = console_1._3dCode.actualTag++;
+                    console_1._3dCode.actualTag++;
+                    const trueTag = console_1._3dCode.actualTag;
+                    console_1._3dCode.actualTag++;
+                    const falseTag = console_1._3dCode.actualTag;
+                    console_1._3dCode.actualTag++;
+                    const exitTag = console_1._3dCode.actualTag;
                     console_1._3dCode.output += 'if(T' + console_1._3dCode.actualTemp + ' == 0) goto L' + trueTag + ';//Check if False\n';
                     console_1._3dCode.output += 'goto L' + falseTag + ';\n';
                     console_1._3dCode.output += 'L' + trueTag + '://True tag\n';

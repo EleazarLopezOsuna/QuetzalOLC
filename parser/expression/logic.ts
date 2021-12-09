@@ -1,4 +1,6 @@
+import { exit } from "process";
 import { expression } from "../abstract/expression";
+import { _3dCode } from "../system/console";
 import { environment } from "../system/environment";
 import { data, type } from "../system/type";
 
@@ -10,9 +12,54 @@ export enum logic_type {
 
 export class logic extends expression {
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        const leftType = this.left.translate(environment);
+        const leftTemp = _3dCode.actualTemp;
+        const rightType = this.right.translate(environment);
+        const rightTemp = _3dCode.actualTemp;
+        _3dCode.actualTag++
+        const trueTag = _3dCode.actualTag;
+        _3dCode.actualTag++
+        const falseTag = _3dCode.actualTag;
+        _3dCode.actualTag++
+        const exitTag = _3dCode.actualTag;
+        switch (this.type) {
+            case logic_type.AND:
+                if (leftType === type.BOOLEAN && rightType == type.BOOLEAN) {
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'if(T' + leftTemp + ' == 0) goto L' + trueTag + ';//Expression is false\n';
+                    _3dCode.output += 'if(T' + rightTemp + ' == 0) goto L' + trueTag + ';//Expression is false\n';
+                    _3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
+                    _3dCode.output += 'L' + trueTag + ':\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = 0;//Set value tu 0 (false)\n';
+                    _3dCode.output += 'goto L' + exitTag + ';\n';
+                    _3dCode.output += 'L' + falseTag + ':\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = 1;//Set value tu 1 (true)\n';
+                    _3dCode.output += 'goto L' + exitTag + ';\n';
+                    _3dCode.output += 'L' + exitTag + ':\n';
+                }
+                return type.BOOLEAN;
+            case logic_type.OR:
+                if (leftType === type.BOOLEAN && rightType == type.BOOLEAN) {
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'if(T' + leftTemp + ' == 1) goto L' + trueTag + ';//Expression is true\n';
+                    _3dCode.output += 'if(T' + rightTemp + ' == 1) goto L' + trueTag + ';//Expression is true\n';
+                    _3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
+                    _3dCode.output += 'L' + trueTag + ':\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = 1;//Set value tu 1 (true)\n';
+                    _3dCode.output += 'goto L' + exitTag + ';\n';
+                    _3dCode.output += 'L' + falseTag + ':\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = 0;//Set value tu 0 (false)\n';
+                    _3dCode.output += 'goto L' + exitTag + ';\n';
+                    _3dCode.output += 'L' + exitTag + ':\n';
+                }
+                return type.BOOLEAN;
+            default:
+                return type.INTEGER;
+        }
     }
-    
+
     public plot(count: number): string {
         throw new Error("Method not implemented.");
     }

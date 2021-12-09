@@ -153,9 +153,12 @@ class arithmetic_binary extends expression_1.expression {
                 switch (dominant_type) {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
-                        const trueTag = console_1._3dCode.actualTag++;
-                        const falseTag = console_1._3dCode.actualTag++;
-                        const exitTag = console_1._3dCode.actualTag++;
+                        console_1._3dCode.actualTag++;
+                        const trueTag = console_1._3dCode.actualTag;
+                        console_1._3dCode.actualTag++;
+                        const falseTag = console_1._3dCode.actualTag;
+                        console_1._3dCode.actualTag++;
+                        const exitTag = console_1._3dCode.actualTag;
                         console_1._3dCode.output += 'if(T' + rightTemp + ' == 0) goto L' + trueTag + ';//Check if division by 0\n';
                         console_1._3dCode.output += 'goto L' + falseTag + ';\n';
                         console_1._3dCode.output += 'L' + trueTag + '://True tagn\n';

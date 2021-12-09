@@ -20,9 +20,12 @@ class print extends instruction_1.instruction {
             const elementType = element.translate(environment);
             switch (elementType) {
                 case type_1.type.BOOLEAN:
-                    const trueTag = console_1._3dCode.actualTag++;
-                    const falseTag = console_1._3dCode.actualTag++;
-                    const exitTag = console_1._3dCode.actualTag++;
+                    console_1._3dCode.actualTag++;
+                    const trueTag = console_1._3dCode.actualTag;
+                    console_1._3dCode.actualTag++;
+                    const falseTag = console_1._3dCode.actualTag;
+                    console_1._3dCode.actualTag++;
+                    const exitTag = console_1._3dCode.actualTag;
                     console_1._3dCode.output += 'if(T' + console_1._3dCode.actualTemp + ' == 0) goto L' + trueTag + ';//Check if False\n';
                     console_1._3dCode.output += 'goto L' + falseTag + ';\n';
                     console_1._3dCode.output += 'L' + trueTag + '://True tag\n';

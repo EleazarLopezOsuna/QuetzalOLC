@@ -38,7 +38,7 @@ class arithmetic_unary extends expression_1.expression {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get sqrt\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get cos\n';
                         return type_1.type.FLOAT;
                     default:
                 }
@@ -48,7 +48,7 @@ class arithmetic_unary extends expression_1.expression {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sqrt\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sin\n';
                         return type_1.type.FLOAT;
                     default:
                 }
@@ -58,7 +58,7 @@ class arithmetic_unary extends expression_1.expression {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get sqrt\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get tan\n';
                         return type_1.type.FLOAT;
                     default:
                 }
@@ -68,7 +68,7 @@ class arithmetic_unary extends expression_1.expression {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get sqrt\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get log10\n';
                         return type_1.type.FLOAT;
                     default:
                 }

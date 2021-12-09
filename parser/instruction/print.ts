@@ -16,9 +16,12 @@ export class print extends instruction {
             const elementType = element.translate(environment);
             switch (elementType) {
                 case type.BOOLEAN:
-                    const trueTag = _3dCode.actualTag++;
-                    const falseTag = _3dCode.actualTag++;
-                    const exitTag = _3dCode.actualTag++;
+                    _3dCode.actualTag++
+                    const trueTag = _3dCode.actualTag;
+                    _3dCode.actualTag++
+                    const falseTag = _3dCode.actualTag;
+                    _3dCode.actualTag++
+                    const exitTag = _3dCode.actualTag;
                     _3dCode.output += 'if(T' + _3dCode.actualTemp + ' == 0) goto L' + trueTag + ';//Check if False\n';
                     _3dCode.output += 'goto L' + falseTag + ';\n';
                     _3dCode.output += 'L' + trueTag + '://True tag\n';
