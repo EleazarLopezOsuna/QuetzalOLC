@@ -3161,8 +3161,7 @@ window.translate = function (input) {
         return "$error$";
     }
     console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output + '}';
-    console.log(console_1._3dCode.output);
-    return console_1._console.output;
+    return console_1._3dCode.output;
 };
 function generateHeader() {
     let code = '#include <stdio.h>\n';
