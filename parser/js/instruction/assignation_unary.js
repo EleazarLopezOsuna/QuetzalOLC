@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
-const expression_1 = require("../abstract/expression");
+const instruction_1 = require("../abstract/instruction");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
-class assignation_unary extends expression_1.expression {
+class assignation_unary extends instruction_1.instruction {
     constructor(id, expr, line, column) {
         super(line, column);
         this.id = id;

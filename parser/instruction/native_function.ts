@@ -4,8 +4,9 @@ import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
 import { _console } from "../system/console";
 import { literal } from "../abstract/literal";
+import { instruction } from "../abstract/instruction";
 
-export class native_function extends expression {
+export class native_function extends instruction {
 
     public translate(environment: environment): type {
         throw new Error("Method not implemented.");

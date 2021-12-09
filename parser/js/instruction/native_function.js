@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_function = void 0;
-const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
-class native_function extends expression_1.expression {
+const instruction_1 = require("../abstract/instruction");
+class native_function extends instruction_1.instruction {
     constructor(option, value, line, column) {
         super(line, column);
         this.option = option;

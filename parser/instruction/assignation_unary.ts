@@ -1,10 +1,11 @@
 import { expression } from "../abstract/expression";
+import { instruction } from "../abstract/instruction";
 import { literal } from "../abstract/literal";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
 
-export class assignation_unary extends expression {
+export class assignation_unary extends instruction {
     public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }

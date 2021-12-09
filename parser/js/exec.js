@@ -18,7 +18,7 @@ window.exec = function (input) {
                 console.log(error);
             }
         }
-        // console.log('environment', main_environment)
+        console.log('environment', main_environment);
     }
     catch (error) {
         console.log(error);

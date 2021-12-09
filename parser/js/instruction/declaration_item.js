@@ -4,7 +4,8 @@ exports.declaration_item = void 0;
 const expression_1 = require("../abstract/expression");
 const type_1 = require("../system/type");
 const literal_1 = require("../abstract/literal");
-class declaration_item extends expression_1.expression {
+const instruction_1 = require("../abstract/instruction");
+class declaration_item extends instruction_1.instruction {
     constructor(variable_id, value, line, column) {
         super(line, column);
         this.variable_id = variable_id;

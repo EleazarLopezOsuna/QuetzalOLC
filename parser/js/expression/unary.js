@@ -4,6 +4,7 @@ exports.unary = exports.unary_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var unary_type;
 (function (unary_type) {
     unary_type[unary_type["ARITHMETIC"] = 0] = "ARITHMETIC";
@@ -16,7 +17,45 @@ class unary extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const exprType = this.expr.translate(environment);
+        const exprTemp = console_1._3dCode.actualTemp;
+        switch (this.type) {
+            case unary_type.ARITHMETIC:
+                switch (exprType) {
+                    case type_1.type.INTEGER:
+                    case type_1.type.FLOAT:
+                        console_1._3dCode.output = 'T' + exprTemp + ' = T' + exprTemp + ' * -1;\n';
+                        return exprType;
+                    default:
+                }
+                break;
+            case unary_type.LOGIC:
+                console_1._3dCode.actualTag++;
+                const trueTag = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                const falseTag = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                const exitTag = console_1._3dCode.actualTag;
+                switch (exprType) {
+                    case type_1.type.BOOLEAN:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'if(T' + exprTemp + ' == 0) goto L' + trueTag + ';//Expression is false\n';
+                        console_1._3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
+                        console_1._3dCode.output += 'L' + trueTag + ':\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + exprTemp + ' = 1;//Set value to 1 (true)\n';
+                        console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                        console_1._3dCode.output += 'L' + falseTag + ':\n';
+                        console_1._3dCode.output += 'T' + exprTemp + ' = 0;//Set value to 0 (false)\n';
+                        console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                        console_1._3dCode.output += 'L' + exitTag + ':\n';
+                        return type_1.type.BOOLEAN;
+                    default:
+                }
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const expr_data = this.expr.execute(environment);

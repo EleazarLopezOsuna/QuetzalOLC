@@ -12,6 +12,7 @@
     const {string_unary, string_unary_type} = require('../expression/string_unary');
     const {string_binary, string_binary_type} = require('../expression/string_binary');
     const {string_ternary, string_ternary_type} = require('../expression/string_ternary');
+    const {parameter} = require('../expression/parameter');
 
     
     const {print, print_type} = require('../instruction/print');
@@ -20,6 +21,7 @@
     const {assignation_unary} = require('../instruction/assignation_unary');
     const {native_parse} = require('../instruction/native_parse');
     const {native_function} = require('../instruction/native_function');
+    const {declaration_function} = require('../instruction/declaration_function');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -172,16 +174,16 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 **********************/
 %%
 
-pr_init    
-    : pr_instructions EOF {
-        return $1;
-    } 
-;
 // pr_init    
-//     : pr_globals EOF {
-//         $$ = $1
-//     }
+//     : pr_instructions EOF {
+//         return $1;
+//     } 
 // ;
+pr_init    
+    : pr_globals EOF {
+        return $1
+    }
+;
 
 
 pr_globals
@@ -208,23 +210,30 @@ pr_main
 ;
 
 pr_global
-    : pr_newSubProgram {$$ = $1}
+    : pr_declaration_function {$$ = $1}
     | pr_declaration_item tk_semicolon {$$ = $1}
     | pr_declare_struct tk_semicolon {$$ = $1}
 ;
 
 /* Funciones y metodos, 2 producciones para cada uno (trae o no parametros) */
-pr_newSubProgram
-    : pr_type tk_id tk_par_o pr_declarations tk_par_c tk_cbra_o pr_instructions tk_cbra_c
-    | pr_type tk_id tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c
-    | tk_void tk_id tk_par_o pr_declarations tk_par_c tk_cbra_o pr_instructions tk_cbra_c
-    | tk_void tk_id tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+pr_declaration_function
+    : pr_type tk_id tk_par_o pr_params tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new declaration_function($1, $2, $4, $7, @1.first_line,@1.first_column);
+    }
+    | pr_type tk_id tk_par_o tk_par_c tk_cbra_o pr_instructions tk_cbra_c{
+        $$ = new declaration_function($1, $2, [], $6, @1.first_line,@1.first_column);
+    }
 ;
 
 /* int numero1, int numero2 <- Sirve para declaracion de parametros y atributos de struct */
-pr_declarations
-    : pr_declarations tk_comma pr_type tk_id
-    | pr_type  
+pr_params
+    : pr_params tk_comma pr_type tk_id {
+        $1.push(new parameter($3, $4, @1.first_line,@1.first_column))
+        $$ = $1
+    }
+    | pr_type tk_id {
+        $$ = [new parameter($1, $2, @1.first_line,@1.first_column)]
+    }
 ;
 
 /*
@@ -262,7 +271,7 @@ pr_declaration_item
     }
 */
 pr_declare_struct
-    : tk_struct tk_id tk_cbra_o pr_declarations tk_cbra_c
+    : tk_struct tk_id tk_cbra_o pr_params tk_cbra_c
 ;
 
 pr_type
@@ -271,6 +280,7 @@ pr_type
     | tk_string_type {$$ = $1}
     | tk_boolean_type {$$ = $1}
     | tk_char_type {$$ = $1}
+    | tk_void {$$ = $1}
 ;
 
 /*
