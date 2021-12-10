@@ -3965,7 +3965,7 @@ class console {
         this.symbols = new Map();
         this.stack = new Array;
         this.heap = new Array;
-        this.actualTemp = 3;
+        this.actualTemp = 5;
         this.actualTag = 0;
     }
     saveInHeap(index, id) {
@@ -3979,7 +3979,7 @@ class console {
         this.symbols = new Map();
         this.stack = [];
         this.heap = [];
-        this.actualTemp = 3;
+        this.actualTemp = 5;
         this.actualTag = 0;
     }
 }

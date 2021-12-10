@@ -58,6 +58,7 @@ function generateDefaultFunctions(){
     code += generateDivisionBy0();
     code += generateStringLength();
     code += generateStringPosition();
+    code += generateStringExtract();
     return code;
 }
 
@@ -332,6 +333,55 @@ function generateStringPosition(){
     code += 'HP = HP + 1;\n';
     code += 'HEAP[(int)HP] = 36;\n';
     code += 'HP = HP + 1;\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+
+function generateStringExtract(){
+    let code = 'void StringExtract(){\n';
+    code += 'T0 = SP + 1;//Get String starting position\n';
+    code += 'T0 = STACK[(int)T0];\n';
+    code += 'T5 = SP;//Save actual environment\n';
+    code += 'SP = 18;//Set StringLength environment\n';
+    code += 'T2 = SP + 1;\n';
+    code += 'STACK[(int)T2] = T0;//Set string\n';
+    code += 'StringLength();//Call StringLength\n';
+    code += 'T0 = SP + 0;//Set return position\n';
+    code += 'T0 = STACK[(int)T0];//Get return value\n';
+    code += 'T0 = T0 - 1;//Max value for start or finish position\n';
+    code += 'SP = T5;//Get environment back\n';
+    code += 'T1 = SP + 1;//Get String starting position\n';
+    code += 'T1 = STACK[(int)T1];\n';
+    code += 'T2 = SP + 2;//Get start position\n';
+    code += 'T2 = STACK[(int)T2];\n';
+    code += 'T3 = SP + 3;//Get finish position\n';
+    code += 'T3 = STACK[(int)T3];\n';
+    code += 'T4 = HP;//Save new string start position\n';
+    code += 'if(T2 > T0) goto L0;//Check if index is greater than length\n';
+    code += 'if(T3 > T0) goto L0;//Check if index is greater than length\n';
+    code += 'T2 = T1 + T2;//Update start position\n';
+    code += 'T3 = T1 + T3;//Update finish position\n';
+    code += 'goto L1;\n';
+    code += 'L1:\n';
+    code += 'T5 = HEAP[(int)T2];//Get character in heap\n';
+    code += 'if(T2 > T3) goto L2;//End of extraction\n';
+    code += 'HEAP[(int)HP] = T5;//Save character in heap\n';
+    code += 'HP = HP + 1;//Increase hp\n';
+    code += 'T2 = T2 + 1;//Increase iterator\n';
+    code += 'goto L1;//Go back to loop\n';
+    code += 'L0:\n';
+    code += 'OutOfBounds();\n';
+    code += 'T0 = SP + 0;\n';
+    code += 'HEAP[(int)HP] = -1;//Set error code\n';
+    code += 'STACK[(int)T0] = HP;\n';
+    code += 'HP = HP + 1;\n';
+    code += 'return;\n';
+    code += 'L2:\n';
+    code += 'HEAP[(int)HP] = 36;//Add end of string to new string\n';
+    code += 'HP = HP + 1;//Increase HP\n';
+    code += 'T0 = SP + 0;//Set return position\n';
+    code += 'STACK[(int)T0] = T4;//Set return\n';
     code += 'return;\n';
     code += '}\n';
     return code;

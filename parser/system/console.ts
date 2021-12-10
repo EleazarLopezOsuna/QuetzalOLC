@@ -11,7 +11,7 @@ class console {
     constructor() {
         this.stack = new Array;
         this.heap = new Array;
-        this.actualTemp = 3;
+        this.actualTemp = 5;
         this.actualTag = 0;
     }
     saveInHeap(index: number, id: any) {
@@ -26,7 +26,7 @@ class console {
         this.symbols = new Map();
         this.stack = []
         this.heap = []
-        this.actualTemp = 3;
+        this.actualTemp = 5;
         this.actualTag = 0;
     }
 
