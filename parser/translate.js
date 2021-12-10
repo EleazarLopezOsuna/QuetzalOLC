@@ -1745,6 +1745,7 @@ exports.ternary = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 class ternary extends expression_1.expression {
     constructor(first, second, third, line, column) {
         super(line, column);
@@ -1753,7 +1754,35 @@ class ternary extends expression_1.expression {
         this.third = third;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const conditionType = this.first.translate(environment);
+        const conditionTemp = console_1._3dCode.actualTemp;
+        const trueType = this.second.translate(environment);
+        const trueTemp = console_1._3dCode.actualTemp;
+        const falseType = this.third.translate(environment);
+        const falseTemp = console_1._3dCode.actualTemp;
+        console_1._3dCode.actualTag++;
+        const trueTag = console_1._3dCode.actualTag;
+        console_1._3dCode.actualTag++;
+        const falseTag = console_1._3dCode.actualTag;
+        console_1._3dCode.actualTag++;
+        const exitTag = console_1._3dCode.actualTag;
+        if (conditionType == type_1.type.BOOLEAN) {
+            console_1._3dCode.actualTemp++;
+            console_1._3dCode.output += 'if(T' + conditionTemp + ' == 1) goto L' + trueTag + ';//Return true value\n';
+            console_1._3dCode.output += 'goto L' + falseTag + ';//Return false value\n';
+            console_1._3dCode.output += 'L' + trueTag + ':\n';
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + trueTemp + ';//Set true value\n';
+            console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+            console_1._3dCode.output += 'L' + falseTag + ':\n';
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + falseTemp + ';//Set true value\n';
+            console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+            console_1._3dCode.output += 'L' + exitTag + ':\n';
+            return trueType;
+        }
+        else {
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const first_data = this.first.execute(environment);
@@ -1774,7 +1803,7 @@ class ternary extends expression_1.expression {
 }
 exports.ternary = ternary;
 
-},{"../abstract/expression":4,"../system/error":39,"../system/type":40}],17:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":37,"../system/error":39,"../system/type":40}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unary = exports.unary_type = void 0;
