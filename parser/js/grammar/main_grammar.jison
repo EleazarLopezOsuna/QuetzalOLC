@@ -25,6 +25,7 @@
     const {main} = require('../instruction/main');
     const {call} = require('../instruction/call');
     const {_return} = require('../instruction/_return');
+    const {_if} = require('../instruction/_if');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -100,7 +101,6 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "toDouble"              return 'tk_to_double'
 "string"                return 'tk_string_func'
 "typeof"                return 'tk_typeof'
-"elseif"                return 'tk_elseif'
 "break"                 return 'tk_break'
 "continue"              return 'tk_continue'
 "in"                    return 'tk_in'
@@ -482,8 +482,12 @@ pr_case
     if(expression){instructions}
 */
 pr_if
-    : tk_if tk_par_o pr_expr tk_cbra_o pr_instructions tk_cbra_c pr_else
-    | tk_if tk_par_o pr_expr tk_cbra_o pr_instructions tk_cbra_c
+    : tk_if tk_par_o pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c pr_else {
+        $$ = new _if($3, $6, $8, @1.first_line,@1.first_column);
+    }   
+    | tk_if tk_par_o pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new _if($3, $6, null, @1.first_line,@1.first_column);
+    }   
 ;
 
 /*
@@ -493,9 +497,12 @@ pr_if
     else{instructions}
 */
 pr_else
-    : tk_elseif tk_par_o pr_expr tk_cbra_o pr_instructions tk_cbra_c pr_else
-    | tk_elseif tk_par_o pr_expr tk_cbra_o pr_instructions tk_cbra_c
-    | tk_else tk_cbra_o pr_instructions tk_cbra_c
+    : tk_else tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = $3
+    }
+    | tk_else pr_if {
+        $$ = $2
+    }
 ;
 
 pr_expr
