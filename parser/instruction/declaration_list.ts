@@ -11,7 +11,7 @@ export class declaration_list extends instruction {
         throw new Error("Method not implemented.");
     }
 
-    constructor(public native_type: string, public declare_list: [declaration_item], line: number, column: number) {
+    constructor(public native_type: type, public declare_list: [declaration_item], line: number, column: number) {
         super(line, column);
     }
 
@@ -23,39 +23,23 @@ export class declaration_list extends instruction {
         this.declare_list.forEach(item => {
             let item_data = item.execute(environment);
 
-            // match the type in the system and the string type
-            let validation_arr: Array<Array<type | string>> = [
-                [type.BOOLEAN, "boolean"],
-                [type.CHAR, "char"],
-                [type.FLOAT, "double"],
-                [type.INTEGER, "int"],
-                [type.STRING, "String"],
-            ]
-
             // if is undefined save the variable with the type declared
             if (item_data.type == type.NULL) {
-                validation_arr.forEach(validate_item => {
-                    if (validate_item[1] == this.native_type) {
-                        // Save the variable 
-                        item_data.type = validate_item[0] as type;
-                        if (environment.get_variable(item.variable_id).type != type.NULL) {
-                            error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
-                        } else {
-                            environment.save_variable(item.variable_id, item_data)
-                        }
-                        return
-                    }
-                });
+                // Save the variable 
+                if (environment.get_variable(item.variable_id).type != type.NULL) {
+                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
+                } else {
+                    environment.save_variable(item.variable_id, item_data)
+                }
+                return
             }
             // if the save variable has an expression check types
             else {
                 // Checking both types
                 let checked = false
-                validation_arr.forEach(validate_item => {
-                    if (validate_item[0] == item_data.type && validate_item[1] == this.native_type) {
-                        checked = true
-                    }
-                });
+                if (item_data.type == this.native_type) {
+                    checked = true
+                }
 
                 // if checked type save the variable
                 if (!checked) {
