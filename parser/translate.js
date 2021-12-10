@@ -1530,6 +1530,7 @@ exports.string_ternary = exports.string_ternary_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var string_ternary_type;
 (function (string_ternary_type) {
     string_ternary_type[string_ternary_type["SUBSTRING"] = 0] = "SUBSTRING";
@@ -1543,7 +1544,43 @@ class string_ternary extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const firstType = this.first.translate(environment);
+        const firstTemp = console_1._3dCode.actualTemp;
+        const secondType = this.second.translate(environment);
+        const secondTemp = console_1._3dCode.actualTemp;
+        const thirdType = this.third.translate(environment);
+        const thirdTemp = console_1._3dCode.actualTemp;
+        switch (this.type) {
+            case string_ternary_type.SUBSTRING:
+                if (firstType == type_1.type.STRING && secondType == type_1.type.INTEGER && thirdType == type_1.type.INTEGER) {
+                    console_1._3dCode.actualTemp++;
+                    const savedEnvironment = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 23;//Set StringExtract environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set string position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + firstTemp + ';//Save string\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set start position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + secondTemp + ';//Save start position\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 3;//Set end position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + thirdTemp + ';//Save end position\n';
+                    console_1._3dCode.output += 'StringExtract();//Call function\n';
+                    console_1._3dCode.actualTemp++;
+                    const resultTemp = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                    return type_1.type.STRING;
+                }
+                else {
+                }
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const first_data = this.first.execute(environment);
@@ -1569,7 +1606,7 @@ class string_ternary extends expression_1.expression {
 }
 exports.string_ternary = string_ternary;
 
-},{"../abstract/expression":4,"../system/error":39,"../system/type":40}],15:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":37,"../system/error":39,"../system/type":40}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_unary = exports.string_unary_type = void 0;
