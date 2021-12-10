@@ -23,6 +23,8 @@
     const {native_function} = require('../instruction/native_function');
     const {declaration_function} = require('../instruction/declaration_function');
     const {main} = require('../instruction/main');
+    const {call} = require('../instruction/call');
+    const {_return} = require('../instruction/_return');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -276,12 +278,12 @@ pr_declare_struct
 ;
 
 pr_type
-    : tk_integer_type {$$ = $1}
-    | tk_double_type {$$ = $1}
-    | tk_string_type {$$ = $1}
-    | tk_boolean_type {$$ = $1}
-    | tk_char_type {$$ = $1}
-    | tk_void {$$ = $1}
+    : tk_integer_type {$$ = type.INTEGER}
+    | tk_double_type {$$ = type.FLOAT}
+    | tk_string_type {$$ = type.STRING}
+    | tk_boolean_type {$$ = type.BOOLEAN}
+    | tk_char_type {$$ = type.CHAR}
+    | tk_void {$$ = type.VOID}
 ;
 
 /*
@@ -333,17 +335,19 @@ pr_instruction
     | tk_continue tk_semicolon {$$ = $1}
     | tk_id tk_double_plus tk_semicolon
     | tk_id tk_double_minus tk_semicolon
-    | tk_return pr_expr tk_semicolon
+    | tk_return pr_expr tk_semicolon { 
+        $$ = new _return($2, @1.first_line,@1.first_column);
+    }
     | pr_print tk_semicolon {$$ = $1}
     | pr_native_function tk_semicolon {$$ = $1}
     | error
 ;
 
 pr_print
-    : tk_print tk_par_o pr_exprList tk_par_c { 
+    : tk_print tk_par_o pr_expression_list tk_par_c { 
         $$ = new print($3, print_type.PRINT, @1.first_line,@1.first_column);
     }
-    | tk_println tk_par_o pr_exprList tk_par_c { 
+    | tk_println tk_par_o pr_expression_list tk_par_c { 
         $$ = new print($3, print_type.PRINTLN, @1.first_line,@1.first_column);
     }
 ;
@@ -404,16 +408,20 @@ pr_access
     id()
 */
 pr_call
-    : tk_id tk_par_o pr_exprList tk_par_c
-    | tkid tk_par_o tk_par_c
+    : tk_id tk_par_o pr_expression_list tk_par_c {
+        $$ = new call($1, $3, @1.first_line,@1.first_column);
+    }
+    | tk_id tk_par_o tk_par_c {
+        $$ = new call($1, [], @1.first_line,@1.first_column);
+    }
 ;
 
 /*
     ... , expression
     expression
 */
-pr_exprList
-    : pr_exprList tk_comma pr_expr {
+pr_expression_list
+    : pr_expression_list tk_comma pr_expr {
         $1.push($3)
         $$ = $1
     }
@@ -573,6 +581,9 @@ pr_expr
         $$ = new ternary($1, $3, $5, @1.first_line, @1.first_column);
     }
     | pr_native_function {
+        $$ = $1
+    }
+    | pr_call {
         $$ = $1
     }
     | pr_unary {

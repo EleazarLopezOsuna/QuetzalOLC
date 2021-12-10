@@ -5,6 +5,7 @@ export enum type {
     FLOAT = 3,
     CHAR = 4,
     NULL = 5,
+    VOID = 6,
 }
 
 export type data = {

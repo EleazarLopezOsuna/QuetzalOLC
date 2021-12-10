@@ -3,6 +3,7 @@ import { data, type } from "../system/type";
 import { _console } from "../system/console";
 import { instruction } from "../abstract/instruction";
 import { parameter } from "../expression/parameter";
+import { error, error_arr, error_type } from "../system/error";
 
 export class declaration_function extends instruction {
 
@@ -10,11 +11,12 @@ export class declaration_function extends instruction {
         throw new Error("Method not implemented.");
     }
 
-    constructor(public native_type: string, public id: string, public parametros: Array<parameter>,  public statement: instruction, line: number, column: number) {
+    constructor(public native_type: type, public id: string, public parameters: Array<parameter>, public code: Array<instruction>, line: number, column: number) {
         super(line, column);
     }
 
     public execute(environment: environment): data {
+
         environment.save_function(this.id, this);
         // Default
         return { value: null, type: type.NULL }

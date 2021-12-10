@@ -4,12 +4,12 @@ exports.declaration_function = void 0;
 const type_1 = require("../system/type");
 const instruction_1 = require("../abstract/instruction");
 class declaration_function extends instruction_1.instruction {
-    constructor(native_type, id, parametros, statement, line, column) {
+    constructor(native_type, id, parameters, code, line, column) {
         super(line, column);
         this.native_type = native_type;
         this.id = id;
-        this.parametros = parametros;
-        this.statement = statement;
+        this.parameters = parameters;
+        this.code = code;
     }
     translate(environment) {
         throw new Error("Method not implemented.");
