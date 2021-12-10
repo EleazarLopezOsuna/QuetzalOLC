@@ -1633,6 +1633,7 @@ exports.string_unary = exports.string_unary_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var string_unary_type;
 (function (string_unary_type) {
     string_unary_type[string_unary_type["LENGTH"] = 0] = "LENGTH";
@@ -1646,7 +1647,75 @@ class string_unary extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const exprType = this.expr.translate(environment);
+        const leftTemp = console_1._3dCode.actualTemp;
+        switch (this.type) {
+            case string_unary_type.LENGTH:
+                switch (exprType) {
+                    case type_1.type.STRING:
+                        console_1._3dCode.actualTemp++;
+                        const savedEnvironment = console_1._3dCode.actualTemp;
+                        console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                        console_1._3dCode.output += 'SP = 18;//Set StringConcat environment\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set first String position\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                        console_1._3dCode.output += 'StringLength();//Call function\n';
+                        console_1._3dCode.actualTemp++;
+                        const resultTemp = console_1._3dCode.actualTemp;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                        console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                        return type_1.type.INTEGER;
+                    default:
+                }
+                break;
+            case string_unary_type.UPPERCASE:
+                switch (exprType) {
+                    case type_1.type.STRING:
+                        console_1._3dCode.actualTemp++;
+                        const savedEnvironment = console_1._3dCode.actualTemp;
+                        console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                        console_1._3dCode.output += 'SP = 6;//Set StringConcat environment\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set first String position\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                        console_1._3dCode.output += 'StringUpperCase();//Call function\n';
+                        console_1._3dCode.actualTemp++;
+                        const resultTemp = console_1._3dCode.actualTemp;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                        console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                        return type_1.type.STRING;
+                    default:
+                }
+                break;
+            case string_unary_type.LOWERCASE:
+                switch (exprType) {
+                    case type_1.type.STRING:
+                        console_1._3dCode.actualTemp++;
+                        const savedEnvironment = console_1._3dCode.actualTemp;
+                        console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                        console_1._3dCode.output += 'SP = 4;//Set StringConcat environment\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set first String position\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                        console_1._3dCode.output += 'StringLowerCase();//Call function\n';
+                        console_1._3dCode.actualTemp++;
+                        const resultTemp = console_1._3dCode.actualTemp;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                        console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                        return type_1.type.STRING;
+                    default:
+                }
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const expr_data = this.expr.execute(environment);
@@ -1655,6 +1724,7 @@ class string_unary extends expression_1.expression {
                 switch (expr_data.type) {
                     case type_1.type.STRING:
                         let string_value = expr_data.value.toString();
+                        //Posible error en el return, deberia de retornar INTEGER. Comprobar
                         return { value: string_value.length, type: type_1.type.STRING };
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar length para: ' + expr_data.value));
@@ -1688,7 +1758,7 @@ class string_unary extends expression_1.expression {
 }
 exports.string_unary = string_unary;
 
-},{"../abstract/expression":4,"../system/error":33,"../system/type":34}],17:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":31,"../system/error":33,"../system/type":34}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ternary = void 0;
