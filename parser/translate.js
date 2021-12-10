@@ -1425,6 +1425,23 @@ class string_binary extends expression_1.expression {
         switch (this.type) {
             case string_binary_type.CONCAT:
                 if (leftType == type_1.type.STRING && rightType == type_1.type.STRING) {
+                    console_1._3dCode.actualTemp++;
+                    const savedEnvironment = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 0;//Set StringConcat environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set first String position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set second String position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + rightTemp + ';//Save position\n';
+                    console_1._3dCode.output += 'StringConcat();//Call function\n';
+                    console_1._3dCode.actualTemp++;
+                    const resultTemp = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type_1.type.STRING;
                 }
                 else {
@@ -1432,6 +1449,23 @@ class string_binary extends expression_1.expression {
                 break;
             case string_binary_type.REPEAT:
                 if (leftType == type_1.type.STRING && rightType == type_1.type.INTEGER) {
+                    console_1._3dCode.actualTemp++;
+                    const savedEnvironment = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 8;//Set StringConcat environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set first String position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set second String position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + rightTemp + ';//Save position\n';
+                    console_1._3dCode.output += 'StringTimes();//Call function\n';
+                    console_1._3dCode.actualTemp++;
+                    const resultTemp = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type_1.type.STRING;
                 }
                 else {
@@ -3315,8 +3349,9 @@ class print extends instruction_1.instruction {
                     const elementTemp = console_1._3dCode.actualTemp;
                     console_1._3dCode.actualTemp++;
                     const savedEnvironment = console_1._3dCode.actualTemp;
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
                     console_1._3dCode.output += 'SP = 3;//Set StringPrint environment\n';
+                    console_1._3dCode.actualTemp++;
                     console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = ' + 'SP + 0;//Set string position\n';
                     console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + elementTemp + ';//Save string\n';
                     console_1._3dCode.output += 'StringPrint();//Call function\n';

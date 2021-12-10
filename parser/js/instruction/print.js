@@ -48,8 +48,9 @@ class print extends instruction_1.instruction {
                     const elementTemp = console_1._3dCode.actualTemp;
                     console_1._3dCode.actualTemp++;
                     const savedEnvironment = console_1._3dCode.actualTemp;
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
                     console_1._3dCode.output += 'SP = 3;//Set StringPrint environment\n';
+                    console_1._3dCode.actualTemp++;
                     console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = ' + 'SP + 0;//Set string position\n';
                     console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + elementTemp + ';//Save string\n';
                     console_1._3dCode.output += 'StringPrint();//Call function\n';

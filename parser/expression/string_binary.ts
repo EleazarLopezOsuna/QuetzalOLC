@@ -20,6 +20,23 @@ export class string_binary extends expression {
         switch (this.type) {
             case string_binary_type.CONCAT:
                 if (leftType == type.STRING && rightType == type.STRING) {
+                    _3dCode.actualTemp++;
+                    const savedEnvironment = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    _3dCode.output += 'SP = 0;//Set StringConcat environment\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;//Set first String position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 2;//Set second String position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + rightTemp + ';//Save position\n';
+                    _3dCode.output += 'StringConcat();//Call function\n';
+                    _3dCode.actualTemp++;
+                    const resultTemp = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
                     
@@ -27,7 +44,23 @@ export class string_binary extends expression {
                 break;
             case string_binary_type.REPEAT:
                 if (leftType == type.STRING && rightType == type.INTEGER) {
-
+                    _3dCode.actualTemp++;
+                    const savedEnvironment = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    _3dCode.output += 'SP = 8;//Set StringConcat environment\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;//Set first String position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + leftTemp + ';//Save string\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 2;//Set second String position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + rightTemp + ';//Save position\n';
+                    _3dCode.output += 'StringTimes();//Call function\n';
+                    _3dCode.actualTemp++;
+                    const resultTemp = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
                     
