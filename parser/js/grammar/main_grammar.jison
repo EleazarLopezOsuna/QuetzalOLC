@@ -26,6 +26,10 @@
     const {call} = require('../instruction/call');
     const {_return} = require('../instruction/_return');
     const {_if} = require('../instruction/_if');
+    const {_switch} = require('../instruction/_switch');
+    const {_case, _case_type} = require('../instruction/_case');
+    const {_break} = require('../instruction/_break');
+    const {_continue} = require('../instruction/_continue');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -331,8 +335,12 @@ pr_instruction
     | pr_call tk_semicolon {$$ = $1}
     | pr_declaration_list tk_semicolon {$$ = $1}
     | pr_declare_struct tk_semicolon {$$ = $1}
-    | tk_break tk_semicolon {$$ = $1}
-    | tk_continue tk_semicolon {$$ = $1}
+    | tk_break tk_semicolon { 
+        $$ = new _break($2, @1.first_line,@1.first_column);
+    }
+    | tk_continue tk_semicolon { 
+        $$ = new _continue($2, @1.first_line,@1.first_column);
+    }
     | tk_id tk_double_plus tk_semicolon
     | tk_id tk_double_minus tk_semicolon
     | tk_return pr_expr tk_semicolon { 
@@ -460,12 +468,19 @@ pr_do
 
 /* switch(expression){cases} */
 pr_switch
-    : tk_switch tk_par_o pr_expr tk_par_c tk_cbra_o pr_cases tk_cbra_c
+    : tk_switch tk_par_o pr_expr tk_par_c tk_cbra_o pr_cases tk_cbra_c {
+        $$ = new _switch($3, $6, @1.first_line,@1.first_column);
+    }   
 ;
 
 pr_cases
-    : pr_cases pr_case
-    | pr_case
+    : pr_cases pr_case {
+        $1.push($2)
+        $$ = $1
+    }
+    | pr_case {
+        $$ = [$1]
+    }
 ;
 
 /*
@@ -473,8 +488,12 @@ pr_cases
     default: instructions
 */
 pr_case
-    : tk_case pr_type tk_colon pr_instructions
-    | tk_default tk_colon pr_instructions
+    : tk_case pr_expr tk_colon pr_instructions {
+        $$ = new _case($2, $4, _case_type.CASE, @1.first_line,@1.first_column);
+    }
+    | tk_default tk_colon pr_instructions {
+        $$ = new _case(null, $3, _case_type.DEFAULT, @1.first_line,@1.first_column);
+    }
 ;
 
 /*

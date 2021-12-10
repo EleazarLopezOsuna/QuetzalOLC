@@ -17,9 +17,11 @@ class _if extends instruction_1.instruction {
     }
     execute(environment) {
         const condition = this.condition.execute(environment);
+        // first check that the condition is a boolean
         if (condition.type != type_1.type.BOOLEAN) {
             error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La condicion del if tiene que ser booleana'));
         }
+        // if the condition is true execute the set of instructions
         if (condition.value == true) {
             for (const instr of this.code) {
                 try {
@@ -34,9 +36,11 @@ class _if extends instruction_1.instruction {
             }
         }
         else {
+            // else if is another if
             if (this.else_statement instanceof instruction_1.instruction) {
                 return this.else_statement.execute(environment);
             }
+            // Else without condition is just a set of instructions 
             else if (this.else_statement instanceof Array) {
                 for (const instr of this.else_statement) {
                     try {
