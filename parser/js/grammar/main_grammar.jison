@@ -32,6 +32,7 @@
     const {_continue} = require('../instruction/_continue');
     const {_while, _while_type} = require('../instruction/_while');
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
+    const {_for} = require('../instruction/_for');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -184,7 +185,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %%
 
 // pr_init    
-//     : pr_instructions EOF {
+//     : pr_for EOF {
 //         return $1;
 //     } 
 // ;
@@ -333,6 +334,7 @@ pr_instruction
     | pr_while {$$ = $1}
     | pr_do {$$ = $1}
     | pr_for {$$ = $1}
+    | pr_unary_instruction tk_semicolon {$$ = $1}
     | pr_assignation tk_semicolon {$$ = $1}
     | pr_call tk_semicolon {$$ = $1}
     | pr_declaration_list tk_semicolon {$$ = $1}
@@ -343,12 +345,6 @@ pr_instruction
     | tk_continue tk_semicolon { 
         $$ = new _continue($2, @1.first_line,@1.first_column);
     }
-    | tk_id tk_double_plus tk_semicolon { 
-        $$ = new unary_instruction($1, unary_instruction_type.INCREMENT, @1.first_line,@1.first_column);
-    }
-    | tk_id tk_double_minus tk_semicolon  { 
-        $$ = new unary_instruction($1, unary_instruction_type.DECREMENT, @1.first_line,@1.first_column);
-    }
     | tk_return pr_expr tk_semicolon { 
         $$ = new _return($2, @1.first_line,@1.first_column);
     }
@@ -356,7 +352,14 @@ pr_instruction
     | pr_native_function tk_semicolon {$$ = $1}
     | error
 ;
-
+pr_unary_instruction 
+    : tk_id tk_double_plus { 
+        $$ = new unary_instruction($1, unary_instruction_type.INCREMENT, @1.first_line,@1.first_column);
+    }
+    | tk_id tk_double_minus { 
+        $$ = new unary_instruction($1, unary_instruction_type.DECREMENT, @1.first_line,@1.first_column);
+    }
+;
 pr_print
     : tk_print tk_par_o pr_expression_list tk_par_c { 
         $$ = new print($3, print_type.PRINT, @1.first_line,@1.first_column);
@@ -449,17 +452,12 @@ pr_expression_list
     for letra in expression {instructions}
 */
 pr_for
-    : tk_for tk_par_o pr_forStart tk_semicolon pr_expr tk_semicolon pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c
-    | tk_for tk_id tk_in pr_expr tk_cbra_o pr_instructions tk_cbra_c
-;
-
-/*
-    int iterador = expression
-    iterador = expression
-*/
-pr_forStart
-    : pr_type tk_id tk_equal pr_expr
-    | tk_id tk_equal pr_expr
+    : tk_for tk_par_o pr_declaration_list tk_semicolon pr_expr tk_semicolon pr_unary_instruction tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new _for($3, $5, $7, $10, @1.first_line,@1.first_column);
+    }   
+    | tk_for tk_par_o pr_assignation tk_semicolon pr_expr tk_semicolon pr_unary_instruction tk_par_c tk_cbra_o pr_instructions tk_cbra_c  {
+        $$ = new _for($3, $5, $7, $10, @1.first_line,@1.first_column);
+    }   
 ;
 
 /* while(expression){instructions} */

@@ -30,6 +30,8 @@ export class _while extends instruction {
         let condition_data = this.condition.execute(environment);
         if (condition_data.type != type.BOOLEAN) {
             error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
+            // Default
+            return { value: null, type: type.NULL }
         }
         switch (this.type) {
             case _while_type.NORMAL:
