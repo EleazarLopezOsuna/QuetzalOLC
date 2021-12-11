@@ -28,7 +28,7 @@ import { error_arr } from "./system/error";
     return _3dCode.output
 }
 
-function generateHeader(){
+function generateHeader() {
     let code = '#include <stdio.h>\n';
     code += '#include <math.h>\n';
     code += 'float HEAP[16384];\n';
@@ -36,8 +36,8 @@ function generateHeader(){
     code += 'float HP;\n';
     code += 'float SP;\n';
     code += 'float ';
-    for(let i = 0; i <= _3dCode.actualTemp; i++){
-        if(i == 0)
+    for (let i = 0; i <= _3dCode.actualTemp; i++) {
+        if (i == 0)
             code += 'T' + i;
         else
             code += ', T' + i;
@@ -46,7 +46,7 @@ function generateHeader(){
     return code;
 }
 
-function generateDefaultFunctions(){
+function generateDefaultFunctions() {
     let code = generateStringConcat();
     code += generateStringPrint();
     code += generateLowerCase();
@@ -59,10 +59,11 @@ function generateDefaultFunctions(){
     code += generateStringLength();
     code += generateStringPosition();
     code += generateStringExtract();
+    code += generateTypeOf();
     return code;
 }
 
-function generateStringConcat(){
+function generateStringConcat() {
     let code = 'void StringConcat(){\n';
     code += 'T0 = SP + 1;//Get stack position of first string\n';
     code += 'T0 = STACK[(int)T0];//Get heap position of first string\n';
@@ -94,7 +95,7 @@ function generateStringConcat(){
     return code;
 }
 
-function generateStringPrint(){
+function generateStringPrint() {
     let code = 'void StringPrint(){\n';
     code += 'T0 = SP + 0;\n';
     code += 'T0 = STACK[(int)T0];\n';
@@ -111,7 +112,7 @@ function generateStringPrint(){
     return code;
 }
 
-function generateOutOfBounds(){
+function generateOutOfBounds() {
     let code = 'void OutOfBounds(){\n';
     code += 'printf("%c", 79); //O\n';
     code += 'printf("%c", 117); //u\n';
@@ -131,7 +132,7 @@ function generateOutOfBounds(){
     return code;
 }
 
-function generateDivisionBy0(){
+function generateDivisionBy0() {
     let code = 'void DivisionBy0(){\n';
     code += 'printf("%c", 68); //D\n';
     code += 'printf("%c", 105); //i\n';
@@ -151,7 +152,7 @@ function generateDivisionBy0(){
     return code;
 }
 
-function generateLowerCase(){
+function generateLowerCase() {
     let code = 'void StringLowerCase(){\n'
     code += 'T0 = SP + 1;//Get stack position of string\n';
     code += 'T0 = STACK[(int)T0];//Get heap position\n';
@@ -177,7 +178,7 @@ function generateLowerCase(){
     return code;
 }
 
-function generateUpperCase(){
+function generateUpperCase() {
     let code = 'void StringUpperCase(){\n'
     code += 'T0 = SP + 1;//Get stack position of string\n';
     code += 'T0 = STACK[(int)T0];//Get heap position\n';
@@ -203,7 +204,7 @@ function generateUpperCase(){
     return code;
 }
 
-function generateStringTimes(){
+function generateStringTimes() {
     let code = 'void StringTimes(){\n';
     code += 'T0 = SP + 1;//Get stack position of string\n';
     code += 'T0 = STACK[(int)T0];//Get heap position of string\n';
@@ -234,7 +235,7 @@ function generateStringTimes(){
     return code;
 }
 
-function generateNumberPower(){
+function generateNumberPower() {
     let code = 'void NumberPower(){\n';
     code += 'T0 = SP + 1;//Get base index\n';
     code += 'T0 = STACK[(int)T0];//Get base value\n';
@@ -254,7 +255,7 @@ function generateNumberPower(){
     return code;
 }
 
-function generateIntToString(){
+function generateIntToString() {
     let code = 'void intToString(){\n'
     code += 'T0 = SP + 1; //Get number position\n'
     code += 'T0 = STACK[(int)T0]; //Get number\n'
@@ -286,7 +287,7 @@ function generateIntToString(){
     return code;
 }
 
-function generateStringLength(){
+function generateStringLength() {
     let code = 'void StringLength(){\n';
     code += 'T0 = SP + 1;\n';
     code += 'T0 = STACK[(int)T0];\n';
@@ -305,7 +306,7 @@ function generateStringLength(){
     return code;
 }
 
-function generateStringPosition(){
+function generateStringPosition() {
     let code = 'void StringPosition(){\n';
     code += 'T0 = SP + 1;\n';
     code += 'T0 = STACK[(int)T0];\n';
@@ -338,7 +339,7 @@ function generateStringPosition(){
     return code;
 }
 
-function generateStringExtract(){
+function generateStringExtract() {
     let code = 'void StringExtract(){\n';
     code += 'T0 = SP + 1;//Get String starting position\n';
     code += 'T0 = STACK[(int)T0];\n';
@@ -382,6 +383,132 @@ function generateStringExtract(){
     code += 'HP = HP + 1;//Increase HP\n';
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T4;//Set return\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+
+function generateTypeOf() {
+    let code = 'void getTypeOf(){\n';
+    code += 'T0 = SP + 1;//Get String starting position\n';
+    code += 'T0 = STACK[(int)T0];\n';
+    code += 'T1 = HP;\n';
+    code += 'if(T0 == 0) goto L0;//Type String\n';
+    code += 'if(T0 == 1) goto L1;//Type Int\n';
+    code += 'if(T0 == 2) goto L2;//Type Float\n';
+    code += 'if(T0 == 3) goto L3;//Type Char\n';
+    code += 'if(T0 == 4) goto L4;//Type Boolean\n';
+    code += 'if(T0 == 5) goto L5;//Type Struct\n';
+    code += 'if(T0 == 6) goto L6;//Type Null\n';
+    code += 'L0:\n';
+    code += 'HEAP[(int)HP] = 83;//S\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 82;//R\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 73;//I\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 78;//N\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 71;//G\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L1:\n';
+    code += 'HEAP[(int)HP] = 73;//I\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 78;//N\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 69;//E\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 71;//G\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 69;//E\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 82;//R\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L2:\n';
+    code += 'HEAP[(int)HP] = 70;//F\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 76;//L\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 79;//O\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 65;//A\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L3:\n';
+    code += 'HEAP[(int)HP] = 67;//C\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 72;//H\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 65;//A\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 82;//R\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L4:\n';
+    code += 'HEAP[(int)HP] = 66;//B\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 79;//O\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 79;//O\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 76;//L\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 69;//E\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 65;//A\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 78;//N\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L5:\n';
+    code += 'HEAP[(int)HP] = 83;//S\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 82;//R\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 85;//U\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 67;//C\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L6:\n';
+    code += 'HEAP[(int)HP] = 78;//N\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 85;//U\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 76;//L\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 76;//L\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L7:\n';
+    code += 'T0 = SP + 0;//Get return position\n';
+    code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;\n';
     code += '}\n';
     return code;
