@@ -732,7 +732,7 @@ class expression extends node_1.node {
 }
 exports.expression = expression;
 
-},{"../system/type":41,"./node":7}],5:[function(require,module,exports){
+},{"../system/type":43,"./node":7}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.instruction = void 0;
@@ -806,7 +806,7 @@ window.exec = function (input) {
     return console_1._console.output;
 };
 
-},{"./grammar/main_grammar":19,"./system/console":38,"./system/environment":39,"./system/error":40}],9:[function(require,module,exports){
+},{"./grammar/main_grammar":19,"./system/console":40,"./system/environment":41,"./system/error":42}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_binary = exports.arithmetic_binary_type = void 0;
@@ -1075,7 +1075,7 @@ class arithmetic_binary extends expression_1.expression {
 }
 exports.arithmetic_binary = arithmetic_binary;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/error":40,"../system/type":41}],10:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/error":42,"../system/type":43}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_unary = exports.arithmetic_unary_type = void 0;
@@ -1213,7 +1213,7 @@ class arithmetic_unary extends expression_1.expression {
 }
 exports.arithmetic_unary = arithmetic_unary;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/error":40,"../system/type":41}],11:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/error":42,"../system/type":43}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logic = exports.logic_type = void 0;
@@ -1299,7 +1299,7 @@ class logic extends expression_1.expression {
 }
 exports.logic = logic;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/type":41}],12:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/type":43}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parameter = void 0;
@@ -1405,7 +1405,7 @@ class relational extends expression_1.expression {
 }
 exports.relational = relational;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/type":41}],14:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/type":43}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_binary = exports.string_binary_type = void 0;
@@ -1556,7 +1556,7 @@ class string_binary extends expression_1.expression {
 }
 exports.string_binary = string_binary;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/error":40,"../system/type":41}],15:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/error":42,"../system/type":43}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_ternary = exports.string_ternary_type = void 0;
@@ -1639,7 +1639,7 @@ class string_ternary extends expression_1.expression {
 }
 exports.string_ternary = string_ternary;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/error":40,"../system/type":41}],16:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/error":42,"../system/type":43}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_unary = exports.string_unary_type = void 0;
@@ -1771,7 +1771,7 @@ class string_unary extends expression_1.expression {
 }
 exports.string_unary = string_unary;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/error":40,"../system/type":41}],17:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/error":42,"../system/type":43}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ternary = void 0;
@@ -1836,7 +1836,7 @@ class ternary extends expression_1.expression {
 }
 exports.ternary = ternary;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/error":40,"../system/type":41}],18:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/error":42,"../system/type":43}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unary = exports.unary_type = void 0;
@@ -1926,7 +1926,7 @@ class unary extends expression_1.expression {
 }
 exports.unary = unary;
 
-},{"../abstract/expression":4,"../system/console":38,"../system/error":40,"../system/type":41}],19:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":40,"../system/error":42,"../system/type":43}],19:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -2110,6 +2110,16 @@ case 38:
         this.$ = new _continue($$[$0], _$[$0-1].first_line,_$[$0-1].first_column);
     
 break;
+case 39:
+ 
+        this.$ = new unary_instruction($$[$0-2], unary_instruction_type.INCREMENT, _$[$0-2].first_line,_$[$0-2].first_column);
+    
+break;
+case 40:
+ 
+        this.$ = new unary_instruction($$[$0-2], unary_instruction_type.DECREMENT, _$[$0-2].first_line,_$[$0-2].first_column);
+    
+break;
 case 41:
  
         this.$ = new _return($$[$0-1], _$[$0-2].first_line,_$[$0-2].first_column);
@@ -2159,6 +2169,11 @@ case 61:
 
         $$[$0-2].push($$[$0])
         this.$ = $$[$0-2]
+    
+break;
+case 67:
+
+        this.$ = new _while($$[$0-4], $$[$0-1], _$[$0-6].first_line,_$[$0-6].first_column);
     
 break;
 case 69:
@@ -2658,6 +2673,8 @@ _handle_error:
     const {_case, _case_type} = require('../instruction/_case');
     const {_break} = require('../instruction/_break');
     const {_continue} = require('../instruction/_continue');
+    const {_while} = require('../instruction/_while');
+    const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -3204,7 +3221,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"../expression/arithmetic_binary":9,"../expression/arithmetic_unary":10,"../expression/logic":11,"../expression/parameter":12,"../expression/relational":13,"../expression/string_binary":14,"../expression/string_ternary":15,"../expression/string_unary":16,"../expression/ternary":17,"../expression/unary":18,"../instruction/_break":20,"../instruction/_case":21,"../instruction/_continue":22,"../instruction/_if":23,"../instruction/_return":24,"../instruction/_switch":25,"../instruction/assignation_unary":26,"../instruction/call":27,"../instruction/declaration_function":28,"../instruction/declaration_item":29,"../instruction/declaration_list":30,"../instruction/main":31,"../instruction/native_function":32,"../instruction/native_parse":33,"../instruction/print":34,"../literal/native":35,"../literal/variable_id":36,"../system/error":40,"../system/type":41,"_process":3,"fs":1,"path":2}],20:[function(require,module,exports){
+},{"../expression/arithmetic_binary":9,"../expression/arithmetic_unary":10,"../expression/logic":11,"../expression/parameter":12,"../expression/relational":13,"../expression/string_binary":14,"../expression/string_ternary":15,"../expression/string_unary":16,"../expression/ternary":17,"../expression/unary":18,"../instruction/_break":20,"../instruction/_case":21,"../instruction/_continue":22,"../instruction/_if":23,"../instruction/_return":24,"../instruction/_switch":25,"../instruction/_while":26,"../instruction/assignation_unary":27,"../instruction/call":28,"../instruction/declaration_function":29,"../instruction/declaration_item":30,"../instruction/declaration_list":31,"../instruction/main":32,"../instruction/native_function":33,"../instruction/native_parse":34,"../instruction/print":35,"../instruction/unary_instruction":36,"../literal/native":37,"../literal/variable_id":38,"../system/error":42,"../system/type":43,"_process":3,"fs":1,"path":2}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._break = void 0;
@@ -3226,7 +3243,7 @@ class _break extends instruction_1.instruction {
 }
 exports._break = _break;
 
-},{"../abstract/instruction":5,"../system/type":41}],21:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/type":43}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._case = exports._case_type = void 0;
@@ -3270,7 +3287,7 @@ class _case extends instruction_1.instruction {
 }
 exports._case = _case;
 
-},{"../abstract/instruction":5,"../system/type":41,"./_break":20,"./_return":24}],22:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/type":43,"./_break":20,"./_return":24}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._continue = void 0;
@@ -3292,7 +3309,7 @@ class _continue extends instruction_1.instruction {
 }
 exports._continue = _continue;
 
-},{"../abstract/instruction":5,"../system/type":41}],23:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/type":43}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._if = void 0;
@@ -3358,7 +3375,7 @@ class _if extends instruction_1.instruction {
 }
 exports._if = _if;
 
-},{"../abstract/instruction":5,"../system/error":40,"../system/type":41,"./_return":24}],24:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/error":42,"../system/type":43,"./_return":24}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._return = void 0;
@@ -3430,7 +3447,58 @@ class _switch extends instruction_1.instruction {
 }
 exports._switch = _switch;
 
-},{"../abstract/instruction":5,"../system/error":40,"../system/type":41,"./_case":21}],26:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/error":42,"../system/type":43,"./_case":21}],26:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports._while = void 0;
+const error_1 = require("../system/error");
+const type_1 = require("../system/type");
+const instruction_1 = require("../abstract/instruction");
+const _return_1 = require("./_return");
+const _break_1 = require("./_break");
+const _continue_1 = require("./_continue");
+class _while extends instruction_1.instruction {
+    constructor(condition, code, line, column) {
+        super(line, column);
+        this.condition = condition;
+        this.code = code;
+    }
+    translate(environment) {
+        throw new Error("Method not implemented.");
+    }
+    execute(environment) {
+        let condition_data = this.condition.execute(environment);
+        if (condition_data.type != type_1.type.BOOLEAN) {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
+        }
+        while (condition_data.value == true) {
+            for (const instruction of this.code) {
+                let instruction_data = instruction.execute(environment);
+                if (instruction instanceof _return_1._return) {
+                    return instruction_data;
+                }
+                else if (instruction instanceof _break_1._break) {
+                    break;
+                }
+                else if (instruction instanceof _continue_1._continue) {
+                    continue;
+                }
+            }
+            condition_data = this.condition.execute(environment);
+            if (condition_data.type != type_1.type.BOOLEAN) {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
+            }
+        }
+        // Default
+        return { value: null, type: type_1.type.NULL };
+    }
+    plot(count) {
+        throw new Error("Method not implemented.");
+    }
+}
+exports._while = _while;
+
+},{"../abstract/instruction":5,"../system/error":42,"../system/type":43,"./_break":20,"./_continue":22,"./_return":24}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
@@ -3472,7 +3540,7 @@ class assignation_unary extends instruction_1.instruction {
 }
 exports.assignation_unary = assignation_unary;
 
-},{"../abstract/instruction":5,"../system/error":40,"../system/type":41}],27:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/error":42,"../system/type":43}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.call = void 0;
@@ -3544,7 +3612,7 @@ class call extends instruction_1.instruction {
 }
 exports.call = call;
 
-},{"../abstract/instruction":5,"../system/environment":39,"../system/error":40,"../system/type":41,"./_return":24}],28:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/environment":41,"../system/error":42,"../system/type":43,"./_return":24}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_function = void 0;
@@ -3572,7 +3640,7 @@ class declaration_function extends instruction_1.instruction {
 }
 exports.declaration_function = declaration_function;
 
-},{"../abstract/instruction":5,"../system/type":41}],29:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/type":43}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_item = void 0;
@@ -3603,7 +3671,7 @@ class declaration_item extends instruction_1.instruction {
 }
 exports.declaration_item = declaration_item;
 
-},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../system/type":41}],30:[function(require,module,exports){
+},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../system/type":43}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_list = void 0;
@@ -3667,7 +3735,7 @@ class declaration_list extends instruction_1.instruction {
 }
 exports.declaration_list = declaration_list;
 
-},{"../abstract/instruction":5,"../system/error":40,"../system/type":41}],31:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/error":42,"../system/type":43}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
@@ -3699,7 +3767,7 @@ class main extends instruction_1.instruction {
 }
 exports.main = main;
 
-},{"../abstract/instruction":5,"../system/console":38,"../system/type":41}],32:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":40,"../system/type":43}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_function = void 0;
@@ -3750,7 +3818,7 @@ class native_function extends instruction_1.instruction {
 }
 exports.native_function = native_function;
 
-},{"../abstract/instruction":5,"../system/error":40,"../system/type":41}],33:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/error":42,"../system/type":43}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_parse = void 0;
@@ -3799,7 +3867,7 @@ class native_parse extends instruction_1.instruction {
 }
 exports.native_parse = native_parse;
 
-},{"../abstract/instruction":5,"../system/error":40,"../system/type":41}],34:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/error":42,"../system/type":43}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.print = exports.print_type = void 0;
@@ -3896,7 +3964,64 @@ class print extends instruction_1.instruction {
 }
 exports.print = print;
 
-},{"../abstract/instruction":5,"../system/console":38,"../system/type":41}],35:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":40,"../system/type":43}],36:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.unary_instruction = exports.unary_instruction_type = void 0;
+const expression_1 = require("../abstract/expression");
+const error_1 = require("../system/error");
+const type_1 = require("../system/type");
+var unary_instruction_type;
+(function (unary_instruction_type) {
+    unary_instruction_type[unary_instruction_type["INCREMENT"] = 0] = "INCREMENT";
+    unary_instruction_type[unary_instruction_type["DECREMENT"] = 1] = "DECREMENT";
+})(unary_instruction_type = exports.unary_instruction_type || (exports.unary_instruction_type = {}));
+class unary_instruction extends expression_1.expression {
+    constructor(variable_id, type, line, column) {
+        super(line, column);
+        this.variable_id = variable_id;
+        this.type = type;
+    }
+    translate(environment) {
+        // Default
+        return type_1.type.NULL;
+    }
+    execute(environment) {
+        const variable_data = environment.get_variable(this.variable_id);
+        if (variable_data.type == type_1.type.NULL) {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no existente'));
+            return { value: null, type: type_1.type.NULL };
+        }
+        switch (this.type) {
+            case unary_instruction_type.INCREMENT:
+                switch (variable_data.type) {
+                    case type_1.type.INTEGER:
+                        variable_data.value++;
+                        break;
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar ++ para: ' + variable_data.value));
+                }
+                break;
+            case unary_instruction_type.DECREMENT:
+                switch (variable_data.type) {
+                    case type_1.type.INTEGER:
+                        variable_data.value--;
+                        break;
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar -- para: ' + variable_data.value));
+                }
+                break;
+        }
+        // Default
+        return { value: null, type: type_1.type.NULL };
+    }
+    plot(count) {
+        throw new Error("Method not implemented.");
+    }
+}
+exports.unary_instruction = unary_instruction;
+
+},{"../abstract/expression":4,"../system/error":42,"../system/type":43}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native = void 0;
@@ -3966,7 +4091,7 @@ class native extends literal_1.literal {
 }
 exports.native = native;
 
-},{"../abstract/literal":6,"../system/console":38,"../system/type":41}],36:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/console":40,"../system/type":43}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.variable_id = exports.variable_id_type = void 0;
@@ -4003,7 +4128,7 @@ class variable_id extends literal_1.literal {
 }
 exports.variable_id = variable_id;
 
-},{"../abstract/literal":6,"../system/error":40,"../system/type":41}],37:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/error":42,"../system/type":43}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._symbol = exports.scope = void 0;
@@ -4021,7 +4146,7 @@ class _symbol {
 }
 exports._symbol = _symbol;
 
-},{}],38:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._3dCode = exports._console = void 0;
@@ -4052,7 +4177,7 @@ class console {
 exports._console = new console();
 exports._3dCode = new console();
 
-},{}],39:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
@@ -4103,7 +4228,7 @@ class environment {
 }
 exports.environment = environment;
 
-},{"../instruction/declaration_function":28,"./_symbol":37,"./type":41}],40:[function(require,module,exports){
+},{"../instruction/declaration_function":29,"./_symbol":39,"./type":43}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.error_arr = exports.error_type = exports.error = void 0;
@@ -4131,7 +4256,7 @@ var error_type;
 })(error_type = exports.error_type || (exports.error_type = {}));
 exports.error_arr = [];
 
-},{}],41:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.type_tbl = exports.type = void 0;

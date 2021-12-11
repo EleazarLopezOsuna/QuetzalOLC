@@ -8,7 +8,6 @@ import { instruction } from "../abstract/instruction";
 import { _return } from "./_return";
 import { _case, _case_type } from "./_case";
 import { _break } from "./_break";
-import { off } from "process";
 
 export class _switch extends instruction {
 
@@ -24,7 +23,7 @@ export class _switch extends instruction {
         const switch_value_data = this.switch_value.execute(environment);
         // comprobar tipos de los case
         for (const case_instr of this.case_list) {
-            if(case_instr.type == _case_type.CASE) {
+            if (case_instr.type == _case_type.CASE) {
                 const case_value_data = case_instr.get_value().execute(environment)
                 if (case_value_data.type != switch_value_data.type) {
                     error_arr.push(new error(case_instr.line, case_instr.column, error_type.SEMANTICO, 'El case tiene tipo distinto al switch'));

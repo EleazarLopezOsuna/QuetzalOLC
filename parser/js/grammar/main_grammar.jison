@@ -30,6 +30,8 @@
     const {_case, _case_type} = require('../instruction/_case');
     const {_break} = require('../instruction/_break');
     const {_continue} = require('../instruction/_continue');
+    const {_while} = require('../instruction/_while');
+    const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -341,8 +343,12 @@ pr_instruction
     | tk_continue tk_semicolon { 
         $$ = new _continue($2, @1.first_line,@1.first_column);
     }
-    | tk_id tk_double_plus tk_semicolon
-    | tk_id tk_double_minus tk_semicolon
+    | tk_id tk_double_plus tk_semicolon { 
+        $$ = new unary_instruction($1, unary_instruction_type.INCREMENT, @1.first_line,@1.first_column);
+    }
+    | tk_id tk_double_minus tk_semicolon  { 
+        $$ = new unary_instruction($1, unary_instruction_type.DECREMENT, @1.first_line,@1.first_column);
+    }
     | tk_return pr_expr tk_semicolon { 
         $$ = new _return($2, @1.first_line,@1.first_column);
     }
@@ -458,7 +464,9 @@ pr_forStart
 
 /* while(expression){instructions} */
 pr_while
-    : tk_while tk_par_o pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c
+    : tk_while tk_par_o pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new _while($3, $6, @1.first_line,@1.first_column);
+    }   
 ;
 
 /* do{instructions}while(expression); */

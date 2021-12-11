@@ -180,6 +180,16 @@ case 38:
         this.$ = new _continue($$[$0], _$[$0-1].first_line,_$[$0-1].first_column);
     
 break;
+case 39:
+ 
+        this.$ = new unary_instruction($$[$0-2], unary_instruction_type.INCREMENT, _$[$0-2].first_line,_$[$0-2].first_column);
+    
+break;
+case 40:
+ 
+        this.$ = new unary_instruction($$[$0-2], unary_instruction_type.DECREMENT, _$[$0-2].first_line,_$[$0-2].first_column);
+    
+break;
 case 41:
  
         this.$ = new _return($$[$0-1], _$[$0-2].first_line,_$[$0-2].first_column);
@@ -229,6 +239,11 @@ case 61:
 
         $$[$0-2].push($$[$0])
         this.$ = $$[$0-2]
+    
+break;
+case 67:
+
+        this.$ = new _while($$[$0-4], $$[$0-1], _$[$0-6].first_line,_$[$0-6].first_column);
     
 break;
 case 69:
@@ -728,6 +743,8 @@ _handle_error:
     const {_case, _case_type} = require('../instruction/_case');
     const {_break} = require('../instruction/_break');
     const {_continue} = require('../instruction/_continue');
+    const {_while} = require('../instruction/_while');
+    const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
