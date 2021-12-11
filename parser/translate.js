@@ -3775,6 +3775,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_function = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class native_function extends instruction_1.instruction {
     constructor(option, value, line, column) {
@@ -3783,7 +3784,65 @@ class native_function extends instruction_1.instruction {
         this.value = value;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        let dataType = this.value.translate(environment);
+        const dataTemp = console_1._3dCode.actualTemp;
+        switch (this.option) {
+            case "toInt":
+                if (dataType == type_1.type.FLOAT) {
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = (int)T' + dataTemp + ';//Change value to int\n';
+                    return type_1.type.INTEGER;
+                }
+                else {
+                }
+            case "toDouble":
+                if (dataType == type_1.type.INTEGER) {
+                    return type_1.type.FLOAT;
+                }
+                else {
+                }
+            case "string":
+                return type_1.type.STRING;
+            case "typeof":
+                console_1._3dCode.actualTemp++;
+                const savedEnvironment = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                console_1._3dCode.output += 'SP = 27;//Set StringConcat environment\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set number position\n';
+                switch (dataType) {
+                    case type_1.type.STRING:
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;//Save number\n';
+                        break;
+                    case type_1.type.INTEGER:
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 1;//Save number\n';
+                        break;
+                    case type_1.type.FLOAT:
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 2;//Save number\n';
+                        break;
+                    case type_1.type.CHAR:
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 3;//Save number\n';
+                        break;
+                    case type_1.type.BOOLEAN:
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 4;//Save number\n';
+                        break;
+                    case type_1.type.NULL:
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 6;//Save number\n';
+                        break;
+                    default:
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 5;//Save number\n';
+                        break;
+                }
+                console_1._3dCode.output += 'getTypeOf();//Call function\n';
+                console_1._3dCode.actualTemp++;
+                const resultTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                return type_1.type.STRING;
+        }
+        return type_1.type.NULL;
     }
     execute(environment) {
         let value_data = this.value.execute(environment);
@@ -3820,7 +3879,7 @@ class native_function extends instruction_1.instruction {
 }
 exports.native_function = native_function;
 
-},{"../abstract/instruction":5,"../system/error":41,"../system/type":42}],33:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":39,"../system/error":41,"../system/type":42}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_parse = void 0;
@@ -4355,6 +4414,7 @@ function generateDefaultFunctions() {
     code += generateStringLength();
     code += generateStringPosition();
     code += generateStringExtract();
+    code += generateTypeOf();
     return code;
 }
 function generateStringConcat() {
@@ -4666,6 +4726,131 @@ function generateStringExtract() {
     code += 'HP = HP + 1;//Increase HP\n';
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T4;//Set return\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+function generateTypeOf() {
+    let code = 'void getTypeOf(){\n';
+    code += 'T0 = SP + 1;//Get String starting position\n';
+    code += 'T0 = STACK[(int)T0];\n';
+    code += 'T1 = HP;\n';
+    code += 'if(T0 == 0) goto L0;//Type String\n';
+    code += 'if(T0 == 1) goto L1;//Type Int\n';
+    code += 'if(T0 == 2) goto L2;//Type Float\n';
+    code += 'if(T0 == 3) goto L3;//Type Char\n';
+    code += 'if(T0 == 4) goto L4;//Type Boolean\n';
+    code += 'if(T0 == 5) goto L5;//Type Struct\n';
+    code += 'if(T0 == 6) goto L6;//Type Null\n';
+    code += 'L0:\n';
+    code += 'HEAP[(int)HP] = 83;//S\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 82;//R\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 73;//I\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 78;//N\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 71;//G\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L1:\n';
+    code += 'HEAP[(int)HP] = 73;//I\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 78;//N\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 69;//E\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 71;//G\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 69;//E\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 82;//R\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L2:\n';
+    code += 'HEAP[(int)HP] = 70;//F\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 76;//L\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 79;//O\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 65;//A\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L3:\n';
+    code += 'HEAP[(int)HP] = 67;//C\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 72;//H\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 65;//A\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 82;//R\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L4:\n';
+    code += 'HEAP[(int)HP] = 66;//B\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 79;//O\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 79;//O\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 76;//L\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 69;//E\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 65;//A\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 78;//N\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L5:\n';
+    code += 'HEAP[(int)HP] = 83;//S\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 82;//R\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 85;//U\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 67;//C\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 84;//T\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L6:\n';
+    code += 'HEAP[(int)HP] = 78;//N\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 85;//U\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 76;//L\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 76;//L\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;//End of string\n';
+    code += 'HP = HP + 1;\n';
+    code += 'goto L7;\n';
+    code += 'L7:\n';
+    code += 'T0 = SP + 0;//Get return position\n';
+    code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;\n';
     code += '}\n';
     return code;
