@@ -10,13 +10,18 @@ import { _case, _case_type } from "./_case";
 import { _break } from "./_break";
 import { _continue } from "./_continue";
 
+export enum _while_type {
+    NORMAL,
+    DO
+}
+
 export class _while extends instruction {
 
     public translate(environment: environment): type {
         throw new Error("Method not implemented.");
     }
 
-    constructor(public condition: expression | literal, public code: Array<instruction>, line: number, column: number) {
+    constructor(public condition: expression | literal, public code: Array<instruction>, public type: _while_type, line: number, column: number) {
         super(line, column);
     }
 
@@ -26,22 +31,45 @@ export class _while extends instruction {
         if (condition_data.type != type.BOOLEAN) {
             error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
         }
-        while (condition_data.value == true) {
-            for (const instruction of this.code) {
-                let instruction_data = instruction.execute(environment)
-                if (instruction instanceof _return) {
-                    return instruction_data
-                } else if (instruction instanceof _break) {
-                    break
-                } else if (instruction instanceof _continue) {
-                    continue
+        switch (this.type) {
+            case _while_type.NORMAL:
+                while (condition_data.value == true) {
+                    for (const instruction of this.code) {
+                        let instruction_data = instruction.execute(environment)
+                        if (instruction instanceof _return) {
+                            return instruction_data
+                        } else if (instruction instanceof _break) {
+                            break
+                        } else if (instruction instanceof _continue) {
+                            continue
+                        }
+                    }
+                    condition_data = this.condition.execute(environment);
+                    if (condition_data.type != type.BOOLEAN) {
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
+                    }
                 }
-            }
-            condition_data = this.condition.execute(environment);
-            if (condition_data.type != type.BOOLEAN) {
-                error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
-            }
+                break;
+            case _while_type.DO:
+                do {
+                    for (const instruction of this.code) {
+                        let instruction_data = instruction.execute(environment)
+                        if (instruction instanceof _return) {
+                            return instruction_data
+                        } else if (instruction instanceof _break) {
+                            break
+                        } else if (instruction instanceof _continue) {
+                            continue
+                        }
+                    }
+                    condition_data = this.condition.execute(environment);
+                    if (condition_data.type != type.BOOLEAN) {
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
+                    }
+                } while (condition_data.value == true)
+                break;
         }
+
         // Default
         return { value: null, type: type.NULL }
     }

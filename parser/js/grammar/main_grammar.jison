@@ -30,7 +30,7 @@
     const {_case, _case_type} = require('../instruction/_case');
     const {_break} = require('../instruction/_break');
     const {_continue} = require('../instruction/_continue');
-    const {_while} = require('../instruction/_while');
+    const {_while, _while_type} = require('../instruction/_while');
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
 
     const {native} = require('../literal/native');
@@ -465,13 +465,15 @@ pr_forStart
 /* while(expression){instructions} */
 pr_while
     : tk_while tk_par_o pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
-        $$ = new _while($3, $6, @1.first_line,@1.first_column);
+        $$ = new _while($3, $6, _while_type.NORMAL, @1.first_line,@1.first_column);
     }   
 ;
 
 /* do{instructions}while(expression); */
 pr_do
-    : tk_do tk_cbra_o pr_instructions tk_cbra_c tk_while tk_par_o pr_expr tk_par_c tk_semicolon
+    : tk_do tk_cbra_o pr_instructions tk_cbra_c tk_while tk_par_o pr_expr tk_par_c tk_semicolon {
+        $$ = new _while($7, $3, _while_type.DO, @1.first_line,@1.first_column);
+    }   
 ;
 
 /* switch(expression){cases} */

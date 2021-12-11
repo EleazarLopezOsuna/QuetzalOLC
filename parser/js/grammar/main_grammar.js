@@ -243,7 +243,12 @@ case 61:
 break;
 case 67:
 
-        this.$ = new _while($$[$0-4], $$[$0-1], _$[$0-6].first_line,_$[$0-6].first_column);
+        this.$ = new _while($$[$0-4], $$[$0-1], _while_type.NORMAL, _$[$0-6].first_line,_$[$0-6].first_column);
+    
+break;
+case 68:
+
+        this.$ = new _while($$[$0-2], $$[$0-6], _while_type.DO, _$[$0-8].first_line,_$[$0-8].first_column);
     
 break;
 case 69:
@@ -743,7 +748,7 @@ _handle_error:
     const {_case, _case_type} = require('../instruction/_case');
     const {_break} = require('../instruction/_break');
     const {_continue} = require('../instruction/_continue');
-    const {_while} = require('../instruction/_while');
+    const {_while, _while_type} = require('../instruction/_while');
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
 
     const {native} = require('../literal/native');

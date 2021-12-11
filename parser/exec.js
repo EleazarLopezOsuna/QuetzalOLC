@@ -2173,7 +2173,12 @@ case 61:
 break;
 case 67:
 
-        this.$ = new _while($$[$0-4], $$[$0-1], _$[$0-6].first_line,_$[$0-6].first_column);
+        this.$ = new _while($$[$0-4], $$[$0-1], _while_type.NORMAL, _$[$0-6].first_line,_$[$0-6].first_column);
+    
+break;
+case 68:
+
+        this.$ = new _while($$[$0-2], $$[$0-6], _while_type.DO, _$[$0-8].first_line,_$[$0-8].first_column);
     
 break;
 case 69:
@@ -2673,7 +2678,7 @@ _handle_error:
     const {_case, _case_type} = require('../instruction/_case');
     const {_break} = require('../instruction/_break');
     const {_continue} = require('../instruction/_continue');
-    const {_while} = require('../instruction/_while');
+    const {_while, _while_type} = require('../instruction/_while');
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
 
     const {native} = require('../literal/native');
@@ -3450,18 +3455,24 @@ exports._switch = _switch;
 },{"../abstract/instruction":5,"../system/error":42,"../system/type":43,"./_case":21}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._while = void 0;
+exports._while = exports._while_type = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
 const instruction_1 = require("../abstract/instruction");
 const _return_1 = require("./_return");
 const _break_1 = require("./_break");
 const _continue_1 = require("./_continue");
+var _while_type;
+(function (_while_type) {
+    _while_type[_while_type["NORMAL"] = 0] = "NORMAL";
+    _while_type[_while_type["DO"] = 1] = "DO";
+})(_while_type = exports._while_type || (exports._while_type = {}));
 class _while extends instruction_1.instruction {
-    constructor(condition, code, line, column) {
+    constructor(condition, code, type, line, column) {
         super(line, column);
         this.condition = condition;
         this.code = code;
+        this.type = type;
     }
     translate(environment) {
         throw new Error("Method not implemented.");
@@ -3471,23 +3482,47 @@ class _while extends instruction_1.instruction {
         if (condition_data.type != type_1.type.BOOLEAN) {
             error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
         }
-        while (condition_data.value == true) {
-            for (const instruction of this.code) {
-                let instruction_data = instruction.execute(environment);
-                if (instruction instanceof _return_1._return) {
-                    return instruction_data;
+        switch (this.type) {
+            case _while_type.NORMAL:
+                while (condition_data.value == true) {
+                    for (const instruction of this.code) {
+                        let instruction_data = instruction.execute(environment);
+                        if (instruction instanceof _return_1._return) {
+                            return instruction_data;
+                        }
+                        else if (instruction instanceof _break_1._break) {
+                            break;
+                        }
+                        else if (instruction instanceof _continue_1._continue) {
+                            continue;
+                        }
+                    }
+                    condition_data = this.condition.execute(environment);
+                    if (condition_data.type != type_1.type.BOOLEAN) {
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
+                    }
                 }
-                else if (instruction instanceof _break_1._break) {
-                    break;
-                }
-                else if (instruction instanceof _continue_1._continue) {
-                    continue;
-                }
-            }
-            condition_data = this.condition.execute(environment);
-            if (condition_data.type != type_1.type.BOOLEAN) {
-                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
-            }
+                break;
+            case _while_type.DO:
+                do {
+                    for (const instruction of this.code) {
+                        let instruction_data = instruction.execute(environment);
+                        if (instruction instanceof _return_1._return) {
+                            return instruction_data;
+                        }
+                        else if (instruction instanceof _break_1._break) {
+                            break;
+                        }
+                        else if (instruction instanceof _continue_1._continue) {
+                            continue;
+                        }
+                    }
+                    condition_data = this.condition.execute(environment);
+                    if (condition_data.type != type_1.type.BOOLEAN) {
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La condicion tiene que ser de tipo booleana'));
+                    }
+                } while (condition_data.value == true);
+                break;
         }
         // Default
         return { value: null, type: type_1.type.NULL };
