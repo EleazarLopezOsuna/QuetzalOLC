@@ -25,7 +25,7 @@ export class declaration_array extends instruction {
             if (environment.get_array(this.variable_id).type != type.UNDEFINED) {
                 error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             } else {
-                environment.save_array(this.variable_id, { value: this.value, type: this.type })
+                environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0)
             }
         }
         // if the save variable has an expression check types
@@ -41,7 +41,7 @@ export class declaration_array extends instruction {
                 if (environment.get_array(this.variable_id).type != type.UNDEFINED) {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
                 } else {
-                    environment.save_array(this.variable_id, { value: this.value, type: this.type })
+                    environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0)
                 }
             }
         }

@@ -15,7 +15,7 @@ class declaration_function extends instruction_1.instruction {
         throw new Error("Method not implemented.");
     }
     execute(environment) {
-        environment.save_function(this.id, this);
+        environment.save_function(this.id, this, 0, 0, 0);
         // Default
         return { value: null, type: type_1.type.NULL };
     }

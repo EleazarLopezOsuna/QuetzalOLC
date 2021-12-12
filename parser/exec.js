@@ -3742,6 +3742,7 @@ exports._while = _while;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
 const instruction_1 = require("../abstract/instruction");
+const console_1 = require("../system/console");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
 class assignation_unary extends instruction_1.instruction {
@@ -3751,7 +3752,23 @@ class assignation_unary extends instruction_1.instruction {
         this.expr = expr;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const exprType = this.expr.translate(environment);
+        // validate that exists
+        let saved_variable = environment.get_variable(this.id);
+        let absolutePos = environment.get_absolute(this.id);
+        if (saved_variable.type != type_1.type.NULL) {
+            // validate the type
+            if (saved_variable.type == exprType) {
+                // assign the value
+                console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value for variable ' + this.id + '\n';
+            }
+            else {
+            }
+        }
+        else {
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const expr_data = this.expr.execute(environment);
@@ -3761,7 +3778,10 @@ class assignation_unary extends instruction_1.instruction {
             // validate the type
             if (saved_variable.type == expr_data.type) {
                 // assign the value
-                environment.save_variable(this.id, expr_data);
+                let absolutePos = environment.get_absolute(this.id);
+                let relativePos = environment.get_relative(this.id);
+                let size = environment.get_size(this.id);
+                environment.save_variable(this.id, expr_data, absolutePos, relativePos, size);
             }
             else {
                 error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Tipo diferente, no se puede asignar'));
@@ -3779,7 +3799,7 @@ class assignation_unary extends instruction_1.instruction {
 }
 exports.assignation_unary = assignation_unary;
 
-},{"../abstract/instruction":5,"../system/error":45,"../system/type":46}],29:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":43,"../system/error":45,"../system/type":46}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.call = void 0;
@@ -3809,7 +3829,7 @@ class call extends instruction_1.instruction {
                     const call_parameter = this.parameters[index];
                     const call_parameter_data = call_parameter.execute(current_environment);
                     if (call_parameter_data.type == function_to_execute.parameters[index].native_type) {
-                        new_environment.save_variable(function_to_execute.parameters[index].id, call_parameter_data);
+                        new_environment.save_variable(function_to_execute.parameters[index].id, call_parameter_data, 0, 0, 0);
                     }
                     else {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Tipo de parametro incorrecto'));
@@ -3876,7 +3896,7 @@ class declaration_array extends instruction_1.instruction {
                 error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             }
             else {
-                environment.save_array(this.variable_id, { value: this.value, type: this.type });
+                environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
             }
         }
         // if the save variable has an expression check types
@@ -3893,7 +3913,7 @@ class declaration_array extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
                 }
                 else {
-                    environment.save_array(this.variable_id, { value: this.value, type: this.type });
+                    environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
                 }
             }
         }
@@ -3924,7 +3944,7 @@ class declaration_function extends instruction_1.instruction {
         throw new Error("Method not implemented.");
     }
     execute(environment) {
-        environment.save_function(this.id, this);
+        environment.save_function(this.id, this, 0, 0, 0);
         // Default
         return { value: null, type: type_1.type.NULL };
     }
@@ -4769,6 +4789,13 @@ class environment {
         let symbol_item = this.symbol_map.get(id);
         if (symbol_item instanceof _symbol_1._symbol) {
             return symbol_item.size;
+        }
+        return -1;
+    }
+    get_relative(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.relative;
         }
         return -1;
     }

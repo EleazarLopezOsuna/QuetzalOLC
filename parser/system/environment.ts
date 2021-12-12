@@ -83,4 +83,11 @@ export class environment {
         return -1
     }
 
+    public get_relative(id: string): number{
+        let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.relative
+        }
+        return -1
+    }
 }

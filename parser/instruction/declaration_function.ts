@@ -17,7 +17,7 @@ export class declaration_function extends instruction {
 
     public execute(environment: environment): data {
 
-        environment.save_function(this.id, this);
+        environment.save_function(this.id, this, 0, 0, 0);
         // Default
         return { value: null, type: type.NULL }
     }

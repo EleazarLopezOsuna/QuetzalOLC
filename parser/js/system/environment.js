@@ -69,6 +69,13 @@ class environment {
         }
         return -1;
     }
+    get_relative(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.relative;
+        }
+        return -1;
+    }
 }
 exports.environment = environment;
 //# sourceMappingURL=environment.js.map
