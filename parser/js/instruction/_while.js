@@ -26,6 +26,8 @@ class _while extends instruction_1.instruction {
         let conditionType;
         let conditionTemp;
         let final;
+        let tempBreak;
+        let tempContinue;
         switch (this.type) {
             case _while_type.NORMAL:
                 console_1._3dCode.actualTag++;
@@ -40,18 +42,15 @@ class _while extends instruction_1.instruction {
                 console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
                 console_1._3dCode.output += "goto L" + final + ";\n";
                 console_1._3dCode.output += "L" + inicio + ":\n";
+                tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = startTag;
+                tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
                 for (const instruction of this.code) {
-                    let instructionType = instruction.translate(environment);
-                    if (instruction instanceof _return_1._return) {
-                        return instructionType;
-                    }
-                    else if (instruction instanceof _break_1._break) {
-                        console_1._3dCode.output += "goto L" + final + ";\n";
-                    }
-                    else if (instruction instanceof _continue_1._continue) {
-                        console_1._3dCode.output += "goto L" + startTag + ";\n";
-                    }
+                    instruction.translate(environment);
                 }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
                 console_1._3dCode.output += "goto L" + startTag + ";\n";
                 console_1._3dCode.output += "L" + final + ":\n";
                 break;
@@ -59,23 +58,20 @@ class _while extends instruction_1.instruction {
                 console_1._3dCode.actualTag++;
                 startTag = console_1._3dCode.actualTag;
                 console_1._3dCode.output += "L" + startTag + ":\n";
+                console_1._3dCode.actualTag++;
+                final = console_1._3dCode.actualTag;
+                tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = startTag;
+                tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
                 for (const instruction of this.code) {
-                    let instructionType = instruction.translate(environment);
-                    if (instruction instanceof _return_1._return) {
-                        return instructionType;
-                    }
-                    else if (instruction instanceof _break_1._break) {
-                        console_1._3dCode.output += "goto L" + final + ";\n";
-                    }
-                    else if (instruction instanceof _continue_1._continue) {
-                        console_1._3dCode.output += "goto L" + startTag + ";\n";
-                    }
+                    instruction.translate(environment);
                 }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
                 conditionType = this.condition.translate(environment);
                 conditionTemp = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + startTag + ";\n";
-                console_1._3dCode.actualTag++;
-                final = console_1._3dCode.actualTag;
                 console_1._3dCode.output += "L" + final + ":\n";
                 break;
         }

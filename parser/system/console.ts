@@ -7,12 +7,16 @@ class console {
     public heap: any[];
     public actualTemp: number;
     public actualTag: number;
+    public breakTag: number;
+    public continueTag: number;
 
     constructor() {
         this.stack = new Array;
         this.heap = new Array;
         this.actualTemp = 5;
         this.actualTag = 0;
+        this.breakTag = 0;
+        this.continueTag = 0;
     }
     saveInHeap(index: number, id: any) {
         this.heap[index] = id;
@@ -28,6 +32,8 @@ class console {
         this.heap = []
         this.actualTemp = 5;
         this.actualTag = 0;
+        this.breakTag = 0;
+        this.continueTag = 0;
     }
 
 

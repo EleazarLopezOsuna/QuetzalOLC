@@ -3231,10 +3231,12 @@ if (typeof module !== 'undefined' && require.main === module) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._break = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class _break extends instruction_1.instruction {
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.output += "goto L" + console_1._3dCode.breakTag + ";\n";
+        return type_1.type.NULL;
     }
     constructor(line, column) {
         super(line, column);
@@ -3248,7 +3250,7 @@ class _break extends instruction_1.instruction {
 }
 exports._break = _break;
 
-},{"../abstract/instruction":5,"../system/type":45}],20:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":42,"../system/type":45}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._case = exports._case_type = void 0;
@@ -3297,10 +3299,12 @@ exports._case = _case;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._continue = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class _continue extends instruction_1.instruction {
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.output += "goto L" + console_1._3dCode.continueTag + ";\n";
+        return type_1.type.NULL;
     }
     constructor(line, column) {
         super(line, column);
@@ -3314,7 +3318,7 @@ class _continue extends instruction_1.instruction {
 }
 exports._continue = _continue;
 
-},{"../abstract/instruction":5,"../system/type":45}],22:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":42,"../system/type":45}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._for = void 0;
@@ -3587,6 +3591,8 @@ class _while extends instruction_1.instruction {
         let conditionType;
         let conditionTemp;
         let final;
+        let tempBreak;
+        let tempContinue;
         switch (this.type) {
             case _while_type.NORMAL:
                 console_1._3dCode.actualTag++;
@@ -3601,18 +3607,15 @@ class _while extends instruction_1.instruction {
                 console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
                 console_1._3dCode.output += "goto L" + final + ";\n";
                 console_1._3dCode.output += "L" + inicio + ":\n";
+                tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = startTag;
+                tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
                 for (const instruction of this.code) {
-                    let instructionType = instruction.translate(environment);
-                    if (instruction instanceof _return_1._return) {
-                        return instructionType;
-                    }
-                    else if (instruction instanceof _break_1._break) {
-                        console_1._3dCode.output += "goto L" + final + ";\n";
-                    }
-                    else if (instruction instanceof _continue_1._continue) {
-                        console_1._3dCode.output += "goto L" + startTag + ";\n";
-                    }
+                    instruction.translate(environment);
                 }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
                 console_1._3dCode.output += "goto L" + startTag + ";\n";
                 console_1._3dCode.output += "L" + final + ":\n";
                 break;
@@ -3620,23 +3623,20 @@ class _while extends instruction_1.instruction {
                 console_1._3dCode.actualTag++;
                 startTag = console_1._3dCode.actualTag;
                 console_1._3dCode.output += "L" + startTag + ":\n";
+                console_1._3dCode.actualTag++;
+                final = console_1._3dCode.actualTag;
+                tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = startTag;
+                tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
                 for (const instruction of this.code) {
-                    let instructionType = instruction.translate(environment);
-                    if (instruction instanceof _return_1._return) {
-                        return instructionType;
-                    }
-                    else if (instruction instanceof _break_1._break) {
-                        console_1._3dCode.output += "goto L" + final + ";\n";
-                    }
-                    else if (instruction instanceof _continue_1._continue) {
-                        console_1._3dCode.output += "goto L" + startTag + ";\n";
-                    }
+                    instruction.translate(environment);
                 }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
                 conditionType = this.condition.translate(environment);
                 conditionTemp = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + startTag + ";\n";
-                console_1._3dCode.actualTag++;
-                final = console_1._3dCode.actualTag;
                 console_1._3dCode.output += "L" + final + ":\n";
                 break;
         }
@@ -4576,6 +4576,8 @@ class console {
         this.heap = new Array;
         this.actualTemp = 5;
         this.actualTag = 0;
+        this.breakTag = 0;
+        this.continueTag = 0;
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -4590,6 +4592,8 @@ class console {
         this.heap = [];
         this.actualTemp = 5;
         this.actualTag = 0;
+        this.breakTag = 0;
+        this.continueTag = 0;
     }
 }
 exports._console = new console();

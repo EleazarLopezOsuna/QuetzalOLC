@@ -23,6 +23,8 @@ export class _while extends instruction {
         let conditionType;
         let conditionTemp;
         let final;
+        let tempBreak;
+        let tempContinue;
         switch (this.type) {
             case _while_type.NORMAL:
                 _3dCode.actualTag++;
@@ -37,16 +39,17 @@ export class _while extends instruction {
                 _3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
                 _3dCode.output += "goto L" + final + ";\n";
                 _3dCode.output += "L" + inicio + ":\n";
+
+                tempContinue = _3dCode.continueTag;
+                _3dCode.continueTag = startTag;
+                tempBreak = _3dCode.breakTag;
+                _3dCode.breakTag = final;
                 for (const instruction of this.code) {
-                    let instructionType = instruction.translate(environment)
-                    if (instruction instanceof _return) {
-                        return instructionType;
-                    } else if (instruction instanceof _break) {
-                        _3dCode.output += "goto L" + final + ";\n";
-                    } else if (instruction instanceof _continue) {
-                        _3dCode.output += "goto L" + startTag + ";\n";
-                    }
+                    instruction.translate(environment)
                 }
+                _3dCode.breakTag = tempBreak;
+                _3dCode.continueTag = tempContinue;
+
                 _3dCode.output += "goto L" + startTag + ";\n";
                 _3dCode.output += "L" + final + ":\n";
                 break;
@@ -54,21 +57,22 @@ export class _while extends instruction {
                 _3dCode.actualTag++;
                 startTag = _3dCode.actualTag;
                 _3dCode.output += "L" + startTag + ":\n";
+                _3dCode.actualTag++;
+                final = _3dCode.actualTag;
+                
+                tempContinue = _3dCode.continueTag;
+                _3dCode.continueTag = startTag;
+                tempBreak = _3dCode.breakTag;
+                _3dCode.breakTag = final;
                 for (const instruction of this.code) {
-                    let instructionType = instruction.translate(environment)
-                    if (instruction instanceof _return) {
-                        return instructionType;
-                    } else if (instruction instanceof _break) {
-                        _3dCode.output += "goto L" + final + ";\n";
-                    } else if (instruction instanceof _continue) {
-                        _3dCode.output += "goto L" + startTag + ";\n";
-                    }
+                    instruction.translate(environment)
                 }
+                _3dCode.breakTag = tempBreak;
+                _3dCode.continueTag = tempContinue;
+
                 conditionType = this.condition.translate(environment);
                 conditionTemp = _3dCode.actualTemp;
                 _3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + startTag + ";\n";
-                _3dCode.actualTag++;
-                final = _3dCode.actualTag;
                 _3dCode.output += "L" + final + ":\n";
                 break;
         }
