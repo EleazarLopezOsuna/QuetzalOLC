@@ -3422,6 +3422,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._if = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _return_1 = require("./_return");
 class _if extends instruction_1.instruction {
@@ -3432,7 +3433,43 @@ class _if extends instruction_1.instruction {
         this.else_statement = else_statement;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        this.condition.translate(environment);
+        const conditionTemp = console_1._3dCode.actualTemp;
+        console_1._3dCode.actualTag++;
+        let lTrue = console_1._3dCode.actualTag;
+        console_1._3dCode.output += "if(T" + conditionTemp + ") goto L" + lTrue + ";\n";
+        console_1._3dCode.actualTag++;
+        let lFalse = console_1._3dCode.actualTag;
+        console_1._3dCode.output += "goto L" + lFalse + ";\n";
+        console_1._3dCode.actualTag++;
+        let salida = console_1._3dCode.actualTag;
+        console_1._3dCode.output += "L" + lTrue + ":\n";
+        for (const instr of this.code) {
+            try {
+                instr.translate(environment);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        console_1._3dCode.output += "goto L" + salida + ";\n";
+        console_1._3dCode.output += "L" + lFalse + ":\n";
+        if (this.else_statement != null)
+            if (this.else_statement instanceof instruction_1.instruction) {
+                this.else_statement.translate(environment);
+            }
+            else if (this.else_statement instanceof Array) {
+                for (const instr of this.else_statement) {
+                    try {
+                        instr.translate(environment);
+                    }
+                    catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        console_1._3dCode.output += "L" + salida + ":\n";
+        return type_1.type.NULL;
     }
     execute(environment) {
         const condition = this.condition.execute(environment);
@@ -3482,7 +3519,7 @@ class _if extends instruction_1.instruction {
 }
 exports._if = _if;
 
-},{"../abstract/instruction":5,"../system/error":45,"../system/type":46,"./_return":25}],25:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":43,"../system/error":45,"../system/type":46,"./_return":25}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._return = void 0;
@@ -4071,11 +4108,7 @@ class native_function extends instruction_1.instruction {
 }
 exports.native_function = native_function;
 
-<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/console":43,"../system/error":45,"../system/type":46}],36:[function(require,module,exports){
-=======
-},{"../abstract/instruction":5,"../system/console":41,"../system/error":43,"../system/type":44}],35:[function(require,module,exports){
->>>>>>> d226268c05983a6e68a43b15e34c9238db1d0280
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_parse = void 0;
@@ -4182,11 +4215,7 @@ class native_parse extends instruction_1.instruction {
 }
 exports.native_parse = native_parse;
 
-<<<<<<< HEAD
-},{"../abstract/instruction":5,"../system/error":45,"../system/type":46}],37:[function(require,module,exports){
-=======
-},{"../abstract/instruction":5,"../system/console":41,"../system/error":43,"../system/type":44}],36:[function(require,module,exports){
->>>>>>> d226268c05983a6e68a43b15e34c9238db1d0280
+},{"../abstract/instruction":5,"../system/console":43,"../system/error":45,"../system/type":46}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.print = exports.print_type = void 0;
