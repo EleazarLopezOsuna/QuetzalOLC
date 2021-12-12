@@ -8,7 +8,7 @@ export enum scope {
 }
 
 export class _symbol {
-    constructor(public id: any, public data: data | declaration_function | _array, public scope: scope) {
+    constructor(public id: any, public data: data | declaration_function | _array, public scope: scope, public absolute: number, public relative: number, public size: number) {
 
     }
 }

@@ -9,6 +9,8 @@ class console {
     public actualTag: number;
     public breakTag: number;
     public continueTag: number;
+    public absolutePos: number;
+    public relativePos: number;
 
     constructor() {
         this.stack = new Array;
@@ -17,6 +19,8 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
+        this.absolutePos = 33;//Initial value 33 because of default functions
+        this.relativePos = 0;
     }
     saveInHeap(index: number, id: any) {
         this.heap[index] = id;
@@ -34,6 +38,8 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
+        this.absolutePos = 33;
+        this.relativePos = 0;
     }
 
 

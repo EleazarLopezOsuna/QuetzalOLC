@@ -7,10 +7,13 @@ var scope;
     scope[scope["LOCAL"] = 1] = "LOCAL";
 })(scope = exports.scope || (exports.scope = {}));
 class _symbol {
-    constructor(id, data, scope) {
+    constructor(id, data, scope, absolute, relative, size) {
         this.id = id;
         this.data = data;
         this.scope = scope;
+        this.absolute = absolute;
+        this.relative = relative;
+        this.size = size;
     }
 }
 exports._symbol = _symbol;

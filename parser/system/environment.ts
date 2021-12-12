@@ -17,12 +17,12 @@ export class environment {
         this.function_map = new Map<string, _symbol>();
     }
 
-    public save_function(id: string, new_function: declaration_function) {
+    public save_function(id: string, new_function: declaration_function, absolute: number, relative: number, size:number) {
         let symbol_type = scope.LOCAL;
         if (this.previous == null) {
             symbol_type = scope.GLOBAL;
         }
-        this.function_map.set(id, new _symbol(id, new_function, symbol_type));
+        this.function_map.set(id, new _symbol(id, new_function, symbol_type, absolute, relative, size));
     }
 
     public get_function(id: string): declaration_function | null {
@@ -42,20 +42,20 @@ export class environment {
         return { value: null, type: type.UNDEFINED }
     }
 
-    public save_array(id: string, arr: data) {
+    public save_array(id: string, arr: data, absolute: number, relative: number, size:number) {
         let symbol_type = scope.LOCAL;
         if (this.previous == null) {
             symbol_type = scope.GLOBAL;
         }
-        this.array_map.set(id, new _symbol(id, arr, symbol_type));
+        this.array_map.set(id, new _symbol(id, arr, symbol_type, absolute, relative, size));
     }
 
-    public save_variable(id: string, data: data) {
+    public save_variable(id: string, data: data, absolute: number, relative: number, size:number) {
         let symbol_type = scope.LOCAL;
         if (this.previous == null) {
             symbol_type = scope.GLOBAL;
         }
-        this.symbol_map.set(id, new _symbol(id, data, symbol_type));
+        this.symbol_map.set(id, new _symbol(id, data, symbol_type, absolute, relative, size));
     }
 
     public get_variable(id: string): data {

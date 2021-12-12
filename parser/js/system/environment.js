@@ -11,12 +11,12 @@ class environment {
         this.array_map = new Map();
         this.function_map = new Map();
     }
-    save_function(id, new_function) {
+    save_function(id, new_function, absolute, relative, size) {
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {
             symbol_type = _symbol_1.scope.GLOBAL;
         }
-        this.function_map.set(id, new _symbol_1._symbol(id, new_function, symbol_type));
+        this.function_map.set(id, new _symbol_1._symbol(id, new_function, symbol_type, absolute, relative, size));
     }
     get_function(id) {
         let symbol_item = this.function_map.get(id);
@@ -33,19 +33,19 @@ class environment {
         }
         return { value: null, type: type_1.type.UNDEFINED };
     }
-    save_array(id, arr) {
+    save_array(id, arr, absolute, relative, size) {
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {
             symbol_type = _symbol_1.scope.GLOBAL;
         }
-        this.array_map.set(id, new _symbol_1._symbol(id, arr, symbol_type));
+        this.array_map.set(id, new _symbol_1._symbol(id, arr, symbol_type, absolute, relative, size));
     }
-    save_variable(id, data) {
+    save_variable(id, data, absolute, relative, size) {
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {
             symbol_type = _symbol_1.scope.GLOBAL;
         }
-        this.symbol_map.set(id, new _symbol_1._symbol(id, data, symbol_type));
+        this.symbol_map.set(id, new _symbol_1._symbol(id, data, symbol_type, absolute, relative, size));
     }
     get_variable(id) {
         let symbol_item = this.symbol_map.get(id);

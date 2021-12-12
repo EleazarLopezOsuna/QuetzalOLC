@@ -12,7 +12,13 @@ class declaration_item extends instruction_1.instruction {
         this.value = value;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        if (this.value instanceof expression_1.expression || this.value instanceof literal_1.literal) {
+            let valueType = this.value.translate(environment);
+            return valueType;
+        }
+        else {
+        }
+        return type_1.type.NULL;
     }
     execute(environment) {
         // If value is different to null then we need to operate the expresion
