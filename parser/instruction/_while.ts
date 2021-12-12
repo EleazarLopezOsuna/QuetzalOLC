@@ -2,7 +2,7 @@ import { expression } from "../abstract/expression";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _console, _3dCode } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 import { _return } from "./_return";
@@ -18,7 +18,43 @@ export enum _while_type {
 export class _while extends instruction {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        _3dCode.actualTag++;
+        let startTag = _3dCode.actualTag;
+        _3dCode.output += "L" + startTag + ":\n";
+        let conditionType = this.condition.translate(environment);
+        let conditionTemp = _3dCode.actualTemp;
+        if (conditionType != type.BOOLEAN) {
+
+        }
+        switch (this.type) {
+            case _while_type.NORMAL:
+                _3dCode.actualTag++;
+                let inicio = _3dCode.actualTag;
+                _3dCode.actualTag++;
+                let final = _3dCode.actualTag;
+                _3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
+                _3dCode.output += "goto L" + final + ";\n";
+                _3dCode.output += "L" + inicio + ":\n";
+                for (const instruction of this.code) {
+                    let instructionType = instruction.translate(environment)
+                    if (instruction instanceof _return) {
+                        return instructionType;
+                    } else if (instruction instanceof _break) {
+                        _3dCode.output += "goto L" + final + ";\n";
+                    } else if (instruction instanceof _continue) {
+                        _3dCode.output += "goto L" + startTag + ";\n";
+                    }
+                }
+                _3dCode.output += "goto L" + startTag + ";\n";
+                _3dCode.output += "L" + final + ":\n";
+                break;
+            case _while_type.DO:
+
+                break;
+        }
+
+        // Default
+        return type.NULL
     }
 
     constructor(public condition: expression | literal, public code: Array<instruction>, public type: _while_type, line: number, column: number) {

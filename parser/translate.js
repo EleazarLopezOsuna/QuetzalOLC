@@ -3564,6 +3564,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._while = exports._while_type = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _return_1 = require("./_return");
 const _break_1 = require("./_break");
@@ -3581,7 +3582,42 @@ class _while extends instruction_1.instruction {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.actualTag++;
+        let startTag = console_1._3dCode.actualTag;
+        console_1._3dCode.output += "L" + startTag + ":\n";
+        let conditionType = this.condition.translate(environment);
+        let conditionTemp = console_1._3dCode.actualTemp;
+        if (conditionType != type_1.type.BOOLEAN) {
+        }
+        switch (this.type) {
+            case _while_type.NORMAL:
+                console_1._3dCode.actualTag++;
+                let inicio = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                let final = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
+                console_1._3dCode.output += "goto L" + final + ";\n";
+                console_1._3dCode.output += "L" + inicio + ":\n";
+                for (const instruction of this.code) {
+                    let instructionType = instruction.translate(environment);
+                    if (instruction instanceof _return_1._return) {
+                        return instructionType;
+                    }
+                    else if (instruction instanceof _break_1._break) {
+                        console_1._3dCode.output += "goto L" + final + ";\n";
+                    }
+                    else if (instruction instanceof _continue_1._continue) {
+                        console_1._3dCode.output += "goto L" + startTag + ";\n";
+                    }
+                }
+                console_1._3dCode.output += "goto L" + startTag + ";\n";
+                console_1._3dCode.output += "L" + final + ":\n";
+                break;
+            case _while_type.DO:
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         let condition_data = this.condition.execute(environment);
@@ -3641,7 +3677,7 @@ class _while extends instruction_1.instruction {
 }
 exports._while = _while;
 
-},{"../abstract/instruction":5,"../system/error":44,"../system/type":45,"./_break":19,"./_continue":21,"./_return":24}],27:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45,"./_break":19,"./_continue":21,"./_return":24}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
