@@ -3616,18 +3616,21 @@ class _while extends instruction_1.instruction {
     }
     translate(environment) {
         console_1._3dCode.actualTag++;
-        let startTag = console_1._3dCode.actualTag;
-        console_1._3dCode.output += "L" + startTag + ":\n";
-        let conditionType = this.condition.translate(environment);
-        let conditionTemp = console_1._3dCode.actualTemp;
-        if (conditionType != type_1.type.BOOLEAN) {
-        }
+        let startTag;
+        let conditionType;
+        let conditionTemp;
+        let final;
         switch (this.type) {
             case _while_type.NORMAL:
                 console_1._3dCode.actualTag++;
+                startTag = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + startTag + ":\n";
+                conditionType = this.condition.translate(environment);
+                conditionTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTag++;
                 let inicio = console_1._3dCode.actualTag;
                 console_1._3dCode.actualTag++;
-                let final = console_1._3dCode.actualTag;
+                final = console_1._3dCode.actualTag;
                 console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
                 console_1._3dCode.output += "goto L" + final + ";\n";
                 console_1._3dCode.output += "L" + inicio + ":\n";
@@ -3647,6 +3650,27 @@ class _while extends instruction_1.instruction {
                 console_1._3dCode.output += "L" + final + ":\n";
                 break;
             case _while_type.DO:
+                console_1._3dCode.actualTag++;
+                startTag = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + startTag + ":\n";
+                for (const instruction of this.code) {
+                    let instructionType = instruction.translate(environment);
+                    if (instruction instanceof _return_1._return) {
+                        return instructionType;
+                    }
+                    else if (instruction instanceof _break_1._break) {
+                        console_1._3dCode.output += "goto L" + final + ";\n";
+                    }
+                    else if (instruction instanceof _continue_1._continue) {
+                        console_1._3dCode.output += "goto L" + startTag + ";\n";
+                    }
+                }
+                conditionType = this.condition.translate(environment);
+                conditionTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + startTag + ";\n";
+                console_1._3dCode.actualTag++;
+                final = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + final + ":\n";
                 break;
         }
         // Default

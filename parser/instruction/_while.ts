@@ -19,19 +19,21 @@ export class _while extends instruction {
 
     public translate(environment: environment): type {
         _3dCode.actualTag++;
-        let startTag = _3dCode.actualTag;
-        _3dCode.output += "L" + startTag + ":\n";
-        let conditionType = this.condition.translate(environment);
-        let conditionTemp = _3dCode.actualTemp;
-        if (conditionType != type.BOOLEAN) {
-
-        }
+        let startTag;
+        let conditionType;
+        let conditionTemp;
+        let final;
         switch (this.type) {
             case _while_type.NORMAL:
                 _3dCode.actualTag++;
+                startTag = _3dCode.actualTag;
+                _3dCode.output += "L" + startTag + ":\n";
+                conditionType = this.condition.translate(environment);
+                conditionTemp = _3dCode.actualTemp;
+                _3dCode.actualTag++;
                 let inicio = _3dCode.actualTag;
                 _3dCode.actualTag++;
-                let final = _3dCode.actualTag;
+                final = _3dCode.actualTag;
                 _3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
                 _3dCode.output += "goto L" + final + ";\n";
                 _3dCode.output += "L" + inicio + ":\n";
@@ -49,7 +51,25 @@ export class _while extends instruction {
                 _3dCode.output += "L" + final + ":\n";
                 break;
             case _while_type.DO:
-
+                _3dCode.actualTag++;
+                startTag = _3dCode.actualTag;
+                _3dCode.output += "L" + startTag + ":\n";
+                for (const instruction of this.code) {
+                    let instructionType = instruction.translate(environment)
+                    if (instruction instanceof _return) {
+                        return instructionType;
+                    } else if (instruction instanceof _break) {
+                        _3dCode.output += "goto L" + final + ";\n";
+                    } else if (instruction instanceof _continue) {
+                        _3dCode.output += "goto L" + startTag + ";\n";
+                    }
+                }
+                conditionType = this.condition.translate(environment);
+                conditionTemp = _3dCode.actualTemp;
+                _3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + startTag + ";\n";
+                _3dCode.actualTag++;
+                final = _3dCode.actualTag;
+                _3dCode.output += "L" + final + ":\n";
                 break;
         }
 
