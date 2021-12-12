@@ -6,6 +6,7 @@ export enum type {
     CHAR = 4,
     NULL = 5,
     VOID = 6,
+    UNDEFINED = 7,
 }
 
 export type data = {

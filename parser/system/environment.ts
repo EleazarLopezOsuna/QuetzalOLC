@@ -1,4 +1,5 @@
 import { declaration_function } from "../instruction/declaration_function";
+import { _array } from "../literal/_array";
 import { _console } from "./console";
 import { data, type } from "./type";
 import { _symbol, scope } from "./_symbol";
@@ -6,11 +7,13 @@ import { _symbol, scope } from "./_symbol";
 export class environment {
 
     private symbol_map: Map<string, _symbol>;
+    private array_map: Map<string, _symbol>;
     private function_map: Map<string, _symbol>;
 
     constructor(private previous: environment | null) {
         this.previous = previous;
         this.symbol_map = new Map<string, _symbol>();
+        this.array_map = new Map<string, _symbol>();
         this.function_map = new Map<string, _symbol>();
     }
 
@@ -21,16 +24,30 @@ export class environment {
         }
         this.function_map.set(id, new _symbol(id, new_function, symbol_type));
     }
-    
-    public get_function(id:string): declaration_function | null {
+
+    public get_function(id: string): declaration_function | null {
         let symbol_item = this.function_map.get(id)
-        if(symbol_item instanceof _symbol) {
+        if (symbol_item instanceof _symbol) {
             let return_function = symbol_item.data;
-            if(return_function instanceof declaration_function) {
-                return return_function 
-            }
+            return return_function as declaration_function
         }
         return null
+    }
+
+    public get_array(id: string): data {
+        let arr = this.array_map.get(id)
+        if (arr instanceof _symbol) {
+            return arr.data as data
+        }
+        return { value: null, type: type.UNDEFINED }
+    }
+
+    public save_array(id: string, arr: data) {
+        let symbol_type = scope.LOCAL;
+        if (this.previous == null) {
+            symbol_type = scope.GLOBAL;
+        }
+        this.array_map.set(id, new _symbol(id, arr, symbol_type));
     }
 
     public save_variable(id: string, data: data) {
@@ -41,15 +58,13 @@ export class environment {
         this.symbol_map.set(id, new _symbol(id, data, symbol_type));
     }
 
-    public get_variable(id:string): data {
+    public get_variable(id: string): data {
         let symbol_item = this.symbol_map.get(id)
-        if(symbol_item instanceof _symbol) {
+        if (symbol_item instanceof _symbol) {
             let return_data = symbol_item.data;
-            if(!(return_data instanceof declaration_function)) {
-                return return_data as data
-            }
+            return return_data as data
         }
-        return {value: null, type: type.NULL}
+        return { value: null, type: type.NULL }
     }
 
 }

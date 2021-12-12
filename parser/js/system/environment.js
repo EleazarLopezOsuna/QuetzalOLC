@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
-const declaration_function_1 = require("../instruction/declaration_function");
 const type_1 = require("./type");
 const _symbol_1 = require("./_symbol");
 class environment {
@@ -9,6 +8,7 @@ class environment {
         this.previous = previous;
         this.previous = previous;
         this.symbol_map = new Map();
+        this.array_map = new Map();
         this.function_map = new Map();
     }
     save_function(id, new_function) {
@@ -22,11 +22,23 @@ class environment {
         let symbol_item = this.function_map.get(id);
         if (symbol_item instanceof _symbol_1._symbol) {
             let return_function = symbol_item.data;
-            if (return_function instanceof declaration_function_1.declaration_function) {
-                return return_function;
-            }
+            return return_function;
         }
         return null;
+    }
+    get_array(id) {
+        let arr = this.array_map.get(id);
+        if (arr instanceof _symbol_1._symbol) {
+            return arr.data;
+        }
+        return { value: null, type: type_1.type.UNDEFINED };
+    }
+    save_array(id, arr) {
+        let symbol_type = _symbol_1.scope.LOCAL;
+        if (this.previous == null) {
+            symbol_type = _symbol_1.scope.GLOBAL;
+        }
+        this.array_map.set(id, new _symbol_1._symbol(id, arr, symbol_type));
     }
     save_variable(id, data) {
         let symbol_type = _symbol_1.scope.LOCAL;
@@ -39,9 +51,7 @@ class environment {
         let symbol_item = this.symbol_map.get(id);
         if (symbol_item instanceof _symbol_1._symbol) {
             let return_data = symbol_item.data;
-            if (!(return_data instanceof declaration_function_1.declaration_function)) {
-                return return_data;
-            }
+            return return_data;
         }
         return { value: null, type: type_1.type.NULL };
     }

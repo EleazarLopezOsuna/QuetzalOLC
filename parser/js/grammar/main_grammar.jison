@@ -33,9 +33,11 @@
     const {_while, _while_type} = require('../instruction/_while');
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
     const {_for} = require('../instruction/_for');
+    const {declaration_array} = require('../instruction/declaration_array');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
+    const {_array} = require('../literal/_array');
 %}
 
 %lex
@@ -271,7 +273,6 @@ pr_declaration_item
     | tk_id{
         $$ = new declaration_item($1, null, @1.first_line,@1.first_column);
     }
-    | tk_bra_o tk_bra_c tk_id tk_equal pr_expr
 ;
 
 /*
@@ -339,6 +340,7 @@ pr_instruction
     | pr_call tk_semicolon {$$ = $1}
     | pr_declaration_list tk_semicolon {$$ = $1}
     | pr_declare_struct tk_semicolon {$$ = $1}
+    | pr_declaration_array tk_semicolon {$$ = $1}
     | tk_break tk_semicolon { 
         $$ = new _break($2, @1.first_line,@1.first_column);
     }
@@ -352,6 +354,41 @@ pr_instruction
     | pr_native_function tk_semicolon {$$ = $1}
     | error
 ;
+
+pr_declaration_array 
+    : pr_type tk_id tk_bra_o tk_bra_c {
+        $$ = new declaration_array($1, $2, null, @1.first_line,@1.first_column);
+    }
+    | pr_type tk_bra_o tk_bra_c tk_id {
+        $$ = new declaration_array($1, $4, null, @1.first_line,@1.first_column);
+    }
+    | pr_type tk_id tk_bra_o tk_bra_c tk_equal pr_array {
+        $$ = new declaration_array($1, $2, $6, @1.first_line,@1.first_column);
+    }
+    | pr_type tk_bra_o tk_bra_c tk_id tk_equal pr_array {
+        $$ = new declaration_array($1, $4, $6, @1.first_line,@1.first_column);
+    }
+; 
+
+pr_array_list
+    : pr_array_list tk_comma pr_array {
+        $1.push($3)
+        $$ = $1
+    }
+    | pr_array {
+        $$ = [$1]
+    }
+; 
+
+pr_array 
+    : tk_bra_o pr_expression_list tk_bra_c {
+        $$ = new _array($2, @1.first_line,@1.first_column);
+    }
+    | tk_bra_o pr_array_list tk_bra_c {
+        $$ = new _array($2, @1.first_line,@1.first_column);
+    }
+; 
+
 pr_unary_instruction 
     : tk_id tk_double_plus { 
         $$ = new unary_instruction($1, unary_instruction_type.INCREMENT, @1.first_line,@1.first_column);
