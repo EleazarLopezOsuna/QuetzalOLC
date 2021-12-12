@@ -4417,6 +4417,7 @@ exports.unary_instruction = exports.unary_instruction_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var unary_instruction_type;
 (function (unary_instruction_type) {
     unary_instruction_type[unary_instruction_type["INCREMENT"] = 0] = "INCREMENT";
@@ -4429,6 +4430,37 @@ class unary_instruction extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
+        const variable_data = environment.get_variable(this.variable_id);
+        if (variable_data.type == type_1.type.NULL) {
+            return type_1.type.NULL;
+        }
+        let absolutePos = environment.get_absolute(this.variable_id);
+        switch (this.type) {
+            case unary_instruction_type.INCREMENT:
+                switch (variable_data.type) {
+                    case type_1.type.INTEGER:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + 1;\n';
+                        console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
+                        break;
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar ++ para: ' + variable_data.value));
+                }
+                break;
+            case unary_instruction_type.DECREMENT:
+                switch (variable_data.type) {
+                    case type_1.type.INTEGER:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' - 1;\n';
+                        console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
+                        break;
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar -- para: ' + variable_data.value));
+                }
+                break;
+        }
         // Default
         return type_1.type.NULL;
     }
@@ -4467,7 +4499,7 @@ class unary_instruction extends expression_1.expression {
 }
 exports.unary_instruction = unary_instruction;
 
-},{"../abstract/expression":4,"../system/error":44,"../system/type":45}],38:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":42,"../system/error":44,"../system/type":45}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._array = void 0;
