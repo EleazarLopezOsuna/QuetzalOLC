@@ -67,4 +67,20 @@ export class environment {
         return { value: null, type: type.NULL }
     }
 
+    public get_absolute(id: string): number{
+        let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.absolute
+        }
+        return -1
+    }
+
+    public get_size(id: string): number{
+        let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.size
+        }
+        return -1
+    }
+
 }

@@ -55,6 +55,20 @@ class environment {
         }
         return { value: null, type: type_1.type.NULL };
     }
+    get_absolute(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.absolute;
+        }
+        return -1;
+    }
+    get_size(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.size;
+        }
+        return -1;
+    }
 }
 exports.environment = environment;
 //# sourceMappingURL=environment.js.map

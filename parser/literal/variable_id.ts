@@ -12,7 +12,16 @@ export enum variable_id_type {
 export class variable_id extends literal {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        let return_data = environment.get_variable(this.id)
+        let absolute = environment.get_absolute(this.id)
+        if(return_data.type != type.NULL) {
+            _3dCode.actualTemp++;
+            _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[' + absolute + '];//Getting value of variable ' + this.id + '\n';
+            return return_data.type
+        } else {
+            
+        }
+        return type.NULL;
     }
 
     constructor(public id: string, public type: variable_id_type, line: number, column: number) {

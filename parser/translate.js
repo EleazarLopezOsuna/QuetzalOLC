@@ -4566,6 +4566,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.variable_id = exports.variable_id_type = void 0;
 const literal_1 = require("../abstract/literal");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const error_1 = require("../system/error");
 var variable_id_type;
 (function (variable_id_type) {
@@ -4579,7 +4580,16 @@ class variable_id extends literal_1.literal {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        let return_data = environment.get_variable(this.id);
+        let absolute = environment.get_absolute(this.id);
+        if (return_data.type != type_1.type.NULL) {
+            console_1._3dCode.actualTemp++;
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolute + '];//Getting value of variable ' + this.id + '\n';
+            return return_data.type;
+        }
+        else {
+        }
+        return type_1.type.NULL;
     }
     execute(environment) {
         let return_data = environment.get_variable(this.id);
@@ -4597,7 +4607,7 @@ class variable_id extends literal_1.literal {
 }
 exports.variable_id = variable_id;
 
-},{"../abstract/literal":6,"../system/error":44,"../system/type":45}],41:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/console":42,"../system/error":44,"../system/type":45}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._symbol = exports.scope = void 0;
@@ -4714,6 +4724,20 @@ class environment {
             return return_data;
         }
         return { value: null, type: type_1.type.NULL };
+    }
+    get_absolute(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.absolute;
+        }
+        return -1;
+    }
+    get_size(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.size;
+        }
+        return -1;
     }
 }
 exports.environment = environment;
