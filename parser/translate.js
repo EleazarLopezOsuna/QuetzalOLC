@@ -4038,12 +4038,17 @@ class native_function extends instruction_1.instruction {
 }
 exports.native_function = native_function;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],35:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":40,"../system/error":42,"../system/type":43}],34:[function(require,module,exports){
+>>>>>>> d226268c05983a6e68a43b15e34c9238db1d0280
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_parse = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class native_parse extends instruction_1.instruction {
     constructor(native_type, value, line, column) {
@@ -4052,7 +4057,64 @@ class native_parse extends instruction_1.instruction {
         this.value = value;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const dataType = this.value.translate(environment);
+        const dataTemp = console_1._3dCode.actualTemp;
+        let savedEnvironment = 0;
+        let resultTemp = 0;
+        switch (this.native_type) {
+            case type_1.type.INTEGER:
+                console_1._3dCode.actualTemp++;
+                savedEnvironment = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                console_1._3dCode.output += 'SP = 29;//Set StringToInt environment\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set string position\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + dataTemp + ';//Save string\n';
+                console_1._3dCode.output += 'StringToInt();//Call function\n';
+                console_1._3dCode.actualTemp++;
+                resultTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                return type_1.type.INTEGER;
+            case type_1.type.FLOAT:
+                console_1._3dCode.actualTemp++;
+                savedEnvironment = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                console_1._3dCode.output += 'SP = 29;//Set StringToInt environment\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set string position\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + dataTemp + ';//Save string\n';
+                console_1._3dCode.output += 'StringToFloat();//Call function\n';
+                console_1._3dCode.actualTemp++;
+                resultTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                return type_1.type.FLOAT;
+            case type_1.type.BOOLEAN:
+                console_1._3dCode.actualTag++;
+                const trueTag = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                const falseTag = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                const exitTag = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + '= HEAP[(int)T' + dataTemp + '];//Get character\n';
+                console_1._3dCode.output += 'if(T' + console_1._3dCode.actualTemp + ' == 48) goto L' + trueTag + ';//Check if 0\n';
+                console_1._3dCode.output += 'goto L' + falseTag + ';\n';
+                console_1._3dCode.output += 'L' + trueTag + '://True tag\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;\n';
+                console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                console_1._3dCode.output += 'L' + falseTag + '://False tag\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;\n';
+                console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                console_1._3dCode.output += 'L' + exitTag + ':\n';
+                return type_1.type.BOOLEAN;
+        }
+        return type_1.type.NULL;
     }
     execute(environment) {
         let value_data = this.value.execute(environment);
@@ -4087,7 +4149,11 @@ class native_parse extends instruction_1.instruction {
 }
 exports.native_parse = native_parse;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":44,"../system/type":45}],36:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":40,"../system/error":42,"../system/type":43}],35:[function(require,module,exports){
+>>>>>>> d226268c05983a6e68a43b15e34c9238db1d0280
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.print = exports.print_type = void 0;
@@ -4628,6 +4694,8 @@ function generateDefaultFunctions() {
     code += generateStringPosition();
     code += generateStringExtract();
     code += generateTypeOf();
+    code += generateStringToInt();
+    code += generateStringToFloat();
     return code;
 }
 function generateStringConcat() {
@@ -5064,6 +5132,144 @@ function generateTypeOf() {
     code += 'L7:\n';
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+function generateStringToInt() {
+    let code = '/*\n';
+    code += 'Algorithm:\n';
+    code += '    iterator = string.length\n';
+    code += '    position = iterator + string.position\n';
+    code += '    while(iterator >= 0){\n';
+    code += '        if(character == 45){\n';
+    code += '            result = result * -1\n';
+    code += '            position--\n';
+    code += '            iterator--\n';
+    code += '            continue\n';
+    code += '        }\n';
+    code += '        character = string.charAt(position)\n';
+    code += '        character = character - 48\n';
+    code += '        result = result + mul * character\n';
+    code += '        mul = mul * 10\n';
+    code += '        position--\n';
+    code += '        iterator--\n';
+    code += '    }\n';
+    code += '*/\n';
+    code += 'void StringToInt(){\n';
+    code += 'T0 = SP + 1;//Get string stack position\n';
+    code += 'T0 = STACK[(int)T0];//Get string heap position\n';
+    code += 'T3 = SP;//Save environment\n';
+    code += 'SP = 18;//Set environment for StringLength function\n';
+    code += 'T1 = SP + 1;//Set string position\n';
+    code += 'STACK[(int)T1] = T0;//Save string positon\n';
+    code += 'StringLength();//Call function\n';
+    code += 'T1 = SP + 0;//Get return position\n';
+    code += 'T1 = STACK[(int)T1];//Get return value\n';
+    code += 'T1 = T1 - 1;//Get last character position\n';
+    code += 'SP = T3;//Get environment back\n';
+    code += 'T0 = SP + 1;//Get string stack position\n';
+    code += 'T0 = STACK[(int)T0];//Get string heap position\n';
+    code += 'T5 = T1;//Set iterator to string length\n';
+    code += 'T1 = T1 + T0;//Set real position for last character\n';
+    code += 'T2 = 1;//Set mul = 1\n';
+    code += 'T3 = 0;//Set result = 0\n';
+    code += 'L0://Loop tag\n';
+    code += 'if(T5 < 0) goto L1;//Check if none characters are left\n';
+    code += 'T0 = HEAP[(int)T1];//Get character\n';
+    code += 'if(T0 == 45) goto L2;//Check if character is -\n';
+    code += 'T0 = T0 - 48;//Transform character into digit\n';
+    code += 'T4 = T2 * T0;//mul*digit\n';
+    code += 'T3 = T3 + T4;//result = result + mul * digit\n';
+    code += 'T2 = T2 * 10;//mul = mul * 10\n';
+    code += 'T1 = T1 - 1;//Update character position\n';
+    code += 'T5 = T5 - 1;//Update iterator\n';
+    code += 'goto L0;//Go back to loop\n';
+    code += 'L2://Transform to negative\n';
+    code += 'T3 = T3 * -1;//result * -1\n';
+    code += 'T1 = T1 - 1;//position--\n';
+    code += 'T5 = T5 - 1;//iterator--\n';
+    code += 'goto L0;//Go back to loop\n';
+    code += 'L1:\n';
+    code += 'T0 = SP + 0;//Set return position\n';
+    code += 'STACK[(int)T0] = T3;//Set return to result\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+function generateStringToFloat() {
+    let code = '/*\n';
+    code += 'Algorithm:\n';
+    code += '    iterator = string.length\n';
+    code += '    position = iterator + string.position\n';
+    code += '    while(iterator >= 0){\n';
+    code += '        if(character == 46){\n';
+    code += '            result = result / mul\n';
+    code += '            mul = 1\n';
+    code += '            position--\n';
+    code += '            iterator--\n';
+    code += '            continue\n';
+    code += '        }\n';
+    code += '        if(character == 45){\n';
+    code += '            result = result * -1\n';
+    code += '            position--\n';
+    code += '            iterator--\n';
+    code += '            continue\n';
+    code += '        }\n';
+    code += '        character = string.charAt(position)\n';
+    code += '        character = character - 48\n';
+    code += '        result = result + mul * character\n';
+    code += '        mul = mul * 10\n';
+    code += '        position--\n';
+    code += '        iterator--\n';
+    code += '    }\n';
+    code += '*/\n';
+    code += 'void StringToFloat(){\n';
+    code += 'T0 = SP + 1;//Get string stack position\n';
+    code += 'T0 = STACK[(int)T0];//Get string heap position\n';
+    code += 'T3 = SP;//Save environment\n';
+    code += 'SP = 18;//Set environment for StringLength function\n';
+    code += 'T1 = SP + 1;//Set string position\n';
+    code += 'STACK[(int)T1] = T0;//Save string positon\n';
+    code += 'StringLength();//Call function\n';
+    code += 'T1 = SP + 0;//Get return position\n';
+    code += 'T1 = STACK[(int)T1];//Get return value\n';
+    code += 'T1 = T1 - 1;//Get last character position\n';
+    code += 'SP = T3;//Get environment back\n';
+    code += 'T0 = SP + 1;//Get string stack position\n';
+    code += 'T0 = STACK[(int)T0];//Get string heap position\n';
+    code += 'T5 = T1;//Set iterator to string length\n';
+    code += 'T1 = T1 + T0;//Set real position for last character\n';
+    code += 'T2 = 1;//Set mul = 1\n';
+    code += 'T3 = 0;//Set result = 0\n';
+    code += 'T6 = 0;//Set decimal value to 0\n';
+    code += 'L0://Loop tag\n';
+    code += 'if(T5 < 0) goto L1;//Check if none characters are left\n';
+    code += 'T0 = HEAP[(int)T1];//Get character\n';
+    code += 'if(T0 == 46) goto L2;//Check if character is .\n';
+    code += 'if(T0 == 45) goto L3;//Check if character is -\n';
+    code += 'T0 = T0 - 48;//Transform character into digit\n';
+    code += 'T4 = T2 * T0;//mul*digit\n';
+    code += 'T3 = T3 + T4;//result = result + mul * digit\n';
+    code += 'T2 = T2 * 10;//mul = mul * 10\n';
+    code += 'T1 = T1 - 1;//Update character position\n';
+    code += 'T5 = T5 - 1;//Update iterator\n';
+    code += 'goto L0;//Go back to loop\n';
+    code += 'L2://Transform result to decimal\n';
+    code += 'T3 = T3 / T2;//result = result / mul\n';
+    code += 'T2 = 1;//mul = 1\n';
+    code += 'T1 = T1 - 1;//position--\n';
+    code += 'T5 = T5 - 1;//iterator--\n';
+    code += 'goto L0;//Go back to loop\n';
+    code += 'L3://Transform to negative\n';
+    code += 'T3 = T3 * -1;//result * -1\n';
+    code += 'T1 = T1 - 1;//position--\n';
+    code += 'T5 = T5 - 1;//iterator--\n';
+    code += 'goto L0;//Go back to loop\n';
+    code += 'L1:\n';
+    code += 'T3 = T3 + T6;//result = result + decimal\n';
+    code += 'T0 = SP + 0;//Set return position\n';
+    code += 'STACK[(int)T0] = T3;//Set return to result\n';
     code += 'return;\n';
     code += '}\n';
     return code;
