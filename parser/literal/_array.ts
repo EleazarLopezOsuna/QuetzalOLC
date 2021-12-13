@@ -4,6 +4,7 @@ import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
 import { _3dCode } from "../system/console";
 import { literal } from "../abstract/literal";
+import { array_range } from "../expression/array_range";
 
 export class _array extends literal {
     public translate(environment: environment): type {
@@ -11,11 +12,11 @@ export class _array extends literal {
         return type.NULL
     }
 
-    constructor(public body: Array<_array> | Array<expression> | Array<literal>, line: number, column: number) {
+    constructor(public body: Array<expression | literal | array_range>, line: number, column: number) {
         super(line, column);
     }
 
-    public check_dimensions_number(dimensions: Array<expression> | Array<literal>): boolean {
+    public check_dimensions_number(dimensions: Array<expression | literal | array_range>): boolean {
         let checked = false
         if (dimensions.length == 1 && !(this.body[0] instanceof _array)) {
             checked = true
@@ -33,13 +34,20 @@ export class _array extends literal {
         return checked
     }
 
-    public check_dimensions_length(dimensions: Array<expression> | Array<literal>, environment: environment): boolean {
+    public check_dimensions_length(dimensions: Array<expression | literal | array_range>, environment: environment): boolean {
         let body_pointer = this.body
         let dimensions_counter = 0
         while (body_pointer[0] instanceof _array) {
             let dimension_data = dimensions[dimensions_counter].execute(environment)
-
-            if (dimension_data.type != type.INTEGER || dimension_data.value >= body_pointer.length
+            if (dimension_data.value instanceof Array) {
+                // if is a range
+                let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0]
+                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[0]
+                if (last_index >= body_pointer.length || first_index < 0) {
+                    return false;
+                }
+            }
+            else if (dimension_data.type != type.INTEGER || dimension_data.value >= body_pointer.length
                 || dimension_data.value < 0) {
                 return false
             }
@@ -54,7 +62,19 @@ export class _array extends literal {
         return true
     }
 
-    public get_by_index(dimensions: Array<expression> | Array<literal>, environment: environment): data {
+    public get_by_range(dimensions: Array<expression | literal | array_range>, environment: environment): Array<expression | literal | array_range> {
+        // get first data 
+        let dimension_data = dimensions[0].execute(environment)
+        if (dimension_data.value instanceof Array) {
+            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0]
+            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[0]
+            return this.body.slice(first_index, last_index);
+        }
+        return this.body
+    }
+
+
+    public get_by_index(dimensions: Array<expression | literal | array_range>, environment: environment): data {
         // get first data 
         let dimension_data = dimensions[0].execute(environment)
         dimensions.shift()

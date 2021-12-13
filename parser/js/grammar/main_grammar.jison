@@ -13,6 +13,7 @@
     const {string_binary, string_binary_type} = require('../expression/string_binary');
     const {string_ternary, string_ternary_type} = require('../expression/string_ternary');
     const {parameter} = require('../expression/parameter');
+    const {array_range} = require('../expression/array_range');
 
     
     const {print, print_type} = require('../instruction/print');
@@ -673,14 +674,29 @@ pr_expr
 ;
 
 pr_index_list 
-    : pr_index_list tk_bra_o pr_expr tk_bra_c {
+    : pr_index_list tk_bra_o pr_array_range tk_bra_c {
         $1.push($3)
         $$ = $1
     }
-    | tk_bra_o pr_expr tk_bra_c {
+    | tk_bra_o pr_array_range tk_bra_c {
         $$ = [$2]
     }
-    
+;
+
+pr_array_range
+    : pr_expr {
+        $$ = $1
+    }
+    | tk_begin tk_colon pr_expr {
+        $$ = new array_range($1, $3, @1.first_line, @1.first_column);
+    }
+    | pr_expr tk_colon tk_end {
+        $$ = new array_range($1, $3, @1.first_line, @1.first_column);
+    }
+    | pr_expr tk_colon pr_expr {
+        $$ = new array_range($1, $3, @1.first_line, @1.first_column);
+    }
+
 ;
 
 pr_unary :

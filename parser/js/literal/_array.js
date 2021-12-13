@@ -35,7 +35,15 @@ class _array extends literal_1.literal {
         let dimensions_counter = 0;
         while (body_pointer[0] instanceof _array) {
             let dimension_data = dimensions[dimensions_counter].execute(environment);
-            if (dimension_data.type != type_1.type.INTEGER || dimension_data.value >= body_pointer.length
+            if (dimension_data.value instanceof Array) {
+                // if is a range
+                let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
+                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[0];
+                if (last_index >= body_pointer.length || first_index < 0) {
+                    return false;
+                }
+            }
+            else if (dimension_data.type != type_1.type.INTEGER || dimension_data.value >= body_pointer.length
                 || dimension_data.value < 0) {
                 return false;
             }
@@ -48,6 +56,16 @@ class _array extends literal_1.literal {
             return false;
         }
         return true;
+    }
+    get_by_range(dimensions, environment) {
+        // get first data 
+        let dimension_data = dimensions[0].execute(environment);
+        if (dimension_data.value instanceof Array) {
+            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
+            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[0];
+            return this.body.slice(first_index, last_index);
+        }
+        return this.body;
     }
     get_by_index(dimensions, environment) {
         // get first data 

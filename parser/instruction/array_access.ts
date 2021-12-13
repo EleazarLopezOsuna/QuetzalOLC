@@ -6,6 +6,7 @@ import { _console } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 import { _array } from "../literal/_array";
+import { array_range } from "../expression/array_range";
 
 export class array_access extends instruction {
 
@@ -13,7 +14,7 @@ export class array_access extends instruction {
         throw new Error("Method not implemented.");
     }
 
-    constructor(public id: string, public dimensions: Array<expression> | Array<literal>, line: number, column: number) {
+    constructor(public id: string, public dimensions: Array<expression | literal | array_range>, line: number, column: number) {
         super(line, column);
     }
 
