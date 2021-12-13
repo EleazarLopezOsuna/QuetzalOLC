@@ -14,6 +14,7 @@ class main extends instruction_1.instruction {
         this.code.forEach(element => {
             element.translate(environment);
         });
+        console_1._3dCode.output += 'return;\n';
         console_1._3dCode.output += '}\n';
         return type_1.type.NULL;
     }

@@ -28,7 +28,7 @@ export class call extends instruction {
                     const call_parameter = this.parameters[index];
                     const call_parameter_data = call_parameter.execute(current_environment)
                     if (call_parameter_data.type == function_to_execute.parameters[index].native_type) {
-                        new_environment.save_variable(function_to_execute.parameters[index].id, call_parameter_data)
+                        new_environment.save_variable(function_to_execute.parameters[index].id, call_parameter_data, 0, 0, 0)
                     } else {
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Tipo de parametro incorrecto'));
                     }

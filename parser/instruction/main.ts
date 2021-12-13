@@ -10,6 +10,7 @@ export class main extends instruction {
         this.code.forEach(element => {
             element.translate(environment)
         });
+        _3dCode.output += 'return;\n';
         _3dCode.output += '}\n';
         return type.NULL;
     }

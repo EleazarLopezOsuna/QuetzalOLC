@@ -13,6 +13,39 @@ export enum unary_instruction_type {
 
 export class unary_instruction extends expression {
     public translate(environment: environment): type {
+        const variable_data = environment.get_variable(this.variable_id)
+        if (variable_data.type == type.NULL) {
+            return type.NULL
+        }
+        let absolutePos = environment.get_absolute(this.variable_id);
+        switch (this.type) {
+            case unary_instruction_type.INCREMENT:
+                switch (variable_data.type) {
+                    case type.INTEGER:
+                        _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + 1;\n';
+                        _3dCode.output += 'STACK[' + absolutePos + '] = T' + _3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n'; 
+                        break;
+                    default:
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar ++ para: ' + variable_data.value));
+                }
+                break;
+            case unary_instruction_type.DECREMENT:
+                switch (variable_data.type) {
+                    case type.INTEGER:
+                        _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' - 1;\n';
+                        _3dCode.output += 'STACK[' + absolutePos + '] = T' + _3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n'; 
+                        break;
+                    default:
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar -- para: ' + variable_data.value));
+                }
+                break;
+
+
+        }
         // Default
         return type.NULL
     }

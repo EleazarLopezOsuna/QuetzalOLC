@@ -3248,10 +3248,12 @@ if (typeof module !== 'undefined' && require.main === module) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._break = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class _break extends instruction_1.instruction {
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.output += "goto L" + console_1._3dCode.breakTag + ";\n";
+        return type_1.type.NULL;
     }
     constructor(line, column) {
         super(line, column);
@@ -3265,7 +3267,11 @@ class _break extends instruction_1.instruction {
 }
 exports._break = _break;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/type":46}],20:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/type":45}],20:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._case = exports._case_type = void 0;
@@ -3314,10 +3320,12 @@ exports._case = _case;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._continue = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class _continue extends instruction_1.instruction {
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.output += "goto L" + console_1._3dCode.continueTag + ";\n";
+        return type_1.type.NULL;
     }
     constructor(line, column) {
         super(line, column);
@@ -3331,7 +3339,11 @@ class _continue extends instruction_1.instruction {
 }
 exports._continue = _continue;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/type":46}],22:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/type":45}],22:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._for = void 0;
@@ -3406,6 +3418,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._if = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _return_1 = require("./_return");
 class _if extends instruction_1.instruction {
@@ -3416,7 +3429,43 @@ class _if extends instruction_1.instruction {
         this.else_statement = else_statement;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        this.condition.translate(environment);
+        const conditionTemp = console_1._3dCode.actualTemp;
+        console_1._3dCode.actualTag++;
+        let lTrue = console_1._3dCode.actualTag;
+        console_1._3dCode.output += "if(T" + conditionTemp + ") goto L" + lTrue + ";\n";
+        console_1._3dCode.actualTag++;
+        let lFalse = console_1._3dCode.actualTag;
+        console_1._3dCode.output += "goto L" + lFalse + ";\n";
+        console_1._3dCode.actualTag++;
+        let salida = console_1._3dCode.actualTag;
+        console_1._3dCode.output += "L" + lTrue + ":\n";
+        for (const instr of this.code) {
+            try {
+                instr.translate(environment);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        console_1._3dCode.output += "goto L" + salida + ";\n";
+        console_1._3dCode.output += "L" + lFalse + ":\n";
+        if (this.else_statement != null)
+            if (this.else_statement instanceof instruction_1.instruction) {
+                this.else_statement.translate(environment);
+            }
+            else if (this.else_statement instanceof Array) {
+                for (const instr of this.else_statement) {
+                    try {
+                        instr.translate(environment);
+                    }
+                    catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        console_1._3dCode.output += "L" + salida + ":\n";
+        return type_1.type.NULL;
     }
     execute(environment) {
         const condition = this.condition.execute(environment);
@@ -3466,10 +3515,15 @@ class _if extends instruction_1.instruction {
 }
 exports._if = _if;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":45,"../system/type":46,"./_return":24}],24:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45,"./_return":24}],24:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._return = void 0;
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class _return extends instruction_1.instruction {
     constructor(return_value, line, column) {
@@ -3477,7 +3531,9 @@ class _return extends instruction_1.instruction {
         this.return_value = return_value;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        let returnType = this.return_value.translate(environment);
+        console_1._3dCode.output += "goto L" + console_1._3dCode.breakTag + ";\n";
+        return returnType;
     }
     execute(environment) {
         return this.return_value.execute(environment);
@@ -3488,7 +3544,7 @@ class _return extends instruction_1.instruction {
 }
 exports._return = _return;
 
-},{"../abstract/instruction":5}],25:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":42}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._switch = void 0;
@@ -3544,6 +3600,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._while = exports._while_type = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _return_1 = require("./_return");
 const _break_1 = require("./_break");
@@ -3561,7 +3618,62 @@ class _while extends instruction_1.instruction {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.actualTag++;
+        let startTag;
+        let conditionType;
+        let conditionTemp;
+        let final;
+        let tempBreak;
+        let tempContinue;
+        switch (this.type) {
+            case _while_type.NORMAL:
+                console_1._3dCode.actualTag++;
+                startTag = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + startTag + ":\n";
+                conditionType = this.condition.translate(environment);
+                conditionTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTag++;
+                let inicio = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                final = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
+                console_1._3dCode.output += "goto L" + final + ";\n";
+                console_1._3dCode.output += "L" + inicio + ":\n";
+                tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = startTag;
+                tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
+                for (const instruction of this.code) {
+                    instruction.translate(environment);
+                }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
+                console_1._3dCode.output += "goto L" + startTag + ";\n";
+                console_1._3dCode.output += "L" + final + ":\n";
+                break;
+            case _while_type.DO:
+                console_1._3dCode.actualTag++;
+                startTag = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + startTag + ":\n";
+                console_1._3dCode.actualTag++;
+                final = console_1._3dCode.actualTag;
+                tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = startTag;
+                tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
+                for (const instruction of this.code) {
+                    instruction.translate(environment);
+                }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
+                conditionType = this.condition.translate(environment);
+                conditionTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + startTag + ";\n";
+                console_1._3dCode.output += "L" + final + ":\n";
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         let condition_data = this.condition.execute(environment);
@@ -3621,6 +3733,7 @@ class _while extends instruction_1.instruction {
 }
 exports._while = _while;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":45,"../system/type":46,"./_break":19,"./_continue":21,"./_return":24}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -3670,10 +3783,14 @@ class array_access extends instruction_1.instruction {
 exports.array_access = array_access;
 
 },{"../abstract/instruction":5,"../literal/_array":39,"../system/error":45,"../system/type":46}],28:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45,"./_break":19,"./_continue":21,"./_return":24}],27:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
 const instruction_1 = require("../abstract/instruction");
+const console_1 = require("../system/console");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
 class assignation_unary extends instruction_1.instruction {
@@ -3683,7 +3800,23 @@ class assignation_unary extends instruction_1.instruction {
         this.expr = expr;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const exprType = this.expr.translate(environment);
+        // validate that exists
+        let saved_variable = environment.get_variable(this.id);
+        let absolutePos = environment.get_absolute(this.id);
+        if (saved_variable.type != type_1.type.NULL) {
+            // validate the type
+            if (saved_variable.type == exprType) {
+                // assign the value
+                console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value for variable ' + this.id + '\n';
+            }
+            else {
+            }
+        }
+        else {
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const expr_data = this.expr.execute(environment);
@@ -3693,7 +3826,10 @@ class assignation_unary extends instruction_1.instruction {
             // validate the type
             if (saved_variable.type == expr_data.type) {
                 // assign the value
-                environment.save_variable(this.id, expr_data);
+                let absolutePos = environment.get_absolute(this.id);
+                let relativePos = environment.get_relative(this.id);
+                let size = environment.get_size(this.id);
+                environment.save_variable(this.id, expr_data, absolutePos, relativePos, size);
             }
             else {
                 error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Tipo diferente, no se puede asignar'));
@@ -3711,7 +3847,11 @@ class assignation_unary extends instruction_1.instruction {
 }
 exports.assignation_unary = assignation_unary;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":45,"../system/type":46}],29:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],28:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.call = void 0;
@@ -3741,7 +3881,7 @@ class call extends instruction_1.instruction {
                     const call_parameter = this.parameters[index];
                     const call_parameter_data = call_parameter.execute(current_environment);
                     if (call_parameter_data.type == function_to_execute.parameters[index].native_type) {
-                        new_environment.save_variable(function_to_execute.parameters[index].id, call_parameter_data);
+                        new_environment.save_variable(function_to_execute.parameters[index].id, call_parameter_data, 0, 0, 0);
                     }
                     else {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Tipo de parametro incorrecto'));
@@ -3808,7 +3948,11 @@ class declaration_array extends instruction_1.instruction {
                 error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             }
             else {
+<<<<<<< HEAD
                 environment.save_variable(this.variable_id, { value: this.value, type: this.type });
+=======
+                environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
             }
         }
         // if the save variable has an expression check types
@@ -3825,7 +3969,11 @@ class declaration_array extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
                 }
                 else {
+<<<<<<< HEAD
                     environment.save_variable(this.variable_id, { value: this.value, type: this.type });
+=======
+                    environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
                 }
             }
         }
@@ -3856,7 +4004,7 @@ class declaration_function extends instruction_1.instruction {
         throw new Error("Method not implemented.");
     }
     execute(environment) {
-        environment.save_function(this.id, this);
+        environment.save_function(this.id, this, 0, 0, 0);
         // Default
         return { value: null, type: type_1.type.NULL };
     }
@@ -3881,7 +4029,13 @@ class declaration_item extends instruction_1.instruction {
         this.value = value;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        if (this.value instanceof expression_1.expression || this.value instanceof literal_1.literal) {
+            let valueType = this.value.translate(environment);
+            return valueType;
+        }
+        else {
+        }
+        return type_1.type.NULL;
     }
     execute(environment) {
         // If value is different to null then we need to operate the expresion
@@ -3903,6 +4057,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_list = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class declaration_list extends instruction_1.instruction {
     constructor(native_type, declare_list, line, column) {
@@ -3911,7 +4066,43 @@ class declaration_list extends instruction_1.instruction {
         this.declare_list = declare_list;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        let tData = { value: null, type: type_1.type.NULL };
+        this.declare_list.forEach(item => {
+            let itemType = item.translate(environment);
+            let itemTemp = console_1._3dCode.actualTemp;
+            tData.type = itemType;
+            if (itemType == type_1.type.NULL) {
+                if (environment.get_variable(item.variable_id).type != type_1.type.NULL) {
+                }
+                else {
+                    console_1._3dCode.output += 'STACK[' + console_1._3dCode.absolutePos + '] = 0;//Save variable ' + item.variable_id + '\n';
+                    environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                    console_1._3dCode.absolutePos++;
+                    console_1._3dCode.relativePos++;
+                }
+                return type_1.type.NULL;
+            }
+            else {
+                let checked = false;
+                if (itemType == this.native_type) {
+                    checked = true;
+                }
+                if (!checked) {
+                }
+                else {
+                    if (environment.get_variable(item.variable_id).type != type_1.type.NULL) {
+                    }
+                    else {
+                        console_1._3dCode.output += 'STACK[' + console_1._3dCode.absolutePos + '] = T' + itemTemp + ';//Save variable ' + item.variable_id + '\n';
+                        environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                        console_1._3dCode.absolutePos++;
+                        console_1._3dCode.relativePos++;
+                    }
+                }
+            }
+        });
+        // Default
+        return type_1.type.NULL;
     }
     add_to_list(item) {
         this.declare_list.push(item);
@@ -3926,7 +4117,9 @@ class declaration_list extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 }
                 else {
-                    environment.save_variable(item.variable_id, item_data);
+                    environment.save_variable(item.variable_id, item_data, console_1._console.absolutePos, console_1._console.relativePos, 1);
+                    console_1._console.absolutePos++;
+                    console_1._console.relativePos++;
                 }
                 return;
             }
@@ -3947,7 +4140,9 @@ class declaration_list extends instruction_1.instruction {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                     }
                     else {
-                        environment.save_variable(item.variable_id, item_data);
+                        environment.save_variable(item.variable_id, item_data, console_1._console.absolutePos, console_1._console.relativePos, 1);
+                        console_1._console.absolutePos++;
+                        console_1._console.relativePos++;
                     }
                 }
             }
@@ -3961,7 +4156,11 @@ class declaration_list extends instruction_1.instruction {
 }
 exports.declaration_list = declaration_list;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":45,"../system/type":46}],34:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],33:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
@@ -3978,6 +4177,7 @@ class main extends instruction_1.instruction {
         this.code.forEach(element => {
             element.translate(environment);
         });
+        console_1._3dCode.output += 'return;\n';
         console_1._3dCode.output += '}\n';
         return type_1.type.NULL;
     }
@@ -4103,7 +4303,11 @@ class native_function extends instruction_1.instruction {
 }
 exports.native_function = native_function;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/console":43,"../system/error":45,"../system/type":46}],36:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],35:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_parse = void 0;
@@ -4210,7 +4414,11 @@ class native_parse extends instruction_1.instruction {
 }
 exports.native_parse = native_parse;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/console":43,"../system/error":45,"../system/type":46}],37:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],36:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.print = exports.print_type = void 0;
@@ -4319,6 +4527,7 @@ exports.unary_instruction = exports.unary_instruction_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 var unary_instruction_type;
 (function (unary_instruction_type) {
     unary_instruction_type[unary_instruction_type["INCREMENT"] = 0] = "INCREMENT";
@@ -4331,6 +4540,37 @@ class unary_instruction extends expression_1.expression {
         this.type = type;
     }
     translate(environment) {
+        const variable_data = environment.get_variable(this.variable_id);
+        if (variable_data.type == type_1.type.NULL) {
+            return type_1.type.NULL;
+        }
+        let absolutePos = environment.get_absolute(this.variable_id);
+        switch (this.type) {
+            case unary_instruction_type.INCREMENT:
+                switch (variable_data.type) {
+                    case type_1.type.INTEGER:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + 1;\n';
+                        console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
+                        break;
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar ++ para: ' + variable_data.value));
+                }
+                break;
+            case unary_instruction_type.DECREMENT:
+                switch (variable_data.type) {
+                    case type_1.type.INTEGER:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' - 1;\n';
+                        console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
+                        break;
+                    default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar -- para: ' + variable_data.value));
+                }
+                break;
+        }
         // Default
         return type_1.type.NULL;
     }
@@ -4369,7 +4609,11 @@ class unary_instruction extends expression_1.expression {
 }
 exports.unary_instruction = unary_instruction;
 
+<<<<<<< HEAD
 },{"../abstract/expression":4,"../system/error":45,"../system/type":46}],39:[function(require,module,exports){
+=======
+},{"../abstract/expression":4,"../system/console":42,"../system/error":44,"../system/type":45}],38:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._array = void 0;
@@ -4552,6 +4796,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.variable_id = exports.variable_id_type = void 0;
 const literal_1 = require("../abstract/literal");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const error_1 = require("../system/error");
 var variable_id_type;
 (function (variable_id_type) {
@@ -4565,7 +4810,16 @@ class variable_id extends literal_1.literal {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        let return_data = environment.get_variable(this.id);
+        let absolute = environment.get_absolute(this.id);
+        if (return_data.type != type_1.type.NULL) {
+            console_1._3dCode.actualTemp++;
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolute + '];//Getting value of variable ' + this.id + '\n';
+            return return_data.type;
+        }
+        else {
+        }
+        return type_1.type.NULL;
     }
     execute(environment) {
         let return_data = environment.get_variable(this.id);
@@ -4583,7 +4837,11 @@ class variable_id extends literal_1.literal {
 }
 exports.variable_id = variable_id;
 
+<<<<<<< HEAD
 },{"../abstract/literal":6,"../system/error":45,"../system/type":46}],42:[function(require,module,exports){
+=======
+},{"../abstract/literal":6,"../system/console":42,"../system/error":44,"../system/type":45}],41:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._symbol = exports.scope = void 0;
@@ -4593,10 +4851,13 @@ var scope;
     scope[scope["LOCAL"] = 1] = "LOCAL";
 })(scope = exports.scope || (exports.scope = {}));
 class _symbol {
-    constructor(id, data, scope) {
+    constructor(id, data, scope, absolute, relative, size) {
         this.id = id;
         this.data = data;
         this.scope = scope;
+        this.absolute = absolute;
+        this.relative = relative;
+        this.size = size;
     }
 }
 exports._symbol = _symbol;
@@ -4613,6 +4874,10 @@ class console {
         this.heap = new Array;
         this.actualTemp = 5;
         this.actualTag = 0;
+        this.breakTag = 0;
+        this.continueTag = 0;
+        this.absolutePos = 33; //Initial value 33 because of default functions
+        this.relativePos = 0;
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -4627,6 +4892,10 @@ class console {
         this.heap = [];
         this.actualTemp = 5;
         this.actualTag = 0;
+        this.breakTag = 0;
+        this.continueTag = 0;
+        this.absolutePos = 33;
+        this.relativePos = 0;
     }
 }
 exports._console = new console();
@@ -4645,12 +4914,12 @@ class environment {
         this.symbol_map = new Map();
         this.function_map = new Map();
     }
-    save_function(id, new_function) {
+    save_function(id, new_function, absolute, relative, size) {
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {
             symbol_type = _symbol_1.scope.GLOBAL;
         }
-        this.function_map.set(id, new _symbol_1._symbol(id, new_function, symbol_type));
+        this.function_map.set(id, new _symbol_1._symbol(id, new_function, symbol_type, absolute, relative, size));
     }
     get_function(id) {
         let symbol_item = this.function_map.get(id);
@@ -4660,12 +4929,30 @@ class environment {
         }
         return null;
     }
+<<<<<<< HEAD
     save_variable(id, data) {
+=======
+    get_array(id) {
+        let arr = this.array_map.get(id);
+        if (arr instanceof _symbol_1._symbol) {
+            return arr.data;
+        }
+        return { value: null, type: type_1.type.UNDEFINED };
+    }
+    save_array(id, arr, absolute, relative, size) {
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {
             symbol_type = _symbol_1.scope.GLOBAL;
         }
-        this.symbol_map.set(id, new _symbol_1._symbol(id, data, symbol_type));
+        this.array_map.set(id, new _symbol_1._symbol(id, arr, symbol_type, absolute, relative, size));
+    }
+    save_variable(id, data, absolute, relative, size) {
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
+        let symbol_type = _symbol_1.scope.LOCAL;
+        if (this.previous == null) {
+            symbol_type = _symbol_1.scope.GLOBAL;
+        }
+        this.symbol_map.set(id, new _symbol_1._symbol(id, data, symbol_type, absolute, relative, size));
     }
     get_variable(id) {
         let symbol_item = this.symbol_map.get(id);
@@ -4674,6 +4961,27 @@ class environment {
             return return_data;
         }
         return { value: null, type: type_1.type.UNDEFINED };
+    }
+    get_absolute(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.absolute;
+        }
+        return -1;
+    }
+    get_size(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.size;
+        }
+        return -1;
+    }
+    get_relative(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.relative;
+        }
+        return -1;
     }
 }
 exports.environment = environment;

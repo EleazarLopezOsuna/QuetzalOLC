@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._while = exports._while_type = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _return_1 = require("./_return");
 const _break_1 = require("./_break");
@@ -20,7 +21,62 @@ class _while extends instruction_1.instruction {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.actualTag++;
+        let startTag;
+        let conditionType;
+        let conditionTemp;
+        let final;
+        let tempBreak;
+        let tempContinue;
+        switch (this.type) {
+            case _while_type.NORMAL:
+                console_1._3dCode.actualTag++;
+                startTag = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + startTag + ":\n";
+                conditionType = this.condition.translate(environment);
+                conditionTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTag++;
+                let inicio = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                final = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + inicio + ";\n";
+                console_1._3dCode.output += "goto L" + final + ";\n";
+                console_1._3dCode.output += "L" + inicio + ":\n";
+                tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = startTag;
+                tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
+                for (const instruction of this.code) {
+                    instruction.translate(environment);
+                }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
+                console_1._3dCode.output += "goto L" + startTag + ";\n";
+                console_1._3dCode.output += "L" + final + ":\n";
+                break;
+            case _while_type.DO:
+                console_1._3dCode.actualTag++;
+                startTag = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + startTag + ":\n";
+                console_1._3dCode.actualTag++;
+                final = console_1._3dCode.actualTag;
+                tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = startTag;
+                tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
+                for (const instruction of this.code) {
+                    instruction.translate(environment);
+                }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
+                conditionType = this.condition.translate(environment);
+                conditionTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += "if(T" + conditionTemp + " == 1) goto L" + startTag + ";\n";
+                console_1._3dCode.output += "L" + final + ":\n";
+                break;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         let condition_data = this.condition.execute(environment);
