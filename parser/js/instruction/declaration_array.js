@@ -23,7 +23,11 @@ class declaration_array extends instruction_1.instruction {
             }
             else {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 environment.save_variable(this.variable_id, { value: this.value, type: this.type });
+=======
+                environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
                 environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -44,7 +48,11 @@ class declaration_array extends instruction_1.instruction {
                 }
                 else {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     environment.save_variable(this.variable_id, { value: this.value, type: this.type });
+=======
+                    environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
                     environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3

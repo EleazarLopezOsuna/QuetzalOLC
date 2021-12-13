@@ -3268,7 +3268,11 @@ class _break extends instruction_1.instruction {
 exports._break = _break;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/type":46}],20:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/type":45}],20:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/instruction":5,"../system/console":42,"../system/type":45}],20:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -3340,7 +3344,11 @@ class _continue extends instruction_1.instruction {
 exports._continue = _continue;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/type":46}],22:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/type":45}],22:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/instruction":5,"../system/console":42,"../system/type":45}],22:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -3516,7 +3524,11 @@ class _if extends instruction_1.instruction {
 exports._if = _if;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":45,"../system/type":46,"./_return":24}],24:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45,"./_return":24}],24:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45,"./_return":24}],24:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -3734,6 +3746,7 @@ class _while extends instruction_1.instruction {
 exports._while = _while;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":45,"../system/type":46,"./_break":19,"./_continue":21,"./_return":24}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -3783,6 +3796,9 @@ class array_access extends instruction_1.instruction {
 exports.array_access = array_access;
 
 },{"../abstract/instruction":5,"../literal/_array":39,"../system/error":45,"../system/type":46}],28:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45,"./_break":19,"./_continue":21,"./_return":24}],27:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45,"./_break":19,"./_continue":21,"./_return":24}],27:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -3848,7 +3864,11 @@ class assignation_unary extends instruction_1.instruction {
 exports.assignation_unary = assignation_unary;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":45,"../system/type":46}],29:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],28:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],28:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -3949,7 +3969,11 @@ class declaration_array extends instruction_1.instruction {
             }
             else {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 environment.save_variable(this.variable_id, { value: this.value, type: this.type });
+=======
+                environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
                 environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -3970,7 +3994,11 @@ class declaration_array extends instruction_1.instruction {
                 }
                 else {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     environment.save_variable(this.variable_id, { value: this.value, type: this.type });
+=======
+                    environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
                     environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -4157,7 +4185,11 @@ class declaration_list extends instruction_1.instruction {
 exports.declaration_list = declaration_list;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/error":45,"../system/type":46}],34:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],33:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],33:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -4304,7 +4336,11 @@ class native_function extends instruction_1.instruction {
 exports.native_function = native_function;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/console":43,"../system/error":45,"../system/type":46}],36:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],35:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],35:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -4415,7 +4451,11 @@ class native_parse extends instruction_1.instruction {
 exports.native_parse = native_parse;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../system/console":43,"../system/error":45,"../system/type":46}],37:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],36:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/instruction":5,"../system/console":42,"../system/error":44,"../system/type":45}],36:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -4610,7 +4650,11 @@ class unary_instruction extends expression_1.expression {
 exports.unary_instruction = unary_instruction;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/expression":4,"../system/error":45,"../system/type":46}],39:[function(require,module,exports){
+=======
+},{"../abstract/expression":4,"../system/console":42,"../system/error":44,"../system/type":45}],38:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/expression":4,"../system/console":42,"../system/error":44,"../system/type":45}],38:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -4838,7 +4882,11 @@ class variable_id extends literal_1.literal {
 exports.variable_id = variable_id;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../abstract/literal":6,"../system/error":45,"../system/type":46}],42:[function(require,module,exports){
+=======
+},{"../abstract/literal":6,"../system/console":42,"../system/error":44,"../system/type":45}],41:[function(require,module,exports){
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
 =======
 },{"../abstract/literal":6,"../system/console":42,"../system/error":44,"../system/type":45}],41:[function(require,module,exports){
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
@@ -4947,6 +4995,9 @@ class environment {
         this.array_map.set(id, new _symbol_1._symbol(id, arr, symbol_type, absolute, relative, size));
     }
     save_variable(id, data, absolute, relative, size) {
+<<<<<<< HEAD
+>>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
+=======
 >>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {
@@ -4961,6 +5012,27 @@ class environment {
             return return_data;
         }
         return { value: null, type: type_1.type.UNDEFINED };
+    }
+    get_absolute(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.absolute;
+        }
+        return -1;
+    }
+    get_size(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.size;
+        }
+        return -1;
+    }
+    get_relative(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item.relative;
+        }
+        return -1;
     }
     get_absolute(id) {
         let symbol_item = this.symbol_map.get(id);

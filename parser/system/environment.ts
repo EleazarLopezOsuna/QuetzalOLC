@@ -8,10 +8,12 @@ export class environment {
 
     private symbol_map: Map<string, _symbol>;
     private function_map: Map<string, _symbol>;
+    private array_map: Map<string, _symbol>;
 
     constructor(private previous: environment | null) {
         this.previous = previous;
         this.symbol_map = new Map<string, _symbol>();
+        this.array_map = new Map<string, _symbol>();
         this.function_map = new Map<string, _symbol>();
     }
 
@@ -72,6 +74,7 @@ export class environment {
         }
         return -1
     }
+
 
     public get_size(id: string): number {
         let symbol_item = this.symbol_map.get(id)
