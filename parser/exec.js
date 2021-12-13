@@ -3961,7 +3961,7 @@ class declaration_array extends instruction_1.instruction {
                 error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             }
             else {
-                environment.save_array(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+                environment.save_variable(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
             }
         }
         // if the save variable has an expression check types
@@ -4897,7 +4897,6 @@ class environment {
         this.previous = previous;
         this.previous = previous;
         this.symbol_map = new Map();
-        this.array_map = new Map();
         this.function_map = new Map();
     }
     save_function(id, new_function, absolute, relative, size) {
@@ -4914,20 +4913,6 @@ class environment {
             return return_function;
         }
         return null;
-    }
-    get_array(id) {
-        let arr = this.array_map.get(id);
-        if (arr instanceof _symbol_1._symbol) {
-            return arr.data;
-        }
-        return { value: null, type: type_1.type.UNDEFINED };
-    }
-    save_array(id, arr, absolute, relative, size) {
-        let symbol_type = _symbol_1.scope.LOCAL;
-        if (this.previous == null) {
-            symbol_type = _symbol_1.scope.GLOBAL;
-        }
-        this.array_map.set(id, new _symbol_1._symbol(id, arr, symbol_type, absolute, relative, size));
     }
     save_variable(id, data, absolute, relative, size) {
         let symbol_type = _symbol_1.scope.LOCAL;
