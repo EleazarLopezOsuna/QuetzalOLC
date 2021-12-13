@@ -4211,6 +4211,8 @@ class native_function extends instruction_1.instruction {
     translate(environment) {
         let dataType = this.value.translate(environment);
         const dataTemp = console_1._3dCode.actualTemp;
+        let savedEnvironment = 0;
+        let resultTemp = 0;
         switch (this.option) {
             case "toInt":
                 if (dataType == type_1.type.FLOAT) {
@@ -4218,19 +4220,48 @@ class native_function extends instruction_1.instruction {
                     console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = (int)T' + dataTemp + ';//Change value to int\n';
                     return type_1.type.INTEGER;
                 }
-                else {
+                else if (dataType == type_1.type.STRING) {
+                    console_1._3dCode.actualTemp++;
+                    savedEnvironment = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 29;//Set StringToInt environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set string position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + dataTemp + ';//Save string\n';
+                    console_1._3dCode.output += 'StringToInt();//Call function\n';
+                    console_1._3dCode.actualTemp++;
+                    resultTemp = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                    return type_1.type.INTEGER;
                 }
             case "toDouble":
                 if (dataType == type_1.type.INTEGER) {
                     return type_1.type.FLOAT;
                 }
-                else {
+                else if (dataType == type_1.type.STRING) {
+                    console_1._3dCode.actualTemp++;
+                    savedEnvironment = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 29;//Set StringToInt environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set string position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + dataTemp + ';//Save string\n';
+                    console_1._3dCode.output += 'StringToFloat();//Call function\n';
+                    console_1._3dCode.actualTemp++;
+                    resultTemp = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                    return type_1.type.FLOAT;
                 }
             case "string":
                 return type_1.type.STRING;
             case "typeof":
                 console_1._3dCode.actualTemp++;
-                const savedEnvironment = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
                 console_1._3dCode.output += 'SP = 27;//Set StringConcat environment\n';
                 console_1._3dCode.actualTemp++;
@@ -4260,7 +4291,7 @@ class native_function extends instruction_1.instruction {
                 }
                 console_1._3dCode.output += 'getTypeOf();//Call function\n';
                 console_1._3dCode.actualTemp++;
-                const resultTemp = console_1._3dCode.actualTemp;
+                resultTemp = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
