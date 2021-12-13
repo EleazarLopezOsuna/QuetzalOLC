@@ -3,6 +3,7 @@ import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
 import { _console, _3dCode } from "../system/console";
+import { _array } from "../literal/_array";
 
 export enum print_type {
     PRINT,
@@ -77,7 +78,10 @@ export class print extends instruction {
     public execute(environment: environment): data {
         this.expresions.forEach(element => {
             const expr_data = element.execute(environment);
-
+            // if is an array convert to string first 
+            if (expr_data.value instanceof _array) {
+                expr_data.value = expr_data.value.to_string(environment)
+            }
             switch (this.type) {
                 case print_type.PRINT:
                     _console.output += expr_data.value

@@ -23,10 +23,10 @@ export class declaration_list extends instruction {
         this.declare_list.forEach(item => {
             let item_data = item.execute(environment);
 
-            // if is undefined save the variable with the type declared
+            // if is equal null save the variable with the type declared
             if (item_data.type == type.NULL) {
                 // Save the variable 
-                if (environment.get_variable(item.variable_id).type != type.NULL) {
+                if (environment.get_variable(item.variable_id).type != type.UNDEFINED) {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 } else {
                     environment.save_variable(item.variable_id, item_data)
@@ -46,7 +46,7 @@ export class declaration_list extends instruction {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede iniciar con distinto tipo de dato para: ' + item.variable_id));
                 } else {
                     // Save the variable 
-                    if (environment.get_variable(item.variable_id).type != type.NULL) {
+                    if (environment.get_variable(item.variable_id).type != type.UNDEFINED) {
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                     } else {
                         environment.save_variable(item.variable_id, item_data)

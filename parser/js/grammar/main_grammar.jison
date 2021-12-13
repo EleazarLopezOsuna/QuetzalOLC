@@ -34,6 +34,7 @@
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
     const {_for} = require('../instruction/_for');
     const {declaration_array} = require('../instruction/declaration_array');
+    const {array_access} = require('../instruction/array_access');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -187,7 +188,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %%
 
 // pr_init    
-//     : pr_for EOF {
+//     : pr_declaration_array EOF {
 //         return $1;
 //     } 
 // ;
@@ -666,6 +667,20 @@ pr_expr
     | tk_id tk_hash { 
         $$ = new variable_id($1, variable_id_type.REFERENCE, @1.first_line, @1.first_column);
     }
+    | tk_id pr_index_list {
+        $$ = new array_access($1, $2, @1.first_line, @1.first_column);
+    }
+;
+
+pr_index_list 
+    : pr_index_list tk_bra_o pr_expr tk_bra_c {
+        $1.push($3)
+        $$ = $1
+    }
+    | tk_bra_o pr_expr tk_bra_c {
+        $$ = [$2]
+    }
+    
 ;
 
 pr_unary :

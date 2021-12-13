@@ -19,10 +19,10 @@ class declaration_list extends instruction_1.instruction {
     execute(environment) {
         this.declare_list.forEach(item => {
             let item_data = item.execute(environment);
-            // if is undefined save the variable with the type declared
+            // if is equal null save the variable with the type declared
             if (item_data.type == type_1.type.NULL) {
                 // Save the variable 
-                if (environment.get_variable(item.variable_id).type != type_1.type.NULL) {
+                if (environment.get_variable(item.variable_id).type != type_1.type.UNDEFINED) {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 }
                 else {
@@ -43,7 +43,7 @@ class declaration_list extends instruction_1.instruction {
                 }
                 else {
                     // Save the variable 
-                    if (environment.get_variable(item.variable_id).type != type_1.type.NULL) {
+                    if (environment.get_variable(item.variable_id).type != type_1.type.UNDEFINED) {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                     }
                     else {

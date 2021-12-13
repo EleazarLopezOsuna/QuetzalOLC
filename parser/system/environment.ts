@@ -7,13 +7,11 @@ import { _symbol, scope } from "./_symbol";
 export class environment {
 
     private symbol_map: Map<string, _symbol>;
-    private array_map: Map<string, _symbol>;
     private function_map: Map<string, _symbol>;
 
     constructor(private previous: environment | null) {
         this.previous = previous;
         this.symbol_map = new Map<string, _symbol>();
-        this.array_map = new Map<string, _symbol>();
         this.function_map = new Map<string, _symbol>();
     }
 
@@ -34,22 +32,6 @@ export class environment {
         return null
     }
 
-    public get_array(id: string): data {
-        let arr = this.array_map.get(id)
-        if (arr instanceof _symbol) {
-            return arr.data as data
-        }
-        return { value: null, type: type.UNDEFINED }
-    }
-
-    public save_array(id: string, arr: data) {
-        let symbol_type = scope.LOCAL;
-        if (this.previous == null) {
-            symbol_type = scope.GLOBAL;
-        }
-        this.array_map.set(id, new _symbol(id, arr, symbol_type));
-    }
-
     public save_variable(id: string, data: data) {
         let symbol_type = scope.LOCAL;
         if (this.previous == null) {
@@ -64,7 +46,7 @@ export class environment {
             let return_data = symbol_item.data;
             return return_data as data
         }
-        return { value: null, type: type.NULL }
+        return { value: null, type: type.UNDEFINED }
     }
 
 }

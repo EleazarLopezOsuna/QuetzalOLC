@@ -18,11 +18,11 @@ class declaration_array extends instruction_1.instruction {
         // if is undefined save the variable with the type declared
         if (this.value == null) {
             // Save the variable 
-            if (environment.get_array(this.variable_id).type != type_1.type.UNDEFINED) {
+            if (environment.get_variable(this.variable_id).type != type_1.type.UNDEFINED) {
                 error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             }
             else {
-                environment.save_array(this.variable_id, { value: this.value, type: this.type });
+                environment.save_variable(this.variable_id, { value: this.value, type: this.type });
             }
         }
         // if the save variable has an expression check types
@@ -35,11 +35,11 @@ class declaration_array extends instruction_1.instruction {
             }
             else {
                 // Save the variable 
-                if (environment.get_array(this.variable_id).type != type_1.type.UNDEFINED) {
+                if (environment.get_variable(this.variable_id).type != type_1.type.UNDEFINED) {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
                 }
                 else {
-                    environment.save_array(this.variable_id, { value: this.value, type: this.type });
+                    environment.save_variable(this.variable_id, { value: this.value, type: this.type });
                 }
             }
         }

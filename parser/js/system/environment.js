@@ -8,7 +8,6 @@ class environment {
         this.previous = previous;
         this.previous = previous;
         this.symbol_map = new Map();
-        this.array_map = new Map();
         this.function_map = new Map();
     }
     save_function(id, new_function) {
@@ -26,20 +25,6 @@ class environment {
         }
         return null;
     }
-    get_array(id) {
-        let arr = this.array_map.get(id);
-        if (arr instanceof _symbol_1._symbol) {
-            return arr.data;
-        }
-        return { value: null, type: type_1.type.UNDEFINED };
-    }
-    save_array(id, arr) {
-        let symbol_type = _symbol_1.scope.LOCAL;
-        if (this.previous == null) {
-            symbol_type = _symbol_1.scope.GLOBAL;
-        }
-        this.array_map.set(id, new _symbol_1._symbol(id, arr, symbol_type));
-    }
     save_variable(id, data) {
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {
@@ -53,7 +38,7 @@ class environment {
             let return_data = symbol_item.data;
             return return_data;
         }
-        return { value: null, type: type_1.type.NULL };
+        return { value: null, type: type_1.type.UNDEFINED };
     }
 }
 exports.environment = environment;

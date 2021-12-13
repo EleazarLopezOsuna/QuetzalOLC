@@ -20,7 +20,7 @@ class variable_id extends literal_1.literal {
     }
     execute(environment) {
         let return_data = environment.get_variable(this.id);
-        if (return_data.type != type_1.type.NULL) {
+        if (return_data.type != type_1.type.UNDEFINED) {
             return return_data;
         }
         else {
