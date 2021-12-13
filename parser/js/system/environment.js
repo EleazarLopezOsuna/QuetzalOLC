@@ -8,6 +8,7 @@ class environment {
         this.previous = previous;
         this.previous = previous;
         this.symbol_map = new Map();
+        this.array_map = new Map();
         this.function_map = new Map();
     }
     save_function(id, new_function, absolute, relative, size) {
@@ -25,9 +26,6 @@ class environment {
         }
         return null;
     }
-<<<<<<< HEAD
-    save_variable(id, data) {
-=======
     get_array(id) {
         let arr = this.array_map.get(id);
         if (arr instanceof _symbol_1._symbol) {
@@ -43,10 +41,6 @@ class environment {
         this.array_map.set(id, new _symbol_1._symbol(id, arr, symbol_type, absolute, relative, size));
     }
     save_variable(id, data, absolute, relative, size) {
-<<<<<<< HEAD
->>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
-=======
->>>>>>> dbe7e48968f4976d0b82e0ab51ad7fabbb28e9c3
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {
             symbol_type = _symbol_1.scope.GLOBAL;
@@ -60,27 +54,6 @@ class environment {
             return return_data;
         }
         return { value: null, type: type_1.type.UNDEFINED };
-    }
-    get_absolute(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.absolute;
-        }
-        return -1;
-    }
-    get_size(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.size;
-        }
-        return -1;
-    }
-    get_relative(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.relative;
-        }
-        return -1;
     }
     get_absolute(id) {
         let symbol_item = this.symbol_map.get(id);

@@ -14,7 +14,7 @@ export class declaration_list extends instruction {
             let itemTemp = _3dCode.actualTemp;
             tData.type = itemType
             if (itemType == type.NULL) {
-                if (environment.get_variable(item.variable_id).type != type.NULL) {
+                if (environment.get_variable(item.variable_id).value != null) {
                     
                 } else {
                     _3dCode.output += 'STACK[' + _3dCode.absolutePos + '] = 0;//Save variable ' + item.variable_id + '\n';
@@ -31,7 +31,7 @@ export class declaration_list extends instruction {
                 if (!checked) {
                     
                 } else {
-                    if (environment.get_variable(item.variable_id).type != type.NULL) {
+                    if (environment.get_variable(item.variable_id).value != null) {
                         
                     } else {
                         _3dCode.output += 'STACK[' + _3dCode.absolutePos + '] = T' + itemTemp + ';//Save variable ' + item.variable_id + '\n';
