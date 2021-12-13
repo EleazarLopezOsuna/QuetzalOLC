@@ -8,12 +8,10 @@ export class environment {
 
     private symbol_map: Map<string, _symbol>;
     private function_map: Map<string, _symbol>;
-    private array_map: Map<string, _symbol>;
 
     constructor(private previous: environment | null) {
         this.previous = previous;
         this.symbol_map = new Map<string, _symbol>();
-        this.array_map = new Map<string, _symbol>();
         this.function_map = new Map<string, _symbol>();
     }
 
@@ -32,22 +30,6 @@ export class environment {
             return return_function as declaration_function
         }
         return null
-    }
-
-    public get_array(id: string): data {
-        let arr = this.array_map.get(id)
-        if (arr instanceof _symbol) {
-            return arr.data as data
-        }
-        return { value: null, type: type.UNDEFINED }
-    }
-
-    public save_array(id: string, arr: data, absolute: number, relative: number, size: number) {
-        let symbol_type = scope.LOCAL;
-        if (this.previous == null) {
-            symbol_type = scope.GLOBAL;
-        }
-        this.array_map.set(id, new _symbol(id, arr, symbol_type, absolute, relative, size));
     }
 
     public save_variable(id: string, data: data, absolute: number, relative: number, size: number) {
