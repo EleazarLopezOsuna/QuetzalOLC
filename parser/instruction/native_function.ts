@@ -11,26 +11,55 @@ export class native_function extends instruction {
     public translate(environment: environment): type {
         let dataType = this.value.translate(environment);
         const dataTemp = _3dCode.actualTemp;
+        let savedEnvironment = 0;
+        let resultTemp = 0;
         switch (this.option) {
             case "toInt":
                 if (dataType == type.FLOAT) {
-                        _3dCode.actualTemp++;
-                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = (int)T' + dataTemp + ';//Change value to int\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = (int)T' + dataTemp + ';//Change value to int\n';
                     return type.INTEGER;
-                } else {
-
+                } else if (dataType == type.STRING) {
+                    _3dCode.actualTemp++;
+                    savedEnvironment = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    _3dCode.output += 'SP = 29;//Set StringToInt environment\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;//Set string position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + dataTemp + ';//Save string\n';
+                    _3dCode.output += 'StringToInt();//Call function\n';
+                    _3dCode.actualTemp++;
+                    resultTemp = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                    return type.INTEGER;
                 }
             case "toDouble":
                 if (dataType == type.INTEGER) {
                     return type.FLOAT;
-                } else {
-
+                } else if (dataType == type.STRING) {
+                    _3dCode.actualTemp++;
+                    savedEnvironment = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    _3dCode.output += 'SP = 29;//Set StringToInt environment\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;//Set string position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + dataTemp + ';//Save string\n';
+                    _3dCode.output += 'StringToFloat();//Call function\n';
+                    _3dCode.actualTemp++;
+                    resultTemp = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                    return type.FLOAT;
                 }
             case "string":
                 return type.STRING;
             case "typeof":
                 _3dCode.actualTemp++;
-                const savedEnvironment = _3dCode.actualTemp;
                 _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
                 _3dCode.output += 'SP = 27;//Set StringConcat environment\n';
                 _3dCode.actualTemp++;
@@ -60,7 +89,7 @@ export class native_function extends instruction {
                 }
                 _3dCode.output += 'getTypeOf();//Call function\n';
                 _3dCode.actualTemp++;
-                const resultTemp = _3dCode.actualTemp;
+                resultTemp = _3dCode.actualTemp;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
                 _3dCode.actualTemp++;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + resultTemp + '];//Get return value\n';
