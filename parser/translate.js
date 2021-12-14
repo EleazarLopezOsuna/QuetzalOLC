@@ -1185,6 +1185,7 @@ exports.arithmetic_unary = arithmetic_unary;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_range = void 0;
 const expression_1 = require("../abstract/expression");
+const error_1 = require("../system/error");
 const type_1 = require("../system/type");
 class array_range extends expression_1.expression {
     constructor(left, right, line, column) {
@@ -1196,10 +1197,22 @@ class array_range extends expression_1.expression {
         throw new Error("Method not implemented.");
     }
     execute(environment) {
-        const left_data = (this.left instanceof expression_1.expression) ? this.left.execute(environment) : { type: type_1.type.STRING, value: this.left };
-        const right_data = (this.right instanceof expression_1.expression) ? this.right.execute(environment) : { type: type_1.type.STRING, value: this.right };
+        const left_data = (typeof this.left != 'string') ? this.left.execute(environment) : { type: type_1.type.STRING, value: this.left };
+        const right_data = (typeof this.right != 'string') ? this.right.execute(environment) : { type: type_1.type.STRING, value: this.right };
+        if (left_data.type != type_1.type.INTEGER && left_data.value != 'begin') {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Inicio de rango no valido: ' + left_data.value));
+            return { value: null, type: type_1.type.NULL };
+        }
+        if (right_data.type != type_1.type.INTEGER && right_data.value != 'end') {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Fin de rango no valido: ' + right_data.value));
+            return { value: null, type: type_1.type.NULL };
+        }
+        if (left_data.type == type_1.type.INTEGER && right_data.type == type_1.type.INTEGER && left_data.value >= right_data.value) {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Inicio del rango tiene que ser mayor que el final'));
+            return { value: null, type: type_1.type.NULL };
+        }
         // Default
-        return { value: [left_data.value, right_data.value], type: type_1.type.NULL };
+        return { value: [left_data.value, right_data.value], type: type_1.type.INTEGER };
     }
     plot(count) {
         throw new Error("Method not implemented.");
@@ -1207,7 +1220,7 @@ class array_range extends expression_1.expression {
 }
 exports.array_range = array_range;
 
-},{"../abstract/expression":4,"../system/type":47}],11:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":46,"../system/type":47}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logic = exports.logic_type = void 0;
@@ -3824,6 +3837,9 @@ class array_access extends instruction_1.instruction {
         let return_data = environment.get_variable(this.id);
         if (return_data.type != type_1.type.UNDEFINED) {
             if (return_data.value instanceof _array_1._array) {
+                if (this.dimensions.length == 0) {
+                    return return_data;
+                }
                 // validate that the array have the correct dimensions
                 if (!return_data.value.check_dimensions_number(this.dimensions)) {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Numero de dimensiones no validas para el array'));
@@ -3834,7 +3850,12 @@ class array_access extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Index no valido'));
                     return { value: null, type: type_1.type.NULL };
                 }
-                return return_data.value.get_by_index(this.dimensions, environment);
+                let returned = return_data.value.get(this.dimensions, environment);
+                // Get the type from the symbols table
+                if (returned.type == type_1.type.UNDEFINED) {
+                    returned.type = return_data.type;
+                }
+                return returned;
             }
             else {
                 error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no es un array: ' + this.id));
@@ -4571,16 +4592,17 @@ class print extends instruction_1.instruction {
     execute(environment) {
         this.expresions.forEach(element => {
             const expr_data = element.execute(environment);
+            let print_str = expr_data.value;
             // if is an array convert to string first 
             if (expr_data.value instanceof _array_1._array) {
-                expr_data.value = expr_data.value.to_string(environment);
+                print_str = expr_data.value.to_string(environment);
             }
             switch (this.type) {
                 case print_type.PRINT:
-                    console_1._console.output += expr_data.value;
+                    console_1._console.output += print_str;
                     break;
                 case print_type.PRINTLN:
-                    console_1._console.output += expr_data.value + "\n";
+                    console_1._console.output += print_str + "\n";
                     break;
             }
         });
@@ -4688,6 +4710,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._array = void 0;
 const type_1 = require("../system/type");
 const literal_1 = require("../abstract/literal");
+const array_range_1 = require("../expression/array_range");
 class _array extends literal_1.literal {
     constructor(body, line, column) {
         super(line, column);
@@ -4699,70 +4722,83 @@ class _array extends literal_1.literal {
     }
     check_dimensions_number(dimensions) {
         let checked = false;
-        if (dimensions.length == 1 && !(this.body[0] instanceof _array)) {
-            checked = true;
-        }
-        else {
-            let body_pointer = this.body;
-            let dimensions_counter = 1;
-            while (body_pointer[0] instanceof _array) {
+        let body_pointer = this.body;
+        let dimensions_counter = 1;
+        let dimensions_index = 0;
+        while (dimensions_index < dimensions.length) {
+            if (dimensions[dimensions_index] instanceof array_range_1.array_range) {
+                dimensions_counter++;
+                dimensions_index++;
+            }
+            else if (body_pointer[0] instanceof _array) {
                 body_pointer = body_pointer[0].body;
                 dimensions_counter++;
+                dimensions_index++;
             }
-            if (dimensions_counter == dimensions.length) {
-                checked = true;
+            else {
+                dimensions_index++;
             }
+        }
+        if (dimensions_index <= dimensions_counter) {
+            checked = true;
         }
         return checked;
     }
     check_dimensions_length(dimensions, environment) {
         let body_pointer = this.body;
-        let dimensions_counter = 0;
-        while (body_pointer[0] instanceof _array) {
-            let dimension_data = dimensions[dimensions_counter].execute(environment);
+        let dimensions_index = 0;
+        while (dimensions_index < dimensions.length) {
+            let dimension_data = dimensions[dimensions_index].execute(environment);
             if (dimension_data.value instanceof Array) {
-                // if is a range
                 let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
-                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[0];
-                if (last_index >= body_pointer.length || first_index < 0) {
+                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[1];
+                if (first_index < 0 || last_index >= body_pointer.length) {
                     return false;
                 }
+                body_pointer = body_pointer.slice(first_index, last_index + 1);
+                dimensions_index++;
             }
-            else if (dimension_data.type != type_1.type.INTEGER || dimension_data.value >= body_pointer.length
-                || dimension_data.value < 0) {
-                return false;
+            else if (body_pointer[0] instanceof _array) {
+                if (dimension_data.value < 0 || dimension_data.value >= body_pointer.length) {
+                    return false;
+                }
+                body_pointer = body_pointer[0].body;
+                dimensions_index++;
             }
-            dimensions_counter++;
-            body_pointer = body_pointer[0].body;
-        }
-        let dimension_data = dimensions[dimensions_counter].execute(environment);
-        if (dimension_data.type != type_1.type.INTEGER || dimension_data.value >= body_pointer.length
-            || dimension_data.value < 0) {
-            return false;
+            else {
+                if (dimension_data.value < 0 || dimension_data.value >= body_pointer.length) {
+                    return false;
+                }
+                dimensions_index++;
+            }
         }
         return true;
     }
-    get_by_range(dimensions, environment) {
-        // get first data 
-        let dimension_data = dimensions[0].execute(environment);
-        if (dimension_data.value instanceof Array) {
-            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
-            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[0];
-            return this.body.slice(first_index, last_index);
-        }
-        return this.body;
-    }
-    get_by_index(dimensions, environment) {
+    get(dimensions, environment) {
         // get first data 
         let dimension_data = dimensions[0].execute(environment);
         dimensions.shift();
-        // iterate trought the array and return the value
-        let item = this.body[dimension_data.value];
-        if (item instanceof _array) {
-            return item.get_by_index(dimensions, environment);
+        // if the dimension is a range obtain by range
+        if (dimension_data.value instanceof Array) {
+            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
+            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[1];
+            let arr_return = new _array(this.body.slice(first_index, last_index + 1), this.line, this.column);
+            if (dimensions.length > 0) {
+                return arr_return.get(dimensions, environment);
+            }
+            else {
+                return { type: type_1.type.UNDEFINED, value: arr_return };
+            }
         }
         else {
-            return item.execute(environment);
+            // iterate trought the array and return the value
+            let item = this.body[dimension_data.value];
+            if (item instanceof _array && dimensions.length > 0) {
+                return item.get(dimensions, environment);
+            }
+            else {
+                return item.execute(environment);
+            }
         }
     }
     checkType(type, environment) {
@@ -4799,7 +4835,7 @@ class _array extends literal_1.literal {
     }
     execute(environment) {
         // Default
-        return { value: null, type: type_1.type.NULL };
+        return { value: this, type: type_1.type.UNDEFINED };
     }
     plot(count) {
         throw new Error("Method not implemented.");
@@ -4807,7 +4843,7 @@ class _array extends literal_1.literal {
 }
 exports._array = _array;
 
-},{"../abstract/literal":6,"../system/type":47}],41:[function(require,module,exports){
+},{"../abstract/literal":6,"../expression/array_range":10,"../system/type":47}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native = void 0;

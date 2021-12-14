@@ -18,72 +18,80 @@ export class _array extends literal {
 
     public check_dimensions_number(dimensions: Array<expression | literal | array_range>): boolean {
         let checked = false
-        if (dimensions.length == 1 && !(this.body[0] instanceof _array)) {
-            checked = true
-        } else {
-            let body_pointer = this.body
-            let dimensions_counter = 1
-            while (body_pointer[0] instanceof _array) {
+        let body_pointer = this.body
+        let dimensions_counter = 1
+        let dimensions_index = 0
+        while (dimensions_index < dimensions.length) {
+            if (dimensions[dimensions_index] instanceof array_range) {
+                dimensions_counter++
+                dimensions_index++
+            } else if (body_pointer[0] instanceof _array) {
                 body_pointer = body_pointer[0].body
                 dimensions_counter++
+                dimensions_index++
+            } else {
+                dimensions_index++
             }
-            if (dimensions_counter == dimensions.length) {
-                checked = true
-            }
+        }
+        if (dimensions_index <= dimensions_counter) {
+            checked = true
         }
         return checked
     }
 
     public check_dimensions_length(dimensions: Array<expression | literal | array_range>, environment: environment): boolean {
         let body_pointer = this.body
-        let dimensions_counter = 0
-        while (body_pointer[0] instanceof _array) {
-            let dimension_data = dimensions[dimensions_counter].execute(environment)
+        let dimensions_index = 0
+        while (dimensions_index < dimensions.length) {
+            let dimension_data = dimensions[dimensions_index].execute(environment)
             if (dimension_data.value instanceof Array) {
-                // if is a range
                 let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0]
-                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[0]
-                if (last_index >= body_pointer.length || first_index < 0) {
-                    return false;
+                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[1]
+                if(first_index < 0 || last_index >= body_pointer.length) {
+                    return false
                 }
+                body_pointer = body_pointer.slice(first_index, last_index + 1)
+                dimensions_index++
+            } else if (body_pointer[0] instanceof _array) {
+                if (dimension_data.value < 0 || dimension_data.value >= body_pointer.length) {
+                    return false
+                }
+                body_pointer = body_pointer[0].body
+                dimensions_index++
+            } else {
+                if (dimension_data.value < 0 || dimension_data.value >= body_pointer.length) {
+                    return false
+                }
+                dimensions_index++
             }
-            else if (dimension_data.type != type.INTEGER || dimension_data.value >= body_pointer.length
-                || dimension_data.value < 0) {
-                return false
-            }
-            dimensions_counter++
-            body_pointer = body_pointer[0].body
-        }
-        let dimension_data = dimensions[dimensions_counter].execute(environment)
-        if (dimension_data.type != type.INTEGER || dimension_data.value >= body_pointer.length
-            || dimension_data.value < 0) {
-            return false
         }
         return true
     }
 
-    public get_by_range(dimensions: Array<expression | literal | array_range>, environment: environment): Array<expression | literal | array_range> {
-        // get first data 
-        let dimension_data = dimensions[0].execute(environment)
-        if (dimension_data.value instanceof Array) {
-            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0]
-            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[0]
-            return this.body.slice(first_index, last_index);
-        }
-        return this.body
-    }
 
-
-    public get_by_index(dimensions: Array<expression | literal | array_range>, environment: environment): data {
+    public get(dimensions: Array<expression | literal | array_range>, environment: environment): data {
         // get first data 
         let dimension_data = dimensions[0].execute(environment)
         dimensions.shift()
-        // iterate trought the array and return the value
-        let item = this.body[dimension_data.value]
-        if (item instanceof _array) {
-            return item.get_by_index(dimensions, environment)
+
+        // if the dimension is a range obtain by range
+        if (dimension_data.value instanceof Array) {
+            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0]
+            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[1]
+            let arr_return = new _array(this.body.slice(first_index, last_index + 1), this.line, this.column)
+            if (dimensions.length > 0) {
+                return arr_return.get(dimensions, environment)
+            } else {
+                return { type: type.UNDEFINED, value: arr_return }
+            }
         } else {
-            return item.execute(environment)
+            // iterate trought the array and return the value
+            let item = this.body[dimension_data.value]
+            if (item instanceof _array && dimensions.length > 0) {
+                return item.get(dimensions, environment)
+            } else {
+                return item.execute(environment)
+            }
         }
     }
 
@@ -129,7 +137,7 @@ export class _array extends literal {
 
     public execute(environment: environment): data {
         // Default
-        return { value: null, type: type.NULL }
+        return { value: this, type: type.UNDEFINED }
     }
 
     public plot(count: number): string {
