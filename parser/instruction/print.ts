@@ -78,16 +78,17 @@ export class print extends instruction {
     public execute(environment: environment): data {
         this.expresions.forEach(element => {
             const expr_data = element.execute(environment);
+            let print_str = expr_data.value
             // if is an array convert to string first 
             if (expr_data.value instanceof _array) {
-                expr_data.value = expr_data.value.to_string(environment)
+                print_str = expr_data.value.to_string(environment)
             }
             switch (this.type) {
                 case print_type.PRINT:
-                    _console.output += expr_data.value
+                    _console.output += print_str
                     break;
                 case print_type.PRINTLN:
-                    _console.output += expr_data.value + "\n"
+                    _console.output += print_str + "\n"
                     break;
             }
         });

@@ -17,7 +17,11 @@ class array_access extends instruction_1.instruction {
     execute(environment) {
         let return_data = environment.get_variable(this.id);
         if (return_data.type != type_1.type.UNDEFINED) {
+            console.log('ret arr', return_data);
             if (return_data.value instanceof _array_1._array) {
+                if (this.dimensions.length == 0) {
+                    return return_data;
+                }
                 // validate that the array have the correct dimensions
                 if (!return_data.value.check_dimensions_number(this.dimensions)) {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Numero de dimensiones no validas para el array'));
@@ -28,7 +32,12 @@ class array_access extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Index no valido'));
                     return { value: null, type: type_1.type.NULL };
                 }
-                return return_data.value.get_by_index(this.dimensions, environment);
+                let returned = return_data.value.get(this.dimensions, environment);
+                // Get the type from the symbols table
+                if (returned.type == type_1.type.UNDEFINED) {
+                    returned.type = return_data.type;
+                }
+                return returned;
             }
             else {
                 error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no es un array: ' + this.id));

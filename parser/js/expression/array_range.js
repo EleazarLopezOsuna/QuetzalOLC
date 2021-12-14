@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_range = void 0;
 const expression_1 = require("../abstract/expression");
+const error_1 = require("../system/error");
 const type_1 = require("../system/type");
 class array_range extends expression_1.expression {
     constructor(left, right, line, column) {
@@ -13,10 +14,22 @@ class array_range extends expression_1.expression {
         throw new Error("Method not implemented.");
     }
     execute(environment) {
-        const left_data = (this.left instanceof expression_1.expression) ? this.left.execute(environment) : { type: type_1.type.STRING, value: this.left };
-        const right_data = (this.right instanceof expression_1.expression) ? this.right.execute(environment) : { type: type_1.type.STRING, value: this.right };
+        const left_data = (typeof this.left != 'string') ? this.left.execute(environment) : { type: type_1.type.STRING, value: this.left };
+        const right_data = (typeof this.right != 'string') ? this.right.execute(environment) : { type: type_1.type.STRING, value: this.right };
+        if (left_data.type != type_1.type.INTEGER && left_data.value != 'begin') {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Inicio de rango no valido: ' + left_data.value));
+            return { value: null, type: type_1.type.NULL };
+        }
+        if (right_data.type != type_1.type.INTEGER && right_data.value != 'end') {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Fin de rango no valido: ' + right_data.value));
+            return { value: null, type: type_1.type.NULL };
+        }
+        if (left_data.type == type_1.type.INTEGER && right_data.type == type_1.type.INTEGER && left_data.value >= right_data.value) {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Inicio del rango tiene que ser mayor que el final'));
+            return { value: null, type: type_1.type.NULL };
+        }
         // Default
-        return { value: [left_data.value, right_data.value], type: type_1.type.NULL };
+        return { value: [left_data.value, right_data.value], type: type_1.type.INTEGER };
     }
     plot(count) {
         throw new Error("Method not implemented.");
