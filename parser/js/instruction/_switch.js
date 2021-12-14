@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._switch = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _case_1 = require("./_case");
 class _switch extends instruction_1.instruction {
@@ -12,7 +13,16 @@ class _switch extends instruction_1.instruction {
         this.case_list = case_list;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        this.switch_value.translate(environment);
+        console_1._3dCode.switchEvaluation = console_1._3dCode.actualTemp;
+        console_1._3dCode.actualTag++;
+        let salida = console_1._3dCode.actualTag;
+        console_1._3dCode.breakTag = salida;
+        for (const case_instr of this.case_list) {
+            case_instr.translate(environment);
+        }
+        console_1._3dCode.output += "L" + salida + ":\n";
+        return type_1.type.NULL;
     }
     execute(environment) {
         const switch_value_data = this.switch_value.execute(environment);

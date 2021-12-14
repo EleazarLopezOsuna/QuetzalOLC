@@ -3338,6 +3338,7 @@ exports._break = _break;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._case = exports._case_type = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _return_1 = require("./_return");
 const _break_1 = require("./_break");
@@ -3354,7 +3355,45 @@ class _case extends instruction_1.instruction {
         this.type = type;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        if (this.type == _case_type.CASE) {
+            this.case_value.translate(environment);
+            const conditionTemp = console_1._3dCode.actualTemp;
+            console_1._3dCode.actualTag++;
+            let lTrue = console_1._3dCode.actualTag;
+            console_1._3dCode.output += 'if(T' + conditionTemp + ' == T' + console_1._3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
+            console_1._3dCode.actualTag++;
+            let lFalse = console_1._3dCode.actualTag;
+            console_1._3dCode.output += "goto L" + lFalse + ";\n";
+            console_1._3dCode.actualTag++;
+            let salida = console_1._3dCode.actualTag;
+            console_1._3dCode.output += "L" + lTrue + ":\n";
+            for (const instr of this.code) {
+                try {
+                    instr.translate(environment);
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+            console_1._3dCode.output += "goto L" + salida + ";\n";
+            console_1._3dCode.output += "L" + salida + ":\n";
+            console_1._3dCode.output += "L" + lFalse + ":\n";
+        }
+        else {
+            console_1._3dCode.actualTag++;
+            let salida = console_1._3dCode.actualTag;
+            for (const instr of this.code) {
+                try {
+                    instr.translate(environment);
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+            console_1._3dCode.output += "goto L" + salida + ";\n";
+            console_1._3dCode.output += "L" + salida + ":\n";
+        }
+        return type_1.type.NULL;
     }
     get_value() {
         return this.case_value;
@@ -3377,7 +3416,7 @@ class _case extends instruction_1.instruction {
 }
 exports._case = _case;
 
-},{"../abstract/instruction":5,"../system/type":48,"./_break":21,"./_return":26}],23:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":45,"../system/type":48,"./_break":21,"./_return":26}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._continue = void 0;
@@ -3604,6 +3643,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._switch = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _case_1 = require("./_case");
 class _switch extends instruction_1.instruction {
@@ -3613,7 +3653,16 @@ class _switch extends instruction_1.instruction {
         this.case_list = case_list;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        this.switch_value.translate(environment);
+        console_1._3dCode.switchEvaluation = console_1._3dCode.actualTemp;
+        console_1._3dCode.actualTag++;
+        let salida = console_1._3dCode.actualTag;
+        console_1._3dCode.breakTag = salida;
+        for (const case_instr of this.case_list) {
+            case_instr.translate(environment);
+        }
+        console_1._3dCode.output += "L" + salida + ":\n";
+        return type_1.type.NULL;
     }
     execute(environment) {
         const switch_value_data = this.switch_value.execute(environment);
@@ -3648,7 +3697,7 @@ class _switch extends instruction_1.instruction {
 }
 exports._switch = _switch;
 
-},{"../abstract/instruction":5,"../system/error":47,"../system/type":48,"./_case":22}],28:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":45,"../system/error":47,"../system/type":48,"./_case":22}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._while = exports._while_type = void 0;
@@ -4945,6 +4994,7 @@ class console {
         this.continueTag = 0;
         this.absolutePos = 33; //Initial value 33 because of default functions
         this.relativePos = 0;
+        this.switchEvaluation = 0;
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -4963,6 +5013,7 @@ class console {
         this.continueTag = 0;
         this.absolutePos = 33;
         this.relativePos = 0;
+        this.switchEvaluation = 0;
     }
 }
 exports._console = new console();

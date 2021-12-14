@@ -2,7 +2,7 @@ import { expression } from "../abstract/expression";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _console, _3dCode } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 import { _return } from "./_return";
@@ -12,7 +12,16 @@ import { _break } from "./_break";
 export class _switch extends instruction {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        this.switch_value.translate(environment);
+        _3dCode.switchEvaluation = _3dCode.actualTemp;
+        _3dCode.actualTag++;
+        let salida = _3dCode.actualTag;
+        _3dCode.breakTag = salida;
+        for (const case_instr of this.case_list) {
+            case_instr.translate(environment);
+        }
+        _3dCode.output += "L" + salida + ":\n";
+        return type.NULL
     }
 
     constructor(public switch_value: expression | literal, public case_list: Array<_case>, line: number, column: number) {

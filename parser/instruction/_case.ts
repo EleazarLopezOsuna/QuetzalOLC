@@ -1,24 +1,59 @@
 import { expression } from "../abstract/expression";
 import { environment } from "../system/environment";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _console, _3dCode } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 import { _return } from "./_return";
 import { _break } from "./_break";
 
 export enum _case_type {
-    CASE, 
+    CASE,
     DEFAULT
 }
 
 export class _case extends instruction {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        if (this.type == _case_type.CASE) {
+            this.case_value.translate(environment);
+            const conditionTemp = _3dCode.actualTemp;
+            _3dCode.actualTag++;
+            let lTrue = _3dCode.actualTag;
+            _3dCode.output += 'if(T' + conditionTemp + ' == T' + _3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
+            _3dCode.actualTag++;
+            let lFalse = _3dCode.actualTag;
+            _3dCode.output += "goto L" + lFalse + ";\n";
+            _3dCode.actualTag++;
+            let salida = _3dCode.actualTag;
+            _3dCode.output += "L" + lTrue + ":\n"
+            for (const instr of this.code) {
+                try {
+                    instr.translate(environment);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            _3dCode.output += "goto L" + salida + ";\n";
+            _3dCode.output += "L" + salida + ":\n";
+            _3dCode.output += "L" + lFalse + ":\n";
+        } else {
+            _3dCode.actualTag++;
+            let salida = _3dCode.actualTag;
+            for (const instr of this.code) {
+                try {
+                    instr.translate(environment);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            _3dCode.output += "goto L" + salida + ";\n";
+            _3dCode.output += "L" + salida + ":\n";
+        }
+        return type.NULL;
     }
 
-    constructor(public case_value: expression | literal, public code: Array<instruction>,public type: _case_type, line: number, column: number) {
+    constructor(public case_value: expression | literal, public code: Array<instruction>, public type: _case_type, line: number, column: number) {
         super(line, column);
     }
 
