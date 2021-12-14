@@ -3,6 +3,7 @@ import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
 import { _3dCode, _console } from "../system/console";
+import { _array } from "../literal/_array";
 
 export enum string_unary_type {
     LENGTH,
@@ -102,6 +103,9 @@ export class string_unary extends expression {
                         //Posible error en el return, deberia de retornar INTEGER. Comprobar
                         return { value: string_value.length, type: type.STRING };
                     default:
+                        if (expr_data.value instanceof _array) {
+                            return { value: expr_data.value.body.length, type: type.INTEGER }
+                        }
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar length para: ' + expr_data.value));
                 }
                 break;

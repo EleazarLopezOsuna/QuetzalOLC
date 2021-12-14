@@ -36,6 +36,7 @@
     const {_for} = require('../instruction/_for');
     const {declaration_array} = require('../instruction/declaration_array');
     const {array_access} = require('../instruction/array_access');
+    const {array_native_function} = require('../instruction/array_native_function');
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -354,9 +355,19 @@ pr_instruction
     }
     | pr_print tk_semicolon {$$ = $1}
     | pr_native_function tk_semicolon {$$ = $1}
-    | tk_id tk_dot tk_push tk_par_o pr_expr tk_par_c tk_semicolon
-    | tk_id tk_dot tk_pop tk_par_o tk_par_c tk_semicolon
-    | error
+    | pr_array_native_function tk_semicolon {$$ = $1}
+    | error  {
+        error_arr.push(new error(@1.first_line, @1.first_column, error_type.SINTACTICO, yytext));  
+    }
+;
+
+pr_array_native_function 
+    : pr_expr tk_dot tk_push tk_par_o pr_expr tk_par_c {
+        $$ = new array_native_function($1, $3, $5, @1.first_line,@1.first_column);
+    }
+    | pr_expr tk_dot tk_pop tk_par_o tk_par_c {
+        $$ = new array_native_function($1, $3, null, @1.first_line,@1.first_column);
+    }
 ;
 
 pr_declaration_array 
@@ -445,7 +456,6 @@ pr_assignation
     : tk_id tk_equal pr_expr {
         $$ = new assignation_unary($1, $3, @1.first_line,@1.first_column);
     }
-    | tk_id pr_access tk_equal pr_expr
 ;
 
 /*
@@ -673,7 +683,9 @@ pr_expr
     | tk_id pr_index_list {
         $$ = new array_access($1, $2, @1.first_line, @1.first_column);
     }
-    | pr_expr tk_dot tk_pop tk_par_o tk_par_c  
+    | pr_array_native_function {
+        $$ = $1
+    }
 ;
 
 pr_index_list 

@@ -5,6 +5,7 @@ const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
+const _array_1 = require("../literal/_array");
 var string_unary_type;
 (function (string_unary_type) {
     string_unary_type[string_unary_type["LENGTH"] = 0] = "LENGTH";
@@ -98,6 +99,9 @@ class string_unary extends expression_1.expression {
                         //Posible error en el return, deberia de retornar INTEGER. Comprobar
                         return { value: string_value.length, type: type_1.type.STRING };
                     default:
+                        if (expr_data.value instanceof _array_1._array) {
+                            return { value: expr_data.value.body.length, type: type_1.type.INTEGER };
+                        }
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar length para: ' + expr_data.value));
                 }
                 break;

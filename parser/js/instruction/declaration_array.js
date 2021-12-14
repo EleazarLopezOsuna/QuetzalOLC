@@ -12,7 +12,36 @@ class declaration_array extends instruction_1.instruction {
         this.value = value;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        // if is undefined save the variable with the type declared
+        if (this.value == null) {
+            // Save the variable 
+            if (environment.get_variable(this.variable_id).type != type_1.type.UNDEFINED) {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
+            }
+            else {
+                environment.save_variable(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+            }
+        }
+        // if the save variable has an expression check types
+        else {
+            // Checking both types
+            let checked = this.value.checkType(this.type, environment);
+            // if checked type save the variable
+            if (!checked) {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede iniciar con distinto tipo de dato para: ' + this.variable_id));
+            }
+            else {
+                // Save the variable 
+                if (environment.get_variable(this.variable_id).type != type_1.type.UNDEFINED) {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
+                }
+                else {
+                    environment.save_variable(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+                }
+            }
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         // if is undefined save the variable with the type declared

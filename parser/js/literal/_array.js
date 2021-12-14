@@ -112,6 +112,16 @@ class _array extends literal_1.literal {
         }
         return return_bool;
     }
+    translateElements(environment) {
+        for (const item of this.body) {
+            if (item instanceof _array) {
+                item.translateElements(environment);
+            }
+            else {
+                item.translate(environment);
+            }
+        }
+    }
     to_string(environment) {
         let result_str = "[";
         for (const item of this.body) {
