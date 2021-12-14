@@ -39,36 +39,31 @@ class _array extends literal_1.literal {
     }
     check_dimensions_length(dimensions, environment) {
         let body_pointer = this.body;
-        let dimensions_counter = 0;
-        while (body_pointer[0] instanceof _array && (dimensions_counter + 1) < dimensions.length) {
-            let dimension_data = dimensions[dimensions_counter].execute(environment);
-            // if is an arrage range just take the first value
+        let dimensions_index = 0;
+        while (dimensions_index < dimensions.length) {
+            let dimension_data = dimensions[dimensions_index].execute(environment);
             if (dimension_data.value instanceof Array) {
                 let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
-                let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[1];
+                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[1];
                 if (first_index < 0 || last_index >= body_pointer.length) {
                     return false;
                 }
+                body_pointer = body_pointer.slice(first_index, last_index + 1);
+                dimensions_index++;
             }
-            else if (dimension_data.type != type_1.type.INTEGER || dimension_data.value >= body_pointer.length
-                || dimension_data.value < 0) {
-                return false;
+            else if (body_pointer[0] instanceof _array) {
+                if (dimension_data.value < 0 || dimension_data.value >= body_pointer.length) {
+                    return false;
+                }
+                body_pointer = body_pointer[0].body;
+                dimensions_index++;
             }
-            dimensions_counter++;
-            body_pointer = body_pointer[0].body;
-        }
-        let dimension_data = dimensions[dimensions_counter].execute(environment);
-        // if is an arrage range just take the first value
-        if (dimension_data.value instanceof Array) {
-            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
-            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[1];
-            if (first_index < 0 || last_index >= body_pointer.length) {
-                return false;
+            else {
+                if (dimension_data.value < 0 || dimension_data.value >= body_pointer.length) {
+                    return false;
+                }
+                dimensions_index++;
             }
-        }
-        else if (dimension_data.type != type_1.type.INTEGER || dimension_data.value >= body_pointer.length
-            || dimension_data.value < 0) {
-            return false;
         }
         return true;
     }

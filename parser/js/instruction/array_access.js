@@ -17,7 +17,6 @@ class array_access extends instruction_1.instruction {
     execute(environment) {
         let return_data = environment.get_variable(this.id);
         if (return_data.type != type_1.type.UNDEFINED) {
-            console.log('ret arr', return_data);
             if (return_data.value instanceof _array_1._array) {
                 if (this.dimensions.length == 0) {
                     return return_data;
