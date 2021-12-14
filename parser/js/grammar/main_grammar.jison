@@ -355,7 +355,7 @@ pr_instruction
     | pr_print tk_semicolon {$$ = $1}
     | pr_native_function tk_semicolon {$$ = $1}
     | tk_id tk_dot tk_push tk_par_o pr_expr tk_par_c tk_semicolon
-    | tk_id tk_dot tk_pop tk_par_o tk_par_c  
+    | tk_id tk_dot tk_pop tk_par_o tk_par_c tk_semicolon
     | error
 ;
 
