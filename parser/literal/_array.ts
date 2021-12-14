@@ -103,6 +103,16 @@ export class _array extends literal {
         return return_bool;
     }
 
+    public translateElements(environment: environment){
+        for(const item of this.body){
+            if(item instanceof _array){
+                item.translateElements(environment)
+            } else {
+                item.translate(environment)
+            }
+        }
+    }
+
     public to_string(environment: environment): string {
         let result_str = "["
         for (const item of this.body) {

@@ -354,6 +354,7 @@ pr_instruction
     }
     | pr_print tk_semicolon {$$ = $1}
     | pr_native_function tk_semicolon {$$ = $1}
+    | tk_id tk_dot tk_push tk_par_o pr_expr tk_par_c tk_semicolon
     | error
 ;
 
@@ -574,7 +575,7 @@ pr_else
 pr_expr
     : pr_expr tk_plus pr_expr {
         $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.PLUS, @1.first_line,@1.first_column);
-    }   
+    }
     | pr_expr tk_minus pr_expr {
         $$ = new arithmetic_binary($1, $3, arithmetic_binary_type.MINUS, @1.first_line,@1.first_column);
     }
@@ -671,6 +672,7 @@ pr_expr
     | tk_id pr_index_list {
         $$ = new array_access($1, $2, @1.first_line, @1.first_column);
     }
+    | pr_expr tk_dot tk_pop tk_par_o tk_par_c  
 ;
 
 pr_index_list 
