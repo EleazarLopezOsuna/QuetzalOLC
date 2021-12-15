@@ -4,6 +4,7 @@ import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
 import { _console, _3dCode } from "../system/console";
 import { _array } from "../literal/_array";
+import { struct_item } from "../literal/struct_item";
 
 export enum print_type {
     PRINT,
@@ -79,8 +80,8 @@ export class print extends instruction {
         this.expresions.forEach(element => {
             const expr_data = element.execute(environment);
             let print_str = expr_data.value
-            // if is an array convert to string first 
-            if (expr_data.value instanceof _array) {
+            // if is an array or a struct convert to string first 
+            if (expr_data.value instanceof _array || expr_data.value instanceof struct_item) {
                 print_str = expr_data.value.to_string(environment)
             }
             switch (this.type) {

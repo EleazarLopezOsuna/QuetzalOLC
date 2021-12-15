@@ -35,6 +35,8 @@
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
     const {_for} = require('../instruction/_for');
     const {declaration_array} = require('../instruction/declaration_array');
+    const {declaration_struct} = require('../instruction/declaration_struct');
+    const {declaration_struct_item} = require('../instruction/declaration_struct_item');
     const {array_access} = require('../instruction/array_access');
     const {array_native_function} = require('../instruction/array_native_function');
     const {assignation_array} = require('../instruction/assignation_array');
@@ -192,7 +194,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %%
 
 // pr_init    
-//     : pr_assignation EOF {
+//     : pr_declaration_item EOF {
 //         return $1;
 //     } 
 // ;
@@ -229,7 +231,8 @@ pr_main
 pr_global
     : pr_declaration_function {$$ = $1}
     | pr_declaration_list tk_semicolon {$$ = $1}
-    | pr_declare_struct tk_semicolon {$$ = $1}
+    | pr_declaration_struct tk_semicolon {$$ = $1}
+    | pr_declaration_array tk_semicolon {$$ = $1}
 ;
 
 /* Funciones y metodos, 2 producciones para cada uno (trae o no parametros) */
@@ -275,7 +278,7 @@ pr_declaration_item
     : tk_id tk_equal pr_expr {
         $$ = new declaration_item($1, $3, @1.first_line,@1.first_column);
     }
-    | tk_id{
+    | tk_id {
         $$ = new declaration_item($1, null, @1.first_line,@1.first_column);
     }
 ;
@@ -286,8 +289,10 @@ pr_declaration_item
         Strint nombre
     }
 */
-pr_declare_struct
-    : tk_struct tk_id tk_cbra_o pr_params tk_cbra_c
+pr_declaration_struct
+    : tk_struct tk_id tk_cbra_o pr_params tk_cbra_c {
+        $$ = new declaration_struct($2, $4, @1.first_line,@1.first_column);
+    }
 ;
 
 pr_type
@@ -340,11 +345,14 @@ pr_instruction
     | pr_while {$$ = $1}
     | pr_do {$$ = $1}
     | pr_for {$$ = $1}
+    | tk_id tk_id tk_equal tk_id tk_par_o pr_expression_list tk_par_c tk_semicolon{
+        $$ = new declaration_struct_item([$1,$4], $2, $6, @1.first_line,@1.first_column);
+    }
     | pr_unary_instruction tk_semicolon {$$ = $1}
     | pr_assignation tk_semicolon {$$ = $1}
     | pr_call tk_semicolon {$$ = $1}
     | pr_declaration_list tk_semicolon {$$ = $1}
-    | pr_declare_struct tk_semicolon {$$ = $1}
+    | pr_declaration_struct tk_semicolon {$$ = $1}
     | pr_declaration_array tk_semicolon {$$ = $1}
     | tk_break tk_semicolon { 
         $$ = new _break($2, @1.first_line,@1.first_column);
