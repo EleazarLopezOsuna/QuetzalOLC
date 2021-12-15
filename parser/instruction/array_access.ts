@@ -11,7 +11,20 @@ import { array_range } from "../expression/array_range";
 export class array_access extends instruction {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        console.log('Hola')
+        let return_data = environment.get_variable(this.id)
+        if (return_data.type != type.UNDEFINED) {
+            if (return_data.value instanceof _array) {
+                let returned = return_data.value.get(this.dimensions, environment)
+                console.log(this.dimensions)
+                return return_data.type
+            } else {
+                
+            }
+        } else {
+            
+        }
+        return type.NULL
     }
 
     constructor(public id: string, public dimensions: Array<expression | literal | array_range>, line: number, column: number) {
