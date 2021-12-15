@@ -37,6 +37,8 @@
     const {declaration_array} = require('../instruction/declaration_array');
     const {array_access} = require('../instruction/array_access');
     const {array_native_function} = require('../instruction/array_native_function');
+    const {assignation_array} = require('../instruction/assignation_array');
+
 
     const {native} = require('../literal/native');
     const {variable_id, variable_id_type} = require('../literal/variable_id');
@@ -190,7 +192,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 %%
 
 // pr_init    
-//     : pr_declaration_array EOF {
+//     : pr_assignation EOF {
 //         return $1;
 //     } 
 // ;
@@ -383,6 +385,12 @@ pr_declaration_array
     | pr_type tk_bra_o tk_bra_c tk_id tk_equal pr_array {
         $$ = new declaration_array($1, $4, $6, @1.first_line,@1.first_column);
     }
+    | pr_type tk_id tk_bra_o tk_bra_c tk_equal tk_hash pr_expr {
+        $$ = new declaration_array($1, $2, $7, @1.first_line,@1.first_column);
+    }
+    | pr_type tk_bra_o tk_bra_c tk_id tk_equal tk_hash pr_expr {
+        $$ = new declaration_array($1, $4, $7, @1.first_line,@1.first_column);
+    }
 ; 
 
 pr_array_list
@@ -455,6 +463,9 @@ pr_native_function_option
 pr_assignation
     : tk_id tk_equal pr_expr {
         $$ = new assignation_unary($1, $3, @1.first_line,@1.first_column);
+    }
+    | tk_id pr_index_list tk_equal pr_expr {
+        $$ = new assignation_array($1, $2, $4, @1.first_line, @1.first_column);
     }
 ;
 

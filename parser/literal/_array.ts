@@ -16,6 +16,32 @@ export class _array extends literal {
         super(line, column);
     }
 
+    public assign_value(dimensions: Array<expression | literal | array_range>, environment: environment, expr: expression | literal) {
+        let body_pointer = this.body
+        let dimensions_index = 0
+        let dimension_data: data = { type: type.UNDEFINED, value: null }
+        while (dimensions_index < dimensions.length) {
+            dimension_data = dimensions[dimensions_index].execute(environment)
+            if (dimension_data.value instanceof Array) {
+                return false
+            } else if (body_pointer[0] instanceof _array) {
+                let item = body_pointer[dimension_data.value]
+                if (item instanceof _array) {
+                    body_pointer = item.body
+                } else {
+                    return false
+                }
+                dimensions_index++
+            } else {
+                dimensions_index++
+            }
+        }
+        if (dimension_data.type != type.UNDEFINED) {
+            body_pointer[dimension_data.value] = expr
+        }
+        return true
+    }
+
     public check_dimensions_number(dimensions: Array<expression | literal | array_range>): boolean {
         let checked = false
         let body_pointer = this.body
@@ -47,7 +73,7 @@ export class _array extends literal {
             if (dimension_data.value instanceof Array) {
                 let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0]
                 let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[1]
-                if(first_index < 0 || last_index >= body_pointer.length) {
+                if (first_index < 0 || last_index >= body_pointer.length) {
                     return false
                 }
                 body_pointer = body_pointer.slice(first_index, last_index + 1)
@@ -111,9 +137,9 @@ export class _array extends literal {
         return return_bool;
     }
 
-    public translateElements(environment: environment){
-        for(const item of this.body){
-            if(item instanceof _array){
+    public translateElements(environment: environment) {
+        for (const item of this.body) {
+            if (item instanceof _array) {
                 item.translateElements(environment)
             } else {
                 item.translate(environment)

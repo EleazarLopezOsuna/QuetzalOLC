@@ -14,16 +14,16 @@ export class assignation_unary extends instruction {
         // validate that exists
         let saved_variable = environment.get_variable(this.id)
         let absolutePos = environment.get_absolute(this.id);
-        if (saved_variable.type != type.NULL) {
+        if (saved_variable.type != type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == exprType) {
                 // assign the value
                 _3dCode.output += 'STACK[' + absolutePos + '] = T' + _3dCode.actualTemp + ';//Update value for variable ' + this.id + '\n';
             } else {
-                
+
             }
         } else {
-            
+
         }
         // Default
         return type.NULL
@@ -37,7 +37,7 @@ export class assignation_unary extends instruction {
         const expr_data = this.expr.execute(environment);
         // validate that exists
         let saved_variable = environment.get_variable(this.id)
-        if (saved_variable.type != type.NULL) {
+        if (saved_variable.type != type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == expr_data.type) {
                 // assign the value

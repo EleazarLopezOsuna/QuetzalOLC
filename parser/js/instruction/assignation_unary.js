@@ -16,7 +16,7 @@ class assignation_unary extends instruction_1.instruction {
         // validate that exists
         let saved_variable = environment.get_variable(this.id);
         let absolutePos = environment.get_absolute(this.id);
-        if (saved_variable.type != type_1.type.NULL) {
+        if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == exprType) {
                 // assign the value
@@ -34,7 +34,7 @@ class assignation_unary extends instruction_1.instruction {
         const expr_data = this.expr.execute(environment);
         // validate that exists
         let saved_variable = environment.get_variable(this.id);
-        if (saved_variable.type != type_1.type.NULL) {
+        if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == expr_data.type) {
                 // assign the value
