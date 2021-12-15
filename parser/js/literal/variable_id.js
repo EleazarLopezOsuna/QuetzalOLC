@@ -19,9 +19,13 @@ class variable_id extends literal_1.literal {
     translate(environment) {
         let return_data = environment.get_variable(this.id);
         let absolute = environment.get_absolute(this.id);
+        let relative = environment.get_relative(this.id);
         if (return_data.type != type_1.type.NULL) {
             console_1._3dCode.actualTemp++;
-            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolute + '];//Getting value of variable ' + this.id + '\n';
+            let posVar = console_1._3dCode.actualTemp;
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relative + ';\n';
+            console_1._3dCode.actualTemp++;
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
             return return_data.type;
         }
         else {

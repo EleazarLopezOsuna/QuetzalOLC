@@ -15,9 +15,11 @@ export class declaration_list extends instruction {
             tData.type = itemType
             if (itemType == type.NULL) {
                 if (environment.get_variable(item.variable_id).value != null) {
-                    
+
                 } else {
-                    _3dCode.output += 'STACK[' + _3dCode.absolutePos + '] = 0;//Save variable ' + item.variable_id + '\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
                     environment.save_variable(item.variable_id, tData, _3dCode.absolutePos, _3dCode.relativePos, 1)
                     _3dCode.absolutePos++;
                     _3dCode.relativePos++;
@@ -29,12 +31,14 @@ export class declaration_list extends instruction {
                     checked = true
                 }
                 if (!checked) {
-                    
+
                 } else {
                     if (environment.get_variable(item.variable_id).value != null) {
-                        
+
                     } else {
-                        _3dCode.output += 'STACK[' + _3dCode.absolutePos + '] = T' + itemTemp + ';//Save variable ' + item.variable_id + '\n';
+                        _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n';
+                        _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + itemTemp + ';//Save variable ' + item.variable_id + '\n';
                         environment.save_variable(item.variable_id, tData, _3dCode.absolutePos, _3dCode.relativePos, 1)
                         _3dCode.absolutePos++;
                         _3dCode.relativePos++;

@@ -14,12 +14,16 @@ export class variable_id extends literal {
     public translate(environment: environment): type {
         let return_data = environment.get_variable(this.id)
         let absolute = environment.get_absolute(this.id)
-        if(return_data.type != type.NULL) {
+        let relative = environment.get_relative(this.id)
+        if (return_data.type != type.NULL) {
             _3dCode.actualTemp++;
-            _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[' + absolute + '];//Getting value of variable ' + this.id + '\n';
+            let posVar = _3dCode.actualTemp;
+            _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + relative + ';\n';
+            _3dCode.actualTemp++;
+            _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
             return return_data.type
         } else {
-            
+
         }
         return type.NULL;
     }

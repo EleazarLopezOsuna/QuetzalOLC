@@ -4167,6 +4167,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_array = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _array_1 = require("../literal/_array");
 const variable_id_1 = require("../literal/variable_id");
@@ -4178,16 +4179,21 @@ class declaration_array extends instruction_1.instruction {
         this.value = value;
     }
     translate(environment) {
-        // if is undefined save the variable with the type declared
         if (this.value == null) {
-            // Save the variable 
             if (environment.get_variable(this.variable_id).type != type_1.type.UNDEFINED) {
-                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             }
             else {
-                environment.save_variable(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + console_1._3dCode.relativePos + ' of this context\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;\n';
+                //Size is 0 because its just declaration without assignation of values
+                environment.save_variable(this.variable_id, { value: this.value, type: this.type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 0);
+                console_1._3dCode.absolutePos++;
+                console_1._3dCode.relativePos++;
             }
         }
+<<<<<<< HEAD
         // if the save variable has an expression check types
         else if (this.value instanceof _array_1._array) {
             // Checking both types
@@ -4205,6 +4211,12 @@ class declaration_array extends instruction_1.instruction {
                     environment.save_variable(this.variable_id, { value: this.value, type: this.type }, 0, 0, 0);
                 }
             }
+=======
+        else {
+            console_1._3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + console_1._3dCode.relativePos + ' of this context\n';
+            environment.save_variable(this.variable_id, { value: this.value, type: this.type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, this.value.body.length);
+            this.value.translateElements(environment);
+>>>>>>> 3a9edeae1dfd48d2b50623295c3c32c5465d22dc
         }
         // Default
         return type_1.type.NULL;
@@ -4272,7 +4284,11 @@ class declaration_array extends instruction_1.instruction {
 }
 exports.declaration_array = declaration_array;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../literal/_array":42,"../literal/variable_id":44,"../system/error":48,"../system/type":49}],34:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../system/console":45,"../system/error":47,"../system/type":48}],33:[function(require,module,exports){
+>>>>>>> 3a9edeae1dfd48d2b50623295c3c32c5465d22dc
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_function = void 0;
@@ -4361,7 +4377,9 @@ class declaration_list extends instruction_1.instruction {
                 if (environment.get_variable(item.variable_id).value != null) {
                 }
                 else {
-                    console_1._3dCode.output += 'STACK[' + console_1._3dCode.absolutePos + '] = 0;//Save variable ' + item.variable_id + '\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
                     environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                     console_1._3dCode.absolutePos++;
                     console_1._3dCode.relativePos++;
@@ -4379,7 +4397,9 @@ class declaration_list extends instruction_1.instruction {
                     if (environment.get_variable(item.variable_id).value != null) {
                     }
                     else {
-                        console_1._3dCode.output += 'STACK[' + console_1._3dCode.absolutePos + '] = T' + itemTemp + ';//Save variable ' + item.variable_id + '\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + itemTemp + ';//Save variable ' + item.variable_id + '\n';
                         environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                         console_1._3dCode.absolutePos++;
                         console_1._3dCode.relativePos++;
@@ -4456,6 +4476,7 @@ class main extends instruction_1.instruction {
     }
     translate(environment) {
         console_1._3dCode.output += 'void main(){\n';
+        console_1._3dCode.output += 'SP = 33;\n';
         this.code.forEach(element => {
             element.translate(environment);
         });
@@ -4851,14 +4872,17 @@ class unary_instruction extends expression_1.expression {
             return type_1.type.NULL;
         }
         let absolutePos = environment.get_absolute(this.variable_id);
+        let relative = environment.get_relative(this.variable_id);
         switch (this.type) {
             case unary_instruction_type.INCREMENT:
                 switch (variable_data.type) {
                     case type_1.type.INTEGER:
+                        let posVariable = console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + posVariable + ' = SP + ' + relative + ';\n';
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVariable + '];//Get value of variable ' + this.variable_id + '\n';
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + 1;\n';
-                        console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + posVariable + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
                         break;
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar ++ para: ' + variable_data.value));
@@ -4867,10 +4891,12 @@ class unary_instruction extends expression_1.expression {
             case unary_instruction_type.DECREMENT:
                 switch (variable_data.type) {
                     case type_1.type.INTEGER:
+                        let posVariable = console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + posVariable + ' = SP + ' + relative + ';\n';
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVariable + '];//Get value of variable ' + this.variable_id + '\n';
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' - 1;\n';
-                        console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + posVariable + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
                         break;
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar -- para: ' + variable_data.value));
@@ -4920,6 +4946,7 @@ exports.unary_instruction = unary_instruction;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._array = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const literal_1 = require("../abstract/literal");
 const array_range_1 = require("../expression/array_range");
 class _array extends literal_1.literal {
@@ -5059,13 +5086,21 @@ class _array extends literal_1.literal {
         return return_bool;
     }
     translateElements(environment) {
+        let contador = 0;
         for (const item of this.body) {
             if (item instanceof _array) {
                 item.translateElements(environment);
             }
             else {
                 item.translate(environment);
+                let itemTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + itemTemp + ';//Save value in array, index ' + contador + '\n';
+                console_1._3dCode.absolutePos++;
+                console_1._3dCode.relativePos++;
             }
+            contador++;
         }
     }
     to_string(environment) {
@@ -5092,7 +5127,11 @@ class _array extends literal_1.literal {
 }
 exports._array = _array;
 
+<<<<<<< HEAD
 },{"../abstract/literal":6,"../expression/array_range":10,"../system/type":49}],43:[function(require,module,exports){
+=======
+},{"../abstract/literal":6,"../expression/array_range":10,"../system/console":45,"../system/type":48}],42:[function(require,module,exports){
+>>>>>>> 3a9edeae1dfd48d2b50623295c3c32c5465d22dc
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native = void 0;
@@ -5184,9 +5223,13 @@ class variable_id extends literal_1.literal {
     translate(environment) {
         let return_data = environment.get_variable(this.id);
         let absolute = environment.get_absolute(this.id);
+        let relative = environment.get_relative(this.id);
         if (return_data.type != type_1.type.NULL) {
             console_1._3dCode.actualTemp++;
-            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolute + '];//Getting value of variable ' + this.id + '\n';
+            let posVar = console_1._3dCode.actualTemp;
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relative + ';\n';
+            console_1._3dCode.actualTemp++;
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
             return return_data.type;
         }
         else {

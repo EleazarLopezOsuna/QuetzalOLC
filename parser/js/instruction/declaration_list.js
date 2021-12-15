@@ -21,7 +21,9 @@ class declaration_list extends instruction_1.instruction {
                 if (environment.get_variable(item.variable_id).value != null) {
                 }
                 else {
-                    console_1._3dCode.output += 'STACK[' + console_1._3dCode.absolutePos + '] = 0;//Save variable ' + item.variable_id + '\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
                     environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                     console_1._3dCode.absolutePos++;
                     console_1._3dCode.relativePos++;
@@ -39,7 +41,9 @@ class declaration_list extends instruction_1.instruction {
                     if (environment.get_variable(item.variable_id).value != null) {
                     }
                     else {
-                        console_1._3dCode.output += 'STACK[' + console_1._3dCode.absolutePos + '] = T' + itemTemp + ';//Save variable ' + item.variable_id + '\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + itemTemp + ';//Save variable ' + item.variable_id + '\n';
                         environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                         console_1._3dCode.absolutePos++;
                         console_1._3dCode.relativePos++;
