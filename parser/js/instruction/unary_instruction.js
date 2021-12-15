@@ -22,14 +22,17 @@ class unary_instruction extends expression_1.expression {
             return type_1.type.NULL;
         }
         let absolutePos = environment.get_absolute(this.variable_id);
+        let relative = environment.get_relative(this.variable_id);
         switch (this.type) {
             case unary_instruction_type.INCREMENT:
                 switch (variable_data.type) {
                     case type_1.type.INTEGER:
+                        let posVariable = console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + posVariable + ' = SP + ' + relative + ';\n';
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVariable + '];//Get value of variable ' + this.variable_id + '\n';
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + 1;\n';
-                        console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + posVariable + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
                         break;
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar ++ para: ' + variable_data.value));
@@ -38,10 +41,12 @@ class unary_instruction extends expression_1.expression {
             case unary_instruction_type.DECREMENT:
                 switch (variable_data.type) {
                     case type_1.type.INTEGER:
+                        let posVariable = console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + posVariable + ' = SP + ' + relative + ';\n';
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[' + absolutePos + '];//Get value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVariable + '];//Get value of variable ' + this.variable_id + '\n';
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' - 1;\n';
-                        console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + posVariable + '] = T' + console_1._3dCode.actualTemp + ';//Update value of variable ' + this.variable_id + '\n';
                         break;
                     default:
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar -- para: ' + variable_data.value));

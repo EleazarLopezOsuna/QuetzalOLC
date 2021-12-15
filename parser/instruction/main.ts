@@ -7,6 +7,7 @@ export class main extends instruction {
 
     public translate(environment: environment): type {
         _3dCode.output += 'void main(){\n';
+        _3dCode.output += 'SP = 33;\n';
         this.code.forEach(element => {
             element.translate(environment)
         });

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._array = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const literal_1 = require("../abstract/literal");
 const array_range_1 = require("../expression/array_range");
 class _array extends literal_1.literal {
@@ -113,13 +114,21 @@ class _array extends literal_1.literal {
         return return_bool;
     }
     translateElements(environment) {
+        let contador = 0;
         for (const item of this.body) {
             if (item instanceof _array) {
                 item.translateElements(environment);
             }
             else {
                 item.translate(environment);
+                let itemTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + itemTemp + ';//Save value in array, index ' + contador + '\n';
+                console_1._3dCode.absolutePos++;
+                console_1._3dCode.relativePos++;
             }
+            contador++;
         }
     }
     to_string(environment) {

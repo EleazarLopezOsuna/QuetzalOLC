@@ -112,12 +112,20 @@ export class _array extends literal {
     }
 
     public translateElements(environment: environment){
+        let contador = 0;
         for(const item of this.body){
             if(item instanceof _array){
                 item.translateElements(environment)
             } else {
-                item.translate(environment)
+                item.translate(environment);
+                let itemTemp = _3dCode.actualTemp;
+                _3dCode.actualTemp++;
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n'; 
+                _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + itemTemp + ';//Save value in array, index ' + contador + '\n';
+                _3dCode.absolutePos++;
+                _3dCode.relativePos++;
             }
+            contador++;
         }
     }
 
