@@ -12,7 +12,20 @@ class array_access extends instruction_1.instruction {
         this.dimensions = dimensions;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console.log('Hola');
+        let return_data = environment.get_variable(this.id);
+        if (return_data.type != type_1.type.UNDEFINED) {
+            if (return_data.value instanceof _array_1._array) {
+                let returned = return_data.value.get(this.dimensions, environment);
+                console.log(this.dimensions);
+                return return_data.type;
+            }
+            else {
+            }
+        }
+        else {
+        }
+        return type_1.type.NULL;
     }
     execute(environment) {
         let return_data = environment.get_variable(this.id);
