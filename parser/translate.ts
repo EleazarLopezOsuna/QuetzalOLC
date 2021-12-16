@@ -94,7 +94,7 @@ function generateStringConcat() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -111,7 +111,7 @@ function generateStringPrint() {
     code += 'goto L0;\n';
     code += 'L1:\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -131,7 +131,7 @@ function generateOutOfBounds() {
     code += 'printf("%c", 100); //d\n';
     code += 'printf("%c", 115); //s\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -151,7 +151,7 @@ function generateDivisionBy0() {
     code += 'printf("%c", 32); // \n';
     code += 'printf("%c", 48); //0\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -177,7 +177,7 @@ function generateLowerCase() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -203,7 +203,7 @@ function generateUpperCase() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -234,7 +234,7 @@ function generateStringTimes() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T2;//Set return\n';
     code += 'return;//\n';
-    code += '}'
+    code += '}\n\n'
     return code;
 }
 
@@ -254,7 +254,7 @@ function generateNumberPower() {
     code += 'T0 = SP + 0;//Set return index\n';
     code += 'STACK[(int)T0] = T2;//Set return value\n';
     code += 'return;//Go back\n';
-    code += '}'
+    code += '}\n\n'
     return code;
 }
 
@@ -286,7 +286,7 @@ function generateIntToString() {
     code += 'HEAP[(int)HP] = 36; //Set end of string\n'
     code += 'HP = HP + 1; //Increase HP\n'
     code += 'return;\n'
-    code += '}\n'
+    code += '}\n\n'
     return code;
 }
 
@@ -305,7 +305,7 @@ function generateStringLength() {
     code += 'T0 = SP + 0;\n';
     code += 'STACK[(int)T0] = T2;\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -338,7 +338,7 @@ function generateStringPosition() {
     code += 'HEAP[(int)HP] = 36;\n';
     code += 'HP = HP + 1;\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -387,7 +387,7 @@ function generateStringExtract() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T4;//Set return\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -513,7 +513,7 @@ function generateTypeOf() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -575,7 +575,7 @@ function generateStringToInt() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T3;//Set return to result\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -653,7 +653,7 @@ function generateStringToFloat() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T3;//Set return to result\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -699,6 +699,6 @@ function generateFloatToString() {
     code += 'T0 = SP + 0;\n';
     code += 'STACK[(int)T0] = T1;//Save return\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }

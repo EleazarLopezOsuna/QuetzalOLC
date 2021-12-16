@@ -13,6 +13,9 @@ export class native_function extends instruction {
         const dataTemp = _3dCode.actualTemp;
         let savedEnvironment = 0;
         let resultTemp = 0;
+        let numero = 0;
+        let entero = 0;
+        let flotante = 0;
         switch (this.option) {
             case "toInt":
                 if (dataType == type.FLOAT) {
@@ -61,11 +64,11 @@ export class native_function extends instruction {
                 savedEnvironment = _3dCode.actualTemp;
                 if (dataType == type.FLOAT) {
                     _3dCode.actualTemp++;
-                    const numero = _3dCode.actualTemp;
+                    numero = _3dCode.actualTemp;
                     _3dCode.actualTemp++;
-                    const entero = _3dCode.actualTemp;
+                    entero = _3dCode.actualTemp;
                     _3dCode.actualTemp++;
-                    const flotante = _3dCode.actualTemp;
+                    flotante = _3dCode.actualTemp;
                     _3dCode.output += 'T' + numero + ' = T' + dataTemp + ';//Get value\n';
                     _3dCode.output += 'T' + entero + ' = (int)T' + numero + ';//Get integer part\n';
                     _3dCode.output += 'T' + flotante + ' = T' + numero + ' - T' + entero + ';//Get float part\n';
@@ -83,7 +86,17 @@ export class native_function extends instruction {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
                     return type.STRING;
                 } else if (dataType == type.INTEGER) {
-                    
+                    _3dCode.actualTemp++;
+                    numero = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + numero + ' = T' + dataTemp + ';//Get value\n';
+                    _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    _3dCode.output += 'SP = 14;//Set intToString environment\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;//Set position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + numero + ';//Save value\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = HP;//Save start position of string\n';
+                    _3dCode.output += 'intToString();//Call function\n';
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n'; 
                     return type.STRING;
                 } else if (dataType == type.CHAR){
                     return type.CHAR

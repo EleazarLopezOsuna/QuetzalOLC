@@ -4678,6 +4678,9 @@ class native_function extends instruction_1.instruction {
         const dataTemp = console_1._3dCode.actualTemp;
         let savedEnvironment = 0;
         let resultTemp = 0;
+        let numero = 0;
+        let entero = 0;
+        let flotante = 0;
         switch (this.option) {
             case "toInt":
                 if (dataType == type_1.type.FLOAT) {
@@ -4728,11 +4731,11 @@ class native_function extends instruction_1.instruction {
                 savedEnvironment = console_1._3dCode.actualTemp;
                 if (dataType == type_1.type.FLOAT) {
                     console_1._3dCode.actualTemp++;
-                    const numero = console_1._3dCode.actualTemp;
+                    numero = console_1._3dCode.actualTemp;
                     console_1._3dCode.actualTemp++;
-                    const entero = console_1._3dCode.actualTemp;
+                    entero = console_1._3dCode.actualTemp;
                     console_1._3dCode.actualTemp++;
-                    const flotante = console_1._3dCode.actualTemp;
+                    flotante = console_1._3dCode.actualTemp;
                     console_1._3dCode.output += 'T' + numero + ' = T' + dataTemp + ';//Get value\n';
                     console_1._3dCode.output += 'T' + entero + ' = (int)T' + numero + ';//Get integer part\n';
                     console_1._3dCode.output += 'T' + flotante + ' = T' + numero + ' - T' + entero + ';//Get float part\n';
@@ -4751,6 +4754,17 @@ class native_function extends instruction_1.instruction {
                     return type_1.type.STRING;
                 }
                 else if (dataType == type_1.type.INTEGER) {
+                    console_1._3dCode.actualTemp++;
+                    numero = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + numero + ' = T' + dataTemp + ';//Get value\n';
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 14;//Set intToString environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + numero + ';//Save value\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = HP;//Save start position of string\n';
+                    console_1._3dCode.output += 'intToString();//Call function\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
                     return type_1.type.STRING;
                 }
                 else if (dataType == type_1.type.CHAR) {
@@ -5883,7 +5897,7 @@ function generateStringConcat() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateStringPrint() {
@@ -5899,7 +5913,7 @@ function generateStringPrint() {
     code += 'goto L0;\n';
     code += 'L1:\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateOutOfBounds() {
@@ -5918,7 +5932,7 @@ function generateOutOfBounds() {
     code += 'printf("%c", 100); //d\n';
     code += 'printf("%c", 115); //s\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateDivisionBy0() {
@@ -5937,7 +5951,7 @@ function generateDivisionBy0() {
     code += 'printf("%c", 32); // \n';
     code += 'printf("%c", 48); //0\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateLowerCase() {
@@ -5962,7 +5976,7 @@ function generateLowerCase() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateUpperCase() {
@@ -5987,7 +6001,7 @@ function generateUpperCase() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateStringTimes() {
@@ -6017,7 +6031,7 @@ function generateStringTimes() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T2;//Set return\n';
     code += 'return;//\n';
-    code += '}';
+    code += '}\n\n';
     return code;
 }
 function generateNumberPower() {
@@ -6036,7 +6050,7 @@ function generateNumberPower() {
     code += 'T0 = SP + 0;//Set return index\n';
     code += 'STACK[(int)T0] = T2;//Set return value\n';
     code += 'return;//Go back\n';
-    code += '}';
+    code += '}\n\n';
     return code;
 }
 function generateIntToString() {
@@ -6067,7 +6081,7 @@ function generateIntToString() {
     code += 'HEAP[(int)HP] = 36; //Set end of string\n';
     code += 'HP = HP + 1; //Increase HP\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateStringLength() {
@@ -6085,7 +6099,7 @@ function generateStringLength() {
     code += 'T0 = SP + 0;\n';
     code += 'STACK[(int)T0] = T2;\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateStringPosition() {
@@ -6117,7 +6131,7 @@ function generateStringPosition() {
     code += 'HEAP[(int)HP] = 36;\n';
     code += 'HP = HP + 1;\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateStringExtract() {
@@ -6165,7 +6179,7 @@ function generateStringExtract() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T4;//Set return\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateTypeOf() {
@@ -6290,7 +6304,7 @@ function generateTypeOf() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateStringToInt() {
@@ -6351,7 +6365,7 @@ function generateStringToInt() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T3;//Set return to result\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateStringToFloat() {
@@ -6428,7 +6442,7 @@ function generateStringToFloat() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T3;//Set return to result\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 function generateFloatToString() {
@@ -6473,7 +6487,7 @@ function generateFloatToString() {
     code += 'T0 = SP + 0;\n';
     code += 'STACK[(int)T0] = T1;//Save return\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
