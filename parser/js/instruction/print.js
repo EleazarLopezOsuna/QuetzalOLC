@@ -5,6 +5,7 @@ const instruction_1 = require("../abstract/instruction");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const _array_1 = require("../literal/_array");
+const struct_item_1 = require("../literal/struct_item");
 var print_type;
 (function (print_type) {
     print_type[print_type["PRINT"] = 0] = "PRINT";
@@ -78,8 +79,8 @@ class print extends instruction_1.instruction {
         this.expresions.forEach(element => {
             const expr_data = element.execute(environment);
             let print_str = expr_data.value;
-            // if is an array convert to string first 
-            if (expr_data.value instanceof _array_1._array) {
+            // if is an array or a struct convert to string first 
+            if (expr_data.value instanceof _array_1._array || expr_data.value instanceof struct_item_1.struct_item) {
                 print_str = expr_data.value.to_string(environment);
             }
             switch (this.type) {

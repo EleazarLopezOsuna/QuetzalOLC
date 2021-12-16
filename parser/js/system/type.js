@@ -11,6 +11,8 @@ var type;
     type[type["NULL"] = 5] = "NULL";
     type[type["VOID"] = 6] = "VOID";
     type[type["UNDEFINED"] = 7] = "UNDEFINED";
+    type[type["STRUCT"] = 8] = "STRUCT";
+    type[type["STRUCT_ITEM"] = 9] = "STRUCT_ITEM";
 })(type = exports.type || (exports.type = {}));
 /*
         INTEGER        STRING       BOOLEAN       FLOAT     CHAR
