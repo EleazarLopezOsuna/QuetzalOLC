@@ -3992,11 +3992,7 @@ class array_access extends instruction_1.instruction {
 }
 exports.array_access = array_access;
 
-<<<<<<< HEAD
-},{"../abstract/instruction":5,"../literal/_array":46,"../system/error":54,"../system/type":55}],30:[function(require,module,exports){
-=======
-},{"../abstract/instruction":5,"../literal/_array":45,"../system/console":51,"../system/error":53,"../system/type":54}],30:[function(require,module,exports){
->>>>>>> f42353c90eed2189197a7f1abf5cc4dad450188d
+},{"../abstract/instruction":5,"../literal/_array":46,"../system/console":52,"../system/error":54,"../system/type":55}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_native_function = void 0;
@@ -4146,11 +4142,7 @@ class assignation_array extends instruction_1.instruction {
 }
 exports.assignation_array = assignation_array;
 
-<<<<<<< HEAD
-},{"../abstract/instruction":5,"../literal/_array":46,"../system/error":54,"../system/type":55}],32:[function(require,module,exports){
-=======
-},{"../abstract/instruction":5,"../literal/_array":45,"../system/console":51,"../system/error":53,"../system/type":54}],32:[function(require,module,exports){
->>>>>>> f42353c90eed2189197a7f1abf5cc4dad450188d
+},{"../abstract/instruction":5,"../literal/_array":46,"../system/console":52,"../system/error":54,"../system/type":55}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
@@ -4389,11 +4381,7 @@ class declaration_array extends instruction_1.instruction {
 }
 exports.declaration_array = declaration_array;
 
-<<<<<<< HEAD
 },{"../abstract/instruction":5,"../literal/_array":46,"../literal/variable_id":50,"../system/console":52,"../system/error":54,"../system/type":55}],35:[function(require,module,exports){
-=======
-},{"../abstract/instruction":5,"../literal/_array":45,"../literal/variable_id":49,"../system/console":51,"../system/error":53,"../system/type":54}],35:[function(require,module,exports){
->>>>>>> f42353c90eed2189197a7f1abf5cc4dad450188d
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_function = void 0;
@@ -4684,7 +4672,7 @@ class main extends instruction_1.instruction {
     }
     translate(environment) {
         console_1._3dCode.output += 'void main(){\n';
-        console_1._3dCode.output += 'SP = 33;\n';
+        console_1._3dCode.output += 'SP = 36;\n';
         this.code.forEach(element => {
             element.translate(environment);
         });
@@ -4769,6 +4757,38 @@ class native_function extends instruction_1.instruction {
                     return type_1.type.FLOAT;
                 }
             case "string":
+                console_1._3dCode.actualTemp++;
+                savedEnvironment = console_1._3dCode.actualTemp;
+                if (dataType == type_1.type.FLOAT) {
+                    console_1._3dCode.actualTemp++;
+                    const numero = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    const entero = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    const flotante = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + numero + ' = T' + dataTemp + ';//Get value\n';
+                    console_1._3dCode.output += 'T' + entero + ' = (int)T' + numero + ';//Get integer part\n';
+                    console_1._3dCode.output += 'T' + flotante + ' = T' + numero + ' - T' + entero + ';//Get float part\n';
+                    console_1._3dCode.output += 'T' + flotante + ' = T' + flotante + ' * 100000000;//Get float as integer\n';
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 33;//Set floatToString environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set integer part position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + entero + ';//Save integer part\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set float part position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + flotante + ';//Save float part\n';
+                    console_1._3dCode.output += 'floatToString();//Call function\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
+                    return type_1.type.STRING;
+                }
+                else if (dataType == type_1.type.INTEGER) {
+                    return type_1.type.STRING;
+                }
+                else if (dataType == type_1.type.CHAR) {
+                    return type_1.type.CHAR;
+                }
                 return type_1.type.STRING;
             case "typeof":
                 console_1._3dCode.actualTemp++;
@@ -5640,7 +5660,7 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
-        this.absolutePos = 33; //Initial value 33 because of default functions
+        this.absolutePos = 36; //Initial value 36 because of default functions
         this.relativePos = 0;
         this.switchEvaluation = 0;
     }
@@ -5659,7 +5679,7 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
-        this.absolutePos = 33;
+        this.absolutePos = 36;
         this.relativePos = 0;
         this.switchEvaluation = 0;
     }

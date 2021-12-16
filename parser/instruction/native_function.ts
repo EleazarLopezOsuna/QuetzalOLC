@@ -57,6 +57,37 @@ export class native_function extends instruction {
                     return type.FLOAT;
                 }
             case "string":
+                _3dCode.actualTemp++;
+                savedEnvironment = _3dCode.actualTemp;
+                if (dataType == type.FLOAT) {
+                    _3dCode.actualTemp++;
+                    const numero = _3dCode.actualTemp;
+                    _3dCode.actualTemp++;
+                    const entero = _3dCode.actualTemp;
+                    _3dCode.actualTemp++;
+                    const flotante = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + numero + ' = T' + dataTemp + ';//Get value\n';
+                    _3dCode.output += 'T' + entero + ' = (int)T' + numero + ';//Get integer part\n';
+                    _3dCode.output += 'T' + flotante + ' = T' + numero + ' - T' + entero + ';//Get float part\n';
+                    _3dCode.output += 'T' + flotante + ' = T' + flotante + ' * 100000000;//Get float as integer\n';
+                    _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    _3dCode.output += 'SP = 33;//Set floatToString environment\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;//Set integer part position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + entero + ';//Save integer part\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 2;//Set float part position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + flotante + ';//Save float part\n';
+                    _3dCode.output += 'floatToString();//Call function\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];//Get return value\n';
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
+                    return type.STRING;
+                } else if (dataType == type.INTEGER) {
+                    
+                    return type.STRING;
+                } else if (dataType == type.CHAR){
+                    return type.CHAR
+                }
                 return type.STRING;
             case "typeof":
                 _3dCode.actualTemp++;

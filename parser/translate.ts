@@ -62,6 +62,7 @@ function generateDefaultFunctions() {
     code += generateTypeOf();
     code += generateStringToInt();
     code += generateStringToFloat();
+    code += generateFloatToString();
     return code;
 }
 
@@ -578,7 +579,7 @@ function generateStringToInt() {
     return code;
 }
 
-function generateStringToFloat(){
+function generateStringToFloat() {
     let code = '/*\n';
     code += 'Algorithm:\n';
     code += '    iterator = string.length\n';
@@ -651,6 +652,52 @@ function generateStringToFloat(){
     code += 'T3 = T3 + T6;//result = result + decimal\n';
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T3;//Set return to result\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+
+function generateFloatToString() {
+    let code = 'void floatToString(){\n';
+    code += 'T0 = SP + 1;\n';
+    code += 'T0 = STACK[(int)T0];//Get integer part\n';
+    code += 'SP = 14;//Change environment for intToString function\n';
+    code += 'T2 = SP + 1;\n';
+    code += 'STACK[(int)T2] = T0;//Save integer part\n';
+    code += 'T5 = HP;\n';
+    code += 'intToString();\n';
+    code += 'SP = 0;//Change environment for stringConcat\n';
+    code += 'T3 = SP + 1;\n';
+    code += 'T4 = SP + 2;\n';
+    code += 'STACK[(int)T3] = T5;//Save integer string\n';
+    code += 'T5 = HP;\n';
+    code += 'HEAP[(int)HP] = 46;\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;\n';
+    code += 'HP = HP + 1;\n';
+    code += 'STACK[(int)T4] = T5;//Save dot string\n';
+    code += 'StringConcat();\n';
+    code += 'T3 = SP + 0;\n';
+    code += 'T5 = STACK[(int)T3];//Get new string position\n';
+    code += 'SP = 33;//Set environment back to floatToString\n';
+    code += 'T1 = SP + 2;\n';
+    code += 'T1 = STACK[(int)T1];//Get float part\n';
+    code += 'SP = 14;//Change environment for intToString\n';
+    code += 'T2 = SP + 1;\n';
+    code += 'STACK[(int)T2] = T1;//Save float part\n';
+    code += 'T4 = HP;\n';
+    code += 'intToString();\n';
+    code += 'SP = 0;\n';
+    code += 'T3 = SP + 1;\n';
+    code += 'T2 = SP + 2;\n';
+    code += 'STACK[(int)T3] = T5;\n';
+    code += 'STACK[(int)T2] = T4;\n';
+    code += 'StringConcat();\n';
+    code += 'T1 = SP + 0;\n';
+    code += 'T1 = STACK[(int)T1];//Get new string position\n';
+    code += 'SP = 33;//Set environment back to floatToString\n';
+    code += 'T0 = SP + 0;\n';
+    code += 'STACK[(int)T0] = T1;//Save return\n';
     code += 'return;\n';
     code += '}\n';
     return code;
