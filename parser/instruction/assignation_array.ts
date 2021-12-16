@@ -11,7 +11,38 @@ import { data, type } from "../system/type";
 
 export class assignation_array extends instruction {
     public translate(environment: environment): type {
-        // Default
+        let return_data = environment.get_variable(this.id)
+        this.expr.translate(environment)
+        let exprTemp = _3dCode.actualTemp;
+        let tempList = []
+        if (return_data.type != type.UNDEFINED) {
+            if (return_data.value instanceof _array) {
+                for (let dimension of this.dimensions) {
+                    dimension.translate(environment)
+                    tempList.push(_3dCode.actualTemp)
+                }
+                _3dCode.actualTemp++;
+                let uno = _3dCode.actualTemp;
+                _3dCode.actualTemp++;
+                let dos = _3dCode.actualTemp;
+                for(let i = 0; i < tempList.length; i++){
+                    if(i == 0)
+                        _3dCode.output += 'T' + uno + ' = T' + tempList[i] + ';\n';
+                    else{
+                        _3dCode.output += 'T' + dos + ' = T' + uno + ' * ' + return_data.value.dimensionSize.get(i) + ';\n';
+                        _3dCode.output += 'T' + uno + ' = T' + dos + ' + T' + tempList[i] + ';\n';
+                    }
+                }
+                _3dCode.actualTemp++;
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
+                _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
+            } else {
+
+            }
+        } else {
+
+        }
         return type.NULL
     }
 

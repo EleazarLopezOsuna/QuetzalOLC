@@ -18,19 +18,19 @@ export class declaration_array extends instruction {
             } else {
                 _3dCode.actualTemp++;
                 _3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + _3dCode.relativePos + ' of this context\n';
-                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n'; 
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n';
                 _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = 0;\n';
                 //Size is 0 because its just declaration without assignation of values
                 environment.save_variable(this.variable_id, { value: this.value, type: this.type }, _3dCode.absolutePos, _3dCode.relativePos, 0);
                 _3dCode.absolutePos++;
                 _3dCode.relativePos++;
             }
-        } else if(this.value instanceof _array){
+        } else if (this.value instanceof _array) {
             _3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + _3dCode.relativePos + ' of this context\n';
             environment.save_variable(this.variable_id, { value: this.value, type: this.type }, _3dCode.absolutePos, _3dCode.relativePos, this.value.body.length)
-            this.value.translateElements(environment)
+            this.value.translateElements(environment, 0)
         } else if (this.value instanceof variable_id) {
-            
+
         }
         // Default
         return type.NULL

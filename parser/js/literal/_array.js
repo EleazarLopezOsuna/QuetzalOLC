@@ -9,6 +9,7 @@ class _array extends literal_1.literal {
     constructor(body, line, column) {
         super(line, column);
         this.body = body;
+        this.dimensionSize = new Map();
     }
     translate(environment) {
         // Default
@@ -141,11 +142,22 @@ class _array extends literal_1.literal {
         }
         return return_bool;
     }
-    translateElements(environment) {
+    translateElements(environment, dimension) {
         let contador = 0;
         for (const item of this.body) {
             if (item instanceof _array) {
-                item.translateElements(environment);
+                item.translateElements(environment, dimension + 1);
+                item.dimensionSize.forEach((values, keys) => {
+                    if (this.dimensionSize.has(keys)) {
+                        let dimSize = this.dimensionSize.get(keys);
+                        if (dimSize < values) {
+                            this.dimensionSize.set(keys, values);
+                        }
+                    }
+                    else {
+                        this.dimensionSize.set(keys, values);
+                    }
+                });
             }
             else {
                 item.translate(environment);
@@ -157,6 +169,15 @@ class _array extends literal_1.literal {
                 console_1._3dCode.relativePos++;
             }
             contador++;
+        }
+        if (this.dimensionSize.has(dimension)) {
+            let dimSize = this.dimensionSize.get(dimension);
+            if (dimSize < dimension) {
+                this.dimensionSize.set(dimension, contador);
+            }
+        }
+        else {
+            this.dimensionSize.set(dimension, contador);
         }
     }
     to_string(environment) {

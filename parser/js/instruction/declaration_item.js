@@ -12,7 +12,7 @@ class declaration_item extends instruction_1.instruction {
         this.value = value;
     }
     translate(environment) {
-        if (this.value instanceof expression_1.expression || this.value instanceof literal_1.literal) {
+        if (this.value != null) {
             let valueType = this.value.translate(environment);
             return valueType;
         }

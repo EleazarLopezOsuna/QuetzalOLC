@@ -3910,6 +3910,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_access = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _array_1 = require("../literal/_array");
 class array_access extends instruction_1.instruction {
@@ -3919,12 +3920,30 @@ class array_access extends instruction_1.instruction {
         this.dimensions = dimensions;
     }
     translate(environment) {
-        console.log('Hola');
         let return_data = environment.get_variable(this.id);
+        let tempList = [];
         if (return_data.type != type_1.type.UNDEFINED) {
             if (return_data.value instanceof _array_1._array) {
-                let returned = return_data.value.get(this.dimensions, environment);
-                console.log(this.dimensions);
+                for (let dimension of this.dimensions) {
+                    dimension.translate(environment);
+                    tempList.push(console_1._3dCode.actualTemp);
+                }
+                console_1._3dCode.actualTemp++;
+                let uno = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTemp++;
+                let dos = console_1._3dCode.actualTemp;
+                for (let i = 0; i < tempList.length; i++) {
+                    if (i == 0)
+                        console_1._3dCode.output += 'T' + uno + ' = T' + tempList[i] + ';\n';
+                    else {
+                        console_1._3dCode.output += 'T' + dos + ' = T' + uno + ' * ' + return_data.value.dimensionSize.get(i) + ';\n';
+                        console_1._3dCode.output += 'T' + uno + ' = T' + dos + ' + T' + tempList[i] + ';\n';
+                    }
+                }
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get value\n';
                 return return_data.type;
             }
             else {
@@ -3973,7 +3992,11 @@ class array_access extends instruction_1.instruction {
 }
 exports.array_access = array_access;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../literal/_array":46,"../system/error":54,"../system/type":55}],30:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../literal/_array":45,"../system/console":51,"../system/error":53,"../system/type":54}],30:[function(require,module,exports){
+>>>>>>> f42353c90eed2189197a7f1abf5cc4dad450188d
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_native_function = void 0;
@@ -4034,6 +4057,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_array = void 0;
 const instruction_1 = require("../abstract/instruction");
 const _array_1 = require("../literal/_array");
+const console_1 = require("../system/console");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
 class assignation_array extends instruction_1.instruction {
@@ -4044,7 +4068,38 @@ class assignation_array extends instruction_1.instruction {
         this.expr = expr;
     }
     translate(environment) {
-        // Default
+        let return_data = environment.get_variable(this.id);
+        this.expr.translate(environment);
+        let exprTemp = console_1._3dCode.actualTemp;
+        let tempList = [];
+        if (return_data.type != type_1.type.UNDEFINED) {
+            if (return_data.value instanceof _array_1._array) {
+                for (let dimension of this.dimensions) {
+                    dimension.translate(environment);
+                    tempList.push(console_1._3dCode.actualTemp);
+                }
+                console_1._3dCode.actualTemp++;
+                let uno = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTemp++;
+                let dos = console_1._3dCode.actualTemp;
+                for (let i = 0; i < tempList.length; i++) {
+                    if (i == 0)
+                        console_1._3dCode.output += 'T' + uno + ' = T' + tempList[i] + ';\n';
+                    else {
+                        console_1._3dCode.output += 'T' + dos + ' = T' + uno + ' * ' + return_data.value.dimensionSize.get(i) + ';\n';
+                        console_1._3dCode.output += 'T' + uno + ' = T' + dos + ' + T' + tempList[i] + ';\n';
+                    }
+                }
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
+            }
+            else {
+            }
+        }
+        else {
+        }
         return type_1.type.NULL;
     }
     execute(environment) {
@@ -4091,7 +4146,11 @@ class assignation_array extends instruction_1.instruction {
 }
 exports.assignation_array = assignation_array;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../literal/_array":46,"../system/error":54,"../system/type":55}],32:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../literal/_array":45,"../system/console":51,"../system/error":53,"../system/type":54}],32:[function(require,module,exports){
+>>>>>>> f42353c90eed2189197a7f1abf5cc4dad450188d
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
@@ -4260,7 +4319,7 @@ class declaration_array extends instruction_1.instruction {
         else if (this.value instanceof _array_1._array) {
             console_1._3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + console_1._3dCode.relativePos + ' of this context\n';
             environment.save_variable(this.variable_id, { value: this.value, type: this.type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, this.value.body.length);
-            this.value.translateElements(environment);
+            this.value.translateElements(environment, 0);
         }
         else if (this.value instanceof variable_id_1.variable_id) {
         }
@@ -4330,7 +4389,11 @@ class declaration_array extends instruction_1.instruction {
 }
 exports.declaration_array = declaration_array;
 
+<<<<<<< HEAD
 },{"../abstract/instruction":5,"../literal/_array":46,"../literal/variable_id":50,"../system/console":52,"../system/error":54,"../system/type":55}],35:[function(require,module,exports){
+=======
+},{"../abstract/instruction":5,"../literal/_array":45,"../literal/variable_id":49,"../system/console":51,"../system/error":53,"../system/type":54}],35:[function(require,module,exports){
+>>>>>>> f42353c90eed2189197a7f1abf5cc4dad450188d
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_function = void 0;
@@ -4373,7 +4436,7 @@ class declaration_item extends instruction_1.instruction {
         this.value = value;
     }
     translate(environment) {
-        if (this.value instanceof expression_1.expression || this.value instanceof literal_1.literal) {
+        if (this.value != null) {
             let valueType = this.value.translate(environment);
             return valueType;
         }
@@ -5139,6 +5202,7 @@ class _array extends literal_1.literal {
     constructor(body, line, column) {
         super(line, column);
         this.body = body;
+        this.dimensionSize = new Map();
     }
     translate(environment) {
         // Default
@@ -5271,11 +5335,22 @@ class _array extends literal_1.literal {
         }
         return return_bool;
     }
-    translateElements(environment) {
+    translateElements(environment, dimension) {
         let contador = 0;
         for (const item of this.body) {
             if (item instanceof _array) {
-                item.translateElements(environment);
+                item.translateElements(environment, dimension + 1);
+                item.dimensionSize.forEach((values, keys) => {
+                    if (this.dimensionSize.has(keys)) {
+                        let dimSize = this.dimensionSize.get(keys);
+                        if (dimSize < values) {
+                            this.dimensionSize.set(keys, values);
+                        }
+                    }
+                    else {
+                        this.dimensionSize.set(keys, values);
+                    }
+                });
             }
             else {
                 item.translate(environment);
@@ -5287,6 +5362,15 @@ class _array extends literal_1.literal {
                 console_1._3dCode.relativePos++;
             }
             contador++;
+        }
+        if (this.dimensionSize.has(dimension)) {
+            let dimSize = this.dimensionSize.get(dimension);
+            if (dimSize < dimension) {
+                this.dimensionSize.set(dimension, contador);
+            }
+        }
+        else {
+            this.dimensionSize.set(dimension, contador);
         }
     }
     to_string(environment) {
