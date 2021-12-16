@@ -62,6 +62,7 @@ function generateDefaultFunctions() {
     code += generateTypeOf();
     code += generateStringToInt();
     code += generateStringToFloat();
+    code += generateFloatToString();
     return code;
 }
 
@@ -93,7 +94,7 @@ function generateStringConcat() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -110,7 +111,7 @@ function generateStringPrint() {
     code += 'goto L0;\n';
     code += 'L1:\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -130,7 +131,7 @@ function generateOutOfBounds() {
     code += 'printf("%c", 100); //d\n';
     code += 'printf("%c", 115); //s\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -150,7 +151,7 @@ function generateDivisionBy0() {
     code += 'printf("%c", 32); // \n';
     code += 'printf("%c", 48); //0\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -176,7 +177,7 @@ function generateLowerCase() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -202,7 +203,7 @@ function generateUpperCase() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;//Go back\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -233,7 +234,7 @@ function generateStringTimes() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T2;//Set return\n';
     code += 'return;//\n';
-    code += '}'
+    code += '}\n\n'
     return code;
 }
 
@@ -253,7 +254,7 @@ function generateNumberPower() {
     code += 'T0 = SP + 0;//Set return index\n';
     code += 'STACK[(int)T0] = T2;//Set return value\n';
     code += 'return;//Go back\n';
-    code += '}'
+    code += '}\n\n'
     return code;
 }
 
@@ -285,7 +286,7 @@ function generateIntToString() {
     code += 'HEAP[(int)HP] = 36; //Set end of string\n'
     code += 'HP = HP + 1; //Increase HP\n'
     code += 'return;\n'
-    code += '}\n'
+    code += '}\n\n'
     return code;
 }
 
@@ -304,7 +305,7 @@ function generateStringLength() {
     code += 'T0 = SP + 0;\n';
     code += 'STACK[(int)T0] = T2;\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -337,7 +338,7 @@ function generateStringPosition() {
     code += 'HEAP[(int)HP] = 36;\n';
     code += 'HP = HP + 1;\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -386,7 +387,7 @@ function generateStringExtract() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T4;//Set return\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -512,7 +513,7 @@ function generateTypeOf() {
     code += 'T0 = SP + 0;//Get return position\n';
     code += 'STACK[(int)T0] = T1;//Save start position of new string\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
@@ -574,11 +575,11 @@ function generateStringToInt() {
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T3;//Set return to result\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
     return code;
 }
 
-function generateStringToFloat(){
+function generateStringToFloat() {
     let code = '/*\n';
     code += 'Algorithm:\n';
     code += '    iterator = string.length\n';
@@ -652,6 +653,52 @@ function generateStringToFloat(){
     code += 'T0 = SP + 0;//Set return position\n';
     code += 'STACK[(int)T0] = T3;//Set return to result\n';
     code += 'return;\n';
-    code += '}\n';
+    code += '}\n\n';
+    return code;
+}
+
+function generateFloatToString() {
+    let code = 'void floatToString(){\n';
+    code += 'T0 = SP + 1;\n';
+    code += 'T0 = STACK[(int)T0];//Get integer part\n';
+    code += 'SP = 14;//Change environment for intToString function\n';
+    code += 'T2 = SP + 1;\n';
+    code += 'STACK[(int)T2] = T0;//Save integer part\n';
+    code += 'T5 = HP;\n';
+    code += 'intToString();\n';
+    code += 'SP = 0;//Change environment for stringConcat\n';
+    code += 'T3 = SP + 1;\n';
+    code += 'T4 = SP + 2;\n';
+    code += 'STACK[(int)T3] = T5;//Save integer string\n';
+    code += 'T5 = HP;\n';
+    code += 'HEAP[(int)HP] = 46;\n';
+    code += 'HP = HP + 1;\n';
+    code += 'HEAP[(int)HP] = 36;\n';
+    code += 'HP = HP + 1;\n';
+    code += 'STACK[(int)T4] = T5;//Save dot string\n';
+    code += 'StringConcat();\n';
+    code += 'T3 = SP + 0;\n';
+    code += 'T5 = STACK[(int)T3];//Get new string position\n';
+    code += 'SP = 33;//Set environment back to floatToString\n';
+    code += 'T1 = SP + 2;\n';
+    code += 'T1 = STACK[(int)T1];//Get float part\n';
+    code += 'SP = 14;//Change environment for intToString\n';
+    code += 'T2 = SP + 1;\n';
+    code += 'STACK[(int)T2] = T1;//Save float part\n';
+    code += 'T4 = HP;\n';
+    code += 'intToString();\n';
+    code += 'SP = 0;\n';
+    code += 'T3 = SP + 1;\n';
+    code += 'T2 = SP + 2;\n';
+    code += 'STACK[(int)T3] = T5;\n';
+    code += 'STACK[(int)T2] = T4;\n';
+    code += 'StringConcat();\n';
+    code += 'T1 = SP + 0;\n';
+    code += 'T1 = STACK[(int)T1];//Get new string position\n';
+    code += 'SP = 33;//Set environment back to floatToString\n';
+    code += 'T0 = SP + 0;\n';
+    code += 'STACK[(int)T0] = T1;//Save return\n';
+    code += 'return;\n';
+    code += '}\n\n';
     return code;
 }
