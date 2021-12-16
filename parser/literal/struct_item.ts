@@ -11,6 +11,20 @@ export class struct_item extends literal {
         return type.NULL
     }
 
+    public get_value(property: string, environment: environment): expression | literal | null {
+        let parent_struct = environment.get_variable(this.parent_struct_id).value
+        if (parent_struct instanceof _struct) {
+            const parameters = parent_struct.body
+            for (let index = 0; index < this.body.length; index++) {
+                const obtained_parameter_data = parameters[index].execute(environment)
+                if (obtained_parameter_data.value == property) {
+                    return this.body[index]
+                }
+            }
+        }
+        return null
+    }
+
     public to_string(environment: environment) {
         let param_list = ""
         this.body.forEach(element => {

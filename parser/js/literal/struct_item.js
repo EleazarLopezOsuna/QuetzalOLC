@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.struct_item = void 0;
 const type_1 = require("../system/type");
 const literal_1 = require("../abstract/literal");
+const _struct_1 = require("./_struct");
 class struct_item extends literal_1.literal {
     constructor(body, parent_struct_id, line, column) {
         super(line, column);
@@ -12,6 +13,19 @@ class struct_item extends literal_1.literal {
     translate(environment) {
         // Default
         return type_1.type.NULL;
+    }
+    get_value(property, environment) {
+        let parent_struct = environment.get_variable(this.parent_struct_id).value;
+        if (parent_struct instanceof _struct_1._struct) {
+            const parameters = parent_struct.body;
+            for (let index = 0; index < this.body.length; index++) {
+                const obtained_parameter_data = parameters[index].execute(environment);
+                if (obtained_parameter_data.value == property) {
+                    return this.body[index];
+                }
+            }
+        }
+        return null;
     }
     to_string(environment) {
         let param_list = "";

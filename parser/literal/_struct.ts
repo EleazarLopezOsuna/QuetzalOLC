@@ -19,14 +19,14 @@ export class _struct extends literal {
         for (let index = 0; index < this.body.length; index++) {
             const declared_parameter_data = this.body[index].execute(environment);
             const obtained_parameter_data = parameters[index].execute(environment)
-            if(declared_parameter_data.type != obtained_parameter_data.type) {
+            if (declared_parameter_data.type != obtained_parameter_data.type) {
                 return false
             }
         }
         return true
     }
 
-    constructor(public body:  Array<parameter>, line: number, column: number) {
+    constructor(public body: Array<parameter>, line: number, column: number) {
         super(line, column);
     }
 

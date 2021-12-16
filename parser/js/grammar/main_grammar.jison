@@ -38,6 +38,7 @@
     const {declaration_struct} = require('../instruction/declaration_struct');
     const {declaration_struct_item} = require('../instruction/declaration_struct_item');
     const {array_access} = require('../instruction/array_access');
+    const {struct_access} = require('../instruction/struct_access');
     const {array_native_function} = require('../instruction/array_native_function');
     const {assignation_array} = require('../instruction/assignation_array');
 
@@ -693,6 +694,9 @@ pr_expr
     | pr_unary {
         $$ = $1
     }
+    | pr_expr tk_dot tk_id { 
+        $$ = new struct_access($1, $3, variable_id_type.NORMAL, @1.first_line, @1.first_column);
+    }
     | tk_id { 
         $$ = new variable_id($1, variable_id_type.NORMAL, @1.first_line, @1.first_column);
     }
@@ -706,6 +710,7 @@ pr_expr
         $$ = $1
     }
 ;
+
 
 pr_index_list 
     : pr_index_list tk_bra_o pr_array_range tk_bra_c {
