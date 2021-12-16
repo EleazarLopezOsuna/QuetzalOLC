@@ -776,39 +776,6 @@ exports.node = node;
 },{}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const parser = require("./grammar/main_grammar");
-const environment_1 = require("./system/environment");
-const console_1 = require("./system/console");
-const error_1 = require("./system/error");
-window.exec = function (input) {
-    console_1._console.clean();
-    try {
-        const ast = parser.parse(input);
-        const main_environment = new environment_1.environment(null);
-        console.log("ast", ast);
-        for (const instr of ast) {
-            try {
-                instr.execute(main_environment);
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        console.log('environment', main_environment);
-    }
-    catch (error) {
-        console.log(error);
-    }
-    if (error_1.error_arr.length > 0) {
-        console.log(error_1.error_arr);
-        return "$error$";
-    }
-    return console_1._console.output;
-};
-
-},{"./grammar/main_grammar":20,"./system/console":52,"./system/environment":53,"./system/error":54}],9:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_binary = exports.arithmetic_binary_type = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
@@ -1075,7 +1042,7 @@ class arithmetic_binary extends expression_1.expression {
 }
 exports.arithmetic_binary = arithmetic_binary;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],10:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_unary = exports.arithmetic_unary_type = void 0;
@@ -1213,7 +1180,7 @@ class arithmetic_unary extends expression_1.expression {
 }
 exports.arithmetic_unary = arithmetic_unary;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],11:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_range = void 0;
@@ -1253,7 +1220,7 @@ class array_range extends expression_1.expression {
 }
 exports.array_range = array_range;
 
-},{"../abstract/expression":4,"../system/error":54,"../system/type":55}],12:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/error":54,"../system/type":55}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logic = exports.logic_type = void 0;
@@ -1339,7 +1306,7 @@ class logic extends expression_1.expression {
 }
 exports.logic = logic;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/type":55}],13:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/type":55}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parameter = void 0;
@@ -1362,7 +1329,7 @@ class parameter extends expression_1.expression {
 }
 exports.parameter = parameter;
 
-},{"../abstract/expression":4}],14:[function(require,module,exports){
+},{"../abstract/expression":4}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.relational = exports.relational_type = void 0;
@@ -1445,7 +1412,7 @@ class relational extends expression_1.expression {
 }
 exports.relational = relational;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/type":55}],15:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/type":55}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_binary = exports.string_binary_type = void 0;
@@ -1596,7 +1563,7 @@ class string_binary extends expression_1.expression {
 }
 exports.string_binary = string_binary;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],16:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_ternary = exports.string_ternary_type = void 0;
@@ -1679,7 +1646,7 @@ class string_ternary extends expression_1.expression {
 }
 exports.string_ternary = string_ternary;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],17:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.string_unary = exports.string_unary_type = void 0;
@@ -1815,7 +1782,7 @@ class string_unary extends expression_1.expression {
 }
 exports.string_unary = string_unary;
 
-},{"../abstract/expression":4,"../literal/_array":46,"../system/console":52,"../system/error":54,"../system/type":55}],18:[function(require,module,exports){
+},{"../abstract/expression":4,"../literal/_array":45,"../system/console":52,"../system/error":54,"../system/type":55}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ternary = void 0;
@@ -1880,7 +1847,7 @@ class ternary extends expression_1.expression {
 }
 exports.ternary = ternary;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],19:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unary = exports.unary_type = void 0;
@@ -1970,7 +1937,7 @@ class unary extends expression_1.expression {
 }
 exports.unary = unary;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],20:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],19:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -3377,7 +3344,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"../expression/arithmetic_binary":9,"../expression/arithmetic_unary":10,"../expression/array_range":11,"../expression/logic":12,"../expression/parameter":13,"../expression/relational":14,"../expression/string_binary":15,"../expression/string_ternary":16,"../expression/string_unary":17,"../expression/ternary":18,"../expression/unary":19,"../instruction/_break":21,"../instruction/_case":22,"../instruction/_continue":23,"../instruction/_for":24,"../instruction/_if":25,"../instruction/_return":26,"../instruction/_switch":27,"../instruction/_while":28,"../instruction/array_access":29,"../instruction/array_native_function":30,"../instruction/assignation_array":31,"../instruction/assignation_unary":32,"../instruction/call":33,"../instruction/declaration_array":34,"../instruction/declaration_function":35,"../instruction/declaration_item":36,"../instruction/declaration_list":37,"../instruction/declaration_struct":38,"../instruction/declaration_struct_item":39,"../instruction/main":40,"../instruction/native_function":41,"../instruction/native_parse":42,"../instruction/print":43,"../instruction/struct_access":44,"../instruction/unary_instruction":45,"../literal/_array":46,"../literal/native":48,"../literal/variable_id":50,"../system/error":54,"../system/type":55,"_process":3,"fs":1,"path":2}],21:[function(require,module,exports){
+},{"../expression/arithmetic_binary":8,"../expression/arithmetic_unary":9,"../expression/array_range":10,"../expression/logic":11,"../expression/parameter":12,"../expression/relational":13,"../expression/string_binary":14,"../expression/string_ternary":15,"../expression/string_unary":16,"../expression/ternary":17,"../expression/unary":18,"../instruction/_break":20,"../instruction/_case":21,"../instruction/_continue":22,"../instruction/_for":23,"../instruction/_if":24,"../instruction/_return":25,"../instruction/_switch":26,"../instruction/_while":27,"../instruction/array_access":28,"../instruction/array_native_function":29,"../instruction/assignation_array":30,"../instruction/assignation_unary":31,"../instruction/call":32,"../instruction/declaration_array":33,"../instruction/declaration_function":34,"../instruction/declaration_item":35,"../instruction/declaration_list":36,"../instruction/declaration_struct":37,"../instruction/declaration_struct_item":38,"../instruction/main":39,"../instruction/native_function":40,"../instruction/native_parse":41,"../instruction/print":42,"../instruction/struct_access":43,"../instruction/unary_instruction":44,"../literal/_array":45,"../literal/native":47,"../literal/variable_id":49,"../system/error":54,"../system/type":55,"_process":3,"fs":1,"path":2}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._break = void 0;
@@ -3401,7 +3368,7 @@ class _break extends instruction_1.instruction {
 }
 exports._break = _break;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/type":55}],22:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/type":55}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._case = exports._case_type = void 0;
@@ -3484,7 +3451,7 @@ class _case extends instruction_1.instruction {
 }
 exports._case = _case;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/type":55,"./_break":21,"./_return":26}],23:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/type":55,"./_break":20,"./_return":25}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._continue = void 0;
@@ -3508,7 +3475,7 @@ class _continue extends instruction_1.instruction {
 }
 exports._continue = _continue;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/type":55}],24:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/type":55}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._for = void 0;
@@ -3577,7 +3544,7 @@ class _for extends instruction_1.instruction {
 }
 exports._for = _for;
 
-},{"../abstract/instruction":5,"../system/error":54,"../system/type":55,"./_break":21,"./_continue":23,"./_return":26,"./assignation_unary":32,"./declaration_list":37}],25:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/error":54,"../system/type":55,"./_break":20,"./_continue":22,"./_return":25,"./assignation_unary":31,"./declaration_list":36}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._if = void 0;
@@ -3680,7 +3647,7 @@ class _if extends instruction_1.instruction {
 }
 exports._if = _if;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55,"./_return":26}],26:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55,"./_return":25}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._return = void 0;
@@ -3705,7 +3672,7 @@ class _return extends instruction_1.instruction {
 }
 exports._return = _return;
 
-},{"../abstract/instruction":5,"../system/console":52}],27:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._switch = void 0;
@@ -3765,7 +3732,7 @@ class _switch extends instruction_1.instruction {
 }
 exports._switch = _switch;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55,"./_case":22}],28:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55,"./_case":21}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._while = exports._while_type = void 0;
@@ -3904,7 +3871,7 @@ class _while extends instruction_1.instruction {
 }
 exports._while = _while;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55,"./_break":21,"./_continue":23,"./_return":26}],29:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55,"./_break":20,"./_continue":22,"./_return":25}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_access = void 0;
@@ -3992,7 +3959,7 @@ class array_access extends instruction_1.instruction {
 }
 exports.array_access = array_access;
 
-},{"../abstract/instruction":5,"../literal/_array":46,"../system/console":52,"../system/error":54,"../system/type":55}],30:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":45,"../system/console":52,"../system/error":54,"../system/type":55}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_native_function = void 0;
@@ -4047,7 +4014,7 @@ class array_native_function extends instruction_1.instruction {
 }
 exports.array_native_function = array_native_function;
 
-},{"../abstract/instruction":5,"../literal/_array":46,"../system/error":54,"../system/type":55}],31:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":45,"../system/error":54,"../system/type":55}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_array = void 0;
@@ -4142,7 +4109,7 @@ class assignation_array extends instruction_1.instruction {
 }
 exports.assignation_array = assignation_array;
 
-},{"../abstract/instruction":5,"../literal/_array":46,"../system/console":52,"../system/error":54,"../system/type":55}],32:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":45,"../system/console":52,"../system/error":54,"../system/type":55}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
@@ -4204,7 +4171,7 @@ class assignation_unary extends instruction_1.instruction {
 }
 exports.assignation_unary = assignation_unary;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55}],33:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.call = void 0;
@@ -4276,7 +4243,7 @@ class call extends instruction_1.instruction {
 }
 exports.call = call;
 
-},{"../abstract/instruction":5,"../system/environment":53,"../system/error":54,"../system/type":55,"./_return":26}],34:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/environment":53,"../system/error":54,"../system/type":55,"./_return":25}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_array = void 0;
@@ -4381,7 +4348,7 @@ class declaration_array extends instruction_1.instruction {
 }
 exports.declaration_array = declaration_array;
 
-},{"../abstract/instruction":5,"../literal/_array":46,"../literal/variable_id":50,"../system/console":52,"../system/error":54,"../system/type":55}],35:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":45,"../literal/variable_id":49,"../system/console":52,"../system/error":54,"../system/type":55}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_function = void 0;
@@ -4409,7 +4376,7 @@ class declaration_function extends instruction_1.instruction {
 }
 exports.declaration_function = declaration_function;
 
-},{"../abstract/instruction":5,"../system/type":55}],36:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/type":55}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_item = void 0;
@@ -4446,7 +4413,7 @@ class declaration_item extends instruction_1.instruction {
 }
 exports.declaration_item = declaration_item;
 
-},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../system/type":55}],37:[function(require,module,exports){
+},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../system/type":55}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_list = void 0;
@@ -4555,7 +4522,7 @@ class declaration_list extends instruction_1.instruction {
 }
 exports.declaration_list = declaration_list;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55}],38:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_struct = void 0;
@@ -4597,7 +4564,7 @@ class declaration_struct extends instruction_1.instruction {
 }
 exports.declaration_struct = declaration_struct;
 
-},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../literal/_struct":47,"../system/error":54,"../system/type":55}],39:[function(require,module,exports){
+},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../literal/_struct":46,"../system/error":54,"../system/type":55}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_struct_item = void 0;
@@ -4658,7 +4625,7 @@ class declaration_struct_item extends instruction_1.instruction {
 }
 exports.declaration_struct_item = declaration_struct_item;
 
-},{"../abstract/instruction":5,"../literal/_struct":47,"../literal/struct_item":49,"../system/error":54,"../system/type":55}],40:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_struct":46,"../literal/struct_item":48,"../system/error":54,"../system/type":55}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
@@ -4698,7 +4665,7 @@ class main extends instruction_1.instruction {
 }
 exports.main = main;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/type":55}],41:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/type":55}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_function = void 0;
@@ -4839,7 +4806,7 @@ class native_function extends instruction_1.instruction {
 }
 exports.native_function = native_function;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55}],42:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_parse = void 0;
@@ -4946,7 +4913,7 @@ class native_parse extends instruction_1.instruction {
 }
 exports.native_parse = native_parse;
 
-},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55}],43:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/error":54,"../system/type":55}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.print = exports.print_type = void 0;
@@ -5050,7 +5017,7 @@ class print extends instruction_1.instruction {
 }
 exports.print = print;
 
-},{"../abstract/instruction":5,"../literal/_array":46,"../literal/struct_item":49,"../system/console":52,"../system/type":55}],44:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":45,"../literal/struct_item":48,"../system/console":52,"../system/type":55}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.struct_access = void 0;
@@ -5090,7 +5057,7 @@ class struct_access extends instruction_1.instruction {
 }
 exports.struct_access = struct_access;
 
-},{"../abstract/instruction":5,"../literal/struct_item":49,"../system/error":54,"../system/type":55}],45:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/struct_item":48,"../system/error":54,"../system/type":55}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unary_instruction = exports.unary_instruction_type = void 0;
@@ -5184,7 +5151,7 @@ class unary_instruction extends expression_1.expression {
 }
 exports.unary_instruction = unary_instruction;
 
-},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],46:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/console":52,"../system/error":54,"../system/type":55}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._array = void 0;
@@ -5391,7 +5358,7 @@ class _array extends literal_1.literal {
 }
 exports._array = _array;
 
-},{"../abstract/literal":6,"../expression/array_range":11,"../system/console":52,"../system/type":55}],47:[function(require,module,exports){
+},{"../abstract/literal":6,"../expression/array_range":10,"../system/console":52,"../system/type":55}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._struct = void 0;
@@ -5429,7 +5396,7 @@ class _struct extends literal_1.literal {
 }
 exports._struct = _struct;
 
-},{"../abstract/literal":6,"../system/type":55}],48:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/type":55}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native = void 0;
@@ -5499,7 +5466,7 @@ class native extends literal_1.literal {
 }
 exports.native = native;
 
-},{"../abstract/literal":6,"../system/console":52,"../system/type":55}],49:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/console":52,"../system/type":55}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.struct_item = void 0;
@@ -5548,7 +5515,7 @@ class struct_item extends literal_1.literal {
 }
 exports.struct_item = struct_item;
 
-},{"../abstract/literal":6,"../system/type":55,"./_struct":47}],50:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/type":55,"./_struct":46}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.variable_id = exports.variable_id_type = void 0;
@@ -5599,7 +5566,41 @@ class variable_id extends literal_1.literal {
 }
 exports.variable_id = variable_id;
 
-},{"../abstract/literal":6,"../system/console":52,"../system/error":54,"../system/type":55}],51:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/console":52,"../system/error":54,"../system/type":55}],50:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const parser = require("./grammar/main_grammar");
+const environment_1 = require("./system/environment");
+const console_1 = require("./system/console");
+const error_1 = require("./system/error");
+window.plot = function (input) {
+    console_1._console.clean();
+    try {
+        const ast = parser.parse(input);
+        const main_environment = new environment_1.environment(null);
+        console.log("ast", ast);
+        let dot_string = "";
+        for (const instr of ast) {
+            try {
+                dot_string += instr.plot(main_environment);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return dot_string;
+    }
+    catch (error) {
+        console.log(error);
+    }
+    if (error_1.error_arr.length > 0) {
+        console.log(error_1.error_arr);
+        return "$error$";
+    }
+    return console_1._console.output;
+};
+
+},{"./grammar/main_grammar":19,"./system/console":52,"./system/environment":53,"./system/error":54}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._symbol = exports.scope = void 0;
@@ -5794,4 +5795,4 @@ exports.type_tbl = [
     ]
 ];
 
-},{}]},{},[8]);
+},{}]},{},[50]);

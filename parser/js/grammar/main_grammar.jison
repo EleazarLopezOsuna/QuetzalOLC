@@ -487,7 +487,7 @@ pr_assignation
 pr_access
     : pr_access tk_dot tk_id
     | pr_access tk_bra_o pr_expr tk_bra_c
-    | tk_dot tk_id
+    |  tk_id
     | tk_bra_o pr_expr tk_bra_c
 ;
 

@@ -28,6 +28,15 @@ export class main extends instruction {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Main\"];";
+
+        // result += "node" + count + "1[label=\"(" + this.line + "," + this.column + ") Codigo\"];";
+        // result += this.code.plot(Number(count + "11"));
+        // result += "node" + count + "1 -> " + "node" + count + "11;";
+
+        // // Flechas
+        // result += "node" + count + " -> " + "node" + count + "1;";
+        return result;
     }
 }
