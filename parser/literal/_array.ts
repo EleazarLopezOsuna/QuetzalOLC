@@ -7,6 +7,8 @@ import { literal } from "../abstract/literal";
 import { array_range } from "../expression/array_range";
 
 export class _array extends literal {
+    public dimensionSize;
+
     public translate(environment: environment): type {
         // Default
         return type.NULL
@@ -14,6 +16,7 @@ export class _array extends literal {
 
     constructor(public body: Array<expression | literal | array_range>, line: number, column: number) {
         super(line, column);
+        this.dimensionSize = new Map<number, number>();
     }
 
     public assign_value(dimensions: Array<expression | literal | array_range>, environment: environment, expr: expression | literal) {
@@ -137,21 +140,39 @@ export class _array extends literal {
         return return_bool;
     }
 
-    public translateElements(environment: environment){
+    public translateElements(environment: environment, dimension: number) {
         let contador = 0;
-        for(const item of this.body){
-            if(item instanceof _array){
-                item.translateElements(environment)
+        for (const item of this.body) {
+            if (item instanceof _array) {
+                item.translateElements(environment, dimension + 1)
+                item.dimensionSize.forEach((values, keys) => {
+                    if (this.dimensionSize.has(keys)) {
+                        let dimSize = this.dimensionSize.get(keys) as number
+                        if (dimSize < values) {
+                            this.dimensionSize.set(keys, values)
+                        }
+                    } else {
+                        this.dimensionSize.set(keys, values);
+                    }
+                })
             } else {
                 item.translate(environment);
                 let itemTemp = _3dCode.actualTemp;
                 _3dCode.actualTemp++;
-                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n'; 
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n';
                 _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + itemTemp + ';//Save value in array, index ' + contador + '\n';
                 _3dCode.absolutePos++;
                 _3dCode.relativePos++;
             }
             contador++;
+        }
+        if (this.dimensionSize.has(dimension)) {
+            let dimSize = this.dimensionSize.get(dimension) as number
+            if (dimSize < dimension) {
+                this.dimensionSize.set(dimension, contador)
+            }
+        } else {
+            this.dimensionSize.set(dimension, contador);
         }
     }
 

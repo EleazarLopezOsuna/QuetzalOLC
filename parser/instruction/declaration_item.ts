@@ -5,15 +5,16 @@ import { data, type } from "../system/type";
 import { _console } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
+import { _array } from "../literal/_array";
 
 export class declaration_item extends instruction {
 
     public translate(environment: environment): type {
-        if (this.value instanceof expression || this.value instanceof literal) {
+        if (this.value != null) {
             let valueType = this.value.translate(environment);
             return valueType
         } else {
-
+            
         }
         return type.NULL
     }
