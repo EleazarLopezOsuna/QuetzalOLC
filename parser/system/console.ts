@@ -12,6 +12,7 @@ class console {
     public absolutePos: number;
     public relativePos: number;
     public switchEvaluation: number;
+    public finalCode: string;
 
     constructor() {
         this.stack = new Array;
@@ -23,6 +24,7 @@ class console {
         this.absolutePos = 36;//Initial value 36 because of default functions
         this.relativePos = 0;
         this.switchEvaluation = 0;
+        this.finalCode = "";
     }
     saveInHeap(index: number, id: any) {
         this.heap[index] = id;
@@ -43,6 +45,7 @@ class console {
         this.absolutePos = 36;
         this.relativePos = 0;
         this.switchEvaluation = 0;
+        this.finalCode = "";
     }
 
 
