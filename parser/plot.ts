@@ -33,4 +33,3 @@ import { error_arr } from "./system/error";
     }
     return _console.output
 }
-

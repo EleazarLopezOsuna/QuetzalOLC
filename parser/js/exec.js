@@ -18,7 +18,7 @@ window.exec = function (input) {
                 console.log(error);
             }
         }
-        window.environment = main_environment;
+        window.symbol_table = main_environment.get_html();
     }
     catch (error) {
         console.log(error);

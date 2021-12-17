@@ -10,6 +10,35 @@ class environment {
         this.symbol_map = new Map();
         this.function_map = new Map();
     }
+    get_html() {
+        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
+        result += '<table class="table table-hover">\n';
+        result += '<thead>\n<tr>\n<th scope="col">#</th>\n';
+        result += '<th scope="col">Valor</th>\n';
+        result += '<th scope="col">ID</th>\n';
+        result += '<th scope="col">Tipo</th>\n';
+        result += '<th scope="col">Ambito</th>\n';
+        result += '</tr>\n';
+        result += '</thead>\n';
+        result += '<tbody>\n';
+        let count = 1;
+        this.symbol_map.forEach(element => {
+            result += '<tr>\n';
+            result += '<th scope="row">' + count + '</th>\n';
+            result += element.get_html();
+            result += '</tr>\n';
+            count++;
+        });
+        this.function_map.forEach(element => {
+            result += '<tr>\n';
+            result += '<th scope="row">' + count + '</th>\n';
+            result += element.get_html();
+            result += '</tr>\n';
+            count++;
+        });
+        result += '</tbody>\n';
+        return result += '</table></div>';
+    }
     save_function(id, new_function, absolute, relative, size) {
         let symbol_type = _symbol_1.scope.LOCAL;
         if (this.previous == null) {

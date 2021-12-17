@@ -16,7 +16,7 @@ import { error_arr } from "./system/error";
                 console.log(error);
             }
         }
-        (<any>window).environment = main_environment
+        (<any>window).symbol_table = main_environment.get_html()
     } catch (error) {
         console.log(error);
     }

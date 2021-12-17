@@ -31,7 +31,16 @@
     <script src="//d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
     <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
-
+    <style>
+        .modal-dialog {
+            overflow-y: initial !important
+        }
+        
+        .modal-body {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -48,7 +57,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="javascript:void(0)" onclick="print_ast()">Arbol AST</a>
-                        <a class="dropdown-item" href="#">Tabla de Simbolos</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="print_symbol_table()">Tabla de Simbolos</a>
                         <a class="dropdown-item" href="#">Tabla de Errores</a>
                     </div>
                 </nav>
@@ -113,6 +122,13 @@
         });
         editor_2.setSize(600, 800)
 
+        function print_symbol_table() {
+            $("#modal_body").load("modal/symbol.html")
+            $("#modal").modal({
+                resize: true
+            });
+        }
+
         function print_ast() {
             window.dot = plot(editor_1.getValue());
             $("#modal_body").load("modal/ast.html")
@@ -139,6 +155,7 @@
         }
 
         function traducir() {
+            $("#navbarDropdownMenuLink").addClass("d-none")
             let result = translate(editor_1.getValue())
             if (result == "$error$") {
                 Swal.fire(
@@ -149,6 +166,7 @@
             } else {
                 editor_2.setValue(result)
             }
+            $("#navbarDropdownMenuLink").removeClass("d-none")
         }
     </script>
 </body>
