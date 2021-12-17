@@ -28,11 +28,19 @@ export class main extends instruction {
     }
 
     public plot(count: number): string {
-        
+
         let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Main\"];";
 
         // result += "node" + count + "1[label=\"(" + this.line + "," + this.column + ") Codigo\"];";
-        // result += this.code.plot(Number(count + "11"));
+        // for (const instr of this.code) {
+        //     try {
+        //         result += "node" + count + " -> " + "node" + count + "1;";
+        //         count++
+        //         result += instr.plot(Number(count + "11"))
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
         // result += "node" + count + "1 -> " + "node" + count + "11;";
 
         // // Flechas

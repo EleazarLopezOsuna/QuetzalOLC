@@ -4639,7 +4639,7 @@ class main extends instruction_1.instruction {
     }
     translate(environment) {
         console_1._3dCode.output += 'void main(){\n';
-        console_1._3dCode.output += 'SP = 33;\n';
+        console_1._3dCode.output += 'SP = 36;\n';
         this.code.forEach(element => {
             element.translate(environment);
         });
@@ -4656,7 +4656,15 @@ class main extends instruction_1.instruction {
     plot(count) {
         let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Main\"];";
         // result += "node" + count + "1[label=\"(" + this.line + "," + this.column + ") Codigo\"];";
-        // result += this.code.plot(Number(count + "11"));
+        // for (const instr of this.code) {
+        //     try {
+        //         result += "node" + count + " -> " + "node" + count + "1;";
+        //         count++
+        //         result += instr.plot(Number(count + "11"))
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
         // result += "node" + count + "1 -> " + "node" + count + "11;";
         // // Flechas
         // result += "node" + count + " -> " + "node" + count + "1;";
@@ -4684,6 +4692,9 @@ class native_function extends instruction_1.instruction {
         const dataTemp = console_1._3dCode.actualTemp;
         let savedEnvironment = 0;
         let resultTemp = 0;
+        let numero = 0;
+        let entero = 0;
+        let flotante = 0;
         switch (this.option) {
             case "toInt":
                 if (dataType == type_1.type.FLOAT) {
@@ -4730,6 +4741,49 @@ class native_function extends instruction_1.instruction {
                     return type_1.type.FLOAT;
                 }
             case "string":
+                console_1._3dCode.actualTemp++;
+                savedEnvironment = console_1._3dCode.actualTemp;
+                if (dataType == type_1.type.FLOAT) {
+                    console_1._3dCode.actualTemp++;
+                    numero = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    entero = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    flotante = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + numero + ' = T' + dataTemp + ';//Get value\n';
+                    console_1._3dCode.output += 'T' + entero + ' = (int)T' + numero + ';//Get integer part\n';
+                    console_1._3dCode.output += 'T' + flotante + ' = T' + numero + ' - T' + entero + ';//Get float part\n';
+                    console_1._3dCode.output += 'T' + flotante + ' = T' + flotante + ' * 100000000;//Get float as integer\n';
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 33;//Set floatToString environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set integer part position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + entero + ';//Save integer part\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set float part position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + flotante + ';//Save float part\n';
+                    console_1._3dCode.output += 'floatToString();//Call function\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
+                    return type_1.type.STRING;
+                }
+                else if (dataType == type_1.type.INTEGER) {
+                    console_1._3dCode.actualTemp++;
+                    numero = console_1._3dCode.actualTemp;
+                    console_1._3dCode.output += 'T' + numero + ' = T' + dataTemp + ';//Get value\n';
+                    console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    console_1._3dCode.output += 'SP = 14;//Set intToString environment\n';
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set position\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + numero + ';//Save value\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = HP;//Save start position of string\n';
+                    console_1._3dCode.output += 'intToString();//Call function\n';
+                    console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
+                    return type_1.type.STRING;
+                }
+                else if (dataType == type_1.type.CHAR) {
+                    return type_1.type.CHAR;
+                }
                 return type_1.type.STRING;
             case "typeof":
                 console_1._3dCode.actualTemp++;
@@ -5579,16 +5633,19 @@ window.plot = function (input) {
         const ast = parser.parse(input);
         const main_environment = new environment_1.environment(null);
         console.log("ast", ast);
-        let dot_string = "";
+        let count = 1;
+        let dot_string = "digraph G { node" + count + "[label=\"AST\"];";
         for (const instr of ast) {
             try {
-                dot_string += instr.plot(main_environment);
+                dot_string += "node" + count + " -> " + "node" + count + "1;";
+                dot_string += instr.plot(Number(count + "1"));
+                count++;
             }
             catch (error) {
                 console.log(error);
             }
         }
-        return dot_string;
+        return dot_string + "}";
     }
     catch (error) {
         console.log(error);
@@ -5635,7 +5692,7 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
-        this.absolutePos = 33; //Initial value 33 because of default functions
+        this.absolutePos = 36; //Initial value 36 because of default functions
         this.relativePos = 0;
         this.switchEvaluation = 0;
     }
@@ -5654,7 +5711,7 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
-        this.absolutePos = 33;
+        this.absolutePos = 36;
         this.relativePos = 0;
         this.switchEvaluation = 0;
     }

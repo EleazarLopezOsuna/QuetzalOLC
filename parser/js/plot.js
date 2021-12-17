@@ -10,16 +10,19 @@ window.plot = function (input) {
         const ast = parser.parse(input);
         const main_environment = new environment_1.environment(null);
         console.log("ast", ast);
-        let dot_string = "";
+        let count = 1;
+        let dot_string = "digraph G { node" + count + "[label=\"AST\"];";
         for (const instr of ast) {
             try {
-                dot_string += instr.plot(main_environment);
+                dot_string += "node" + count + " -> " + "node" + count + "1;";
+                dot_string += instr.plot(Number(count + "1"));
+                count++;
             }
             catch (error) {
                 console.log(error);
             }
         }
-        return dot_string;
+        return dot_string + "}";
     }
     catch (error) {
         console.log(error);
