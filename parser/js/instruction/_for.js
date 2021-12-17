@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._for = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _return_1 = require("./_return");
 const _break_1 = require("./_break");
@@ -18,7 +19,31 @@ class _for extends instruction_1.instruction {
         this.code = code;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        console_1._3dCode.actualTag++;
+        let inicio = console_1._3dCode.actualTag;
+        console_1._3dCode.actualTag++;
+        let final = console_1._3dCode.actualTag;
+        console_1._3dCode.actualTag++;
+        let continueTag = console_1._3dCode.actualTag;
+        this.initialization.translate(environment);
+        console_1._3dCode.output += 'L' + inicio + ':\n';
+        this.condition.translate(environment);
+        let conditionTemp = console_1._3dCode.actualTemp;
+        console_1._3dCode.output += 'if(T' + conditionTemp + ' == 0) goto L' + final + ';\n';
+        let tempContinue = console_1._3dCode.continueTag;
+        console_1._3dCode.continueTag = continueTag;
+        let tempBreak = console_1._3dCode.breakTag;
+        console_1._3dCode.breakTag = final;
+        for (const instruction of this.code) {
+            instruction.translate(environment);
+        }
+        console_1._3dCode.breakTag = tempBreak;
+        console_1._3dCode.continueTag = tempContinue;
+        console_1._3dCode.output += 'L' + continueTag + ':\n';
+        this.unary.translate(environment);
+        console_1._3dCode.output += "goto L" + inicio + ";\n";
+        console_1._3dCode.output += "L" + final + ":\n";
+        return type_1.type.NULL;
     }
     execute(environment) {
         if (this.initialization instanceof assignation_unary_1.assignation_unary

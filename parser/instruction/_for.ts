@@ -2,7 +2,7 @@ import { expression } from "../abstract/expression";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _3dCode, _console } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 import { _return } from "./_return";
@@ -17,7 +17,31 @@ import { declaration_list } from "./declaration_list";
 export class _for extends instruction {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        _3dCode.actualTag++;
+        let inicio = _3dCode.actualTag;
+        _3dCode.actualTag++;
+        let final = _3dCode.actualTag;
+        _3dCode.actualTag++;
+        let continueTag = _3dCode.actualTag;
+        this.initialization.translate(environment);
+        _3dCode.output += 'L' + inicio + ':\n';
+        this.condition.translate(environment);
+        let conditionTemp = _3dCode.actualTemp
+        _3dCode.output += 'if(T' + conditionTemp + ' == 0) goto L' + final + ';\n';
+        let tempContinue = _3dCode.continueTag;
+        _3dCode.continueTag = continueTag;
+        let tempBreak = _3dCode.breakTag;
+        _3dCode.breakTag = final;
+        for (const instruction of this.code) {
+            instruction.translate(environment)
+        }
+        _3dCode.breakTag = tempBreak;
+        _3dCode.continueTag = tempContinue;
+        _3dCode.output += 'L' + continueTag + ':\n';
+        this.unary.translate(environment);
+        _3dCode.output += "goto L" + inicio + ";\n";
+        _3dCode.output += "L" + final + ":\n";
+        return type.NULL
     }
 
     constructor(public initialization: instruction, public condition: expression, public unary: unary_instruction, public code: Array<instruction>, line: number, column: number) {
