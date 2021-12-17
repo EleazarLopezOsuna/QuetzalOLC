@@ -58,7 +58,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="javascript:void(0)" onclick="print_ast()">Arbol AST</a>
                         <a class="dropdown-item" href="javascript:void(0)" onclick="print_symbol_table()">Tabla de Simbolos</a>
-                        <a class="dropdown-item" href="#">Tabla de Errores</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="print_error_table()">Tabla de Errores</a>
                     </div>
                 </nav>
             </div>
@@ -124,6 +124,13 @@
 
         function print_symbol_table() {
             $("#modal_body").load("modal/symbol.html")
+            $("#modal").modal({
+                resize: true
+            });
+        }
+
+        function print_error_table() {
+            $("#modal_body").load("modal/error.html")
             $("#modal").modal({
                 resize: true
             });

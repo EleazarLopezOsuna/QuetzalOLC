@@ -3,6 +3,7 @@ import { environment } from "./system/environment";
 import { _console, _3dCode } from "./system/console"
 import { error_arr } from "./system/error";
 
+
 (<any>window).exec = function (input: string): string {
     _console.clean();
     try {
@@ -23,9 +24,33 @@ import { error_arr } from "./system/error";
 
 
     if (error_arr.length > 0) {
-        console.log(error_arr)
+        // generate error table
+        (<any>window).error_table = generate_error_table()
         return "$error$"
     }
     return _console.output
 }
 
+function generate_error_table() {
+    //console.log(errores);
+    let result = '<table class="table">\n';
+    result += '<thead>\n<tr>\n<th scope="col">#</th>\n'
+    result += '<th scope="col">Tipo</th>\n';
+    result += '<th scope="col">Descripcion</th>\n';
+    result += '<th scope="col">Linea</th>\n';
+    result += '<th scope="col">Columna</th>\n';
+    result += '</tr>\n';
+    result += '</thead>\n';
+    result += '<tbody>\n';
+
+    let count = 1;
+    error_arr.forEach(element => {
+        result += '<tr>\n';
+        result += '<th scope="row">' + count + '</th>\n';
+        result += element.html();
+        result += '</tr>\n';
+        count++;
+    });
+    result += '</tbody>\n';
+    return result += '</table>\n';
+}

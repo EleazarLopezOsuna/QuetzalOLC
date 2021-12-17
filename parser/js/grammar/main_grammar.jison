@@ -234,6 +234,9 @@ pr_global
     | pr_declaration_list tk_semicolon {$$ = $1}
     | pr_declaration_struct tk_semicolon {$$ = $1}
     | pr_declaration_array tk_semicolon {$$ = $1}
+    | error {
+        error_arr.push(new error(@1.first_line, @1.first_column, error_type.SINTACTICO, yytext));  
+    }
 ;
 
 /* Funciones y metodos, 2 producciones para cada uno (trae o no parametros) */

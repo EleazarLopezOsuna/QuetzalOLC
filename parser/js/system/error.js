@@ -9,7 +9,7 @@ class error {
         this.message = message;
     }
     html() {
-        let result = "<td>" + this.type + "</td>";
+        let result = "<td>" + error_type[this.type] + "</td>";
         result += "<td>" + this.message + "</td>";
         result += "<td>" + this.line + "</td>";
         result += "<td>" + this.column + "</td>";
