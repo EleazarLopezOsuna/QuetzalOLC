@@ -145,10 +145,10 @@
         }
 
         function operar() {
-            $("#navbarDropdownMenuLink").addClass("d-none")
             let result = exec(editor_1.getValue())
             console.log(result)
             if (result == "$error$") {
+                $("#navbarDropdownMenuLink").removeClass("d-none")
                 Swal.fire(
                     'Oh oh!',
                     'Se han encontrado errores al ejecutar!',
@@ -162,7 +162,6 @@
         }
 
         function traducir() {
-            $("#navbarDropdownMenuLink").addClass("d-none")
             let result = translate(editor_1.getValue())
             if (result == "$error$") {
                 Swal.fire(
