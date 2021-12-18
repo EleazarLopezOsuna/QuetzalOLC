@@ -13,6 +13,7 @@ class console {
     public relativePos: number;
     public switchEvaluation: number;
     public finalCode: string;
+    public functionsCode: string;
 
     constructor() {
         this.stack = new Array;
@@ -25,6 +26,7 @@ class console {
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
+        this.functionsCode = "";
     }
     saveInHeap(index: number, id: any) {
         this.heap[index] = id;
@@ -46,6 +48,7 @@ class console {
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
+        this.functionsCode = "";
     }
 
 

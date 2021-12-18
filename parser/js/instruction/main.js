@@ -10,8 +10,7 @@ class main extends instruction_1.instruction {
         this.code = code;
     }
     translate(environment) {
-        console_1._3dCode.output += 'void main(){\n';
-        console_1._3dCode.output += 'SP = 36;\n';
+        console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
         this.code.forEach(element => {
             element.translate(environment);
         });

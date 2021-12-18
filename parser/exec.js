@@ -4433,8 +4433,11 @@ exports.declaration_array = declaration_array;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_function = void 0;
+const environment_1 = require("../system/environment");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
+const _return_1 = require("./_return");
 class declaration_function extends instruction_1.instruction {
     constructor(native_type, id, parameters, code, line, column) {
         super(line, column);
@@ -4442,9 +4445,55 @@ class declaration_function extends instruction_1.instruction {
         this.id = id;
         this.parameters = parameters;
         this.code = code;
+        this.functionEnvironment = new environment_1.environment(null);
     }
-    translate(environment) {
-        throw new Error("Method not implemented.");
+    translate(env) {
+        let return_data;
+        let paramName;
+        this.functionEnvironment = new environment_1.environment(env);
+        switch (this.native_type) {
+            case type_1.type.INTEGER:
+            case type_1.type.STRING:
+            case type_1.type.CHAR:
+            case type_1.type.BOOLEAN:
+            case type_1.type.FLOAT:
+                console_1._3dCode.output += 'float ' + this.id + '(){\n';
+                break;
+            default:
+                console_1._3dCode.output += 'void ' + this.id + '(){\n';
+                break;
+        }
+        let size = 0;
+        console_1._3dCode.actualTemp++;
+        this.functionEnvironment.save_variable('return', { value: null, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+        console_1._3dCode.relativePos++;
+        console_1._3dCode.absolutePos++;
+        size++;
+        this.parameters.forEach(param => {
+            return_data = param.execute(this.functionEnvironment);
+            paramName = return_data.value;
+            this.functionEnvironment.save_variable(paramName, return_data, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';//Setting position for parameter ' + paramName + '\n';
+            console_1._3dCode.relativePos++;
+            console_1._3dCode.absolutePos++;
+            size++;
+        });
+        this.code.forEach(instr => {
+            if (instr instanceof _return_1._return) {
+                return_data = instr.execute(this.functionEnvironment);
+                return;
+            }
+            else {
+                instr.translate(this.functionEnvironment);
+            }
+        });
+        console_1._3dCode.relativePos = 0;
+        console_1._3dCode.output += 'return;\n';
+        console_1._3dCode.output += '}\n\n';
+        console_1._3dCode.functionsCode += console_1._3dCode.output;
+        console_1._3dCode.output = "";
+        env.save_variable(this.id, { value: null, type: type_1.type.FUNCTION }, console_1._3dCode.absolutePos, console_1._3dCode.absolutePos, size);
+        return type_1.type.NULL;
     }
     execute(environment) {
         environment.save_function(this.id, this, 0, 0, 0);
@@ -4457,7 +4506,7 @@ class declaration_function extends instruction_1.instruction {
 }
 exports.declaration_function = declaration_function;
 
-},{"../abstract/instruction":5,"../system/type":55}],36:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/environment":53,"../system/type":55,"./_return":26}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_item = void 0;
@@ -4719,8 +4768,7 @@ class main extends instruction_1.instruction {
         this.code = code;
     }
     translate(environment) {
-        console_1._3dCode.output += 'void main(){\n';
-        console_1._3dCode.output += 'SP = 36;\n';
+        console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
         this.code.forEach(element => {
             element.translate(environment);
         });
@@ -5762,6 +5810,8 @@ class console {
         this.absolutePos = 36; //Initial value 36 because of default functions
         this.relativePos = 0;
         this.switchEvaluation = 0;
+        this.finalCode = "";
+        this.functionsCode = "";
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -5781,6 +5831,8 @@ class console {
         this.absolutePos = 36;
         this.relativePos = 0;
         this.switchEvaluation = 0;
+        this.finalCode = "";
+        this.functionsCode = "";
     }
 }
 exports._console = new console();
@@ -5926,6 +5978,7 @@ var type;
     type[type["UNDEFINED"] = 7] = "UNDEFINED";
     type[type["STRUCT"] = 8] = "STRUCT";
     type[type["STRUCT_ITEM"] = 9] = "STRUCT_ITEM";
+    type[type["FUNCTION"] = 10] = "FUNCTION";
 })(type = exports.type || (exports.type = {}));
 /*
         INTEGER        STRING       BOOLEAN       FLOAT     CHAR

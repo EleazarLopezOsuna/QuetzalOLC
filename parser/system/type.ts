@@ -9,6 +9,7 @@ export enum type {
     UNDEFINED = 7,
     STRUCT = 8,
     STRUCT_ITEM = 9,
+    FUNCTION = 10,
 }
 
 export type data = {
