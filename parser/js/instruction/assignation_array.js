@@ -87,7 +87,30 @@ class assignation_array extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Assignacion de Array\"];";
+        const this_count = count;
+        const child_list = [this.expr];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of this.dimensions) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.assignation_array = assignation_array;

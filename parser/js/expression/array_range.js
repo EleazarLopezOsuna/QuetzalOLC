@@ -4,6 +4,7 @@ exports.array_range = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const literal_1 = require("../abstract/literal");
 class array_range extends expression_1.expression {
     constructor(left, right, line, column) {
         super(line, column);
@@ -32,7 +33,25 @@ class array_range extends expression_1.expression {
         return { value: [left_data.value, right_data.value], type: type_1.type.INTEGER };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Rango de Array\"];";
+        const this_count = count;
+        const child_list = [this.left, this.right];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                if (instr instanceof expression_1.expression || instr instanceof literal_1.literal) {
+                    result += instr.plot(Number(count + "1"));
+                }
+                else {
+                    result += "node" + Number(count + "1") + "[label=\"(" + this.line + "," + this.column + ") " + instr + "\"];";
+                }
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.array_range = array_range;

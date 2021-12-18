@@ -29,9 +29,11 @@ class _switch extends instruction_1.instruction {
         // comprobar tipos de los case
         for (const case_instr of this.case_list) {
             if (case_instr.type == _case_1._case_type.CASE) {
-                const case_value_data = case_instr.get_value().execute(environment);
-                if (case_value_data.type != switch_value_data.type) {
-                    error_1.error_arr.push(new error_1.error(case_instr.line, case_instr.column, error_1.error_type.SEMANTICO, 'El case tiene tipo distinto al switch'));
+                let case_value_data = case_instr.get_value();
+                if (case_value_data != null) {
+                    if (case_value_data.type != switch_value_data.type) {
+                        error_1.error_arr.push(new error_1.error(case_instr.line, case_instr.column, error_1.error_type.SEMANTICO, 'El case tiene tipo distinto al switch'));
+                    }
                 }
             }
         }
@@ -43,16 +45,42 @@ class _switch extends instruction_1.instruction {
                 default_case = case_instr;
             }
             else {
-                const case_value_data = case_instr.get_value().execute(environment);
-                if (case_value_data.value == switch_value_data.value) {
-                    return case_instr.execute(environment);
+                let case_value_data = case_instr.get_value();
+                if (case_value_data != null) {
+                    case_value_data = case_value_data.execute(environment);
+                    if (case_value_data.value == switch_value_data.value) {
+                        return case_instr.execute(environment);
+                    }
                 }
             }
         }
         return default_case ? default_case.execute(environment) : { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Switch\"];";
+        const this_count = count;
+        const child_list = [this.switch_value];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of this.case_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._switch = _switch;

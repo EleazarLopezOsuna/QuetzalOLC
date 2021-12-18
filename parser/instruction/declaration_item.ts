@@ -14,7 +14,7 @@ export class declaration_item extends instruction {
             let valueType = this.value.translate(environment);
             return valueType
         } else {
-            
+
         }
         return type.NULL
     }
@@ -35,6 +35,21 @@ export class declaration_item extends instruction {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Declaracion de Item (" + this.variable_id + ")\"];";
+        const this_count = count
+
+        const child_list = [this.value]
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"))
+                    count++
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result
     }
 }

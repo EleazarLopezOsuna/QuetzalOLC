@@ -64,7 +64,25 @@ export class native extends literal {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let plot_val: any = this.value
+        switch (this.type) {
+            case type.INTEGER:
+                plot_val = Number(this.value);
+            case type.FLOAT:
+                plot_val = Number(this.value);
+            case type.STRING:
+                plot_val = this.get_string_value(this.value);
+            case type.CHAR:
+                plot_val = this.get_string_value(this.value);
+            case type.NULL:
+                plot_val = "NULL";
+            case type.BOOLEAN:
+                plot_val = (this.value === 'false') ? false : true;
+        }
+
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Nativo (" + plot_val + "," + type[this.type] + ")\"];";
+
+        return result
     }
 
 }

@@ -143,7 +143,20 @@ class string_binary extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") String binario (" + string_binary_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.left, this.right];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.string_binary = string_binary;

@@ -20,6 +20,8 @@ export class parameter extends expression {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Parametro (" + this.id + "," + type[this.native_type] + ")\"];";
+
+        return result
     }
 }

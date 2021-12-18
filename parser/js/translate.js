@@ -18,17 +18,42 @@ window.translate = function (input) {
                 console.log(error);
             }
         }
+        window.symbol_table = main_environment.get_html();
     }
     catch (error) {
         console.log(error);
     }
     if (error_1.error_arr.length > 0) {
+        // generate error table
+        window.error_table = generate_error_table();
         console.log(error_1.error_arr);
         return "$error$";
     }
-    console_1._3dCode.output = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output;
-    return console_1._3dCode.output;
+    console_1._3dCode.finalCode = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output;
+    return console_1._3dCode.finalCode;
 };
+function generate_error_table() {
+    //console.log(errores);
+    let result = '<table class="table">\n';
+    result += '<thead>\n<tr>\n<th scope="col">#</th>\n';
+    result += '<th scope="col">Tipo</th>\n';
+    result += '<th scope="col">Descripcion</th>\n';
+    result += '<th scope="col">Linea</th>\n';
+    result += '<th scope="col">Columna</th>\n';
+    result += '</tr>\n';
+    result += '</thead>\n';
+    result += '<tbody>\n';
+    let count = 1;
+    error_1.error_arr.forEach(element => {
+        result += '<tr>\n';
+        result += '<th scope="row">' + count + '</th>\n';
+        result += element.html();
+        result += '</tr>\n';
+        count++;
+    });
+    result += '</tbody>\n';
+    return result += '</table>\n';
+}
 function generateHeader() {
     let code = '#include <stdio.h>\n';
     code += '#include <math.h>\n';

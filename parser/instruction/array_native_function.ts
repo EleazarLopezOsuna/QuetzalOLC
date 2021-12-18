@@ -28,9 +28,9 @@ export class array_native_function extends instruction {
         switch (this.option) {
             case "pop":
                 let return_value = return_data.value.body.pop()
-                if(return_value instanceof _array) {
+                if (return_value instanceof _array) {
                     return { value: return_value, type: return_data.type }
-                } else if(return_value != null) {
+                } else if (return_value != null) {
                     return return_value.execute(environment)
                 }
             case "push":
@@ -51,6 +51,21 @@ export class array_native_function extends instruction {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") While (" + this.id + "," + this.option + ")\"];";
+        const this_count = count
+
+        const child_list = [this.parameter]
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"))
+                    count++
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result
     }
 }

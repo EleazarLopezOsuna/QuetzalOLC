@@ -16,7 +16,8 @@ class _continue extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Continue\"];";
+        return result;
     }
 }
 exports._continue = _continue;

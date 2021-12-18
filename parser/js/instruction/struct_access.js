@@ -32,7 +32,22 @@ class struct_access extends instruction_1.instruction {
         }
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Struct Property (" + this.property + ")\"];";
+        const this_count = count;
+        const child_list = [this.id];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.struct_access = struct_access;

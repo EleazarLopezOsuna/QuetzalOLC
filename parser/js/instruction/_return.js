@@ -17,7 +17,20 @@ class _return extends instruction_1.instruction {
         return this.return_value.execute(environment);
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Return\"];";
+        const this_count = count;
+        const child_list = [this.return_value];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._return = _return;

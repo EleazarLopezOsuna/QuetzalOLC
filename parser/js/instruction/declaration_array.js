@@ -97,7 +97,22 @@ class declaration_array extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Declaracion de Array (" + this.variable_id + "," + type_1.type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.value];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.declaration_array = declaration_array;

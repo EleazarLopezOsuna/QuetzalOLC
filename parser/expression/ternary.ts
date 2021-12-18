@@ -32,7 +32,7 @@ export class ternary extends expression {
             _3dCode.output += 'L' + exitTag + ':\n';
             return trueType;
         } else {
-            
+
         }
         // Default
         return type.NULL
@@ -48,7 +48,7 @@ export class ternary extends expression {
         const third_data = this.third.execute(environment);
 
         if (first_data.type == type.BOOLEAN) {
-            return { value: (first_data.value) ? second_data.value : third_data.value, type: (first_data.value) ? second_data.type : third_data.type};
+            return { value: (first_data.value) ? second_data.value : third_data.value, type: (first_data.value) ? second_data.type : third_data.type };
         } else {
             error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar opreacion ternaria: ' + first_data.value + ' & ' + second_data.value + ' & ' + third_data.value));
         }
@@ -57,6 +57,19 @@ export class ternary extends expression {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Ternaria\"];";
+        const this_count = count
+
+        const child_list = [this.first, this.second, this.third]
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"))
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return result
     }
 }

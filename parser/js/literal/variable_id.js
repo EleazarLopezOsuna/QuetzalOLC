@@ -43,7 +43,8 @@ class variable_id extends literal_1.literal {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Nativo (" + this.id + "," + variable_id_type[this.type] + ")\"];";
+        return result;
     }
 }
 exports.variable_id = variable_id;

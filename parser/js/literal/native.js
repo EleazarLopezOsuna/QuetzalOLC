@@ -62,7 +62,23 @@ class native extends literal_1.literal {
         }
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let plot_val = this.value;
+        switch (this.type) {
+            case type_1.type.INTEGER:
+                plot_val = Number(this.value);
+            case type_1.type.FLOAT:
+                plot_val = Number(this.value);
+            case type_1.type.STRING:
+                plot_val = this.get_string_value(this.value);
+            case type_1.type.CHAR:
+                plot_val = this.get_string_value(this.value);
+            case type_1.type.NULL:
+                plot_val = "NULL";
+            case type_1.type.BOOLEAN:
+                plot_val = (this.value === 'false') ? false : true;
+        }
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Nativo (" + plot_val + "," + type_1.type[this.type] + ")\"];";
+        return result;
     }
 }
 exports.native = native;

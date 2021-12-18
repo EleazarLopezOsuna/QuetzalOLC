@@ -64,6 +64,29 @@ export class declaration_struct_item extends instruction {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Lista de Declaraciones (" + this.variable_id + ")\"];";
+        const this_count = count
+        for (const str of this.struct_id_array) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += "node" + Number(count + "1") + "[label=\"(" + this.line + "," + this.column + ") Declaracion (" + str + ")\"];";
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        const arr_list = [this.parameters]
+        for (const instr_arr of arr_list) {
+            for (const instr of instr_arr) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"))
+                    count++
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result
     }
 }

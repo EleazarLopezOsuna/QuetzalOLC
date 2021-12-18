@@ -96,9 +96,9 @@ export class native_function extends instruction {
                     _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + numero + ';//Save value\n';
                     _3dCode.output += 'T' + _3dCode.actualTemp + ' = HP;//Save start position of string\n';
                     _3dCode.output += 'intToString();//Call function\n';
-                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n'; 
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
                     return type.STRING;
-                } else if (dataType == type.CHAR){
+                } else if (dataType == type.CHAR) {
                     return type.CHAR
                 }
                 return type.STRING;
@@ -177,6 +177,21 @@ export class native_function extends instruction {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Funcion Nativa (" + this.option + ")\"];";
+        const this_count = count
+
+        const child_list = [this.value]
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"))
+                    count++
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result
     }
 }

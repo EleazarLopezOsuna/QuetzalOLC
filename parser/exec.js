@@ -1093,7 +1093,20 @@ class arithmetic_binary extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Aritmetica (" + arithmetic_binary_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.left, this.right];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.arithmetic_binary = arithmetic_binary;
@@ -1231,7 +1244,20 @@ class arithmetic_unary extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Aritmetica (" + arithmetic_unary_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.expr];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.arithmetic_unary = arithmetic_unary;
@@ -1243,6 +1269,7 @@ exports.array_range = void 0;
 const expression_1 = require("../abstract/expression");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const literal_1 = require("../abstract/literal");
 class array_range extends expression_1.expression {
     constructor(left, right, line, column) {
         super(line, column);
@@ -1271,12 +1298,30 @@ class array_range extends expression_1.expression {
         return { value: [left_data.value, right_data.value], type: type_1.type.INTEGER };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Rango de Array\"];";
+        const this_count = count;
+        const child_list = [this.left, this.right];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                if (instr instanceof expression_1.expression || instr instanceof literal_1.literal) {
+                    result += instr.plot(Number(count + "1"));
+                }
+                else {
+                    result += "node" + Number(count + "1") + "[label=\"(" + this.line + "," + this.column + ") " + instr + "\"];";
+                }
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.array_range = array_range;
 
-},{"../abstract/expression":4,"../system/error":54,"../system/type":55}],12:[function(require,module,exports){
+},{"../abstract/expression":4,"../abstract/literal":6,"../system/error":54,"../system/type":55}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logic = exports.logic_type = void 0;
@@ -1345,7 +1390,20 @@ class logic extends expression_1.expression {
         }
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Logica (" + logic_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.left, this.right];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
     execute(environment) {
         const left_data = this.left.execute(environment);
@@ -1367,6 +1425,7 @@ exports.logic = logic;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parameter = void 0;
 const expression_1 = require("../abstract/expression");
+const type_1 = require("../system/type");
 class parameter extends expression_1.expression {
     constructor(native_type, id, line, column) {
         super(line, column);
@@ -1380,12 +1439,13 @@ class parameter extends expression_1.expression {
         return { value: this.id, type: this.native_type };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Parametro (" + this.id + "," + type_1.type[this.native_type] + ")\"];";
+        return result;
     }
 }
 exports.parameter = parameter;
 
-},{"../abstract/expression":4}],14:[function(require,module,exports){
+},{"../abstract/expression":4,"../system/type":55}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.relational = exports.relational_type = void 0;
@@ -1443,7 +1503,20 @@ class relational extends expression_1.expression {
         }
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Relacional (" + relational_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.left, this.right];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
     execute(environment) {
         const left_data = this.left.execute(environment);
@@ -1614,7 +1687,20 @@ class string_binary extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") String binario (" + string_binary_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.left, this.right];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.string_binary = string_binary;
@@ -1697,7 +1783,20 @@ class string_ternary extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") String ternario (" + string_ternary_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.first, this.second, this.third];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.string_ternary = string_ternary;
@@ -1833,7 +1932,20 @@ class string_unary extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") String unario (" + string_unary_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.expr];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.string_unary = string_unary;
@@ -1898,7 +2010,20 @@ class ternary extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Ternaria\"];";
+        const this_count = count;
+        const child_list = [this.first, this.second, this.third];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.ternary = ternary;
@@ -1988,7 +2113,20 @@ class unary extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Unaria\"];";
+        const this_count = count;
+        const child_list = [this.expr];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.unary = unary;
@@ -3419,7 +3557,8 @@ class _break extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Break\"];";
+        return result;
     }
 }
 exports._break = _break;
@@ -3447,28 +3586,30 @@ class _case extends instruction_1.instruction {
     }
     translate(environment) {
         if (this.type == _case_type.CASE) {
-            this.case_value.translate(environment);
-            const conditionTemp = console_1._3dCode.actualTemp;
-            console_1._3dCode.actualTag++;
-            let lTrue = console_1._3dCode.actualTag;
-            console_1._3dCode.output += 'if(T' + conditionTemp + ' == T' + console_1._3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
-            console_1._3dCode.actualTag++;
-            let lFalse = console_1._3dCode.actualTag;
-            console_1._3dCode.output += "goto L" + lFalse + ";\n";
-            console_1._3dCode.actualTag++;
-            let salida = console_1._3dCode.actualTag;
-            console_1._3dCode.output += "L" + lTrue + ":\n";
-            for (const instr of this.code) {
-                try {
-                    instr.translate(environment);
+            if (this.case_value != null) {
+                this.case_value.translate(environment);
+                const conditionTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTag++;
+                let lTrue = console_1._3dCode.actualTag;
+                console_1._3dCode.output += 'if(T' + conditionTemp + ' == T' + console_1._3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
+                console_1._3dCode.actualTag++;
+                let lFalse = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "goto L" + lFalse + ";\n";
+                console_1._3dCode.actualTag++;
+                let salida = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + lTrue + ":\n";
+                for (const instr of this.code) {
+                    try {
+                        instr.translate(environment);
+                    }
+                    catch (error) {
+                        console.log(error);
+                    }
                 }
-                catch (error) {
-                    console.log(error);
-                }
+                console_1._3dCode.output += "goto L" + salida + ";\n";
+                console_1._3dCode.output += "L" + salida + ":\n";
+                console_1._3dCode.output += "L" + lFalse + ":\n";
             }
-            console_1._3dCode.output += "goto L" + salida + ";\n";
-            console_1._3dCode.output += "L" + salida + ":\n";
-            console_1._3dCode.output += "L" + lFalse + ":\n";
         }
         else {
             console_1._3dCode.actualTag++;
@@ -3502,7 +3643,32 @@ class _case extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Case (" + _case_type[this.type] + ")\"];";
+        const this_count = count;
+        if (this.case_value != null) {
+            const child_list = [this.case_value];
+            for (const instr of child_list) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        for (const instr of this.code) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._case = _case;
@@ -3526,7 +3692,8 @@ class _continue extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Continue\"];";
+        return result;
     }
 }
 exports._continue = _continue;
@@ -3620,7 +3787,20 @@ class _for extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") For\"];";
+        const this_count = count;
+        const child_list = [this.initialization, this.condition, this.unary];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._for = _for;
@@ -3723,7 +3903,39 @@ class _if extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") For\"];";
+        const this_count = count;
+        const child_list = [this.condition];
+        const arr_list = [this.code];
+        if (this.else_statement instanceof instruction_1.instruction) {
+            child_list.push(this.else_statement);
+        }
+        else {
+            arr_list.push(this.else_statement);
+        }
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr_arr of arr_list) {
+            for (const instr of instr_arr) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports._if = _if;
@@ -3748,7 +3960,20 @@ class _return extends instruction_1.instruction {
         return this.return_value.execute(environment);
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Return\"];";
+        const this_count = count;
+        const child_list = [this.return_value];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._return = _return;
@@ -3785,9 +4010,11 @@ class _switch extends instruction_1.instruction {
         // comprobar tipos de los case
         for (const case_instr of this.case_list) {
             if (case_instr.type == _case_1._case_type.CASE) {
-                const case_value_data = case_instr.get_value().execute(environment);
-                if (case_value_data.type != switch_value_data.type) {
-                    error_1.error_arr.push(new error_1.error(case_instr.line, case_instr.column, error_1.error_type.SEMANTICO, 'El case tiene tipo distinto al switch'));
+                let case_value_data = case_instr.get_value();
+                if (case_value_data != null) {
+                    if (case_value_data.type != switch_value_data.type) {
+                        error_1.error_arr.push(new error_1.error(case_instr.line, case_instr.column, error_1.error_type.SEMANTICO, 'El case tiene tipo distinto al switch'));
+                    }
                 }
             }
         }
@@ -3799,16 +4026,42 @@ class _switch extends instruction_1.instruction {
                 default_case = case_instr;
             }
             else {
-                const case_value_data = case_instr.get_value().execute(environment);
-                if (case_value_data.value == switch_value_data.value) {
-                    return case_instr.execute(environment);
+                let case_value_data = case_instr.get_value();
+                if (case_value_data != null) {
+                    case_value_data = case_value_data.execute(environment);
+                    if (case_value_data.value == switch_value_data.value) {
+                        return case_instr.execute(environment);
+                    }
                 }
             }
         }
         return default_case ? default_case.execute(environment) : { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Switch\"];";
+        const this_count = count;
+        const child_list = [this.switch_value];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of this.case_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._switch = _switch;
@@ -3947,7 +4200,30 @@ class _while extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") While (" + _while_type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.condition];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of this.code) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._while = _while;
@@ -4035,7 +4311,19 @@ class array_access extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") While (" + this.id + ")\"];";
+        const this_count = count;
+        for (const instr of this.dimensions) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.array_access = array_access;
@@ -4090,7 +4378,22 @@ class array_native_function extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") While (" + this.id + "," + this.option + ")\"];";
+        const this_count = count;
+        const child_list = [this.parameter];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.array_native_function = array_native_function;
@@ -4185,7 +4488,30 @@ class assignation_array extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Assignacion de Array\"];";
+        const this_count = count;
+        const child_list = [this.expr];
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of this.dimensions) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.assignation_array = assignation_array;
@@ -4247,7 +4573,22 @@ class assignation_unary extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Assignacion Unaria (" + this.id + ")\"];";
+        const this_count = count;
+        const child_list = [this.expr];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.assignation_unary = assignation_unary;
@@ -4319,7 +4660,19 @@ class call extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Llamada (" + this.id + ")\"];";
+        const this_count = count;
+        for (const instr of this.parameters) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.call = call;
@@ -4424,7 +4777,22 @@ class declaration_array extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Declaracion de Array (" + this.variable_id + "," + type_1.type[this.type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.value];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.declaration_array = declaration_array;
@@ -4452,7 +4820,22 @@ class declaration_function extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Declaracion de Funcion (" + this.id + "," + type_1.type[this.native_type] + ")\"];";
+        const this_count = count;
+        const arr_list = [this.parameters, this.code];
+        for (const instr_arr of arr_list) {
+            for (const instr of instr_arr) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.declaration_function = declaration_function;
@@ -4489,7 +4872,22 @@ class declaration_item extends instruction_1.instruction {
         return value_data;
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Declaracion de Item (" + this.variable_id + ")\"];";
+        const this_count = count;
+        const child_list = [this.value];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.declaration_item = declaration_item;
@@ -4598,7 +4996,22 @@ class declaration_list extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Lista de Declaraciones (" + type_1.type[this.native_type] + ")\"];";
+        const this_count = count;
+        const arr_list = [this.declare_list];
+        for (const instr_arr of arr_list) {
+            for (const instr of instr_arr) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.declaration_list = declaration_list;
@@ -4640,7 +5053,22 @@ class declaration_struct extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Lista de Declaraciones (" + this.variable_id + ")\"];";
+        const this_count = count;
+        const arr_list = [this.value];
+        for (const instr_arr of arr_list) {
+            for (const instr of instr_arr) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.declaration_struct = declaration_struct;
@@ -4701,7 +5129,32 @@ class declaration_struct_item extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Lista de Declaraciones (" + this.variable_id + ")\"];";
+        const this_count = count;
+        for (const str of this.struct_id_array) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += "node" + Number(count + "1") + "[label=\"(" + this.line + "," + this.column + ") Declaracion (" + str + ")\"];";
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        const arr_list = [this.parameters];
+        for (const instr_arr of arr_list) {
+            for (const instr of instr_arr) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.declaration_struct_item = declaration_struct_item;
@@ -4719,8 +5172,7 @@ class main extends instruction_1.instruction {
         this.code = code;
     }
     translate(environment) {
-        console_1._3dCode.output += 'void main(){\n';
-        console_1._3dCode.output += 'SP = 36;\n';
+        console_1._3dCode.output = 'void main(){\n' + 'SP = 36;\n' + console_1._3dCode.output;
         this.code.forEach(element => {
             element.translate(environment);
         });
@@ -4736,19 +5188,17 @@ class main extends instruction_1.instruction {
     }
     plot(count) {
         let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Main\"];";
-        // result += "node" + count + "1[label=\"(" + this.line + "," + this.column + ") Codigo\"];";
-        // for (const instr of this.code) {
-        //     try {
-        //         result += "node" + count + " -> " + "node" + count + "1;";
-        //         count++
-        //         result += instr.plot(Number(count + "11"))
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // }
-        // result += "node" + count + "1 -> " + "node" + count + "11;";
-        // // Flechas
-        // result += "node" + count + " -> " + "node" + count + "1;";
+        const this_count = count;
+        for (const instr of this.code) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
         return result;
     }
 }
@@ -4936,7 +5386,22 @@ class native_function extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Funcion Nativa (" + this.option + ")\"];";
+        const this_count = count;
+        const child_list = [this.value];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.native_function = native_function;
@@ -5043,7 +5508,22 @@ class native_parse extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Parse (" + type_1.type[this.native_type] + ")\"];";
+        const this_count = count;
+        const child_list = [this.value];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.native_parse = native_parse;
@@ -5147,7 +5627,22 @@ class print extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Print (" + print_type[this.type] + ")\"];";
+        const this_count = count;
+        const arr_list = [this.expresions];
+        for (const instr_arr of arr_list) {
+            for (const instr of instr_arr) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.print = print;
@@ -5187,7 +5682,22 @@ class struct_access extends instruction_1.instruction {
         }
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Struct Property (" + this.property + ")\"];";
+        const this_count = count;
+        const child_list = [this.id];
+        for (const instr of child_list) {
+            if (instr != null) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result;
     }
 }
 exports.struct_access = struct_access;
@@ -5281,7 +5791,8 @@ class unary_instruction extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Continue (" + this.variable_id + "," + unary_instruction_type[this.type] + ")\"];";
+        return result;
     }
 }
 exports.unary_instruction = unary_instruction;
@@ -5488,7 +5999,19 @@ class _array extends literal_1.literal {
         return { value: this, type: type_1.type.UNDEFINED };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Array\"];";
+        const this_count = count;
+        for (const instr of this.body) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._array = _array;
@@ -5526,7 +6049,19 @@ class _struct extends literal_1.literal {
         return { value: this, type: type_1.type.UNDEFINED };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Struct\"];";
+        const this_count = count;
+        for (const instr of this.body) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._struct = _struct;
@@ -5596,7 +6131,23 @@ class native extends literal_1.literal {
         }
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let plot_val = this.value;
+        switch (this.type) {
+            case type_1.type.INTEGER:
+                plot_val = Number(this.value);
+            case type_1.type.FLOAT:
+                plot_val = Number(this.value);
+            case type_1.type.STRING:
+                plot_val = this.get_string_value(this.value);
+            case type_1.type.CHAR:
+                plot_val = this.get_string_value(this.value);
+            case type_1.type.NULL:
+                plot_val = "NULL";
+            case type_1.type.BOOLEAN:
+                plot_val = (this.value === 'false') ? false : true;
+        }
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Nativo (" + plot_val + "," + type_1.type[this.type] + ")\"];";
+        return result;
     }
 }
 exports.native = native;
@@ -5645,7 +6196,19 @@ class struct_item extends literal_1.literal {
         return { value: this, type: type_1.type.UNDEFINED };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Struct Item (" + this.parent_struct_id + ")\"];";
+        const this_count = count;
+        for (const instr of this.body) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports.struct_item = struct_item;
@@ -5696,7 +6259,8 @@ class variable_id extends literal_1.literal {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Nativo (" + this.id + "," + variable_id_type[this.type] + ")\"];";
+        return result;
     }
 }
 exports.variable_id = variable_id;
@@ -5762,6 +6326,7 @@ class console {
         this.absolutePos = 36; //Initial value 36 because of default functions
         this.relativePos = 0;
         this.switchEvaluation = 0;
+        this.finalCode = "";
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -5781,6 +6346,7 @@ class console {
         this.absolutePos = 36;
         this.relativePos = 0;
         this.switchEvaluation = 0;
+        this.finalCode = "";
     }
 }
 exports._console = new console();

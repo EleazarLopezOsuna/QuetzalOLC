@@ -27,7 +27,7 @@ export class array_range extends expression {
             error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Fin de rango no valido: ' + right_data.value));
             return { value: null, type: type.NULL }
         }
-        if(left_data.type == type.INTEGER && right_data.type == type.INTEGER && left_data.value >= right_data.value) {
+        if (left_data.type == type.INTEGER && right_data.type == type.INTEGER && left_data.value >= right_data.value) {
             error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Inicio del rango tiene que ser mayor que el final'));
             return { value: null, type: type.NULL }
         }
@@ -36,6 +36,23 @@ export class array_range extends expression {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Rango de Array\"];";
+        const this_count = count
+
+        const child_list = [this.left, this.right]
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                if (instr instanceof expression || instr instanceof literal) {
+                    result += instr.plot(Number(count + "1"))
+                } else {
+                    result += "node" + Number(count + "1") + "[label=\"(" + this.line + "," + this.column + ") " + instr + "\"];";
+                }
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return result
     }
 }

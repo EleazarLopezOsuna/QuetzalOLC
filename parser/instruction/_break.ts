@@ -11,15 +11,17 @@ export class _break extends instruction {
         return type.NULL;
     }
 
-    constructor( line: number, column: number) {
+    constructor(line: number, column: number) {
         super(line, column);
     }
 
     public execute(environment: environment): data {
-        return {value: null, type: type.NULL}
+        return { value: null, type: type.NULL }
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Break\"];";
+
+        return result
     }
 }

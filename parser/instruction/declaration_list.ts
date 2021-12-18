@@ -104,6 +104,21 @@ export class declaration_list extends instruction {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Lista de Declaraciones (" + type[this.native_type] + ")\"];";
+        const this_count = count
+
+        const arr_list = [this.declare_list]
+        for (const instr_arr of arr_list) {
+            for (const instr of instr_arr) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"))
+                    count++
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        return result
     }
 }

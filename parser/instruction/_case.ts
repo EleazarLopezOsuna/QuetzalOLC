@@ -16,27 +16,29 @@ export class _case extends instruction {
 
     public translate(environment: environment): type {
         if (this.type == _case_type.CASE) {
-            this.case_value.translate(environment);
-            const conditionTemp = _3dCode.actualTemp;
-            _3dCode.actualTag++;
-            let lTrue = _3dCode.actualTag;
-            _3dCode.output += 'if(T' + conditionTemp + ' == T' + _3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
-            _3dCode.actualTag++;
-            let lFalse = _3dCode.actualTag;
-            _3dCode.output += "goto L" + lFalse + ";\n";
-            _3dCode.actualTag++;
-            let salida = _3dCode.actualTag;
-            _3dCode.output += "L" + lTrue + ":\n"
-            for (const instr of this.code) {
-                try {
-                    instr.translate(environment);
-                } catch (error) {
-                    console.log(error);
+            if (this.case_value != null) {
+                this.case_value.translate(environment);
+                const conditionTemp = _3dCode.actualTemp;
+                _3dCode.actualTag++;
+                let lTrue = _3dCode.actualTag;
+                _3dCode.output += 'if(T' + conditionTemp + ' == T' + _3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
+                _3dCode.actualTag++;
+                let lFalse = _3dCode.actualTag;
+                _3dCode.output += "goto L" + lFalse + ";\n";
+                _3dCode.actualTag++;
+                let salida = _3dCode.actualTag;
+                _3dCode.output += "L" + lTrue + ":\n"
+                for (const instr of this.code) {
+                    try {
+                        instr.translate(environment);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
+                _3dCode.output += "goto L" + salida + ";\n";
+                _3dCode.output += "L" + salida + ":\n";
+                _3dCode.output += "L" + lFalse + ":\n";
             }
-            _3dCode.output += "goto L" + salida + ";\n";
-            _3dCode.output += "L" + salida + ":\n";
-            _3dCode.output += "L" + lFalse + ":\n";
         } else {
             _3dCode.actualTag++;
             let salida = _3dCode.actualTag;
@@ -53,11 +55,11 @@ export class _case extends instruction {
         return type.NULL;
     }
 
-    constructor(public case_value: expression | literal, public code: Array<instruction>, public type: _case_type, line: number, column: number) {
+    constructor(public case_value: expression | literal | null, public code: Array<instruction>, public type: _case_type, line: number, column: number) {
         super(line, column);
     }
 
-    public get_value(): expression | literal {
+    public get_value(): expression | literal | null {
         return this.case_value
     }
 
@@ -74,6 +76,29 @@ export class _case extends instruction {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Case (" + _case_type[this.type] + ")\"];";
+        const this_count = count
+        if (this.case_value != null) {
+            const child_list = [this.case_value]
+            for (const instr of child_list) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"))
+                    count++
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        for (const instr of this.code) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"))
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return result
     }
 }

@@ -39,7 +39,7 @@ export class string_binary extends expression {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
-                    
+
                 }
                 break;
             case string_binary_type.REPEAT:
@@ -63,7 +63,7 @@ export class string_binary extends expression {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
-                    
+
                 }
                 break;
             case string_binary_type.POSITION:
@@ -87,7 +87,7 @@ export class string_binary extends expression {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
-                    
+
                 }
                 break;
         }
@@ -140,6 +140,19 @@ export class string_binary extends expression {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") String binario (" + string_binary_type[this.type] + ")\"];";
+        const this_count = count
+
+        const child_list = [this.left, this.right]
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"))
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return result
     }
 }

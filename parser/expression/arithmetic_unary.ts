@@ -26,7 +26,7 @@ export class arithmetic_unary extends expression {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = sqrt(T' + exprTemp + ');//Get sqrt\n';
                         return type.FLOAT;
                     default:
-                        
+
                 }
                 break;
             case arithmetic_unary_type.COS:
@@ -37,14 +37,14 @@ export class arithmetic_unary extends expression {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get cos\n';
                         return type.FLOAT;
                     default:
-                        
+
                 }
                 break;
             case arithmetic_unary_type.SIN:
                 switch (exprType) {
                     case type.INTEGER:
-                    case type.FLOAT:_3dCode.actualTemp++;
-                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sin\n';
+                    case type.FLOAT: _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sin\n';
                         return type.FLOAT;
                     default:
 
@@ -53,8 +53,8 @@ export class arithmetic_unary extends expression {
             case arithmetic_unary_type.TAN:
                 switch (exprType) {
                     case type.INTEGER:
-                    case type.FLOAT:_3dCode.actualTemp++;
-                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get tan\n';
+                    case type.FLOAT: _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get tan\n';
                         return type.FLOAT;
                     default:
 
@@ -63,11 +63,11 @@ export class arithmetic_unary extends expression {
             case arithmetic_unary_type.LOG10:
                 switch (exprType) {
                     case type.INTEGER:
-                    case type.FLOAT:_3dCode.actualTemp++;
-                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get log10\n';
+                    case type.FLOAT: _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get log10\n';
                         return type.FLOAT;
                     default:
-                        
+
                 }
                 break;
 
@@ -136,6 +136,19 @@ export class arithmetic_unary extends expression {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Aritmetica (" + arithmetic_unary_type[this.type] + ")\"];";
+        const this_count = count
+
+        const child_list = [this.expr]
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"))
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return result
     }
 }

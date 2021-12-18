@@ -20,28 +20,30 @@ class _case extends instruction_1.instruction {
     }
     translate(environment) {
         if (this.type == _case_type.CASE) {
-            this.case_value.translate(environment);
-            const conditionTemp = console_1._3dCode.actualTemp;
-            console_1._3dCode.actualTag++;
-            let lTrue = console_1._3dCode.actualTag;
-            console_1._3dCode.output += 'if(T' + conditionTemp + ' == T' + console_1._3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
-            console_1._3dCode.actualTag++;
-            let lFalse = console_1._3dCode.actualTag;
-            console_1._3dCode.output += "goto L" + lFalse + ";\n";
-            console_1._3dCode.actualTag++;
-            let salida = console_1._3dCode.actualTag;
-            console_1._3dCode.output += "L" + lTrue + ":\n";
-            for (const instr of this.code) {
-                try {
-                    instr.translate(environment);
+            if (this.case_value != null) {
+                this.case_value.translate(environment);
+                const conditionTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTag++;
+                let lTrue = console_1._3dCode.actualTag;
+                console_1._3dCode.output += 'if(T' + conditionTemp + ' == T' + console_1._3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
+                console_1._3dCode.actualTag++;
+                let lFalse = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "goto L" + lFalse + ";\n";
+                console_1._3dCode.actualTag++;
+                let salida = console_1._3dCode.actualTag;
+                console_1._3dCode.output += "L" + lTrue + ":\n";
+                for (const instr of this.code) {
+                    try {
+                        instr.translate(environment);
+                    }
+                    catch (error) {
+                        console.log(error);
+                    }
                 }
-                catch (error) {
-                    console.log(error);
-                }
+                console_1._3dCode.output += "goto L" + salida + ";\n";
+                console_1._3dCode.output += "L" + salida + ":\n";
+                console_1._3dCode.output += "L" + lFalse + ":\n";
             }
-            console_1._3dCode.output += "goto L" + salida + ";\n";
-            console_1._3dCode.output += "L" + salida + ":\n";
-            console_1._3dCode.output += "L" + lFalse + ":\n";
         }
         else {
             console_1._3dCode.actualTag++;
@@ -75,7 +77,32 @@ class _case extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Case (" + _case_type[this.type] + ")\"];";
+        const this_count = count;
+        if (this.case_value != null) {
+            const child_list = [this.case_value];
+            for (const instr of child_list) {
+                try {
+                    result += "node" + this_count + " -> " + "node" + count + "1;";
+                    result += instr.plot(Number(count + "1"));
+                    count++;
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        for (const instr of this.code) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        return result;
     }
 }
 exports._case = _case;

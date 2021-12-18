@@ -42,7 +42,7 @@ export class string_ternary extends expression {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
-                    
+
                 }
                 break;
         }
@@ -62,8 +62,8 @@ export class string_ternary extends expression {
         switch (this.type) {
             case string_ternary_type.SUBSTRING:
                 if (first_data.type == type.STRING && second_data.type == type.INTEGER && third_data.type == type.INTEGER) {
-                    let string_return:String = first_data.value.toString()
-                    return { value: string_return.substr(second_data.value,third_data.value), type: type.STRING };
+                    let string_return: String = first_data.value.toString()
+                    return { value: string_return.substr(second_data.value, third_data.value), type: type.STRING };
                 } else {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar substring ' + first_data.value + ' & ' + second_data.value + ' & ' + third_data.value));
                 }
@@ -74,6 +74,19 @@ export class string_ternary extends expression {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") String ternario (" + string_ternary_type[this.type] + ")\"];";
+        const this_count = count
+
+        const child_list = [this.first, this.second, this.third]
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"))
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return result
     }
 }

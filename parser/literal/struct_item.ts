@@ -45,6 +45,18 @@ export class struct_item extends literal {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Struct Item (" + this.parent_struct_id + ")\"];";
+        const this_count = count
+
+        for (const instr of this.body) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"))
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return result
     }
 }

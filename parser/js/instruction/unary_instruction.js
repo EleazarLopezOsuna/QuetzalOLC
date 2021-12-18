@@ -86,7 +86,8 @@ class unary_instruction extends expression_1.expression {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Continue (" + this.variable_id + "," + unary_instruction_type[this.type] + ")\"];";
+        return result;
     }
 }
 exports.unary_instruction = unary_instruction;

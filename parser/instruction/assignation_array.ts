@@ -25,10 +25,10 @@ export class assignation_array extends instruction {
                 let uno = _3dCode.actualTemp;
                 _3dCode.actualTemp++;
                 let dos = _3dCode.actualTemp;
-                for(let i = 0; i < tempList.length; i++){
-                    if(i == 0)
+                for (let i = 0; i < tempList.length; i++) {
+                    if (i == 0)
                         _3dCode.output += 'T' + uno + ' = T' + tempList[i] + ';\n';
-                    else{
+                    else {
                         _3dCode.output += 'T' + dos + ' = T' + uno + ' * ' + return_data.value.dimensionSize.get(i) + ';\n';
                         _3dCode.output += 'T' + uno + ' = T' + dos + ' + T' + tempList[i] + ';\n';
                     }
@@ -90,6 +90,27 @@ export class assignation_array extends instruction {
     }
 
     public plot(count: number): string {
-        throw new Error("Method not implemented.");
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Assignacion de Array\"];";
+        const this_count = count
+        const child_list = [this.expr]
+        for (const instr of child_list) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"))
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of this.dimensions) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"))
+                count++
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return result
     }
 }

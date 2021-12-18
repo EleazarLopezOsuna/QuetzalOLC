@@ -14,6 +14,7 @@ class console {
         this.absolutePos = 36; //Initial value 36 because of default functions
         this.relativePos = 0;
         this.switchEvaluation = 0;
+        this.finalCode = "";
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -33,6 +34,7 @@ class console {
         this.absolutePos = 36;
         this.relativePos = 0;
         this.switchEvaluation = 0;
+        this.finalCode = "";
     }
 }
 exports._console = new console();

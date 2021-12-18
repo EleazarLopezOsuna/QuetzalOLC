@@ -10,8 +10,7 @@ class main extends instruction_1.instruction {
         this.code = code;
     }
     translate(environment) {
-        console_1._3dCode.output += 'void main(){\n';
-        console_1._3dCode.output += 'SP = 36;\n';
+        console_1._3dCode.output = 'void main(){\n' + 'SP = 36;\n' + console_1._3dCode.output;
         this.code.forEach(element => {
             element.translate(environment);
         });
@@ -27,19 +26,17 @@ class main extends instruction_1.instruction {
     }
     plot(count) {
         let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Main\"];";
-        // result += "node" + count + "1[label=\"(" + this.line + "," + this.column + ") Codigo\"];";
-        // for (const instr of this.code) {
-        //     try {
-        //         result += "node" + count + " -> " + "node" + count + "1;";
-        //         count++
-        //         result += instr.plot(Number(count + "11"))
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // }
-        // result += "node" + count + "1 -> " + "node" + count + "11;";
-        // // Flechas
-        // result += "node" + count + " -> " + "node" + count + "1;";
+        const this_count = count;
+        for (const instr of this.code) {
+            try {
+                result += "node" + this_count + " -> " + "node" + count + "1;";
+                result += instr.plot(Number(count + "1"));
+                count++;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
         return result;
     }
 }
