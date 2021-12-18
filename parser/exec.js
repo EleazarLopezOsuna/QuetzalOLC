@@ -5221,11 +5221,7 @@ class main extends instruction_1.instruction {
         this.code = code;
     }
     translate(environment) {
-<<<<<<< HEAD
-        console_1._3dCode.output = 'void main(){\n' + 'SP = 36;\n' + console_1._3dCode.output;
-=======
         console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
->>>>>>> 00ce06a1bfeb26455fe73f7322e14b92e338c295
         this.code.forEach(element => {
             element.translate(environment);
         });
@@ -6380,10 +6376,7 @@ class console {
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
-<<<<<<< HEAD
-=======
         this.functionsCode = "";
->>>>>>> 00ce06a1bfeb26455fe73f7322e14b92e338c295
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -6404,10 +6397,7 @@ class console {
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
-<<<<<<< HEAD
-=======
         this.functionsCode = "";
->>>>>>> 00ce06a1bfeb26455fe73f7322e14b92e338c295
     }
 }
 exports._console = new console();
