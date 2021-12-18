@@ -6,7 +6,7 @@ import { instruction } from "../abstract/instruction";
 export class main extends instruction {
 
     public translate(environment: environment): type {
-        _3dCode.output = 'void main(){\n' + 'SP = 36;\n' + _3dCode.output;
+        _3dCode.output = 'void main(){\n' + 'SP = ' + _3dCode.absolutePos + ';\n' + _3dCode.output;
         this.code.forEach(element => {
             element.translate(environment)
         });

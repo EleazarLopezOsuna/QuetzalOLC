@@ -29,7 +29,11 @@ window.translate = function (input) {
         console.log(error_1.error_arr);
         return "$error$";
     }
+<<<<<<< HEAD
     console_1._3dCode.finalCode = generateHeader() + generateDefaultFunctions() + console_1._3dCode.output;
+=======
+    console_1._3dCode.finalCode = generateHeader() + generateDefaultFunctions() + console_1._3dCode.functionsCode + console_1._3dCode.output;
+>>>>>>> 00ce06a1bfeb26455fe73f7322e14b92e338c295
     return console_1._3dCode.finalCode;
 };
 function generate_error_table() {
@@ -57,8 +61,8 @@ function generate_error_table() {
 function generateHeader() {
     let code = '#include <stdio.h>\n';
     code += '#include <math.h>\n';
-    code += 'float HEAP[16384];\n';
-    code += 'float STACK[16384];\n';
+    code += 'float HEAP[100000000];\n';
+    code += 'float STACK[100000000];\n';
     code += 'float HP;\n';
     code += 'float SP;\n';
     code += 'float ';

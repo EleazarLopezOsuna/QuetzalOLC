@@ -13,6 +13,7 @@ var type;
     type[type["UNDEFINED"] = 7] = "UNDEFINED";
     type[type["STRUCT"] = 8] = "STRUCT";
     type[type["STRUCT_ITEM"] = 9] = "STRUCT_ITEM";
+    type[type["FUNCTION"] = 10] = "FUNCTION";
 })(type = exports.type || (exports.type = {}));
 /*
         INTEGER        STRING       BOOLEAN       FLOAT     CHAR

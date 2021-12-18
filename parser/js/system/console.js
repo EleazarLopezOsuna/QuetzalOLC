@@ -15,6 +15,10 @@ class console {
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
+<<<<<<< HEAD
+=======
+        this.functionsCode = "";
+>>>>>>> 00ce06a1bfeb26455fe73f7322e14b92e338c295
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -35,6 +39,10 @@ class console {
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
+<<<<<<< HEAD
+=======
+        this.functionsCode = "";
+>>>>>>> 00ce06a1bfeb26455fe73f7322e14b92e338c295
     }
 }
 exports._console = new console();
