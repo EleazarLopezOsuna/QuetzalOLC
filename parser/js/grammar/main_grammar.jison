@@ -34,6 +34,7 @@
     const {_while, _while_type} = require('../instruction/_while');
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
     const {_for} = require('../instruction/_for');
+    const {_forin} = require('../instruction/_forin');
     const {declaration_array} = require('../instruction/declaration_array');
     const {declaration_struct} = require('../instruction/declaration_struct');
     const {declaration_struct_item} = require('../instruction/declaration_struct_item');
@@ -534,7 +535,10 @@ pr_for
     }   
     | tk_for tk_par_o pr_assignation tk_semicolon pr_expr tk_semicolon pr_unary_instruction tk_par_c tk_cbra_o pr_instructions tk_cbra_c  {
         $$ = new _for($3, $5, $7, $10, @1.first_line,@1.first_column);
-    }   
+    }
+    | tk_for tk_par_o tk_id tk_in pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new _forin($3, $5, $8, @1.first_line, @1.first_column);
+    }
 ;
 
 /* while(expression){instructions} */

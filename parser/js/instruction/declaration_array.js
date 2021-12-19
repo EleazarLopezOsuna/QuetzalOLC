@@ -33,6 +33,8 @@ class declaration_array extends instruction_1.instruction {
             console_1._3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + console_1._3dCode.relativePos + ' of this context\n';
             environment.save_variable(this.variable_id, { value: this.value, type: this.type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, this.value.body.length);
             this.value.translateElements(environment, 0);
+            console.log(this.value);
+            console.log('aaaaaa');
         }
         else if (this.value instanceof variable_id_1.variable_id) {
         }
