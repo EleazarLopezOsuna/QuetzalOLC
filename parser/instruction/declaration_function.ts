@@ -20,15 +20,13 @@ export class declaration_function extends instruction {
             case type.CHAR:
             case type.BOOLEAN:
             case type.FLOAT:
-                _3dCode.output += 'float ' + this.id + '(){\n'
-                break;
             default:
                 _3dCode.output += 'void ' + this.id + '(){\n'
                 break;
         }
         let size = 0;
         _3dCode.actualTemp++;
-        env.save_variable(this.id, { value: null, type: type.FUNCTION }, _3dCode.absolutePos, _3dCode.absolutePos, size);
+        env.save_variable(this.id, { value: null, type: this.native_type }, _3dCode.absolutePos, _3dCode.absolutePos, size);
         this.functionEnvironment.save_variable('return', { value: null, type: this.native_type }, _3dCode.absolutePos, _3dCode.relativePos, 1);
         _3dCode.relativePos++;
         _3dCode.absolutePos++;

@@ -5,12 +5,15 @@ import { instruction } from "../abstract/instruction";
 import { expression } from "../abstract/expression";
 import { error, error_arr, error_type } from "../system/error";
 import { _return } from "./_return";
+import { declaration_function } from "./declaration_function";
 
 export class call extends instruction {
 
     public translate(environment: environment): type {
         // the new environment to execute
         // Obtain the function
+        let function_to_execute = environment.get_variable_func(this.id);
+        let functionType = environment.get_variable(this.id);
         let parameterTemp;
         _3dCode.actualTemp++;
         let positionTemp = _3dCode.actualTemp;
@@ -27,9 +30,12 @@ export class call extends instruction {
             _3dCode.output += 'STACK[(int)T' + positionTemp + '] = T' + valueTemps[index] + ';//Save parameter\n';
         }
         _3dCode.output += this.id + '();//Call function ' + this.id + '\n';
+        _3dCode.actualTemp++;
+        _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+        _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];//Get return value\n';
         _3dCode.output += 'SP = SP - ' + _3dCode.relativePos + ';//Get SP back\n';
-        //Retornar el tipo de funcion que es
-        return type.NULL
+        console.log(functionType.type)
+        return type.INTEGER
     }
 
     constructor(public id: string, public parameters: Array<expression>, line: number, column: number) {

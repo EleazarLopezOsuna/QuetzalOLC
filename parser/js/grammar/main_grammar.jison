@@ -367,6 +367,9 @@ pr_instruction
     | tk_return pr_expr tk_semicolon { 
         $$ = new _return($2, @1.first_line,@1.first_column);
     }
+    | tk_return tk_semicolon{
+        $$ = new _return(null, @1.first_line, @1.first_column);
+    }
     | pr_print tk_semicolon {$$ = $1}
     | pr_native_function tk_semicolon {$$ = $1}
     | pr_array_native_function tk_semicolon {$$ = $1}

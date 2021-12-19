@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._return = void 0;
+const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 class _return extends instruction_1.instruction {
@@ -9,9 +10,16 @@ class _return extends instruction_1.instruction {
         this.return_value = return_value;
     }
     translate(environment) {
-        let returnType = this.return_value.translate(environment);
-        console_1._3dCode.output += "goto L" + console_1._3dCode.breakTag + ";\n";
-        return returnType;
+        if (this.return_value != null) {
+            let returnType = this.return_value.translate(environment);
+            let returnTemp = console_1._3dCode.actualTemp;
+            console_1._3dCode.actualTemp++;
+            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+            console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + returnTemp + ';//Save return value\n';
+            console_1._3dCode.output += 'return;\n';
+            return returnType;
+        }
+        return type_1.type.NULL;
     }
     execute(environment) {
         return this.return_value.execute(environment);

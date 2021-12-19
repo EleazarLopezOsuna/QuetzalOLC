@@ -9,9 +9,16 @@ import { instruction } from "../abstract/instruction";
 export class _return extends instruction {
 
     public translate(environment: environment): type {
-        let returnType = this.return_value.translate(environment);
-        _3dCode.output += "goto L" + _3dCode.breakTag + ";\n";
-        return returnType;
+        if (this.return_value != null) {
+            let returnType = this.return_value.translate(environment);
+            let returnTemp = _3dCode.actualTemp;
+            _3dCode.actualTemp++;
+            _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+            _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + returnTemp + ';//Save return value\n';
+            _3dCode.output += 'return;\n';
+            return returnType;
+        }
+        return type.NULL;
     }
 
     constructor(public return_value: instruction | expression, line: number, column: number) {

@@ -16,6 +16,8 @@ class call extends instruction_1.instruction {
     translate(environment) {
         // the new environment to execute
         // Obtain the function
+        let function_to_execute = environment.get_variable_func(this.id);
+        let functionType = environment.get_variable(this.id);
         let parameterTemp;
         console_1._3dCode.actualTemp++;
         let positionTemp = console_1._3dCode.actualTemp;
@@ -32,9 +34,12 @@ class call extends instruction_1.instruction {
             console_1._3dCode.output += 'STACK[(int)T' + positionTemp + '] = T' + valueTemps[index] + ';//Save parameter\n';
         }
         console_1._3dCode.output += this.id + '();//Call function ' + this.id + '\n';
+        console_1._3dCode.actualTemp++;
+        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
         console_1._3dCode.output += 'SP = SP - ' + console_1._3dCode.relativePos + ';//Get SP back\n';
-        //Retornar el tipo de funcion que es
-        return type_1.type.NULL;
+        console.log(functionType.type);
+        return type_1.type.INTEGER;
     }
     execute(current_environment) {
         // the new environment to execute

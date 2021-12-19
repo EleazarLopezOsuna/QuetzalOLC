@@ -110,7 +110,7 @@ export class arithmetic_binary extends expression {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + leftTemp + ' * T' + rightTemp + ';\n'
                         return dominant_type;
                     default:
-
+                        
                 }
                 break;
             case arithmetic_binary_type.POWER:
