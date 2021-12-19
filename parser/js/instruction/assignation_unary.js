@@ -15,8 +15,8 @@ class assignation_unary extends instruction_1.instruction {
         const exprType = this.expr.translate(environment);
         let exprTemp = console_1._3dCode.actualTemp;
         // validate that exists
-        let saved_variable = environment.get_variable(this.id);
-        let relativePos = environment.get_relative(this.id);
+        let saved_variable = environment.get_variable_recursive(this.id, environment);
+        let relativePos = environment.get_relative_recursive(this.id, environment);
         if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == exprType) {
@@ -41,9 +41,9 @@ class assignation_unary extends instruction_1.instruction {
             // validate the type
             if (saved_variable.type == expr_data.type) {
                 // assign the value
-                let absolutePos = environment.get_absolute(this.id);
-                let relativePos = environment.get_relative(this.id);
-                let size = environment.get_size(this.id);
+                let absolutePos = 0;
+                let relativePos = 0;
+                let size = 0;
                 environment.save_variable(this.id, expr_data, absolutePos, relativePos, size);
             }
             else {

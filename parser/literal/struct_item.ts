@@ -12,7 +12,7 @@ export class struct_item extends literal {
     }
 
     public get_value(property: string, environment: environment): expression | literal | null {
-        let parent_struct = environment.get_variable(this.parent_struct_id).value
+        let parent_struct = environment.get_variable_recursive(this.parent_struct_id, environment).value
         if (parent_struct instanceof _struct) {
             const parameters = parent_struct.body
             for (let index = 0; index < this.body.length; index++) {

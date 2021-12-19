@@ -3,6 +3,7 @@ import { environment } from "../system/environment";
 import { data, type } from "../system/type";
 import { _3dCode } from "../system/console";
 import { error, error_arr, error_type } from "../system/error";
+import { scope } from "../system/_symbol";
 
 export enum variable_id_type {
     NORMAL,
@@ -12,9 +13,10 @@ export enum variable_id_type {
 export class variable_id extends literal {
 
     public translate(environment: environment): type {
-        let return_data = environment.get_variable(this.id)
-        let absolute = environment.get_absolute(this.id)
-        let relative = environment.get_relative(this.id)
+        let return_data = environment.get_variable_recursive(this.id, environment)
+        let absolute = environment.get_absolute_recursive(this.id, environment)
+        let relative = environment.get_relative_recursive(this.id, environment)
+        let symScope = environment.get_scope_recursive(this.id, environment)
         if (return_data.type != type.NULL) {
             _3dCode.actualTemp++;
             let posVar = _3dCode.actualTemp;

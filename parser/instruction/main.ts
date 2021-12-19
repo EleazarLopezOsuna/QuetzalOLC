@@ -5,10 +5,11 @@ import { instruction } from "../abstract/instruction";
 
 export class main extends instruction {
 
-    public translate(environment: environment): type {
+    public translate(current_environment: environment): type {
         _3dCode.output = 'void main(){\n' + 'SP = ' + _3dCode.absolutePos + ';\n' + _3dCode.output;
+        let main_environment = new environment(current_environment);
         this.code.forEach(element => {
-            element.translate(environment)
+            element.translate(main_environment)
         });
         _3dCode.output += 'return;\n';
         _3dCode.output += '}\n';

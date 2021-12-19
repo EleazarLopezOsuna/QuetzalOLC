@@ -17,8 +17,8 @@ export class unary_instruction extends expression {
         if (variable_data.type == type.NULL) {
             return type.NULL
         }
-        let absolutePos = environment.get_absolute(this.variable_id);
-        let relative = environment.get_relative(this.variable_id);
+        let absolutePos = environment.get_absolute_recursive(this.variable_id, environment);
+        let relative = environment.get_relative_recursive(this.variable_id, environment);
         switch (this.type) {
             case unary_instruction_type.INCREMENT:
                 switch (variable_data.type) {

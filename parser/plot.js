@@ -3807,7 +3807,7 @@ class _forin extends instruction_1.instruction {
                 console_1._3dCode.output += 'HP = HP + 1;\n';
                 console_1._3dCode.output += 'HEAP[(int)HP] = 36;//Save end of string\n';
                 console_1._3dCode.output += 'HP = HP + 1;\n';
-                relativePos = environment.get_relative(this.id);
+                relativePos = environment.get_relative_recursive(this.id, environment);
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
                 console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + inicioString + ';//Update value for variable ' + this.id + '\n';
@@ -3827,12 +3827,12 @@ class _forin extends instruction_1.instruction {
             }
             else {
                 let size;
-                let return_data = environment.get_variable(this.id);
+                let return_data = environment.get_variable_recursive(this.id, environment);
                 if (return_data.value instanceof _array_1._array) {
                     size = return_data.value.getTotalItems();
                 }
                 console.log(return_data);
-                let relative = environment.get_relative(this.id);
+                let relative = environment.get_relative_recursive(this.id, environment);
                 let relativePos = console_1._3dCode.relativePos;
                 console_1._3dCode.actualTemp++;
                 let contador = console_1._3dCode.actualTemp;
@@ -3848,7 +3848,7 @@ class _forin extends instruction_1.instruction {
                 let iterador = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += 'T' + iterador + ' = SP + ' + relative + ';//Set array start\n';
                 console_1._3dCode.output += 'T' + iterador + ' = T' + iterador + ' + T' + contador + ';//Set position\n';
-                relativePos = environment.get_relative(this.id);
+                relativePos = environment.get_relative_recursive(this.id, environment);
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + iterador + '];\n';
                 console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + console_1._3dCode.actualTemp + ';//Update value for index\n';
@@ -4325,7 +4325,7 @@ class array_access extends instruction_1.instruction {
         this.dimensions = dimensions;
     }
     translate(environment) {
-        let return_data = environment.get_variable(this.id);
+        let return_data = environment.get_variable_recursive(this.id, environment);
         let tempList = [];
         if (return_data.type != type_1.type.UNDEFINED) {
             if (return_data.value instanceof _array_1._array) {
@@ -4346,7 +4346,7 @@ class array_access extends instruction_1.instruction {
                     }
                 }
                 console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get value\n';
                 return return_data.type;
@@ -4496,7 +4496,7 @@ class assignation_array extends instruction_1.instruction {
         this.expr = expr;
     }
     translate(environment) {
-        let return_data = environment.get_variable(this.id);
+        let return_data = environment.get_variable_recursive(this.id, environment);
         this.expr.translate(environment);
         let exprTemp = console_1._3dCode.actualTemp;
         let tempList = [];
@@ -4519,7 +4519,7 @@ class assignation_array extends instruction_1.instruction {
                     }
                 }
                 console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                 console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
             }
@@ -4615,8 +4615,8 @@ class assignation_unary extends instruction_1.instruction {
         const exprType = this.expr.translate(environment);
         let exprTemp = console_1._3dCode.actualTemp;
         // validate that exists
-        let saved_variable = environment.get_variable(this.id);
-        let relativePos = environment.get_relative(this.id);
+        let saved_variable = environment.get_variable_recursive(this.id, environment);
+        let relativePos = environment.get_relative_recursive(this.id, environment);
         if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == exprType) {
@@ -4641,9 +4641,9 @@ class assignation_unary extends instruction_1.instruction {
             // validate the type
             if (saved_variable.type == expr_data.type) {
                 // assign the value
-                let absolutePos = environment.get_absolute(this.id);
-                let relativePos = environment.get_relative(this.id);
-                let size = environment.get_size(this.id);
+                let absolutePos = 0;
+                let relativePos = 0;
+                let size = 0;
                 environment.save_variable(this.id, expr_data, absolutePos, relativePos, size);
             }
             else {
@@ -4696,8 +4696,8 @@ class call extends instruction_1.instruction {
     translate(environment) {
         // the new environment to execute
         // Obtain the function
-        let function_to_execute = environment.get_variable_func(this.id);
-        let functionType = environment.get_variable(this.id);
+        let function_to_execute = environment.get_function_recursive(this.id, environment);
+        let functionType = environment.get_variable_recursive(this.id, environment);
         let parameterTemp;
         console_1._3dCode.actualTemp++;
         let positionTemp = console_1._3dCode.actualTemp;
@@ -4806,7 +4806,7 @@ class declaration_array extends instruction_1.instruction {
     }
     translate(environment) {
         if (this.value == null) {
-            if (environment.get_variable(this.variable_id).type != type_1.type.UNDEFINED) {
+            if (environment.get_variable_recursive(this.variable_id, environment).type != type_1.type.UNDEFINED) {
             }
             else {
                 console_1._3dCode.actualTemp++;
@@ -5073,12 +5073,22 @@ class declaration_list extends instruction_1.instruction {
                 if (environment.get_variable(item.variable_id).value != null) {
                 }
                 else {
-                    console_1._3dCode.actualTemp++;
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
-                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
-                    environment.save_variable(item.variable_id, { value: tData.value, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
-                    console_1._3dCode.absolutePos++;
-                    console_1._3dCode.relativePos++;
+                    if (environment.previous == null) {
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = ' + console_1._3dCode.relativePos + ';\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
+                        environment.save_variable(item.variable_id, { value: tData.value, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                        console_1._3dCode.absolutePos++;
+                        console_1._3dCode.relativePos++;
+                    }
+                    else {
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
+                        environment.save_variable(item.variable_id, { value: tData.value, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                        console_1._3dCode.absolutePos++;
+                        console_1._3dCode.relativePos++;
+                    }
                 }
                 return this.native_type;
             }
@@ -5099,8 +5109,6 @@ class declaration_list extends instruction_1.instruction {
                         environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                         console_1._3dCode.absolutePos++;
                         console_1._3dCode.relativePos++;
-                        if (item.variable_id === "declaracion")
-                            console.log(tData.type);
                     }
                 }
             }
@@ -5322,6 +5330,7 @@ exports.declaration_struct_item = declaration_struct_item;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
+const environment_1 = require("../system/environment");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
@@ -5330,10 +5339,11 @@ class main extends instruction_1.instruction {
         super(line, column);
         this.code = code;
     }
-    translate(environment) {
+    translate(current_environment) {
         console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
+        let main_environment = new environment_1.environment(current_environment);
         this.code.forEach(element => {
-            element.translate(environment);
+            element.translate(main_environment);
         });
         console_1._3dCode.output += 'return;\n';
         console_1._3dCode.output += '}\n';
@@ -5363,7 +5373,7 @@ class main extends instruction_1.instruction {
 }
 exports.main = main;
 
-},{"../abstract/instruction":5,"../system/console":53,"../system/type":56}],41:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":53,"../system/environment":54,"../system/type":56}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.native_function = void 0;
@@ -5755,7 +5765,6 @@ class print extends instruction_1.instruction {
                     console_1._3dCode.output += 'printf("%f", T' + console_1._3dCode.actualTemp + ');//Print float\n';
                     break;
                 default:
-                    console.log(elementType);
                     break;
             }
         });
@@ -5886,8 +5895,8 @@ class unary_instruction extends expression_1.expression {
         if (variable_data.type == type_1.type.NULL) {
             return type_1.type.NULL;
         }
-        let absolutePos = environment.get_absolute(this.variable_id);
-        let relative = environment.get_relative(this.variable_id);
+        let absolutePos = environment.get_absolute_recursive(this.variable_id, environment);
+        let relative = environment.get_relative_recursive(this.variable_id, environment);
         switch (this.type) {
             case unary_instruction_type.INCREMENT:
                 switch (variable_data.type) {
@@ -6338,7 +6347,7 @@ class struct_item extends literal_1.literal {
         return type_1.type.NULL;
     }
     get_value(property, environment) {
-        let parent_struct = environment.get_variable(this.parent_struct_id).value;
+        let parent_struct = environment.get_variable_recursive(this.parent_struct_id, environment).value;
         if (parent_struct instanceof _struct_1._struct) {
             const parameters = parent_struct.body;
             for (let index = 0; index < this.body.length; index++) {
@@ -6401,9 +6410,10 @@ class variable_id extends literal_1.literal {
         this.type = type;
     }
     translate(environment) {
-        let return_data = environment.get_variable(this.id);
-        let absolute = environment.get_absolute(this.id);
-        let relative = environment.get_relative(this.id);
+        let return_data = environment.get_variable_recursive(this.id, environment);
+        let absolute = environment.get_absolute_recursive(this.id, environment);
+        let relative = environment.get_relative_recursive(this.id, environment);
+        let symScope = environment.get_scope_recursive(this.id, environment);
         if (return_data.type != type_1.type.NULL) {
             console_1._3dCode.actualTemp++;
             let posVar = console_1._3dCode.actualTemp;
@@ -6631,31 +6641,101 @@ class environment {
         }
         return { value: null, type: type_1.type.UNDEFINED };
     }
-    get_variable_func(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item;
+    get_function_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item
+        }
+        return null*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_function_recursive(id, environment.previous);
         }
         return null;
     }
-    get_absolute(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.absolute;
+    get_scope_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item
+        }
+        return null*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.scope;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_scope_recursive(id, environment.previous);
+        }
+        return null;
+    }
+    get_variable_recursive(id, environment) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                let return_data = symbol_item.data;
+                return return_data;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_variable_recursive(id, environment.previous);
+        }
+        return { value: null, type: type_1.type.UNDEFINED };
+    }
+    get_absolute_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.absolute
+        }
+        return -1*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.absolute;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_absolute_recursive(id, environment.previous);
         }
         return -1;
     }
-    get_size(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.size;
+    get_size_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.size
+        }
+        return -1*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.size;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_size_recursive(id, environment.previous);
         }
         return -1;
     }
-    get_relative(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.relative;
+    get_relative_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.relative
+        }
+        return -1*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.relative;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_relative_recursive(id, environment.previous);
         }
         return -1;
     }

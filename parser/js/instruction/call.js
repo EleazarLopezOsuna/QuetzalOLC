@@ -16,8 +16,8 @@ class call extends instruction_1.instruction {
     translate(environment) {
         // the new environment to execute
         // Obtain the function
-        let function_to_execute = environment.get_variable_func(this.id);
-        let functionType = environment.get_variable(this.id);
+        let function_to_execute = environment.get_function_recursive(this.id, environment);
+        let functionType = environment.get_variable_recursive(this.id, environment);
         let parameterTemp;
         console_1._3dCode.actualTemp++;
         let positionTemp = console_1._3dCode.actualTemp;

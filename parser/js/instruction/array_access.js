@@ -13,7 +13,7 @@ class array_access extends instruction_1.instruction {
         this.dimensions = dimensions;
     }
     translate(environment) {
-        let return_data = environment.get_variable(this.id);
+        let return_data = environment.get_variable_recursive(this.id, environment);
         let tempList = [];
         if (return_data.type != type_1.type.UNDEFINED) {
             if (return_data.value instanceof _array_1._array) {
@@ -34,7 +34,7 @@ class array_access extends instruction_1.instruction {
                     }
                 }
                 console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get value\n';
                 return return_data.type;

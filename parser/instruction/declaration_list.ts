@@ -17,12 +17,21 @@ export class declaration_list extends instruction {
                 if (environment.get_variable(item.variable_id).value != null) {
 
                 } else {
-                    _3dCode.actualTemp++;
-                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n';
-                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
-                    environment.save_variable(item.variable_id, {value: tData.value, type: this.native_type}, _3dCode.absolutePos, _3dCode.relativePos, 1)
-                    _3dCode.absolutePos++;
-                    _3dCode.relativePos++;
+                    if (environment.previous == null) {
+                        _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = ' + _3dCode.relativePos + ';\n';
+                        _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
+                        environment.save_variable(item.variable_id, { value: tData.value, type: this.native_type }, _3dCode.absolutePos, _3dCode.relativePos, 1)
+                        _3dCode.absolutePos++;
+                        _3dCode.relativePos++;
+                    } else {
+                        _3dCode.actualTemp++;
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n';
+                        _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
+                        environment.save_variable(item.variable_id, { value: tData.value, type: this.native_type }, _3dCode.absolutePos, _3dCode.relativePos, 1)
+                        _3dCode.absolutePos++;
+                        _3dCode.relativePos++;
+                    }
                 }
                 return this.native_type
             } else {

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
+const environment_1 = require("../system/environment");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
@@ -9,10 +10,11 @@ class main extends instruction_1.instruction {
         super(line, column);
         this.code = code;
     }
-    translate(environment) {
+    translate(current_environment) {
         console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
+        let main_environment = new environment_1.environment(current_environment);
         this.code.forEach(element => {
-            element.translate(environment);
+            element.translate(main_environment);
         });
         console_1._3dCode.output += 'return;\n';
         console_1._3dCode.output += '}\n';

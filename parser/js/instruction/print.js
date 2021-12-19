@@ -65,7 +65,6 @@ class print extends instruction_1.instruction {
                     console_1._3dCode.output += 'printf("%f", T' + console_1._3dCode.actualTemp + ');//Print float\n';
                     break;
                 default:
-                    console.log(elementType);
                     break;
             }
         });

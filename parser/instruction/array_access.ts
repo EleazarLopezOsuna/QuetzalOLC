@@ -11,7 +11,7 @@ import { array_range } from "../expression/array_range";
 export class array_access extends instruction {
 
     public translate(environment: environment): type {
-        let return_data = environment.get_variable(this.id)
+        let return_data = environment.get_variable_recursive(this.id, environment)
         let tempList = []
         if (return_data.type != type.UNDEFINED) {
             if (return_data.value instanceof _array) {
@@ -32,7 +32,7 @@ export class array_access extends instruction {
                     }
                 }
                 _3dCode.actualTemp++;
-                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];//Get value\n';
                 return return_data.type

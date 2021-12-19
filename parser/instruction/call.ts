@@ -12,8 +12,8 @@ export class call extends instruction {
     public translate(environment: environment): type {
         // the new environment to execute
         // Obtain the function
-        let function_to_execute = environment.get_variable_func(this.id);
-        let functionType = environment.get_variable(this.id);
+        let function_to_execute = environment.get_function_recursive(this.id, environment);
+        let functionType = environment.get_variable_recursive(this.id, environment);
         let parameterTemp;
         _3dCode.actualTemp++;
         let positionTemp = _3dCode.actualTemp;

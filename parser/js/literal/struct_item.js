@@ -15,7 +15,7 @@ class struct_item extends literal_1.literal {
         return type_1.type.NULL;
     }
     get_value(property, environment) {
-        let parent_struct = environment.get_variable(this.parent_struct_id).value;
+        let parent_struct = environment.get_variable_recursive(this.parent_struct_id, environment).value;
         if (parent_struct instanceof _struct_1._struct) {
             const parameters = parent_struct.body;
             for (let index = 0; index < this.body.length; index++) {

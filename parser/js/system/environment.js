@@ -69,31 +69,101 @@ class environment {
         }
         return { value: null, type: type_1.type.UNDEFINED };
     }
-    get_variable_func(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item;
+    get_function_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item
+        }
+        return null*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_function_recursive(id, environment.previous);
         }
         return null;
     }
-    get_absolute(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.absolute;
+    get_scope_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item
+        }
+        return null*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.scope;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_scope_recursive(id, environment.previous);
+        }
+        return null;
+    }
+    get_variable_recursive(id, environment) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                let return_data = symbol_item.data;
+                return return_data;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_variable_recursive(id, environment.previous);
+        }
+        return { value: null, type: type_1.type.UNDEFINED };
+    }
+    get_absolute_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.absolute
+        }
+        return -1*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.absolute;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_absolute_recursive(id, environment.previous);
         }
         return -1;
     }
-    get_size(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.size;
+    get_size_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.size
+        }
+        return -1*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.size;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_size_recursive(id, environment.previous);
         }
         return -1;
     }
-    get_relative(id) {
-        let symbol_item = this.symbol_map.get(id);
-        if (symbol_item instanceof _symbol_1._symbol) {
-            return symbol_item.relative;
+    get_relative_recursive(id, environment) {
+        /*let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item.relative
+        }
+        return -1*/
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.relative;
+            }
+        }
+        if (environment.previous != null) {
+            return this.get_relative_recursive(id, environment.previous);
         }
         return -1;
     }

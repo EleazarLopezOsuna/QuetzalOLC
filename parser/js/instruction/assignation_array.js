@@ -14,7 +14,7 @@ class assignation_array extends instruction_1.instruction {
         this.expr = expr;
     }
     translate(environment) {
-        let return_data = environment.get_variable(this.id);
+        let return_data = environment.get_variable_recursive(this.id, environment);
         this.expr.translate(environment);
         let exprTemp = console_1._3dCode.actualTemp;
         let tempList = [];
@@ -37,7 +37,7 @@ class assignation_array extends instruction_1.instruction {
                     }
                 }
                 console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                 console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
             }

@@ -44,7 +44,7 @@ class _forin extends instruction_1.instruction {
                 console_1._3dCode.output += 'HP = HP + 1;\n';
                 console_1._3dCode.output += 'HEAP[(int)HP] = 36;//Save end of string\n';
                 console_1._3dCode.output += 'HP = HP + 1;\n';
-                relativePos = environment.get_relative(this.id);
+                relativePos = environment.get_relative_recursive(this.id, environment);
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
                 console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + inicioString + ';//Update value for variable ' + this.id + '\n';
@@ -64,12 +64,12 @@ class _forin extends instruction_1.instruction {
             }
             else {
                 let size;
-                let return_data = environment.get_variable(this.id);
+                let return_data = environment.get_variable_recursive(this.id, environment);
                 if (return_data.value instanceof _array_1._array) {
                     size = return_data.value.getTotalItems();
                 }
                 console.log(return_data);
-                let relative = environment.get_relative(this.id);
+                let relative = environment.get_relative_recursive(this.id, environment);
                 let relativePos = console_1._3dCode.relativePos;
                 console_1._3dCode.actualTemp++;
                 let contador = console_1._3dCode.actualTemp;
@@ -85,7 +85,7 @@ class _forin extends instruction_1.instruction {
                 let iterador = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += 'T' + iterador + ' = SP + ' + relative + ';//Set array start\n';
                 console_1._3dCode.output += 'T' + iterador + ' = T' + iterador + ' + T' + contador + ';//Set position\n';
-                relativePos = environment.get_relative(this.id);
+                relativePos = environment.get_relative_recursive(this.id, environment);
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + iterador + '];\n';
                 console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + console_1._3dCode.actualTemp + ';//Update value for index\n';

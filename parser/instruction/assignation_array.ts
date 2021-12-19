@@ -11,7 +11,7 @@ import { data, type } from "../system/type";
 
 export class assignation_array extends instruction {
     public translate(environment: environment): type {
-        let return_data = environment.get_variable(this.id)
+        let return_data = environment.get_variable_recursive(this.id, environment)
         this.expr.translate(environment)
         let exprTemp = _3dCode.actualTemp;
         let tempList = []
@@ -34,7 +34,7 @@ export class assignation_array extends instruction {
                     }
                 }
                 _3dCode.actualTemp++;
-                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative(this.id) + ';//Set array initial position\n';
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                 _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
             } else {

@@ -13,7 +13,7 @@ export class declaration_array extends instruction {
 
     public translate(environment: environment): type {
         if (this.value == null) {
-            if (environment.get_variable(this.variable_id).type != type.UNDEFINED) {
+            if (environment.get_variable_recursive(this.variable_id, environment).type != type.UNDEFINED) {
 
             } else {
                 _3dCode.actualTemp++;

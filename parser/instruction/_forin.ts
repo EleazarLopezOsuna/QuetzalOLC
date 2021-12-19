@@ -45,7 +45,7 @@ export class _forin extends instruction {
                 _3dCode.output += 'HP = HP + 1;\n';
                 _3dCode.output += 'HEAP[(int)HP] = 36;//Save end of string\n';
                 _3dCode.output += 'HP = HP + 1;\n';
-                relativePos = environment.get_relative(this.id);
+                relativePos = environment.get_relative_recursive(this.id, environment);
                 _3dCode.actualTemp++;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
                 _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + inicioString + ';//Update value for variable ' + this.id + '\n';
@@ -64,12 +64,12 @@ export class _forin extends instruction {
                 _3dCode.output += "L" + final + ":\n";
             } else {
                 let size;
-                let return_data = environment.get_variable(this.id);
+                let return_data = environment.get_variable_recursive(this.id, environment);
                 if (return_data.value instanceof _array) {
                     size = return_data.value.getTotalItems();
                 }
                 console.log(return_data)
-                let relative = environment.get_relative(this.id);
+                let relative = environment.get_relative_recursive(this.id, environment);
                 let relativePos = _3dCode.relativePos;
                 _3dCode.actualTemp++;
                 let contador = _3dCode.actualTemp;
@@ -85,7 +85,7 @@ export class _forin extends instruction {
                 let iterador = _3dCode.actualTemp;
                 _3dCode.output += 'T' + iterador + ' = SP + ' + relative + ';//Set array start\n';
                 _3dCode.output += 'T' + iterador + ' = T' + iterador + ' + T' + contador + ';//Set position\n';
-                relativePos = environment.get_relative(this.id);
+                relativePos = environment.get_relative_recursive(this.id, environment);
                 _3dCode.actualTemp++;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + iterador + '];\n';
                 _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + _3dCode.actualTemp + ';//Update value for index\n';

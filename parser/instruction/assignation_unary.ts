@@ -13,8 +13,8 @@ export class assignation_unary extends instruction {
         const exprType = this.expr.translate(environment);
         let exprTemp = _3dCode.actualTemp;
         // validate that exists
-        let saved_variable = environment.get_variable(this.id)
-        let relativePos = environment.get_relative(this.id);
+        let saved_variable = environment.get_variable_recursive(this.id, environment)
+        let relativePos = environment.get_relative_recursive(this.id, environment);
         if (saved_variable.type != type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == exprType) {
@@ -44,9 +44,9 @@ export class assignation_unary extends instruction {
             // validate the type
             if (saved_variable.type == expr_data.type) {
                 // assign the value
-                let absolutePos = environment.get_absolute(this.id);
-                let relativePos = environment.get_relative(this.id);
-                let size = environment.get_size(this.id);
+                let absolutePos = 0
+                let relativePos = 0
+                let size = 0
                 environment.save_variable(this.id, expr_data, absolutePos, relativePos, size)
             } else {
                 error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Tipo diferente, no se puede asignar'));

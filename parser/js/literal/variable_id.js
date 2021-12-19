@@ -17,9 +17,10 @@ class variable_id extends literal_1.literal {
         this.type = type;
     }
     translate(environment) {
-        let return_data = environment.get_variable(this.id);
-        let absolute = environment.get_absolute(this.id);
-        let relative = environment.get_relative(this.id);
+        let return_data = environment.get_variable_recursive(this.id, environment);
+        let absolute = environment.get_absolute_recursive(this.id, environment);
+        let relative = environment.get_relative_recursive(this.id, environment);
+        let symScope = environment.get_scope_recursive(this.id, environment);
         if (return_data.type != type_1.type.NULL) {
             console_1._3dCode.actualTemp++;
             let posVar = console_1._3dCode.actualTemp;
