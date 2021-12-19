@@ -4833,7 +4833,7 @@ class declaration_function extends instruction_1.instruction {
         });
         this.code.forEach(instr => {
             if (instr instanceof _return_1._return) {
-                return_data = instr.execute(this.functionEnvironment);
+                return_data = instr.translate(this.functionEnvironment);
                 return;
             }
             else {

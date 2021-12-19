@@ -42,7 +42,7 @@ export class declaration_function extends instruction {
         });
         this.code.forEach(instr => {
             if (instr instanceof _return) {
-                return_data = instr.execute(this.functionEnvironment)
+                return_data = instr.translate(this.functionEnvironment)
                 return;
             } else {
                 instr.translate(this.functionEnvironment)

@@ -4629,33 +4629,29 @@ class call extends instruction_1.instruction {
         // the new environment to execute
         // Obtain the function
         let function_to_execute = environment.get_variable_func(this.id);
-        if (function_to_execute != null) {
-            let parameterTemp;
-            console_1._3dCode.actualTemp++;
-            let positionTemp = console_1._3dCode.actualTemp;
-            let valueTemps = [];
-            for (let index = 0; index < this.parameters.length; index++) {
-                const call_parameter = this.parameters[index];
-                call_parameter.translate(environment);
-                parameterTemp = console_1._3dCode.actualTemp;
-                valueTemps.push(parameterTemp);
-            }
-            console_1._3dCode.output += 'SP = SP + ' + console_1._3dCode.relativePos + ';//Set SP at the end\n';
-            for (let index = 0; index < this.parameters.length; index++) {
-                console_1._3dCode.output += 'T' + positionTemp + ' = SP + ' + (index + 1) + ';\n';
-                console_1._3dCode.output += 'STACK[(int)T' + positionTemp + '] = T' + valueTemps[index] + ';//Save parameter\n';
-            }
-            console_1._3dCode.output += this.id + '();//Call function ' + this.id + '\n';
-            console_1._3dCode.actualTemp++;
-            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
-            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
-            console_1._3dCode.output += 'SP = SP - ' + console_1._3dCode.relativePos + ';//Get SP back\n';
-            let r = function_to_execute.data;
-            console.log(r.native_type);
-            return r.native_type;
+        let functionType = environment.get_variable(this.id);
+        let parameterTemp;
+        console_1._3dCode.actualTemp++;
+        let positionTemp = console_1._3dCode.actualTemp;
+        let valueTemps = [];
+        for (let index = 0; index < this.parameters.length; index++) {
+            const call_parameter = this.parameters[index];
+            call_parameter.translate(environment);
+            parameterTemp = console_1._3dCode.actualTemp;
+            valueTemps.push(parameterTemp);
         }
-        //Retornar el tipo de funcion que es
-        return type_1.type.NULL;
+        console_1._3dCode.output += 'SP = SP + ' + console_1._3dCode.relativePos + ';//Set SP at the end\n';
+        for (let index = 0; index < this.parameters.length; index++) {
+            console_1._3dCode.output += 'T' + positionTemp + ' = SP + ' + (index + 1) + ';\n';
+            console_1._3dCode.output += 'STACK[(int)T' + positionTemp + '] = T' + valueTemps[index] + ';//Save parameter\n';
+        }
+        console_1._3dCode.output += this.id + '();//Call function ' + this.id + '\n';
+        console_1._3dCode.actualTemp++;
+        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
+        console_1._3dCode.output += 'SP = SP - ' + console_1._3dCode.relativePos + ';//Get SP back\n';
+        console.log(functionType.type);
+        return type_1.type.INTEGER;
     }
     execute(current_environment) {
         // the new environment to execute
@@ -4877,7 +4873,7 @@ class declaration_function extends instruction_1.instruction {
         }
         let size = 0;
         console_1._3dCode.actualTemp++;
-        env.save_variable(this.id, { value: null, type: type_1.type.FUNCTION }, console_1._3dCode.absolutePos, console_1._3dCode.absolutePos, size);
+        env.save_variable(this.id, { value: null, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.absolutePos, size);
         this.functionEnvironment.save_variable('return', { value: null, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
         console_1._3dCode.relativePos++;
         console_1._3dCode.absolutePos++;
@@ -4893,7 +4889,7 @@ class declaration_function extends instruction_1.instruction {
         });
         this.code.forEach(instr => {
             if (instr instanceof _return_1._return) {
-                return_data = instr.execute(this.functionEnvironment);
+                return_data = instr.translate(this.functionEnvironment);
                 return;
             }
             else {
