@@ -69,6 +69,13 @@ class environment {
         }
         return { value: null, type: type_1.type.UNDEFINED };
     }
+    get_variable_func(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item;
+        }
+        return null;
+    }
     get_absolute(id) {
         let symbol_item = this.symbol_map.get(id);
         if (symbol_item instanceof _symbol_1._symbol) {

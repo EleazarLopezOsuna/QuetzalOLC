@@ -13,14 +13,17 @@ class assignation_unary extends instruction_1.instruction {
     }
     translate(environment) {
         const exprType = this.expr.translate(environment);
+        let exprTemp = console_1._3dCode.actualTemp;
         // validate that exists
         let saved_variable = environment.get_variable(this.id);
-        let absolutePos = environment.get_absolute(this.id);
+        let relativePos = environment.get_relative(this.id);
         if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == exprType) {
                 // assign the value
-                console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value for variable ' + this.id + '\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + exprTemp + ';//Update value for variable ' + this.id + '\n';
             }
             else {
             }

@@ -11,14 +11,17 @@ import { data, type } from "../system/type";
 export class assignation_unary extends instruction {
     public translate(environment: environment): type {
         const exprType = this.expr.translate(environment);
+        let exprTemp = _3dCode.actualTemp;
         // validate that exists
         let saved_variable = environment.get_variable(this.id)
-        let absolutePos = environment.get_absolute(this.id);
+        let relativePos = environment.get_relative(this.id);
         if (saved_variable.type != type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == exprType) {
                 // assign the value
-                _3dCode.output += 'STACK[' + absolutePos + '] = T' + _3dCode.actualTemp + ';//Update value for variable ' + this.id + '\n';
+                _3dCode.actualTemp++;
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
+                _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + exprTemp + ';//Update value for variable ' + this.id + '\n';
             } else {
 
             }

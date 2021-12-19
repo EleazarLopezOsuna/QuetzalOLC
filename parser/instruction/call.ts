@@ -1,6 +1,6 @@
 import { environment } from "../system/environment";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _console, _3dCode } from "../system/console";
 import { instruction } from "../abstract/instruction";
 import { expression } from "../abstract/expression";
 import { error, error_arr, error_type } from "../system/error";
@@ -9,7 +9,27 @@ import { _return } from "./_return";
 export class call extends instruction {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        // the new environment to execute
+        // Obtain the function
+        let parameterTemp;
+        _3dCode.actualTemp++;
+        let positionTemp = _3dCode.actualTemp;
+        let valueTemps = [];
+        for (let index = 0; index < this.parameters.length; index++) {
+            const call_parameter = this.parameters[index];
+            call_parameter.translate(environment);
+            parameterTemp = _3dCode.actualTemp;
+            valueTemps.push(parameterTemp);
+        }
+        _3dCode.output += 'SP = SP + ' + _3dCode.relativePos + ';//Set SP at the end\n';
+        for (let index = 0; index < this.parameters.length; index++) {
+            _3dCode.output += 'T' + positionTemp + ' = SP + ' + (index + 1) + ';\n';
+            _3dCode.output += 'STACK[(int)T' + positionTemp + '] = T' + valueTemps[index] + ';//Save parameter\n';
+        }
+        _3dCode.output += this.id + '();//Call function ' + this.id + '\n';
+        _3dCode.output += 'SP = SP - ' + _3dCode.relativePos + ';//Get SP back\n';
+        //Retornar el tipo de funcion que es
+        return type.NULL
     }
 
     constructor(public id: string, public parameters: Array<expression>, line: number, column: number) {

@@ -28,6 +28,7 @@ export class declaration_function extends instruction {
         }
         let size = 0;
         _3dCode.actualTemp++;
+        env.save_variable(this.id, { value: null, type: type.FUNCTION }, _3dCode.absolutePos, _3dCode.absolutePos, size);
         this.functionEnvironment.save_variable('return', { value: null, type: this.native_type }, _3dCode.absolutePos, _3dCode.relativePos, 1);
         _3dCode.relativePos++;
         _3dCode.absolutePos++;
@@ -54,7 +55,6 @@ export class declaration_function extends instruction {
         _3dCode.output += '}\n\n';
         _3dCode.functionsCode += _3dCode.output;
         _3dCode.output = "";
-        env.save_variable(this.id, { value: null, type: type.FUNCTION }, _3dCode.absolutePos, _3dCode.absolutePos, size);
         return type.NULL;
     }
 

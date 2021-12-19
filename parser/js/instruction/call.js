@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.call = void 0;
 const environment_1 = require("../system/environment");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const error_1 = require("../system/error");
 const _return_1 = require("./_return");
@@ -13,7 +14,27 @@ class call extends instruction_1.instruction {
         this.parameters = parameters;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        // the new environment to execute
+        // Obtain the function
+        let parameterTemp;
+        console_1._3dCode.actualTemp++;
+        let positionTemp = console_1._3dCode.actualTemp;
+        let valueTemps = [];
+        for (let index = 0; index < this.parameters.length; index++) {
+            const call_parameter = this.parameters[index];
+            call_parameter.translate(environment);
+            parameterTemp = console_1._3dCode.actualTemp;
+            valueTemps.push(parameterTemp);
+        }
+        console_1._3dCode.output += 'SP = SP + ' + console_1._3dCode.relativePos + ';//Set SP at the end\n';
+        for (let index = 0; index < this.parameters.length; index++) {
+            console_1._3dCode.output += 'T' + positionTemp + ' = SP + ' + (index + 1) + ';\n';
+            console_1._3dCode.output += 'STACK[(int)T' + positionTemp + '] = T' + valueTemps[index] + ';//Save parameter\n';
+        }
+        console_1._3dCode.output += this.id + '();//Call function ' + this.id + '\n';
+        console_1._3dCode.output += 'SP = SP - ' + console_1._3dCode.relativePos + ';//Get SP back\n';
+        //Retornar el tipo de funcion que es
+        return type_1.type.NULL;
     }
     execute(current_environment) {
         // the new environment to execute

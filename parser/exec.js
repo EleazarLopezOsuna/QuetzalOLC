@@ -4532,14 +4532,17 @@ class assignation_unary extends instruction_1.instruction {
     }
     translate(environment) {
         const exprType = this.expr.translate(environment);
+        let exprTemp = console_1._3dCode.actualTemp;
         // validate that exists
         let saved_variable = environment.get_variable(this.id);
-        let absolutePos = environment.get_absolute(this.id);
+        let relativePos = environment.get_relative(this.id);
         if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
             if (saved_variable.type == exprType) {
                 // assign the value
-                console_1._3dCode.output += 'STACK[' + absolutePos + '] = T' + console_1._3dCode.actualTemp + ';//Update value for variable ' + this.id + '\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + exprTemp + ';//Update value for variable ' + this.id + '\n';
             }
             else {
             }
@@ -4599,6 +4602,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.call = void 0;
 const environment_1 = require("../system/environment");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const error_1 = require("../system/error");
 const _return_1 = require("./_return");
@@ -4609,7 +4613,27 @@ class call extends instruction_1.instruction {
         this.parameters = parameters;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        // the new environment to execute
+        // Obtain the function
+        let parameterTemp;
+        console_1._3dCode.actualTemp++;
+        let positionTemp = console_1._3dCode.actualTemp;
+        let valueTemps = [];
+        for (let index = 0; index < this.parameters.length; index++) {
+            const call_parameter = this.parameters[index];
+            call_parameter.translate(environment);
+            parameterTemp = console_1._3dCode.actualTemp;
+            valueTemps.push(parameterTemp);
+        }
+        console_1._3dCode.output += 'SP = SP + ' + console_1._3dCode.relativePos + ';//Set SP at the end\n';
+        for (let index = 0; index < this.parameters.length; index++) {
+            console_1._3dCode.output += 'T' + positionTemp + ' = SP + ' + (index + 1) + ';\n';
+            console_1._3dCode.output += 'STACK[(int)T' + positionTemp + '] = T' + valueTemps[index] + ';//Save parameter\n';
+        }
+        console_1._3dCode.output += this.id + '();//Call function ' + this.id + '\n';
+        console_1._3dCode.output += 'SP = SP - ' + console_1._3dCode.relativePos + ';//Get SP back\n';
+        //Retornar el tipo de funcion que es
+        return type_1.type.NULL;
     }
     execute(current_environment) {
         // the new environment to execute
@@ -4677,7 +4701,7 @@ class call extends instruction_1.instruction {
 }
 exports.call = call;
 
-},{"../abstract/instruction":5,"../system/environment":53,"../system/error":54,"../system/type":55,"./_return":26}],34:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/console":52,"../system/environment":53,"../system/error":54,"../system/type":55,"./_return":26}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_array = void 0;
@@ -4833,6 +4857,7 @@ class declaration_function extends instruction_1.instruction {
         }
         let size = 0;
         console_1._3dCode.actualTemp++;
+        env.save_variable(this.id, { value: null, type: type_1.type.FUNCTION }, console_1._3dCode.absolutePos, console_1._3dCode.absolutePos, size);
         this.functionEnvironment.save_variable('return', { value: null, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
         console_1._3dCode.relativePos++;
         console_1._3dCode.absolutePos++;
@@ -4860,7 +4885,6 @@ class declaration_function extends instruction_1.instruction {
         console_1._3dCode.output += '}\n\n';
         console_1._3dCode.functionsCode += console_1._3dCode.output;
         console_1._3dCode.output = "";
-        env.save_variable(this.id, { value: null, type: type_1.type.FUNCTION }, console_1._3dCode.absolutePos, console_1._3dCode.absolutePos, size);
         return type_1.type.NULL;
     }
     execute(environment) {
@@ -6474,6 +6498,13 @@ class environment {
             return return_data;
         }
         return { value: null, type: type_1.type.UNDEFINED };
+    }
+    get_variable_func(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return symbol_item;
+        }
+        return null;
     }
     get_absolute(id) {
         let symbol_item = this.symbol_map.get(id);

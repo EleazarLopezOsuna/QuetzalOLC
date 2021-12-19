@@ -81,6 +81,14 @@ export class environment {
         return { value: null, type: type.UNDEFINED }
     }
 
+    public get_variable_func(id: string): _symbol | null {
+        let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return symbol_item
+        }
+        return null
+    }
+
     public get_absolute(id: string): number {
         let symbol_item = this.symbol_map.get(id)
         if (symbol_item instanceof _symbol) {
