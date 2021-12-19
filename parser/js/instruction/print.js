@@ -65,14 +65,15 @@ class print extends instruction_1.instruction {
                     console_1._3dCode.output += 'printf("%f", T' + console_1._3dCode.actualTemp + ');//Print float\n';
                     break;
                 default:
-                    break;
-            }
-            switch (this.type) {
-                case print_type.PRINTLN:
-                    console_1._3dCode.output += 'printf("%c", 10);//Print new line\n';
+                    console.log(elementType);
                     break;
             }
         });
+        switch (this.type) {
+            case print_type.PRINTLN:
+                console_1._3dCode.output += 'printf("%c", 10);//Print new line\n';
+                break;
+        }
         return type_1.type.NULL;
     }
     execute(environment) {

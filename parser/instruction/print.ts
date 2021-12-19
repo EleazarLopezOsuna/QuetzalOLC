@@ -63,12 +63,12 @@ export class print extends instruction {
                 default:
                     break;
             }
-            switch (this.type) {
-                case print_type.PRINTLN:
-                    _3dCode.output += 'printf("%c", 10);//Print new line\n';
-                    break;
-            }
         });
+        switch (this.type) {
+            case print_type.PRINTLN:
+                _3dCode.output += 'printf("%c", 10);//Print new line\n';
+                break;
+        }
         return type.NULL
     }
 

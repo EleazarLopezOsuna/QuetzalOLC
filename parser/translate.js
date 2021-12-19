@@ -3764,12 +3764,11 @@ exports._for = _for;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._forin = void 0;
-const expression_1 = require("../abstract/expression");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const array_access_1 = require("./array_access");
-const native_1 = require("../literal/native");
+const _array_1 = require("../literal/_array");
 class _forin extends instruction_1.instruction {
     constructor(id, operator, code, line, column) {
         super(line, column);
@@ -3780,15 +3779,18 @@ class _forin extends instruction_1.instruction {
     translate(environment) {
         if (this.operator instanceof array_access_1.array_access) {
         }
-        else if (this.operator instanceof native_1.native || this.operator instanceof expression_1.expression) {
-            let operatorType = this.operator.translate(environment);
-            let relativePos = console_1._3dCode.relativePos;
-            console_1._3dCode.relativePos = 0;
+        else {
+            let operatorType;
+            let operatorTemp;
+            operatorType = this.operator.translate(environment);
+            operatorTemp = console_1._3dCode.actualTemp;
             environment.save_variable(this.id, { value: null, type: operatorType }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
-            let operatorTemp = console_1._3dCode.actualTemp;
-            console_1._3dCode.actualTemp++;
-            let caracter = console_1._3dCode.actualTemp;
+            console_1._3dCode.absolutePos++;
+            console_1._3dCode.relativePos++;
             if (operatorType == type_1.type.STRING) {
+                let relativePos = console_1._3dCode.relativePos;
+                console_1._3dCode.actualTemp++;
+                let caracter = console_1._3dCode.actualTemp;
                 console_1._3dCode.actualTag++;
                 let inicio = console_1._3dCode.actualTag;
                 console_1._3dCode.actualTag++;
@@ -3805,7 +3807,7 @@ class _forin extends instruction_1.instruction {
                 console_1._3dCode.output += 'HP = HP + 1;\n';
                 console_1._3dCode.output += 'HEAP[(int)HP] = 36;//Save end of string\n';
                 console_1._3dCode.output += 'HP = HP + 1;\n';
-                let relativePos = environment.get_relative(this.id);
+                relativePos = environment.get_relative(this.id);
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
                 console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + inicioString + ';//Update value for variable ' + this.id + '\n';
@@ -3823,7 +3825,47 @@ class _forin extends instruction_1.instruction {
                 console_1._3dCode.output += "goto L" + inicio + ";\n";
                 console_1._3dCode.output += "L" + final + ":\n";
             }
-            console_1._3dCode.relativePos = relativePos;
+            else {
+                let size;
+                let return_data = environment.get_variable(this.id);
+                if (return_data.value instanceof _array_1._array) {
+                    size = return_data.value.getTotalItems();
+                }
+                console.log(return_data);
+                let relative = environment.get_relative(this.id);
+                let relativePos = console_1._3dCode.relativePos;
+                console_1._3dCode.actualTemp++;
+                let contador = console_1._3dCode.actualTemp;
+                console_1._3dCode.actualTag++;
+                let inicio = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                let final = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                let continueTag = console_1._3dCode.actualTag;
+                console_1._3dCode.output += 'L' + inicio + ':\n';
+                console_1._3dCode.output += 'if(T' + contador + ' == ' + size + ') goto L' + final + ';\n';
+                console_1._3dCode.actualTemp++;
+                let iterador = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + iterador + ' = SP + ' + relative + ';//Set array start\n';
+                console_1._3dCode.output += 'T' + iterador + ' = T' + iterador + ' + T' + contador + ';//Set position\n';
+                relativePos = environment.get_relative(this.id);
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + iterador + '];\n';
+                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + console_1._3dCode.actualTemp + ';//Update value for index\n';
+                let tempContinue = console_1._3dCode.continueTag;
+                console_1._3dCode.continueTag = continueTag;
+                let tempBreak = console_1._3dCode.breakTag;
+                console_1._3dCode.breakTag = final;
+                for (const instruction of this.code) {
+                    instruction.translate(environment);
+                }
+                console_1._3dCode.breakTag = tempBreak;
+                console_1._3dCode.continueTag = tempContinue;
+                console_1._3dCode.output += 'L' + continueTag + ':\n';
+                console_1._3dCode.output += 'T' + contador + ' = T' + contador + ' + 1;//Update position\n';
+                console_1._3dCode.output += "goto L" + inicio + ";\n";
+                console_1._3dCode.output += "L" + final + ":\n";
+            }
         }
         return type_1.type.NULL;
     }
@@ -3836,7 +3878,7 @@ class _forin extends instruction_1.instruction {
 }
 exports._forin = _forin;
 
-},{"../abstract/expression":4,"../abstract/instruction":5,"../literal/native":48,"../system/console":52,"../system/type":55,"./array_access":29}],25:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":46,"../system/console":52,"../system/type":55,"./array_access":29}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._if = void 0;
@@ -4781,8 +4823,6 @@ class declaration_array extends instruction_1.instruction {
             console_1._3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + console_1._3dCode.relativePos + ' of this context\n';
             environment.save_variable(this.variable_id, { value: this.value, type: this.type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, this.value.body.length);
             this.value.translateElements(environment, 0);
-            console.log(this.value);
-            console.log('aaaaaa');
         }
         else if (this.value instanceof variable_id_1.variable_id) {
         }
@@ -5036,11 +5076,11 @@ class declaration_list extends instruction_1.instruction {
                     console_1._3dCode.actualTemp++;
                     console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
                     console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
-                    environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                    environment.save_variable(item.variable_id, { value: tData.value, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                     console_1._3dCode.absolutePos++;
                     console_1._3dCode.relativePos++;
                 }
-                return type_1.type.NULL;
+                return this.native_type;
             }
             else {
                 let checked = false;
@@ -5059,6 +5099,8 @@ class declaration_list extends instruction_1.instruction {
                         environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                         console_1._3dCode.absolutePos++;
                         console_1._3dCode.relativePos++;
+                        if (item.variable_id === "declaracion")
+                            console.log(tData.type);
                     }
                 }
             }
@@ -5713,14 +5755,15 @@ class print extends instruction_1.instruction {
                     console_1._3dCode.output += 'printf("%f", T' + console_1._3dCode.actualTemp + ');//Print float\n';
                     break;
                 default:
-                    break;
-            }
-            switch (this.type) {
-                case print_type.PRINTLN:
-                    console_1._3dCode.output += 'printf("%c", 10);//Print new line\n';
+                    console.log(elementType);
                     break;
             }
         });
+        switch (this.type) {
+            case print_type.PRINTLN:
+                console_1._3dCode.output += 'printf("%c", 10);//Print new line\n';
+                break;
+        }
         return type_1.type.NULL;
     }
     execute(environment) {
@@ -6096,6 +6139,14 @@ class _array extends literal_1.literal {
         else {
             this.dimensionSize.set(dimension, contador);
         }
+    }
+    getTotalItems() {
+        let retorno = 0;
+        this.dimensionSize.forEach((values, keys) => {
+            let dimSize = this.dimensionSize.get(keys);
+            retorno += dimSize;
+        });
+        return retorno;
     }
     to_string(environment) {
         let result_str = "[";

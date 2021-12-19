@@ -176,6 +176,15 @@ export class _array extends literal {
         }
     }
 
+    public getTotalItems():number{
+        let retorno = 0;
+        this.dimensionSize.forEach((values, keys) => {
+            let dimSize = this.dimensionSize.get(keys) as number
+            retorno += dimSize;
+        })
+        return retorno
+    }
+
     public to_string(environment: environment): string {
         let result_str = "["
         for (const item of this.body) {

@@ -24,11 +24,11 @@ class declaration_list extends instruction_1.instruction {
                     console_1._3dCode.actualTemp++;
                     console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + console_1._3dCode.relativePos + ';\n';
                     console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
-                    environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                    environment.save_variable(item.variable_id, { value: tData.value, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                     console_1._3dCode.absolutePos++;
                     console_1._3dCode.relativePos++;
                 }
-                return type_1.type.NULL;
+                return this.native_type;
             }
             else {
                 let checked = false;
@@ -47,6 +47,8 @@ class declaration_list extends instruction_1.instruction {
                         environment.save_variable(item.variable_id, tData, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
                         console_1._3dCode.absolutePos++;
                         console_1._3dCode.relativePos++;
+                        if (item.variable_id === "declaracion")
+                            console.log(tData.type);
                     }
                 }
             }

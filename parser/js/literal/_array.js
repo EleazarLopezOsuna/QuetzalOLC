@@ -180,6 +180,14 @@ class _array extends literal_1.literal {
             this.dimensionSize.set(dimension, contador);
         }
     }
+    getTotalItems() {
+        let retorno = 0;
+        this.dimensionSize.forEach((values, keys) => {
+            let dimSize = this.dimensionSize.get(keys);
+            retorno += dimSize;
+        });
+        return retorno;
+    }
     to_string(environment) {
         let result_str = "[";
         for (const item of this.body) {

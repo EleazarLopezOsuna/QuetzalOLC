@@ -20,11 +20,11 @@ export class declaration_list extends instruction {
                     _3dCode.actualTemp++;
                     _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + _3dCode.relativePos + ';\n';
                     _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = 0;//Save variable ' + item.variable_id + '\n';
-                    environment.save_variable(item.variable_id, tData, _3dCode.absolutePos, _3dCode.relativePos, 1)
+                    environment.save_variable(item.variable_id, {value: tData.value, type: this.native_type}, _3dCode.absolutePos, _3dCode.relativePos, 1)
                     _3dCode.absolutePos++;
                     _3dCode.relativePos++;
                 }
-                return type.NULL
+                return this.native_type
             } else {
                 let checked = false
                 if (itemType == this.native_type) {
