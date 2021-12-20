@@ -16,17 +16,34 @@ export class _case extends instruction {
 
     public translate(environment: environment): type {
         if (this.type == _case_type.CASE) {
+            _3dCode.actualTag++;
+            let lTrue = _3dCode.actualTag;
+            _3dCode.actualTag++;
+            let lFalse = _3dCode.actualTag;
+            _3dCode.actualTag++;
+            let salida = _3dCode.actualTag;
             if (this.case_value != null) {
-                this.case_value.translate(environment);
+                let caseType = this.case_value.translate(environment);
                 const conditionTemp = _3dCode.actualTemp;
-                _3dCode.actualTag++;
-                let lTrue = _3dCode.actualTag;
-                _3dCode.output += 'if(T' + conditionTemp + ' == T' + _3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
-                _3dCode.actualTag++;
-                let lFalse = _3dCode.actualTag;
+                if (caseType == type.CHAR || caseType == type.STRING) {
+                    _3dCode.actualTemp++;
+                    let savedEnvironment = _3dCode.actualTemp;
+                    _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                    _3dCode.output += 'SP = 36;//Set new environment\n';
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;//Set first string position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + _3dCode.switchEvaluation + ';//Save first string\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 2;//Set second string position\n';
+                    _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + conditionTemp + ';//Save second string\n';
+                    _3dCode.output += 'stringCompare();//Call function stringCompare\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];//Get return value\n';
+                    _3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
+                    _3dCode.output += 'if(T' + _3dCode.actualTemp + ' == 1) goto L' + lTrue + ';\n';
+                } else {
+                    _3dCode.output += 'if(T' + conditionTemp + ' == T' + _3dCode.switchEvaluation + ') goto L' + lTrue + ';\n';
+                }
                 _3dCode.output += "goto L" + lFalse + ";\n";
-                _3dCode.actualTag++;
-                let salida = _3dCode.actualTag;
                 _3dCode.output += "L" + lTrue + ":\n"
                 for (const instr of this.code) {
                     try {
