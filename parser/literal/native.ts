@@ -17,9 +17,11 @@ export class native extends literal {
                 _3dCode.actualTemp++;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = HP;//Save start position\n';
                 let content = this.get_string_value(this.value);
-                for (let i = 0; i < content.length; i++) {
-                    _3dCode.output += 'HEAP[(int)HP] = ' + content.charAt(i).charCodeAt(0) + ';//Save character ' + content.charAt(i) + ' in heap\n';
-                    _3dCode.output += 'HP = HP + 1;//Increase HP\n';
+                if(content !== ""){
+                    for (let i = 0; i < content.length; i++) {
+                        _3dCode.output += 'HEAP[(int)HP] = ' + content.charAt(i).charCodeAt(0) + ';//Save character ' + content.charAt(i) + ' in heap\n';
+                        _3dCode.output += 'HP = HP + 1;//Increase HP\n';
+                    }
                 }
                 _3dCode.output += 'HEAP[(int)HP] = 36;//Save end of string in heap\n';
                 _3dCode.output += 'HP = HP + 1;//Increase HP\n';

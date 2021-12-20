@@ -22,9 +22,11 @@ class native extends literal_1.literal {
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = HP;//Save start position\n';
                 let content = this.get_string_value(this.value);
-                for (let i = 0; i < content.length; i++) {
-                    console_1._3dCode.output += 'HEAP[(int)HP] = ' + content.charAt(i).charCodeAt(0) + ';//Save character ' + content.charAt(i) + ' in heap\n';
-                    console_1._3dCode.output += 'HP = HP + 1;//Increase HP\n';
+                if (content !== "") {
+                    for (let i = 0; i < content.length; i++) {
+                        console_1._3dCode.output += 'HEAP[(int)HP] = ' + content.charAt(i).charCodeAt(0) + ';//Save character ' + content.charAt(i) + ' in heap\n';
+                        console_1._3dCode.output += 'HP = HP + 1;//Increase HP\n';
+                    }
                 }
                 console_1._3dCode.output += 'HEAP[(int)HP] = 36;//Save end of string in heap\n';
                 console_1._3dCode.output += 'HP = HP + 1;//Increase HP\n';

@@ -40,14 +40,17 @@ class _case extends instruction_1.instruction {
                         console.log(error);
                     }
                 }
-                console_1._3dCode.output += "goto L" + salida + ";\n";
+                console_1._3dCode.output += "goto L" + (salida + 1) + ";\n";
                 console_1._3dCode.output += "L" + salida + ":\n";
                 console_1._3dCode.output += "L" + lFalse + ":\n";
             }
         }
         else {
             console_1._3dCode.actualTag++;
+            let lTrue = console_1._3dCode.actualTag;
+            console_1._3dCode.actualTag++;
             let salida = console_1._3dCode.actualTag;
+            console_1._3dCode.output += "L" + lTrue + ":\n";
             for (const instr of this.code) {
                 try {
                     instr.translate(environment);

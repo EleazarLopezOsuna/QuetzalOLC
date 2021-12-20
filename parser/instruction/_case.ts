@@ -35,13 +35,16 @@ export class _case extends instruction {
                         console.log(error);
                     }
                 }
-                _3dCode.output += "goto L" + salida + ";\n";
+                _3dCode.output += "goto L" + (salida + 1) + ";\n";
                 _3dCode.output += "L" + salida + ":\n";
                 _3dCode.output += "L" + lFalse + ":\n";
             }
         } else {
             _3dCode.actualTag++;
+            let lTrue = _3dCode.actualTag;
+            _3dCode.actualTag++;
             let salida = _3dCode.actualTag;
+            _3dCode.output += "L" + lTrue + ":\n"
             for (const instr of this.code) {
                 try {
                     instr.translate(environment);

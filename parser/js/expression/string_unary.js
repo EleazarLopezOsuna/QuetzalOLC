@@ -21,6 +21,7 @@ class string_unary extends expression_1.expression {
     translate(environment) {
         const exprType = this.expr.translate(environment);
         const leftTemp = console_1._3dCode.actualTemp;
+        const expr_data = this.expr.execute(environment);
         switch (this.type) {
             case string_unary_type.LENGTH:
                 switch (exprType) {
@@ -41,6 +42,11 @@ class string_unary extends expression_1.expression {
                         console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                         return type_1.type.INTEGER;
                     default:
+                        if (expr_data.value instanceof _array_1._array) {
+                            console_1._3dCode.actualTemp++;
+                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = ' + expr_data.value.body.length + ';//Length\n';
+                            return type_1.type.INTEGER;
+                        }
                 }
                 break;
             case string_unary_type.UPPERCASE:

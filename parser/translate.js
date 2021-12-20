@@ -1821,6 +1821,7 @@ class string_unary extends expression_1.expression {
     translate(environment) {
         const exprType = this.expr.translate(environment);
         const leftTemp = console_1._3dCode.actualTemp;
+        const expr_data = this.expr.execute(environment);
         switch (this.type) {
             case string_unary_type.LENGTH:
                 switch (exprType) {
@@ -1841,6 +1842,11 @@ class string_unary extends expression_1.expression {
                         console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                         return type_1.type.INTEGER;
                     default:
+                        if (expr_data.value instanceof _array_1._array) {
+                            console_1._3dCode.actualTemp++;
+                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = ' + expr_data.value.body.length + ';//Length\n';
+                            return type_1.type.INTEGER;
+                        }
                 }
                 break;
             case string_unary_type.UPPERCASE:
@@ -3626,14 +3632,17 @@ class _case extends instruction_1.instruction {
                         console.log(error);
                     }
                 }
-                console_1._3dCode.output += "goto L" + salida + ";\n";
+                console_1._3dCode.output += "goto L" + (salida + 1) + ";\n";
                 console_1._3dCode.output += "L" + salida + ":\n";
                 console_1._3dCode.output += "L" + lFalse + ":\n";
             }
         }
         else {
             console_1._3dCode.actualTag++;
+            let lTrue = console_1._3dCode.actualTag;
+            console_1._3dCode.actualTag++;
             let salida = console_1._3dCode.actualTag;
+            console_1._3dCode.output += "L" + lTrue + ":\n";
             for (const instr of this.code) {
                 try {
                     instr.translate(environment);
@@ -6381,9 +6390,11 @@ class native extends literal_1.literal {
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = HP;//Save start position\n';
                 let content = this.get_string_value(this.value);
-                for (let i = 0; i < content.length; i++) {
-                    console_1._3dCode.output += 'HEAP[(int)HP] = ' + content.charAt(i).charCodeAt(0) + ';//Save character ' + content.charAt(i) + ' in heap\n';
-                    console_1._3dCode.output += 'HP = HP + 1;//Increase HP\n';
+                if (content !== "") {
+                    for (let i = 0; i < content.length; i++) {
+                        console_1._3dCode.output += 'HEAP[(int)HP] = ' + content.charAt(i).charCodeAt(0) + ';//Save character ' + content.charAt(i) + ' in heap\n';
+                        console_1._3dCode.output += 'HP = HP + 1;//Increase HP\n';
+                    }
                 }
                 console_1._3dCode.output += 'HEAP[(int)HP] = 36;//Save end of string in heap\n';
                 console_1._3dCode.output += 'HP = HP + 1;//Increase HP\n';
