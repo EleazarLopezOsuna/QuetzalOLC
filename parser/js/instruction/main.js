@@ -11,7 +11,7 @@ class main extends instruction_1.instruction {
         this.code = code;
     }
     translate(current_environment) {
-        console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
+        console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + 'mainStart = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
         let main_environment = new environment_1.environment(current_environment);
         this.code.forEach(element => {
             element.translate(main_environment);

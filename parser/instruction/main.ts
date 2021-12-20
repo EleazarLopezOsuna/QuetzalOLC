@@ -6,7 +6,7 @@ import { instruction } from "../abstract/instruction";
 export class main extends instruction {
 
     public translate(current_environment: environment): type {
-        _3dCode.output = 'void main(){\n' + 'SP = ' + _3dCode.absolutePos + ';\n' + _3dCode.output;
+        _3dCode.output = 'void main(){\n' + 'SP = ' + _3dCode.absolutePos + ';\n' + 'mainStart = ' + _3dCode.absolutePos + ';\n' + _3dCode.output;
         let main_environment = new environment(current_environment);
         this.code.forEach(element => {
             element.translate(main_environment)

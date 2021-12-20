@@ -18,11 +18,19 @@ export class variable_id extends literal {
         let relative = environment.get_relative_recursive(this.id, environment)
         let symScope = environment.get_scope_recursive(this.id, environment)
         if (return_data.type != type.NULL) {
-            _3dCode.actualTemp++;
-            let posVar = _3dCode.actualTemp;
-            _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + relative + ';\n';
-            _3dCode.actualTemp++;
-            _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            if (symScope == scope.GLOBAL) {
+                _3dCode.actualTemp++;
+                let posVar = _3dCode.actualTemp;
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = mainStart + ' + relative + ';\n';
+                _3dCode.actualTemp++;
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            } else {
+                _3dCode.actualTemp++;
+                let posVar = _3dCode.actualTemp;
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + relative + ';\n';
+                _3dCode.actualTemp++;
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            }
             return return_data.type
         } else {
 

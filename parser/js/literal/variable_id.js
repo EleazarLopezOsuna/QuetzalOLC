@@ -5,6 +5,7 @@ const literal_1 = require("../abstract/literal");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const error_1 = require("../system/error");
+const _symbol_1 = require("../system/_symbol");
 var variable_id_type;
 (function (variable_id_type) {
     variable_id_type[variable_id_type["NORMAL"] = 0] = "NORMAL";
@@ -22,11 +23,20 @@ class variable_id extends literal_1.literal {
         let relative = environment.get_relative_recursive(this.id, environment);
         let symScope = environment.get_scope_recursive(this.id, environment);
         if (return_data.type != type_1.type.NULL) {
-            console_1._3dCode.actualTemp++;
-            let posVar = console_1._3dCode.actualTemp;
-            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relative + ';\n';
-            console_1._3dCode.actualTemp++;
-            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            if (symScope == _symbol_1.scope.GLOBAL) {
+                console_1._3dCode.actualTemp++;
+                let posVar = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = mainStart + ' + relative + ';\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            }
+            else {
+                console_1._3dCode.actualTemp++;
+                let posVar = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relative + ';\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            }
             return return_data.type;
         }
         else {

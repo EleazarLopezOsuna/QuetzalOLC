@@ -33,12 +33,13 @@ class declaration_function extends instruction_1.instruction {
         }
         let size = 0;
         console_1._3dCode.actualTemp++;
+        const savedRelative = console_1._3dCode.relativePos;
+        console_1._3dCode.relativePos = 0;
         env.save_variable(this.id, { value: null, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.absolutePos, size);
         this.functionEnvironment.save_variable('return', { value: null, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
         console_1._3dCode.relativePos++;
         console_1._3dCode.absolutePos++;
         size++;
-        const savedRelative = console_1._3dCode.relativePos;
         this.parameters.forEach(param => {
             return_data = param.execute(this.functionEnvironment);
             paramName = return_data.value;

@@ -28,12 +28,13 @@ export class declaration_function extends instruction {
         }
         let size = 0;
         _3dCode.actualTemp++;
+        const savedRelative = _3dCode.relativePos;
+        _3dCode.relativePos = 0;
         env.save_variable(this.id, { value: null, type: this.native_type }, _3dCode.absolutePos, _3dCode.absolutePos, size);
         this.functionEnvironment.save_variable('return', { value: null, type: this.native_type }, _3dCode.absolutePos, _3dCode.relativePos, 1);
         _3dCode.relativePos++;
         _3dCode.absolutePos++;
         size++;
-        const savedRelative = _3dCode.relativePos;
         this.parameters.forEach(param => {
             return_data = param.execute(this.functionEnvironment);
             paramName = return_data.value as string

@@ -61,6 +61,7 @@ function generateHeader() {
     code += 'float STACK[100000000];\n';
     code += 'float HP;\n';
     code += 'float SP;\n';
+    code += 'float mainStart;\n';
     code += 'float ';
     for (let i = 0; i <= console_1._3dCode.actualTemp; i++) {
         if (i == 0)

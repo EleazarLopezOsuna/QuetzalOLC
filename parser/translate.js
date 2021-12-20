@@ -2018,10 +2018,10 @@ class unary extends expression_1.expression {
                         console_1._3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
                         console_1._3dCode.output += 'L' + trueTag + ':\n';
                         console_1._3dCode.actualTemp++;
-                        console_1._3dCode.output += 'T' + exprTemp + ' = 1;//Set value to 1 (true)\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;//Set value to 1 (true)\n';
                         console_1._3dCode.output += 'goto L' + exitTag + ';\n';
                         console_1._3dCode.output += 'L' + falseTag + ':\n';
-                        console_1._3dCode.output += 'T' + exprTemp + ' = 0;//Set value to 0 (false)\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;//Set value to 0 (false)\n';
                         console_1._3dCode.output += 'goto L' + exitTag + ';\n';
                         console_1._3dCode.output += 'L' + exitTag + ':\n';
                         return type_1.type.BOOLEAN;
@@ -4948,12 +4948,13 @@ class declaration_function extends instruction_1.instruction {
         }
         let size = 0;
         console_1._3dCode.actualTemp++;
+        const savedRelative = console_1._3dCode.relativePos;
+        console_1._3dCode.relativePos = 0;
         env.save_variable(this.id, { value: null, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.absolutePos, size);
         this.functionEnvironment.save_variable('return', { value: null, type: this.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
         console_1._3dCode.relativePos++;
         console_1._3dCode.absolutePos++;
         size++;
-        const savedRelative = console_1._3dCode.relativePos;
         this.parameters.forEach(param => {
             return_data = param.execute(this.functionEnvironment);
             paramName = return_data.value;
@@ -5348,7 +5349,7 @@ class main extends instruction_1.instruction {
         this.code = code;
     }
     translate(current_environment) {
-        console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
+        console_1._3dCode.output = 'void main(){\n' + 'SP = ' + console_1._3dCode.absolutePos + ';\n' + 'mainStart = ' + console_1._3dCode.absolutePos + ';\n' + console_1._3dCode.output;
         let main_environment = new environment_1.environment(current_environment);
         this.code.forEach(element => {
             element.translate(main_environment);
@@ -6406,6 +6407,7 @@ const literal_1 = require("../abstract/literal");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const error_1 = require("../system/error");
+const _symbol_1 = require("../system/_symbol");
 var variable_id_type;
 (function (variable_id_type) {
     variable_id_type[variable_id_type["NORMAL"] = 0] = "NORMAL";
@@ -6423,11 +6425,20 @@ class variable_id extends literal_1.literal {
         let relative = environment.get_relative_recursive(this.id, environment);
         let symScope = environment.get_scope_recursive(this.id, environment);
         if (return_data.type != type_1.type.NULL) {
-            console_1._3dCode.actualTemp++;
-            let posVar = console_1._3dCode.actualTemp;
-            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relative + ';\n';
-            console_1._3dCode.actualTemp++;
-            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            if (symScope == _symbol_1.scope.GLOBAL) {
+                console_1._3dCode.actualTemp++;
+                let posVar = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = mainStart + ' + relative + ';\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            }
+            else {
+                console_1._3dCode.actualTemp++;
+                let posVar = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relative + ';\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + posVar + '];//Getting value of variable ' + this.id + '\n';
+            }
             return return_data.type;
         }
         else {
@@ -6451,7 +6462,7 @@ class variable_id extends literal_1.literal {
 }
 exports.variable_id = variable_id;
 
-},{"../abstract/literal":6,"../system/console":52,"../system/error":54,"../system/type":55}],51:[function(require,module,exports){
+},{"../abstract/literal":6,"../system/_symbol":51,"../system/console":52,"../system/error":54,"../system/type":55}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._symbol = exports.scope = void 0;
@@ -6844,6 +6855,7 @@ function generateHeader() {
     code += 'float STACK[100000000];\n';
     code += 'float HP;\n';
     code += 'float SP;\n';
+    code += 'float mainStart;\n';
     code += 'float ';
     for (let i = 0; i <= console_1._3dCode.actualTemp; i++) {
         if (i == 0)

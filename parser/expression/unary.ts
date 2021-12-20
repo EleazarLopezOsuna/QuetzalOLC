@@ -38,10 +38,10 @@ export class unary extends expression {
                         _3dCode.output += 'goto L' + falseTag + ';//Expression is true\n';
                         _3dCode.output += 'L' + trueTag + ':\n';
                         _3dCode.actualTemp++;
-                        _3dCode.output += 'T' + exprTemp + ' = 1;//Set value to 1 (true)\n';
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = 1;//Set value to 1 (true)\n';
                         _3dCode.output += 'goto L' + exitTag + ';\n';
                         _3dCode.output += 'L' + falseTag + ':\n';
-                        _3dCode.output += 'T' + exprTemp + ' = 0;//Set value to 0 (false)\n';
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = 0;//Set value to 0 (false)\n';
                         _3dCode.output += 'goto L' + exitTag + ';\n';
                         _3dCode.output += 'L' + exitTag + ':\n';
                         return type.BOOLEAN;
