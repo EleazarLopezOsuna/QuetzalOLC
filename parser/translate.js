@@ -1417,14 +1417,66 @@ class relational extends expression_1.expression {
         const leftTemp = console_1._3dCode.actualTemp;
         const rightType = this.right.translate(environment);
         const rightTemp = console_1._3dCode.actualTemp;
+        let savedEnvironment;
         switch (this.type) {
             case relational_type.EQUAL:
-                console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' == T' + rightTemp + ';\n';
+                switch (leftType) {
+                    case type_1.type.STRING:
+                    case type_1.type.CHAR:
+                        console_1._3dCode.actualTemp++;
+                        savedEnvironment = console_1._3dCode.actualTemp;
+                        console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                        console_1._3dCode.output += 'SP = 36;//Set new environment\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set first string position\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save first string\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set second string position\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + rightTemp + ';//Save second string\n';
+                        console_1._3dCode.output += 'stringCompare();//Call function stringCompare\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
+                        console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
+                        break;
+                    default:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' == T' + rightTemp + ';\n';
+                        break;
+                }
                 return type_1.type.BOOLEAN;
             case relational_type.NOTEQUAL:
-                console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' != T' + rightTemp + ';\n';
+                switch (leftType) {
+                    case type_1.type.STRING:
+                    case type_1.type.CHAR:
+                        console_1._3dCode.actualTemp++;
+                        savedEnvironment = console_1._3dCode.actualTemp;
+                        console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                        console_1._3dCode.output += 'SP = 36;//Set new environment\n';
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 1;//Set first string position\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + leftTemp + ';//Save first string\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 2;//Set second string position\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + rightTemp + ';//Save second string\n';
+                        console_1._3dCode.output += 'stringCompare();//Call function stringCompare\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
+                        console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Get environment back\n';
+                        console_1._3dCode.actualTag++;
+                        let isFalse = console_1._3dCode.actualTag;
+                        console_1._3dCode.actualTag++;
+                        let ifExit = console_1._3dCode.actualTag;
+                        console_1._3dCode.output += 'if(T' + console_1._3dCode.actualTemp + ' == 0) goto L' + isFalse + ';//Must change value to true\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 0;//Changing value to false\n';
+                        console_1._3dCode.output += 'goto L' + ifExit + ';\n';
+                        console_1._3dCode.output += 'L' + isFalse + ':\n';
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = 1;//Changing value to true\n';
+                        console_1._3dCode.output += 'goto L' + ifExit + ';\n';
+                        console_1._3dCode.output += 'L' + ifExit + ':\n';
+                        break;
+                    default:
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' != T' + rightTemp + ';\n';
+                        break;
+                }
                 return type_1.type.BOOLEAN;
             case relational_type.GREATER:
                 console_1._3dCode.actualTemp++;
@@ -6520,7 +6572,7 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
-        this.absolutePos = 36; //Initial value 36 because of default functions
+        this.absolutePos = 39; //Initial value 36 because of default functions
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
@@ -6541,7 +6593,7 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
-        this.absolutePos = 36;
+        this.absolutePos = 39;
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
@@ -6883,6 +6935,7 @@ function generateDefaultFunctions() {
     code += generateStringToInt();
     code += generateStringToFloat();
     code += generateFloatToString();
+    code += generateStringCompare();
     return code;
 }
 function generateStringConcat() {
@@ -7504,6 +7557,33 @@ function generateFloatToString() {
     code += 'STACK[(int)T0] = T1;//Save return\n';
     code += 'return;\n';
     code += '}\n\n';
+    return code;
+}
+function generateStringCompare() {
+    let code = 'void stringCompare(){\n';
+    code += 'T0 = SP + 1;//Set first string position\n';
+    code += 'T1 = SP + 2;//Set second string position\n';
+    code += 'T0 = STACK[(int)T0];//Get first string start position\n';
+    code += 'T1 = STACK[(int)T1];//Get second string start position\n';
+    code += 'L0://Loop tag\n';
+    code += 'T2 = HEAP[(int)T0];//Get character in first string\n';
+    code += 'T3 = HEAP[(int)T1];//Get character in second string\n';
+    code += 'if(T2 != T3) goto L1;//Characters are diferent\n';
+    code += 'if(T2 == 36) goto L2;//Both characters are end of string\n';
+    code += 'T0 = T0 + 1;//Get next character in first string\n';
+    code += 'T1 = T1 + 1;//Get next character in second string\n';
+    code += 'goto L0;//Go back to loop\n';
+    code += 'L1:\n';
+    code += 'T0 = SP + 0;//Set return position\n';
+    code += 'STACK[(int)T0] = 0;//Save false as return value\n';
+    code += 'goto L3;\n';
+    code += 'L2:\n';
+    code += 'T0 = SP + 0;//Set return position\n';
+    code += 'STACK[(int)T0] = 1;//Save true as return value\n';
+    code += 'goto L3;\n';
+    code += 'L3:\n';
+    code += 'return;\n';
+    code += '}\n';
     return code;
 }
 

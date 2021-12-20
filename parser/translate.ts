@@ -92,6 +92,7 @@ function generateDefaultFunctions() {
     code += generateStringToInt();
     code += generateStringToFloat();
     code += generateFloatToString();
+    code += generateStringCompare();
     return code;
 }
 
@@ -729,5 +730,33 @@ function generateFloatToString() {
     code += 'STACK[(int)T0] = T1;//Save return\n';
     code += 'return;\n';
     code += '}\n\n';
+    return code;
+}
+
+function generateStringCompare() {
+    let code = 'void stringCompare(){\n';
+    code += 'T0 = SP + 1;//Set first string position\n';
+    code += 'T1 = SP + 2;//Set second string position\n';
+    code += 'T0 = STACK[(int)T0];//Get first string start position\n';
+    code += 'T1 = STACK[(int)T1];//Get second string start position\n';
+    code += 'L0://Loop tag\n';
+    code += 'T2 = HEAP[(int)T0];//Get character in first string\n';
+    code += 'T3 = HEAP[(int)T1];//Get character in second string\n';
+    code += 'if(T2 != T3) goto L1;//Characters are diferent\n';
+    code += 'if(T2 == 36) goto L2;//Both characters are end of string\n';
+    code += 'T0 = T0 + 1;//Get next character in first string\n';
+    code += 'T1 = T1 + 1;//Get next character in second string\n';
+    code += 'goto L0;//Go back to loop\n';
+    code += 'L1:\n';
+    code += 'T0 = SP + 0;//Set return position\n';
+    code += 'STACK[(int)T0] = 0;//Save false as return value\n';
+    code += 'goto L3;\n';
+    code += 'L2:\n';
+    code += 'T0 = SP + 0;//Set return position\n';
+    code += 'STACK[(int)T0] = 1;//Save true as return value\n';
+    code += 'goto L3;\n';
+    code += 'L3:\n';
+    code += 'return;\n';
+    code += '}\n';
     return code;
 }

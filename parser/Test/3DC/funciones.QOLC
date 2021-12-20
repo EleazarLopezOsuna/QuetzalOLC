@@ -1,0 +1,32 @@
+int recursiva_sencilla(int num)
+{
+    if (num == 1){
+        return 1;
+    }else{
+        return recursiva_sencilla(num - 1) * num;
+    }
+}
+
+void juego( int discos, int origen, int auxiliar, int destino)
+{
+    if (discos == 1){
+        println("Mover de " , origen , " a " , destino);
+    }else{
+        juego(discos - 1, origen, destino, auxiliar);
+        println("Mover de " , origen , " a " , destino);
+        juego(discos - 1, auxiliar, origen, destino);
+    }
+}
+
+void main()
+{
+    println("=====================================================");
+    println("===========FUNCIONES RECURSIVAS======================");
+    println("=====================================================");
+    println("");
+
+    println("==============FACTORIAL==============================");
+    println(recursiva_sencilla(12));
+    println("===============HANOI=================================");
+    juego(4, 1, 2, 3);
+}
