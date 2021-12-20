@@ -18,7 +18,7 @@ export class unary extends expression {
                 switch (exprType) {
                     case type.INTEGER:
                     case type.FLOAT:
-                        _3dCode.output = 'T' + exprTemp + ' = T' + exprTemp + ' * -1;\n';
+                        _3dCode.output += 'T' + exprTemp + ' = T' + exprTemp + ' * -1;\n';
                         return exprType;
                     default:
 

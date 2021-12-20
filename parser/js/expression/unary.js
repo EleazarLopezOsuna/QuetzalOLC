@@ -24,7 +24,7 @@ class unary extends expression_1.expression {
                 switch (exprType) {
                     case type_1.type.INTEGER:
                     case type_1.type.FLOAT:
-                        console_1._3dCode.output = 'T' + exprTemp + ' = T' + exprTemp + ' * -1;\n';
+                        console_1._3dCode.output += 'T' + exprTemp + ' = T' + exprTemp + ' * -1;\n';
                         return exprType;
                     default:
                 }

@@ -14,6 +14,8 @@ export class declaration_function extends instruction {
         let return_data;
         let paramName;
         this.functionEnvironment = new environment(env);
+        const savedPreviousCode = _3dCode.output;
+        _3dCode.output = '';
         switch (this.native_type) {
             case type.INTEGER:
             case type.STRING:
@@ -31,6 +33,7 @@ export class declaration_function extends instruction {
         _3dCode.relativePos++;
         _3dCode.absolutePos++;
         size++;
+        const savedRelative = _3dCode.relativePos;
         this.parameters.forEach(param => {
             return_data = param.execute(this.functionEnvironment);
             paramName = return_data.value as string
@@ -48,11 +51,11 @@ export class declaration_function extends instruction {
                 instr.translate(this.functionEnvironment)
             }
         });
-        _3dCode.relativePos = 0;
+        _3dCode.relativePos = savedRelative;
         _3dCode.output += 'return;\n';
         _3dCode.output += '}\n\n';
         _3dCode.functionsCode += _3dCode.output;
-        _3dCode.output = "";
+        _3dCode.output = savedPreviousCode;
         return type.NULL;
     }
 
