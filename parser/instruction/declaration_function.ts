@@ -14,6 +14,8 @@ export class declaration_function extends instruction {
         let return_data;
         let paramName;
         this.functionEnvironment = new environment(env);
+        this.functionEnvironment.name = this.id
+        _3dCode.environmentList.push(this.functionEnvironment);
         const savedPreviousCode = _3dCode.output;
         _3dCode.output = '';
         switch (this.native_type) {

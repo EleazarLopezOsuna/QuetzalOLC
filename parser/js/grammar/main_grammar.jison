@@ -30,6 +30,7 @@
     const {_switch} = require('../instruction/_switch');
     const {_case, _case_type} = require('../instruction/_case');
     const {_break} = require('../instruction/_break');
+    const {_graficarts} = require('../instruction/_graficarts');
     const {_continue} = require('../instruction/_continue');
     const {_while, _while_type} = require('../instruction/_while');
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
@@ -92,6 +93,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "cos"                   return 'tk_cos'
 "tan"                   return 'tk_tan'
 "log10"                 return 'tk_log10'
+"graficar_ts"           return 'tk_graficar_ts'
 
 "int"                   return 'tk_integer_type'
 "double"                return 'tk_double_type'
@@ -374,6 +376,9 @@ pr_instruction
     | pr_print tk_semicolon {$$ = $1}
     | pr_native_function tk_semicolon {$$ = $1}
     | pr_array_native_function tk_semicolon {$$ = $1}
+    | tk_graficar_ts tk_par_o tk_par_c tk_semicolon{
+        $$ = new _graficarts(@1.first_line, @1.first_column);
+    }
     | error  {
         error_arr.push(new error(@1.first_line, @1.first_column, error_type.SINTACTICO, yytext));  
     }

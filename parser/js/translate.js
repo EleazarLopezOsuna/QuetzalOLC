@@ -9,6 +9,8 @@ window.translate = function (input) {
     try {
         const ast = parser.parse(input);
         const main_environment = new environment_1.environment(null);
+        main_environment.name = 'Global';
+        console_1._3dCode.environmentList.push(main_environment);
         console.log("ast", ast);
         for (const instr of ast) {
             try {
@@ -18,7 +20,26 @@ window.translate = function (input) {
                 console.log(error);
             }
         }
-        window.symbol_table = main_environment.get_html();
+        if (console_1._3dCode.symbolTables == '') {
+            console_1._3dCode.environmentList.forEach(envi => {
+                console_1._3dCode.symbolTables += '<div class="table-wrapper-scroll-y my-custom-scrollbar">\n';
+                console_1._3dCode.symbolTables += '<table class="table table-hover">\n';
+                console_1._3dCode.symbolTables += '<thead>\n<tr>\n<th scope="col">#</th>\n';
+                console_1._3dCode.symbolTables += '<th scope="col">ID</th>\n';
+                console_1._3dCode.symbolTables += '<th scope="col">Tipo</th>\n';
+                console_1._3dCode.symbolTables += '<th scope="col">Absolute</th>\n';
+                console_1._3dCode.symbolTables += '<th scope="col">Relative</th>\n';
+                console_1._3dCode.symbolTables += '<th scope="col">Ambito</th>\n';
+                console_1._3dCode.symbolTables += '</tr>\n';
+                console_1._3dCode.symbolTables += '</thead>\n';
+                console_1._3dCode.symbolTables += '<tbody>\n';
+                console_1._3dCode.symbolTables += envi.get_html_translation();
+                console_1._3dCode.symbolTables += '</tbody>\n';
+                console_1._3dCode.symbolTables += '</table>\n';
+                console_1._3dCode.symbolTables += '</div>\n';
+            });
+        }
+        window.symbol_table = console_1._3dCode.symbolTables;
     }
     catch (error) {
         console.log(error);

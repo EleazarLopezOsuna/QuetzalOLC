@@ -16,6 +16,8 @@ class console {
         this.switchEvaluation = 0;
         this.finalCode = "";
         this.functionsCode = "";
+        this.environmentList = new Array;
+        this.symbolTables = "";
     }
     saveInHeap(index, id) {
         this.heap[index] = id;
@@ -37,6 +39,8 @@ class console {
         this.switchEvaluation = 0;
         this.finalCode = "";
         this.functionsCode = "";
+        this.environmentList = new Array;
+        this.symbolTables = "";
     }
 }
 exports._console = new console();

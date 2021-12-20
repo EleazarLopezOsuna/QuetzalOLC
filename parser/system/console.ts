@@ -1,4 +1,6 @@
+import { environment } from "./environment";
 import { error, error_arr } from "./error";
+import { _symbol } from "./_symbol";
 
 class console {
     public output = "";
@@ -14,6 +16,8 @@ class console {
     public switchEvaluation: number;
     public finalCode: string;
     public functionsCode: string;
+    public environmentList: Array<environment>;
+    public symbolTables: string;
 
     constructor() {
         this.stack = new Array;
@@ -27,6 +31,8 @@ class console {
         this.switchEvaluation = 0;
         this.finalCode = "";
         this.functionsCode = "";
+        this.environmentList = new Array;
+        this.symbolTables = "";
     }
     saveInHeap(index: number, id: any) {
         this.heap[index] = id;
@@ -49,6 +55,8 @@ class console {
         this.switchEvaluation = 0;
         this.finalCode = "";
         this.functionsCode = "";
+        this.environmentList = new Array;
+        this.symbolTables = "";
     }
 
 

@@ -6,13 +6,35 @@ import { _symbol, scope } from "./_symbol";
 
 export class environment {
 
-    private symbol_map: Map<string, _symbol>;
+    public symbol_map: Map<string, _symbol>;
     private function_map: Map<string, _symbol>;
+    public name: string;
 
     constructor(public previous: environment | null) {
         this.previous = previous;
         this.symbol_map = new Map<string, _symbol>();
         this.function_map = new Map<string, _symbol>();
+        this.name = '';
+    }
+
+    public get_html_translation(): string {
+        let result = ''
+        let count = 1;
+        this.symbol_map.forEach(element => {
+            result += '<tr>\n';
+            result += '<th scope="row">' + count + '</th>\n';
+            result += element.get_html_translation(this);
+            result += '</tr>\n';
+            count++;
+        });
+        this.function_map.forEach(element => {
+            result += '<tr>\n';
+            result += '<th scope="row">' + count + '</th>\n';
+            result += element.get_html_translation(this);
+            result += '</tr>\n';
+            count++;
+        });
+        return result;
     }
 
     public get_html(): string {

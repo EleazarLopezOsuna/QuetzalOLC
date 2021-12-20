@@ -9,6 +9,26 @@ class environment {
         this.previous = previous;
         this.symbol_map = new Map();
         this.function_map = new Map();
+        this.name = '';
+    }
+    get_html_translation() {
+        let result = '';
+        let count = 1;
+        this.symbol_map.forEach(element => {
+            result += '<tr>\n';
+            result += '<th scope="row">' + count + '</th>\n';
+            result += element.get_html_translation(this);
+            result += '</tr>\n';
+            count++;
+        });
+        this.function_map.forEach(element => {
+            result += '<tr>\n';
+            result += '<th scope="row">' + count + '</th>\n';
+            result += element.get_html_translation(this);
+            result += '</tr>\n';
+            count++;
+        });
+        return result;
     }
     get_html() {
         let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';

@@ -8,21 +8,6 @@ String[] arreglo = ["Estudiante1", "Estudiante2", "Estudiante3"];
 int[] tablero = [0,0,0,0,0,0,0,0,0];
 boolean[] estado = [false, false, false, false, false, false, false, false, false];
 
-boolean agregar(int i, int j, int nota){
-    if(!estado[i * dimension + j]){
-        tablero[i * dimension + j] = nota;
-        estado[i * dimension + j] = true;
-        return true;
-    }
-    println("Posicion ocupada");
-    return false;
-}
-
-int imprimirPromedio(int estudiante){
-    double promedio = (tablero[estudiante * dimension + 0] + tablero[estudiante * dimension + 1] + tablero[estudiante * dimension + 2])/3;
-    println("Promedio Estudiante " , arreglo[estudiante], " = ", promedio);
-}
-
 void main(){
     double val1 = 0.0;
     double val2 = 0.0;
@@ -115,4 +100,19 @@ void main(){
 
     //Debe imprimir posicion ocupada 
     agregar(2,0, -1);
+}
+
+boolean agregar(int i, int j, int nota){
+    if(!estado[i * dimension + j]){
+        tablero[i * dimension + j] = nota;
+        estado[i * dimension + j] = true;
+        return true;
+    }
+    println("Posicion ocupada");
+    return false;
+}
+
+int imprimirPromedio(int estudiante){
+    double promedio = (tablero[estudiante * dimension + 0] + tablero[estudiante * dimension + 1] + tablero[estudiante * dimension + 2])/3;
+    println("Promedio Estudiante " , arreglo[estudiante], " = ", promedio);
 }
