@@ -30,6 +30,14 @@ class environment {
         });
         return result;
     }
+    remove_temp_recursive(environment) {
+        if (environment.symbol_map.has('temp_array_test')) {
+            environment.symbol_map.delete('temp_array_test');
+        }
+        if (environment.previous != null) {
+            this.remove_temp_recursive(environment.previous);
+        }
+    }
     get_html() {
         let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
         result += '<table class="table table-hover">\n';

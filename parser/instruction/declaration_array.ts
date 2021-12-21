@@ -26,9 +26,12 @@ export class declaration_array extends instruction {
                 _3dCode.relativePos++;
             }
         } else if (this.value instanceof _array) {
+            let val = this.value as _array
             _3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + _3dCode.relativePos + ' of this context\n';
             environment.save_variable(this.variable_id, { value: this.value, type: this.type }, _3dCode.absolutePos, _3dCode.relativePos, this.value.body.length)
             this.value.translateElements(environment, 0)
+            let size = val.getTotalItems();
+            this.value.size = size;
         } else if (this.value instanceof variable_id) {
 
         }

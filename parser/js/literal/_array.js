@@ -10,6 +10,7 @@ class _array extends literal_1.literal {
         super(line, column);
         this.body = body;
         this.dimensionSize = new Map();
+        this.size = 0;
     }
     translate(environment) {
         // Default

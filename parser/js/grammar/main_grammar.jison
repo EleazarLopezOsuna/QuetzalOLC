@@ -541,8 +541,11 @@ pr_for
     | tk_for tk_par_o pr_assignation tk_semicolon pr_expr tk_semicolon pr_unary_instruction tk_par_c tk_cbra_o pr_instructions tk_cbra_c  {
         $$ = new _for($3, $5, $7, $10, @1.first_line,@1.first_column);
     }
-    | tk_for tk_par_o tk_id tk_in pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
-        $$ = new _forin($3, $5, $8, @1.first_line, @1.first_column);
+    | tk_for tk_id tk_in pr_expr tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new _forin($2, $4, $6, @1.first_line, @1.first_column);
+    }
+    | tk_for tk_id tk_in pr_array tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new _forin($2, $4, $6, @1.first_line, @1.first_column);
     }
 ;
 

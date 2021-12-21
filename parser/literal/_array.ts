@@ -8,6 +8,7 @@ import { array_range } from "../expression/array_range";
 
 export class _array extends literal {
     public dimensionSize;
+    public size;
 
     public translate(environment: environment): type {
         // Default
@@ -17,6 +18,7 @@ export class _array extends literal {
     constructor(public body: Array<expression | literal | array_range>, line: number, column: number) {
         super(line, column);
         this.dimensionSize = new Map<number, number>();
+        this.size = 0;
     }
 
     public assign_value(dimensions: Array<expression | literal | array_range>, environment: environment, expr: expression | literal) {

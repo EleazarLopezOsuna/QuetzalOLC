@@ -35,8 +35,30 @@ class array_access extends instruction_1.instruction {
                 }
                 console_1._3dCode.actualTemp++;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                let size = return_data.value.size;
+                let index = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get value\n';
+                console_1._3dCode.actualTag++;
+                let lTrue = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                let lFalse = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTag++;
+                let lExit = console_1._3dCode.actualTag;
+                console_1._3dCode.actualTemp++;
+                let sizeTemp = console_1._3dCode.actualTemp;
+                console_1._3dCode.output += 'T' + sizeTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';\n';
+                console_1._3dCode.output += 'T' + sizeTemp + ' = T' + sizeTemp + ' + ' + size + ';\n';
+                console_1._3dCode.actualTemp++;
+                console_1._3dCode.output += 'if(T' + index + ' >= T' + sizeTemp + ') goto L' + lFalse + ';\n';
+                console_1._3dCode.output += 'goto L' + lTrue + ';\n';
+                console_1._3dCode.output += 'L' + lFalse + ':\n';
+                console_1._3dCode.output += 'OutOfBounds();\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = -1337.1337;//Set error\n';
+                console_1._3dCode.output += 'goto L' + lExit + ';\n';
+                console_1._3dCode.output += 'L' + lTrue + ':\n';
+                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + index + '];//Get value\n';
+                console_1._3dCode.output += 'goto L' + lExit + ';\n';
+                console_1._3dCode.output += 'L' + lExit + ':\n';
                 return return_data.type;
             }
             else {

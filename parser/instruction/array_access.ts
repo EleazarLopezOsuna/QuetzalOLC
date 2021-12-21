@@ -33,8 +33,30 @@ export class array_access extends instruction {
                 }
                 _3dCode.actualTemp++;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                let size = return_data.value.size;
+                let index = _3dCode.actualTemp;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
-                _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];//Get value\n';
+                _3dCode.actualTag++;
+                let lTrue = _3dCode.actualTag;
+                _3dCode.actualTag++;
+                let lFalse = _3dCode.actualTag;
+                _3dCode.actualTag++;
+                let lExit = _3dCode.actualTag;
+                _3dCode.actualTemp++;
+                let sizeTemp = _3dCode.actualTemp;
+                _3dCode.output += 'T' + sizeTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';\n';
+                _3dCode.output += 'T' + sizeTemp + ' = T' + sizeTemp + ' + ' + size + ';\n';
+                _3dCode.actualTemp++;
+                _3dCode.output += 'if(T' + index + ' >= T' + sizeTemp + ') goto L' + lFalse + ';\n';
+                _3dCode.output += 'goto L' + lTrue + ';\n';
+                _3dCode.output += 'L' + lFalse + ':\n';
+                _3dCode.output += 'OutOfBounds();\n';
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = -1337.1337;//Set error\n';
+                _3dCode.output += 'goto L' + lExit + ';\n';
+                _3dCode.output += 'L' + lTrue + ':\n';
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + index + '];//Get value\n';
+                _3dCode.output += 'goto L' + lExit + ';\n';
+                _3dCode.output += 'L' + lExit + ':\n';
                 return return_data.type
             } else {
 
