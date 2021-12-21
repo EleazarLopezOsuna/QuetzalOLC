@@ -5305,7 +5305,7 @@ class declaration_list extends instruction_1.instruction {
             // if is equal null save the variable with the type declared
             if (item_data.type == type_1.type.NULL) {
                 // Save the variable 
-                if (environment.get_variable(item.variable_id).type != type_1.type.UNDEFINED) {
+                if (environment.exists(item.variable_id)) {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 }
                 else {
@@ -5328,7 +5328,7 @@ class declaration_list extends instruction_1.instruction {
                 }
                 else {
                     // Save the variable 
-                    if (environment.get_variable(item.variable_id).type != type_1.type.UNDEFINED) {
+                    if (environment.exists(item.variable_id)) {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                     }
                     else {
@@ -5531,9 +5531,10 @@ class main extends instruction_1.instruction {
         console_1._3dCode.output += '}\n';
         return type_1.type.NULL;
     }
-    execute(environment) {
+    execute(current_environment) {
+        const new_environment = new environment_1.environment(current_environment);
         this.code.forEach(element => {
-            element.execute(environment);
+            element.execute(new_environment);
         });
         return { value: null, type: type_1.type.NULL };
     }
@@ -6833,6 +6834,10 @@ class environment {
             let return_function = symbol_item.data;
             return return_function;
         }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_function(id);
+        }
         return null;
     }
     save_variable(id, data, absolute, relative, size) {
@@ -6842,11 +6847,22 @@ class environment {
         }
         this.symbol_map.set(id, new _symbol_1._symbol(id, data, symbol_type, absolute, relative, size));
     }
+    exists(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return true;
+        }
+        return false;
+    }
     get_variable(id) {
         let symbol_item = this.symbol_map.get(id);
         if (symbol_item instanceof _symbol_1._symbol) {
             let return_data = symbol_item.data;
             return return_data;
+        }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_variable(id);
         }
         return { value: null, type: type_1.type.UNDEFINED };
     }

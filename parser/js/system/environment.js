@@ -80,6 +80,10 @@ class environment {
             let return_function = symbol_item.data;
             return return_function;
         }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_function(id);
+        }
         return null;
     }
     save_variable(id, data, absolute, relative, size) {
@@ -89,11 +93,22 @@ class environment {
         }
         this.symbol_map.set(id, new _symbol_1._symbol(id, data, symbol_type, absolute, relative, size));
     }
+    exists(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return true;
+        }
+        return false;
+    }
     get_variable(id) {
         let symbol_item = this.symbol_map.get(id);
         if (symbol_item instanceof _symbol_1._symbol) {
             let return_data = symbol_item.data;
             return return_data;
+        }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_variable(id);
         }
         return { value: null, type: type_1.type.UNDEFINED };
     }

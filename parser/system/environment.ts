@@ -37,11 +37,11 @@ export class environment {
         return result;
     }
 
-    public remove_temp_recursive(environment: environment){
+    public remove_temp_recursive(environment: environment) {
         if (environment.symbol_map.has('temp_array_test')) {
             environment.symbol_map.delete('temp_array_test')
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             this.remove_temp_recursive(environment.previous);
         }
     }
@@ -92,6 +92,10 @@ export class environment {
             let return_function = symbol_item.data;
             return return_function as declaration_function
         }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_function(id)
+        }
         return null
     }
 
@@ -103,11 +107,23 @@ export class environment {
         this.symbol_map.set(id, new _symbol(id, data, symbol_type, absolute, relative, size));
     }
 
+    public exists(id: string): boolean {
+        let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return true
+        }
+        return false
+    }
+
     public get_variable(id: string): data {
         let symbol_item = this.symbol_map.get(id)
         if (symbol_item instanceof _symbol) {
             let return_data = symbol_item.data;
             return return_data as data
+        }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_variable(id)
         }
         return { value: null, type: type.UNDEFINED }
     }
@@ -124,7 +140,7 @@ export class environment {
                 return symbol_item;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_function_recursive(id, environment.previous);
         }
         return null
@@ -142,7 +158,7 @@ export class environment {
                 return symbol_item.scope;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_scope_recursive(id, environment.previous);
         }
         return null
@@ -156,7 +172,7 @@ export class environment {
                 return return_data as data
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_variable_recursive(id, environment.previous);
         }
         return { value: null, type: type.UNDEFINED }
@@ -174,7 +190,7 @@ export class environment {
                 return symbol_item.absolute;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_absolute_recursive(id, environment.previous);
         }
         return -1
@@ -193,7 +209,7 @@ export class environment {
                 return symbol_item.size;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_size_recursive(id, environment.previous);
         }
         return -1
@@ -211,7 +227,7 @@ export class environment {
                 return symbol_item.relative;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_relative_recursive(id, environment.previous);
         }
         return -1

@@ -75,7 +75,7 @@ export class declaration_list extends instruction {
             // if is equal null save the variable with the type declared
             if (item_data.type == type.NULL) {
                 // Save the variable 
-                if (environment.get_variable(item.variable_id).type != type.UNDEFINED) {
+                if (environment.exists(item.variable_id)) {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 } else {
                     environment.save_variable(item.variable_id, item_data, _console.absolutePos, _console.relativePos, 1)
@@ -97,7 +97,7 @@ export class declaration_list extends instruction {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede iniciar con distinto tipo de dato para: ' + item.variable_id));
                 } else {
                     // Save the variable 
-                    if (environment.get_variable(item.variable_id).type != type.UNDEFINED) {
+                    if (environment.exists(item.variable_id)) {
                         error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                     } else {
                         environment.save_variable(item.variable_id, item_data, _console.absolutePos, _console.relativePos, 1)
