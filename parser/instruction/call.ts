@@ -34,8 +34,7 @@ export class call extends instruction {
         _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 0;//Set return position\n';
         _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];//Get return value\n';
         _3dCode.output += 'SP = SP - ' + _3dCode.relativePos + ';//Get SP back\n';
-        console.log(functionType.type)
-        return type.INTEGER
+        return functionType.type
     }
 
     constructor(public id: string, public parameters: Array<expression>, line: number, column: number) {

@@ -37,8 +37,7 @@ class call extends instruction_1.instruction {
         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
         console_1._3dCode.output += 'SP = SP - ' + console_1._3dCode.relativePos + ';//Get SP back\n';
-        console.log(functionType.type);
-        return type_1.type.INTEGER;
+        return functionType.type;
     }
     execute(current_environment) {
         // the new environment to execute

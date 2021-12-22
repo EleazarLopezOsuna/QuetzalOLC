@@ -7,11 +7,13 @@ import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 import { _array } from "../literal/_array";
 import { array_range } from "../expression/array_range";
+import { scope } from "../system/_symbol";
 
 export class array_access extends instruction {
 
     public translate(environment: environment): type {
         let return_data = environment.get_variable_recursive(this.id, environment)
+        let symScope = environment.get_scope_recursive(this.id, environment)
         let tempList = []
         if (return_data.type != type.UNDEFINED) {
             if (return_data.value instanceof _array) {
@@ -32,7 +34,11 @@ export class array_access extends instruction {
                     }
                 }
                 _3dCode.actualTemp++;
-                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                if(symScope == scope.GLOBAL){
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = mainStart + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                } else {
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                }
                 let size = return_data.value.size;
                 let index = _3dCode.actualTemp;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
