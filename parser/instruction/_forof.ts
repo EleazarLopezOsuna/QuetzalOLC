@@ -14,7 +14,7 @@ import { _array } from "../literal/_array";
 import { _break } from "./_break";
 import { _continue } from "./_continue";
 
-export class _forin extends instruction {
+export class _forof extends instruction {
 
     public translate(environment: environment): type {
         let nuevo;
@@ -138,11 +138,13 @@ export class _forin extends instruction {
         // Initialize Variable
         const new_environment = new environment(current_environment);
         new_environment.save_variable(this.id, { value: null, type: type.NULL }, 0, 0, 0)
-        let arr_to_iterate = (this.operator instanceof _array) ? this.operator : this.operator.execute(new_environment).value
+
+        let arr_to_iterate:_array = (this.operator instanceof _array) ? this.operator : this.operator.execute(new_environment).value
         // Foreach value assign to variable
         // Execute the code foreach value
-        for (const key in arr_to_iterate.body) {
-            new_environment.save_variable(this.id, { value: key, type: type.INTEGER }, 0, 0, 0)
+        for (const key of arr_to_iterate.body) {
+            let key_data = key.execute(new_environment)
+            new_environment.save_variable(this.id, key_data, 0, 0, 0)
             for (const instruction of this.code) {
                 let instruction_data = instruction.execute(new_environment)
                 if (new_environment.stop_flag) {
@@ -157,7 +159,7 @@ export class _forin extends instruction {
         return { value: null, type: type.NULL }
     }
     public plot(count: number): string {
-        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") ForIn\"];";
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") ForOf\"];";
         const this_count = count
 
         const child_list = [this.operator]

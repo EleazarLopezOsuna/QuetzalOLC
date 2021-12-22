@@ -129,15 +129,13 @@ class print extends instruction_1.instruction {
             if (expr_data.value instanceof _array_1._array || expr_data.value instanceof struct_item_1.struct_item) {
                 print_str = expr_data.value.to_string(environment);
             }
-            switch (this.type) {
-                case print_type.PRINT:
-                    console_1._console.output += print_str;
-                    break;
-                case print_type.PRINTLN:
-                    console_1._console.output += print_str + "\n";
-                    break;
-            }
+            console_1._console.output += print_str + " ";
         });
+        switch (this.type) {
+            case print_type.PRINTLN:
+                console_1._console.output += "\n";
+                break;
+        }
         // Default
         return { value: null, type: type_1.type.NULL };
     }

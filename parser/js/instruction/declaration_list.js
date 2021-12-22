@@ -99,14 +99,16 @@ class declaration_list extends instruction_1.instruction {
                 }
                 else {
                     // Save the variable 
-                    if (environment.exists(item.variable_id)) {
-                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
-                    }
-                    else {
-                        environment.save_variable(item.variable_id, item_data, console_1._console.absolutePos, console_1._console.relativePos, 1);
-                        console_1._console.absolutePos++;
-                        console_1._console.relativePos++;
-                    }
+                    environment.save_variable(item.variable_id, item_data, console_1._console.absolutePos, console_1._console.relativePos, 1);
+                    console_1._console.absolutePos++;
+                    console_1._console.relativePos++;
+                    // if (environment.exists(item.variable_id)) {
+                    //     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
+                    // } else {
+                    //     environment.save_variable(item.variable_id, item_data, _console.absolutePos, _console.relativePos, 1)
+                    //     _console.absolutePos++;
+                    //     _console.relativePos++;
+                    // }
                 }
             }
         });

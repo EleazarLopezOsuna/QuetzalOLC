@@ -105,7 +105,8 @@ export class string_binary extends expression {
 
         switch (this.type) {
             case string_binary_type.CONCAT:
-                if (left_data.type == type.STRING && right_data.type == type.STRING) {
+                const dominant_type = this.get_dominant_type(left_data.type, right_data.type);
+                if (dominant_type == type.STRING) {
                     return { value: (left_data.value.toString() + right_data.value.toString()), type: type.STRING };
                 } else {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + left_data.value + ' & ' + right_data.value));

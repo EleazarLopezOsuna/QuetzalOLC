@@ -105,7 +105,8 @@ class string_binary extends expression_1.expression {
         const right_data = this.right.execute(environment);
         switch (this.type) {
             case string_binary_type.CONCAT:
-                if (left_data.type == type_1.type.STRING && right_data.type == type_1.type.STRING) {
+                const dominant_type = this.get_dominant_type(left_data.type, right_data.type);
+                if (dominant_type == type_1.type.STRING) {
                     return { value: (left_data.value.toString() + right_data.value.toString()), type: type_1.type.STRING };
                 }
                 else {
