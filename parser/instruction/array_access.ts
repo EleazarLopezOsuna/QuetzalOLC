@@ -72,7 +72,6 @@ export class array_access extends instruction {
     }
 
     public execute(environment: environment): data {
-
         let return_data = environment.get_variable(this.id)
         if (return_data.type != type.UNDEFINED) {
             if (return_data.value instanceof _array) {
@@ -90,7 +89,8 @@ export class array_access extends instruction {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Index no valido'));
                     return { value: null, type: type.NULL }
                 }
-                let returned = return_data.value.get(this.dimensions, environment)
+                let returned = return_data.value.get(0, this.dimensions, environment)
+
                 // Get the type from the symbols table
                 if (returned.type == type.UNDEFINED) {
                     returned.type = return_data.type

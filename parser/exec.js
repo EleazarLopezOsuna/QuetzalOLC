@@ -1971,8 +1971,7 @@ class string_unary extends expression_1.expression {
                 switch (expr_data.type) {
                     case type_1.type.STRING:
                         let string_value = expr_data.value.toString();
-                        //Posible error en el return, deberia de retornar INTEGER. Comprobar
-                        return { value: string_value.length, type: type_1.type.STRING };
+                        return { value: string_value.length, type: type_1.type.INTEGER };
                     default:
                         if (expr_data.value instanceof _array_1._array) {
                             return { value: expr_data.value.body.length, type: type_1.type.INTEGER };
@@ -4626,7 +4625,7 @@ class array_access extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Index no valido'));
                     return { value: null, type: type_1.type.NULL };
                 }
-                let returned = return_data.value.get(this.dimensions, environment);
+                let returned = return_data.value.get(0, this.dimensions, environment);
                 // Get the type from the symbols table
                 if (returned.type == type_1.type.UNDEFINED) {
                     returned.type = return_data.type;
@@ -6403,32 +6402,33 @@ class _array extends literal_1.literal {
         }
         return true;
     }
-    get(dimensions, environment) {
-        // get first data 
-        let dimension_data = dimensions[0].execute(environment);
-        dimensions.shift();
-        // if the dimension is a range obtain by range
-        if (dimension_data.value instanceof Array) {
-            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
-            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[1];
-            let arr_return = new _array(this.body.slice(first_index, last_index + 1), this.line, this.column);
-            if (dimensions.length > 0) {
-                return arr_return.get(dimensions, environment);
+    get(dimensions_index, dimensions, environment) {
+        let body_pointer = this.body;
+        while (dimensions_index < dimensions.length) {
+            let dimension_data = dimensions[dimensions_index].execute(environment);
+            if (dimension_data.value instanceof Array) {
+                let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
+                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[1];
+                let arr_return = new _array(this.body.slice(first_index, last_index + 1), this.line, this.column);
+                if (dimensions_index + 1 < dimensions.length) {
+                    return arr_return.get(dimensions_index + 1, dimensions, environment);
+                }
+                else {
+                    return { type: type_1.type.UNDEFINED, value: arr_return };
+                }
             }
             else {
-                return { type: type_1.type.UNDEFINED, value: arr_return };
+                // iterate trought the array and return the value
+                let item = this.body[dimension_data.value];
+                if (item instanceof _array && (dimensions_index + 1 < dimensions.length)) {
+                    return item.get(dimensions_index + 1, dimensions, environment);
+                }
+                else {
+                    return item.execute(environment);
+                }
             }
         }
-        else {
-            // iterate trought the array and return the value
-            let item = this.body[dimension_data.value];
-            if (item instanceof _array && dimensions.length > 0) {
-                return item.get(dimensions, environment);
-            }
-            else {
-                return item.execute(environment);
-            }
-        }
+        return { type: type_1.type.UNDEFINED, value: null };
     }
     checkType(type, environment) {
         let return_bool = true;

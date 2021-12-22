@@ -100,30 +100,31 @@ export class _array extends literal {
     }
 
 
-    public get(dimensions: Array<expression | literal | array_range>, environment: environment): data {
-        // get first data 
-        let dimension_data = dimensions[0].execute(environment)
-        dimensions.shift()
-
-        // if the dimension is a range obtain by range
-        if (dimension_data.value instanceof Array) {
-            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0]
-            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[1]
-            let arr_return = new _array(this.body.slice(first_index, last_index + 1), this.line, this.column)
-            if (dimensions.length > 0) {
-                return arr_return.get(dimensions, environment)
-            } else {
-                return { type: type.UNDEFINED, value: arr_return }
-            }
-        } else {
-            // iterate trought the array and return the value
-            let item = this.body[dimension_data.value]
-            if (item instanceof _array && dimensions.length > 0) {
-                return item.get(dimensions, environment)
-            } else {
-                return item.execute(environment)
+    public get(dimensions_index: number,dimensions: Array<expression | literal | array_range>, environment: environment): data {
+        let body_pointer = this.body
+        while (dimensions_index < dimensions.length) {
+            let dimension_data = dimensions[dimensions_index].execute(environment)
+            if (dimension_data.value instanceof Array) {
+                let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0]
+                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[1]
+                let arr_return = new _array(this.body.slice(first_index, last_index + 1), this.line, this.column)
+                if (dimensions_index + 1 < dimensions.length) {
+                    return arr_return.get(dimensions_index + 1,dimensions, environment)
+                } else {
+                    return { type: type.UNDEFINED, value: arr_return }
+                }
+            }  else {
+                // iterate trought the array and return the value
+                let item = this.body[dimension_data.value]
+                if (item instanceof _array && (dimensions_index + 1 < dimensions.length)) {
+                    return item.get(dimensions_index + 1,dimensions, environment)
+                } else {
+                    return item.execute(environment)
+                }
             }
         }
+        return { type: type.UNDEFINED, value: null }
+
     }
 
     public checkType(type: type, environment: environment): boolean {
@@ -178,7 +179,7 @@ export class _array extends literal {
         }
     }
 
-    public getTotalItems():number{
+    public getTotalItems(): number {
         let retorno = 0;
         this.dimensionSize.forEach((values, keys) => {
             let dimSize = this.dimensionSize.get(keys) as number

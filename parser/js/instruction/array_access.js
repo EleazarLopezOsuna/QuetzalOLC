@@ -85,7 +85,7 @@ class array_access extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Index no valido'));
                     return { value: null, type: type_1.type.NULL };
                 }
-                let returned = return_data.value.get(this.dimensions, environment);
+                let returned = return_data.value.get(0, this.dimensions, environment);
                 // Get the type from the symbols table
                 if (returned.type == type_1.type.UNDEFINED) {
                     returned.type = return_data.type;

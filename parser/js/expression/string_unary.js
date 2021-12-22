@@ -102,8 +102,7 @@ class string_unary extends expression_1.expression {
                 switch (expr_data.type) {
                     case type_1.type.STRING:
                         let string_value = expr_data.value.toString();
-                        //Posible error en el return, deberia de retornar INTEGER. Comprobar
-                        return { value: string_value.length, type: type_1.type.STRING };
+                        return { value: string_value.length, type: type_1.type.INTEGER };
                     default:
                         if (expr_data.value instanceof _array_1._array) {
                             return { value: expr_data.value.body.length, type: type_1.type.INTEGER };

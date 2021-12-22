@@ -98,32 +98,33 @@ class _array extends literal_1.literal {
         }
         return true;
     }
-    get(dimensions, environment) {
-        // get first data 
-        let dimension_data = dimensions[0].execute(environment);
-        dimensions.shift();
-        // if the dimension is a range obtain by range
-        if (dimension_data.value instanceof Array) {
-            let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
-            let last_index = (dimension_data.value[1] == "end") ? (this.body.length - 1) : dimension_data.value[1];
-            let arr_return = new _array(this.body.slice(first_index, last_index + 1), this.line, this.column);
-            if (dimensions.length > 0) {
-                return arr_return.get(dimensions, environment);
+    get(dimensions_index, dimensions, environment) {
+        let body_pointer = this.body;
+        while (dimensions_index < dimensions.length) {
+            let dimension_data = dimensions[dimensions_index].execute(environment);
+            if (dimension_data.value instanceof Array) {
+                let first_index = (dimension_data.value[0] == "begin") ? 0 : dimension_data.value[0];
+                let last_index = (dimension_data.value[1] == "end") ? (body_pointer.length - 1) : dimension_data.value[1];
+                let arr_return = new _array(this.body.slice(first_index, last_index + 1), this.line, this.column);
+                if (dimensions_index + 1 < dimensions.length) {
+                    return arr_return.get(dimensions_index + 1, dimensions, environment);
+                }
+                else {
+                    return { type: type_1.type.UNDEFINED, value: arr_return };
+                }
             }
             else {
-                return { type: type_1.type.UNDEFINED, value: arr_return };
+                // iterate trought the array and return the value
+                let item = this.body[dimension_data.value];
+                if (item instanceof _array && (dimensions_index + 1 < dimensions.length)) {
+                    return item.get(dimensions_index + 1, dimensions, environment);
+                }
+                else {
+                    return item.execute(environment);
+                }
             }
         }
-        else {
-            // iterate trought the array and return the value
-            let item = this.body[dimension_data.value];
-            if (item instanceof _array && dimensions.length > 0) {
-                return item.get(dimensions, environment);
-            }
-            else {
-                return item.execute(environment);
-            }
-        }
+        return { type: type_1.type.UNDEFINED, value: null };
     }
     checkType(type, environment) {
         let return_bool = true;
