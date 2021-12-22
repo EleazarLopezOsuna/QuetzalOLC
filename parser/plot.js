@@ -4003,22 +4003,21 @@ class _forin extends instruction_1.instruction {
         // Initialize Variable
         const new_environment = new environment_1.environment(current_environment);
         new_environment.save_variable(this.id, { value: null, type: type_1.type.NULL }, 0, 0, 0);
+        let arr_to_iterate = (this.operator instanceof _array_1._array) ? this.operator : this.operator.execute(new_environment).value;
         // Foreach value assign to variable
-        if (this.operator instanceof _array_1._array) {
-            // Execute the code foreach value
-            for (const key in this.operator.body) {
-                new_environment.save_variable(this.id, { value: key, type: type_1.type.INTEGER }, 0, 0, 0);
-                for (const instruction of this.code) {
-                    let instruction_data = instruction.execute(new_environment);
-                    if (new_environment.stop_flag) {
-                        return instruction_data;
-                    }
-                    else if (instruction instanceof _break_1._break) {
-                        break;
-                    }
-                    else if (instruction instanceof _continue_1._continue) {
-                        continue;
-                    }
+        // Execute the code foreach value
+        for (const key in arr_to_iterate.body) {
+            new_environment.save_variable(this.id, { value: key, type: type_1.type.INTEGER }, 0, 0, 0);
+            for (const instruction of this.code) {
+                let instruction_data = instruction.execute(new_environment);
+                if (new_environment.stop_flag) {
+                    return instruction_data;
+                }
+                else if (instruction instanceof _break_1._break) {
+                    break;
+                }
+                else if (instruction instanceof _continue_1._continue) {
+                    continue;
                 }
             }
         }
@@ -4186,23 +4185,22 @@ class _forof extends instruction_1.instruction {
         // Initialize Variable
         const new_environment = new environment_1.environment(current_environment);
         new_environment.save_variable(this.id, { value: null, type: type_1.type.NULL }, 0, 0, 0);
+        let arr_to_iterate = (this.operator instanceof _array_1._array) ? this.operator : this.operator.execute(new_environment).value;
         // Foreach value assign to variable
-        if (this.operator instanceof _array_1._array) {
-            // Execute the code foreach value
-            for (const key of this.operator.body) {
-                let key_data = key.execute(new_environment);
-                new_environment.save_variable(this.id, key_data, 0, 0, 0);
-                for (const instruction of this.code) {
-                    let instruction_data = instruction.execute(new_environment);
-                    if (new_environment.stop_flag) {
-                        return instruction_data;
-                    }
-                    else if (instruction instanceof _break_1._break) {
-                        break;
-                    }
-                    else if (instruction instanceof _continue_1._continue) {
-                        continue;
-                    }
+        // Execute the code foreach value
+        for (const key of arr_to_iterate.body) {
+            let key_data = key.execute(new_environment);
+            new_environment.save_variable(this.id, key_data, 0, 0, 0);
+            for (const instruction of this.code) {
+                let instruction_data = instruction.execute(new_environment);
+                if (new_environment.stop_flag) {
+                    return instruction_data;
+                }
+                else if (instruction instanceof _break_1._break) {
+                    break;
+                }
+                else if (instruction instanceof _continue_1._continue) {
+                    continue;
                 }
             }
         }
@@ -5727,11 +5725,7 @@ class declaration_struct extends instruction_1.instruction {
 }
 exports.declaration_struct = declaration_struct;
 
-<<<<<<< HEAD
-},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../literal/_struct":49,"../system/error":57,"../system/type":58}],41:[function(require,module,exports){
-=======
-},{"../abstract/instruction":5,"../literal/_struct":48,"../system/console":54,"../system/environment":55,"../system/error":56,"../system/type":57}],40:[function(require,module,exports){
->>>>>>> aa01655a8779d5fd5579d6b12483e7e02654d04c
+},{"../abstract/instruction":5,"../literal/_struct":49,"../system/console":55,"../system/environment":56,"../system/error":57,"../system/type":58}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_struct_item = void 0;

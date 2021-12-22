@@ -130,22 +130,21 @@ class _forin extends instruction_1.instruction {
         // Initialize Variable
         const new_environment = new environment_1.environment(current_environment);
         new_environment.save_variable(this.id, { value: null, type: type_1.type.NULL }, 0, 0, 0);
+        let arr_to_iterate = (this.operator instanceof _array_1._array) ? this.operator : this.operator.execute(new_environment).value;
         // Foreach value assign to variable
-        if (this.operator instanceof _array_1._array) {
-            // Execute the code foreach value
-            for (const key in this.operator.body) {
-                new_environment.save_variable(this.id, { value: key, type: type_1.type.INTEGER }, 0, 0, 0);
-                for (const instruction of this.code) {
-                    let instruction_data = instruction.execute(new_environment);
-                    if (new_environment.stop_flag) {
-                        return instruction_data;
-                    }
-                    else if (instruction instanceof _break_1._break) {
-                        break;
-                    }
-                    else if (instruction instanceof _continue_1._continue) {
-                        continue;
-                    }
+        // Execute the code foreach value
+        for (const key in arr_to_iterate.body) {
+            new_environment.save_variable(this.id, { value: key, type: type_1.type.INTEGER }, 0, 0, 0);
+            for (const instruction of this.code) {
+                let instruction_data = instruction.execute(new_environment);
+                if (new_environment.stop_flag) {
+                    return instruction_data;
+                }
+                else if (instruction instanceof _break_1._break) {
+                    break;
+                }
+                else if (instruction instanceof _continue_1._continue) {
+                    continue;
                 }
             }
         }

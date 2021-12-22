@@ -137,23 +137,22 @@ export class _forof extends instruction {
     public execute(current_environment: environment): data {
         // Initialize Variable
         const new_environment = new environment(current_environment);
-        new_environment.save_variable(this.id,{value: null, type: type.NULL},0,0,0)
+        new_environment.save_variable(this.id, { value: null, type: type.NULL }, 0, 0, 0)
 
+        let arr_to_iterate:_array = (this.operator instanceof _array) ? this.operator : this.operator.execute(new_environment).value
         // Foreach value assign to variable
-        if(this.operator instanceof _array) {
-            // Execute the code foreach value
-            for (const key of this.operator.body) {
-                let key_data = key.execute(new_environment)
-                new_environment.save_variable(this.id,key_data,0,0,0)
-                for (const instruction of this.code) {
-                    let instruction_data = instruction.execute(new_environment)
-                    if (new_environment.stop_flag) {
-                        return instruction_data
-                    } else if (instruction instanceof _break) {
-                        break
-                    } else if (instruction instanceof _continue) {
-                        continue
-                    }
+        // Execute the code foreach value
+        for (const key of arr_to_iterate.body) {
+            let key_data = key.execute(new_environment)
+            new_environment.save_variable(this.id, key_data, 0, 0, 0)
+            for (const instruction of this.code) {
+                let instruction_data = instruction.execute(new_environment)
+                if (new_environment.stop_flag) {
+                    return instruction_data
+                } else if (instruction instanceof _break) {
+                    break
+                } else if (instruction instanceof _continue) {
+                    continue
                 }
             }
         }
@@ -173,7 +172,7 @@ export class _forof extends instruction {
                 console.log(error);
             }
         }
-        
+
         for (const instr of this.code) {
             try {
                 result += "node" + this_count + " -> " + "node" + count + "1;";
