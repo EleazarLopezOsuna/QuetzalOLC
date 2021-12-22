@@ -4853,7 +4853,8 @@ class assignation_unary extends instruction_1.instruction {
         let saved_variable = environment.get_variable(this.id);
         if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
-            if (saved_variable.type == expr_data.type) {
+            if (saved_variable.type == expr_data.type || (saved_variable.type == type_1.type.FLOAT && expr_data.type == type_1.type.INTEGER)) {
+                expr_data.type = saved_variable.type;
                 // assign the value
                 let absolutePos = 0;
                 let relativePos = 0;
@@ -5348,6 +5349,7 @@ class declaration_list extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 }
                 else {
+                    item_data.type = this.native_type;
                     environment.save_variable(item.variable_id, item_data, console_1._console.absolutePos, console_1._console.relativePos, 1);
                     console_1._console.absolutePos++;
                     console_1._console.relativePos++;
@@ -5358,7 +5360,9 @@ class declaration_list extends instruction_1.instruction {
             else {
                 // Checking both types
                 let checked = false;
-                if (item_data.type == this.native_type) {
+                if (item_data.type == this.native_type
+                    || (this.native_type == type_1.type.FLOAT && item_data.type == type_1.type.INTEGER)) {
+                    item_data.type == this.native_type;
                     checked = true;
                 }
                 // if checked type save the variable

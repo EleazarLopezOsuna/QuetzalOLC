@@ -2,6 +2,8 @@ const parser = require("./grammar/main_grammar")
 import { environment } from "./system/environment";
 import { _console, _3dCode } from "./system/console"
 import { error_arr } from "./system/error";
+import { declaration_function } from "./instruction/declaration_function";
+import { main } from "./instruction/main";
 
 
 (<any>window).exec = function (input: string): string {
@@ -12,7 +14,18 @@ import { error_arr } from "./system/error";
         console.log("ast", ast)
         for (const instr of ast) {
             try {
-                instr.execute(main_environment)
+                if(!(instr instanceof main)) {
+                    instr.execute(main_environment)
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of ast) {
+            try {
+                if((instr instanceof main)) {
+                    instr.execute(main_environment)
+                }
             } catch (error) {
                 console.log(error);
             }

@@ -39,7 +39,8 @@ class assignation_unary extends instruction_1.instruction {
         let saved_variable = environment.get_variable(this.id);
         if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
-            if (saved_variable.type == expr_data.type) {
+            if (saved_variable.type == expr_data.type || (saved_variable.type == type_1.type.FLOAT && expr_data.type == type_1.type.INTEGER)) {
+                expr_data.type = saved_variable.type;
                 // assign the value
                 let absolutePos = 0;
                 let relativePos = 0;

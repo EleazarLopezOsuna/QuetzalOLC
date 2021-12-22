@@ -42,7 +42,8 @@ export class assignation_unary extends instruction {
         let saved_variable = environment.get_variable(this.id)
         if (saved_variable.type != type.UNDEFINED) {
             // validate the type
-            if (saved_variable.type == expr_data.type) {
+            if (saved_variable.type == expr_data.type  || (saved_variable.type == type.FLOAT && expr_data.type == type.INTEGER)) {
+                expr_data.type = saved_variable.type
                 // assign the value
                 let absolutePos = 0
                 let relativePos = 0

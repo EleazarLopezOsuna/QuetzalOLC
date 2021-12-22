@@ -780,6 +780,7 @@ const parser = require("./grammar/main_grammar");
 const environment_1 = require("./system/environment");
 const console_1 = require("./system/console");
 const error_1 = require("./system/error");
+const main_1 = require("./instruction/main");
 window.exec = function (input) {
     console_1._console.clean();
     try {
@@ -788,7 +789,19 @@ window.exec = function (input) {
         console.log("ast", ast);
         for (const instr of ast) {
             try {
-                instr.execute(main_environment);
+                if (!(instr instanceof main_1.main)) {
+                    instr.execute(main_environment);
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of ast) {
+            try {
+                if ((instr instanceof main_1.main)) {
+                    instr.execute(main_environment);
+                }
             }
             catch (error) {
                 console.log(error);
@@ -829,7 +842,7 @@ function generate_error_table() {
     return result += '</table>\n';
 }
 
-},{"./grammar/main_grammar":20,"./system/console":54,"./system/environment":55,"./system/error":56}],9:[function(require,module,exports){
+},{"./grammar/main_grammar":20,"./instruction/main":42,"./system/console":54,"./system/environment":55,"./system/error":56}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arithmetic_binary = exports.arithmetic_binary_type = void 0;
@@ -4909,7 +4922,8 @@ class assignation_unary extends instruction_1.instruction {
         let saved_variable = environment.get_variable(this.id);
         if (saved_variable.type != type_1.type.UNDEFINED) {
             // validate the type
-            if (saved_variable.type == expr_data.type) {
+            if (saved_variable.type == expr_data.type || (saved_variable.type == type_1.type.FLOAT && expr_data.type == type_1.type.INTEGER)) {
+                expr_data.type = saved_variable.type;
                 // assign the value
                 let absolutePos = 0;
                 let relativePos = 0;
@@ -5404,6 +5418,7 @@ class declaration_list extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 }
                 else {
+                    item_data.type = this.native_type;
                     environment.save_variable(item.variable_id, item_data, console_1._console.absolutePos, console_1._console.relativePos, 1);
                     console_1._console.absolutePos++;
                     console_1._console.relativePos++;
@@ -5414,7 +5429,9 @@ class declaration_list extends instruction_1.instruction {
             else {
                 // Checking both types
                 let checked = false;
-                if (item_data.type == this.native_type) {
+                if (item_data.type == this.native_type
+                    || (this.native_type == type_1.type.FLOAT && item_data.type == type_1.type.INTEGER)) {
+                    item_data.type == this.native_type;
                     checked = true;
                 }
                 // if checked type save the variable

@@ -4,6 +4,7 @@ const parser = require("./grammar/main_grammar");
 const environment_1 = require("./system/environment");
 const console_1 = require("./system/console");
 const error_1 = require("./system/error");
+const main_1 = require("./instruction/main");
 window.exec = function (input) {
     console_1._console.clean();
     try {
@@ -12,7 +13,19 @@ window.exec = function (input) {
         console.log("ast", ast);
         for (const instr of ast) {
             try {
-                instr.execute(main_environment);
+                if (!(instr instanceof main_1.main)) {
+                    instr.execute(main_environment);
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        for (const instr of ast) {
+            try {
+                if ((instr instanceof main_1.main)) {
+                    instr.execute(main_environment);
+                }
             }
             catch (error) {
                 console.log(error);
