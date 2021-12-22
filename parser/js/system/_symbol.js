@@ -19,6 +19,7 @@ class _symbol {
         this.absolute = absolute;
         this.relative = relative;
         this.size = size;
+        this.structName = '';
     }
     get_html() {
         let result = "";

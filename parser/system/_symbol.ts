@@ -11,8 +11,10 @@ export enum scope {
 }
 
 export class _symbol {
-    constructor(public id: any, public data: data | declaration_function, public scope: scope, public absolute: number, public relative: number, public size: number) {
+    public structName:string;
 
+    constructor(public id: any, public data: data | declaration_function, public scope: scope, public absolute: number, public relative: number, public size: number) {
+        this.structName = ''
     }
 
     public get_html(): string {

@@ -74,6 +74,25 @@ export class environment {
         }
     }
 
+    public setStructType_recursive(id: string, structName: string, environment: environment) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id)
+            if(symbol_item instanceof _symbol){
+                let val = symbol_item.data as data
+                if(val.value instanceof _array){
+                    symbol_item.structName = structName
+                    symbol_item.data = {value: val.value, type: val.type}
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item)
+                }
+            }
+            console.log(symbol_item)
+        }
+        if (environment.previous != null) {
+            this.setStructType_recursive(id, structName, environment.previous);
+        }
+    }
+
     public push_recursive(id: string, environment: environment, newValueTemp: number) {
         if (environment.symbol_map.has(id)) {
             let symbol_item = environment.symbol_map.get(id)
