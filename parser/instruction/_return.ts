@@ -26,6 +26,7 @@ export class _return extends instruction {
     }
 
     public execute(environment: environment): data {
+        environment.stop_flag = true
         return this.return_value.execute(environment);
     }
 

@@ -10,6 +10,7 @@ export class environment {
     private function_map: Map<string, _symbol>;
     public name: string;
     public next: environment | null;
+    public stop_flag:boolean;
 
     constructor(public previous: environment | null) {
         this.previous = previous;
@@ -20,6 +21,7 @@ export class environment {
         this.symbol_map = new Map<string, _symbol>();
         this.function_map = new Map<string, _symbol>();
         this.name = '';
+        this.stop_flag = false;
     }
 
     public get_html_translation(): string {

@@ -22,6 +22,7 @@ class _return extends instruction_1.instruction {
         return type_1.type.NULL;
     }
     execute(environment) {
+        environment.stop_flag = true;
         return this.return_value.execute(environment);
     }
     plot(count) {

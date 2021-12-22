@@ -6,7 +6,6 @@ const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const error_1 = require("../system/error");
-const _return_1 = require("./_return");
 class call extends instruction_1.instruction {
     constructor(id, parameters, line, column) {
         super(line, column);
@@ -62,12 +61,9 @@ class call extends instruction_1.instruction {
                 // execute the code in the new environmet
                 let return_data = { value: null, type: type_1.type.NULL };
                 function_to_execute.code.forEach(instr => {
-                    if (instr instanceof _return_1._return) {
+                    if (!new_environment.stop_flag) {
                         return_data = instr.execute(new_environment);
                         return;
-                    }
-                    else {
-                        instr.execute(new_environment);
                     }
                 });
                 // If the type is different to void check the return
