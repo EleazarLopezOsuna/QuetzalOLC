@@ -6,6 +6,7 @@ const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _array_1 = require("../literal/_array");
+const _symbol_1 = require("../system/_symbol");
 class array_access extends instruction_1.instruction {
     constructor(id, dimensions, line, column) {
         super(line, column);
@@ -14,6 +15,7 @@ class array_access extends instruction_1.instruction {
     }
     translate(environment) {
         let return_data = environment.get_variable_recursive(this.id, environment);
+        let symScope = environment.get_scope_recursive(this.id, environment);
         let tempList = [];
         if (return_data.type != type_1.type.UNDEFINED) {
             if (return_data.value instanceof _array_1._array) {
@@ -34,7 +36,12 @@ class array_access extends instruction_1.instruction {
                     }
                 }
                 console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                if (symScope == _symbol_1.scope.GLOBAL) {
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = mainStart + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                }
+                else {
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                }
                 let size = return_data.value.size;
                 let index = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';

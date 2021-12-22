@@ -4547,6 +4547,7 @@ const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _array_1 = require("../literal/_array");
+const _symbol_1 = require("../system/_symbol");
 class array_access extends instruction_1.instruction {
     constructor(id, dimensions, line, column) {
         super(line, column);
@@ -4555,6 +4556,7 @@ class array_access extends instruction_1.instruction {
     }
     translate(environment) {
         let return_data = environment.get_variable_recursive(this.id, environment);
+        let symScope = environment.get_scope_recursive(this.id, environment);
         let tempList = [];
         if (return_data.type != type_1.type.UNDEFINED) {
             if (return_data.value instanceof _array_1._array) {
@@ -4575,7 +4577,12 @@ class array_access extends instruction_1.instruction {
                     }
                 }
                 console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                if (symScope == _symbol_1.scope.GLOBAL) {
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = mainStart + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                }
+                else {
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                }
                 let size = return_data.value.size;
                 let index = console_1._3dCode.actualTemp;
                 console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
@@ -4660,7 +4667,7 @@ class array_access extends instruction_1.instruction {
 }
 exports.array_access = array_access;
 
-},{"../abstract/instruction":5,"../literal/_array":48,"../system/console":54,"../system/error":56,"../system/type":57}],32:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":48,"../system/_symbol":53,"../system/console":54,"../system/error":56,"../system/type":57}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_native_function = void 0;
@@ -4765,6 +4772,7 @@ const _array_1 = require("../literal/_array");
 const console_1 = require("../system/console");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const _symbol_1 = require("../system/_symbol");
 class assignation_array extends instruction_1.instruction {
     constructor(id, dimensions, expr, line, column) {
         super(line, column);
@@ -4779,6 +4787,7 @@ class assignation_array extends instruction_1.instruction {
         }
         else {
             let return_data = environment.get_variable_recursive(this.id, environment);
+            let symScope = environment.get_scope_recursive(this.id, environment);
             this.expr.translate(environment);
             let exprTemp = console_1._3dCode.actualTemp;
             let tempList = [];
@@ -4801,7 +4810,12 @@ class assignation_array extends instruction_1.instruction {
                         }
                     }
                     console_1._3dCode.actualTemp++;
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    if (symScope == _symbol_1.scope.GLOBAL) {
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = mainStart + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    }
+                    else {
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    }
                     console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                     console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
                 }
@@ -4880,7 +4894,7 @@ class assignation_array extends instruction_1.instruction {
 }
 exports.assignation_array = assignation_array;
 
-},{"../abstract/instruction":5,"../literal/_array":48,"../system/console":54,"../system/error":56,"../system/type":57}],34:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":48,"../system/_symbol":53,"../system/console":54,"../system/error":56,"../system/type":57}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_unary = void 0;
@@ -5001,8 +5015,7 @@ class call extends instruction_1.instruction {
         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + 0;//Set return position\n';
         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];//Get return value\n';
         console_1._3dCode.output += 'SP = SP - ' + console_1._3dCode.relativePos + ';//Get SP back\n';
-        console.log(functionType.type);
-        return type_1.type.INTEGER;
+        return functionType.type;
     }
     execute(current_environment) {
         // the new environment to execute
@@ -6001,6 +6014,7 @@ const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const _array_1 = require("../literal/_array");
 const struct_item_1 = require("../literal/struct_item");
+const variable_id_1 = require("../literal/variable_id");
 var print_type;
 (function (print_type) {
     print_type[print_type["PRINT"] = 0] = "PRINT";
@@ -6014,8 +6028,11 @@ class print extends instruction_1.instruction {
     }
     translate(environment) {
         this.expresions.forEach(element => {
-            const expr_data = element.execute(environment);
-            if (expr_data.value instanceof _array_1._array) {
+            let expr_data = null;
+            if (element instanceof variable_id_1.variable_id) {
+                expr_data = element.execute(environment);
+            }
+            if (expr_data != null && expr_data.value instanceof _array_1._array) {
                 let size = expr_data.value.size;
                 let varId = element;
                 let start = environment.get_relative_recursive(varId.id, environment);
@@ -6051,7 +6068,7 @@ class print extends instruction_1.instruction {
                 console_1._3dCode.output += 'printArray();\n';
                 console_1._3dCode.output += 'SP = T' + savedEnvironment + ';\n';
             }
-            else if (expr_data.value instanceof struct_item_1.struct_item) {
+            else if (expr_data != null && expr_data.value instanceof struct_item_1.struct_item) {
             }
             else {
                 const elementType = element.translate(environment);
@@ -6100,6 +6117,7 @@ class print extends instruction_1.instruction {
                         console_1._3dCode.output += 'printf("%f", T' + console_1._3dCode.actualTemp + ');//Print float\n';
                         break;
                     default:
+                        console.log(elementType);
                         break;
                 }
             }
@@ -6152,7 +6170,7 @@ class print extends instruction_1.instruction {
 }
 exports.print = print;
 
-},{"../abstract/instruction":5,"../literal/_array":48,"../literal/struct_item":51,"../system/console":54,"../system/type":57}],46:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":48,"../literal/struct_item":51,"../literal/variable_id":52,"../system/console":54,"../system/type":57}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.struct_access = void 0;

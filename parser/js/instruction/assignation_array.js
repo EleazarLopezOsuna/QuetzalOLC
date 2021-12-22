@@ -6,6 +6,7 @@ const _array_1 = require("../literal/_array");
 const console_1 = require("../system/console");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const _symbol_1 = require("../system/_symbol");
 class assignation_array extends instruction_1.instruction {
     constructor(id, dimensions, expr, line, column) {
         super(line, column);
@@ -20,6 +21,7 @@ class assignation_array extends instruction_1.instruction {
         }
         else {
             let return_data = environment.get_variable_recursive(this.id, environment);
+            let symScope = environment.get_scope_recursive(this.id, environment);
             this.expr.translate(environment);
             let exprTemp = console_1._3dCode.actualTemp;
             let tempList = [];
@@ -42,7 +44,12 @@ class assignation_array extends instruction_1.instruction {
                         }
                     }
                     console_1._3dCode.actualTemp++;
-                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    if (symScope == _symbol_1.scope.GLOBAL) {
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = mainStart + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    }
+                    else {
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    }
                     console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                     console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
                 }

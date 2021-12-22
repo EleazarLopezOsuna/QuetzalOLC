@@ -8,6 +8,7 @@ import { _3dCode } from "../system/console";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
+import { scope } from "../system/_symbol";
 
 export class assignation_array extends instruction {
     public translate(environment: environment): type {
@@ -16,6 +17,7 @@ export class assignation_array extends instruction {
             environment.modifySize_recursive(this.id, environment, 0);
         } else {
             let return_data = environment.get_variable_recursive(this.id, environment)
+            let symScope = environment.get_scope_recursive(this.id, environment)
             this.expr.translate(environment)
             let exprTemp = _3dCode.actualTemp;
             let tempList = []
@@ -38,7 +40,11 @@ export class assignation_array extends instruction {
                         }
                     }
                     _3dCode.actualTemp++;
-                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    if(symScope == scope.GLOBAL){
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = mainStart + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    } else {
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    }
                     _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                     _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
                 } else {
