@@ -111,6 +111,7 @@ function generateDefaultFunctions() {
     code += generateStringToFloat();
     code += generateFloatToString();
     code += generateStringCompare();
+    code += generatePrintArray();
     return code;
 }
 function generateStringConcat() {
@@ -757,6 +758,51 @@ function generateStringCompare() {
     code += 'STACK[(int)T0] = 1;//Save true as return value\n';
     code += 'goto L3;\n';
     code += 'L3:\n';
+    code += 'return;\n';
+    code += '}\n';
+    return code;
+}
+function generatePrintArray() {
+    let code = 'void printArray(){\n';
+    code += 'T2 = SP + 1;//Set array size position\n';
+    code += 'T3 = SP + 2;//Set array start position\n';
+    code += 'T4 = SP + 3;//Set array type position\n';
+    code += 'T2 = STACK[(int)T2];//Get array size position\n';
+    code += 'T3 = STACK[(int)T3];//Get array start position\n';
+    code += 'T4 = STACK[(int)T4];//Get array type position\n';
+    code += 'T5 = 0;//Set contador = 0\n';
+    code += 'printf("%c", 91);\n';
+    code += 'L0://Loop start\n';
+    code += 'if(T5 == T2) goto L1;//End of array\n';
+    code += 'if(T5 == 0) goto L2;\n';
+    code += 'printf("%c", 44);\n';
+    code += 'goto L2;\n';
+    code += 'L2:\n';
+    code += 'if(T4 == 0) goto L3;//Element is string or char\n';
+    code += 'if(T4 == 1) goto L4;//Element is int\n';
+    code += 'if(T4 == 2) goto L5;//Element is float\n';
+    code += 'L3:\n';
+    code += 'T6 = SP;\n';
+    code += 'SP = 3;\n';
+    code += 'T0 = STACK[(int)T3];//Get string start position\n';
+    code += 'STACK[(int)SP] = T0;\n';
+    code += 'StringPrint();\n';
+    code += 'SP = T6;\n';
+    code += 'goto L7;\n';
+    code += 'L4:\n';
+    code += 'T0 = STACK[(int)T3];//Get string start position\n';
+    code += 'printf("%d", (int)T0);\n';
+    code += 'goto L7;\n';
+    code += 'L5:\n';
+    code += 'T0 = STACK[(int)T3];//Get string start position\n';
+    code += 'printf("%f", T0);\n';
+    code += 'goto L7;\n';
+    code += 'L7:\n';
+    code += 'T3 = T3 + 1;//Update array position\n';
+    code += 'T5 = T5 + 1;//Update contador\n';
+    code += 'goto L0;//Go back to loop\n';
+    code += 'L1:\n';
+    code += 'printf("%c", 93);\n';
     code += 'return;\n';
     code += '}\n';
     return code;

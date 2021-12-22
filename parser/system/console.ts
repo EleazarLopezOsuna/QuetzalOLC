@@ -26,7 +26,7 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
-        this.absolutePos = 39;//Initial value 36 because of default functions
+        this.absolutePos = 43;//Initial value 36 because of default functions
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";
@@ -50,7 +50,7 @@ class console {
         this.actualTag = 0;
         this.breakTag = 0;
         this.continueTag = 0;
-        this.absolutePos = 39;
+        this.absolutePos = 43;
         this.relativePos = 0;
         this.switchEvaluation = 0;
         this.finalCode = "";

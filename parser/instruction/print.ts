@@ -5,6 +5,7 @@ import { data, type } from "../system/type";
 import { _console, _3dCode } from "../system/console";
 import { _array } from "../literal/_array";
 import { struct_item } from "../literal/struct_item";
+import { variable_id } from "../literal/variable_id";
 
 export enum print_type {
     PRINT,
@@ -15,7 +16,47 @@ export class print extends instruction {
 
     public translate(environment: environment): type {
         this.expresions.forEach(element => {
-            const elementType = element.translate(environment);
+            const expr_data = element.execute(environment);
+            if (expr_data.value instanceof _array) {
+                let size = expr_data.value.size;
+                let varId = element as variable_id
+                let start = environment.get_relative_recursive(varId.id, environment);
+                _3dCode.actualTemp++;
+                let startTemp = _3dCode.actualTemp;
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + start + ';\n';
+                let varType = environment.get_variable_recursive(varId.id, environment).type;
+                let tipo;
+                switch(varType){
+                    case type.CHAR:
+                    case type.STRING:
+                        tipo = 0;
+                        break;
+                    case type.BOOLEAN:
+                    case type.INTEGER:
+                        tipo = 1;
+                        break;
+                    case type.FLOAT:
+                        tipo = 2;
+                        break;
+
+                }
+                _3dCode.actualTemp++;
+                let savedEnvironment = _3dCode.actualTemp;
+                _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                _3dCode.actualTemp++;
+                _3dCode.output += 'SP = 39;\n';
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 1;\n';
+                _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = ' + size + ';\n';
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 2;\n';
+                _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + startTemp + ';\n';
+                _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + 3;\n';
+                _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = ' + tipo + ';\n';
+                _3dCode.output += 'printArray();\n';
+                _3dCode.output += 'SP = T' + savedEnvironment + ';\n';
+            } else if(expr_data.value instanceof struct_item){
+                
+            }else {
+                const elementType = element.translate(environment);
             switch (elementType) {
                 case type.BOOLEAN:
                     _3dCode.actualTag++
@@ -62,6 +103,7 @@ export class print extends instruction {
                     break;
                 default:
                     break;
+            }
             }
         });
         switch (this.type) {
