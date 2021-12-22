@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_item = void 0;
-const expression_1 = require("../abstract/expression");
 const type_1 = require("../system/type");
-const literal_1 = require("../abstract/literal");
 const instruction_1 = require("../abstract/instruction");
 class declaration_item extends instruction_1.instruction {
     constructor(variable_id, value, line, column) {
@@ -21,12 +19,7 @@ class declaration_item extends instruction_1.instruction {
         return type_1.type.NULL;
     }
     execute(environment) {
-        // If value is different to null then we need to operate the expresion
-        let value_data = { value: null, type: type_1.type.NULL };
-        if (this.value instanceof expression_1.expression || this.value instanceof literal_1.literal) {
-            value_data = this.value.execute(environment);
-        }
-        return value_data;
+        return (this.value == null) ? { value: null, type: type_1.type.NULL } : this.value.execute(environment);
     }
     plot(count) {
         let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Declaracion de Item (" + this.variable_id + ")\"];";

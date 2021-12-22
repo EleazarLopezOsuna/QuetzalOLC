@@ -24,14 +24,7 @@ export class declaration_item extends instruction {
     }
 
     public execute(environment: environment): data {
-
-        // If value is different to null then we need to operate the expresion
-        let value_data = { value: null, type: type.NULL }
-        if (this.value instanceof expression || this.value instanceof literal) {
-            value_data = this.value.execute(environment);
-        }
-
-        return value_data
+        return (this.value == null) ? { value: null, type: type.NULL } : this.value.execute(environment)
     }
 
     public plot(count: number): string {

@@ -5302,9 +5302,7 @@ exports.declaration_function = declaration_function;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_item = void 0;
-const expression_1 = require("../abstract/expression");
 const type_1 = require("../system/type");
-const literal_1 = require("../abstract/literal");
 const instruction_1 = require("../abstract/instruction");
 class declaration_item extends instruction_1.instruction {
     constructor(variable_id, value, line, column) {
@@ -5322,12 +5320,7 @@ class declaration_item extends instruction_1.instruction {
         return type_1.type.NULL;
     }
     execute(environment) {
-        // If value is different to null then we need to operate the expresion
-        let value_data = { value: null, type: type_1.type.NULL };
-        if (this.value instanceof expression_1.expression || this.value instanceof literal_1.literal) {
-            value_data = this.value.execute(environment);
-        }
-        return value_data;
+        return (this.value == null) ? { value: null, type: type_1.type.NULL } : this.value.execute(environment);
     }
     plot(count) {
         let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Declaracion de Item (" + this.variable_id + ")\"];";
@@ -5350,7 +5343,7 @@ class declaration_item extends instruction_1.instruction {
 }
 exports.declaration_item = declaration_item;
 
-},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../system/type":57}],39:[function(require,module,exports){
+},{"../abstract/instruction":5,"../system/type":57}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_list = void 0;
@@ -5858,8 +5851,10 @@ class native_function extends instruction_1.instruction {
                 }
             case "typeof":
                 return { value: type_1.type[value_data.type], type: type_1.type.STRING };
+            default:
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Operacion no existente: ' + this.option));
+                return { value: null, type: type_1.type.NULL };
         }
-        return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
         let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Funcion Nativa (" + this.option + ")\"];";

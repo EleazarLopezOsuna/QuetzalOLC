@@ -175,8 +175,10 @@ class native_function extends instruction_1.instruction {
                 }
             case "typeof":
                 return { value: type_1.type[value_data.type], type: type_1.type.STRING };
+            default:
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Operacion no existente: ' + this.option));
+                return { value: null, type: type_1.type.NULL };
         }
-        return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
         let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") Funcion Nativa (" + this.option + ")\"];";

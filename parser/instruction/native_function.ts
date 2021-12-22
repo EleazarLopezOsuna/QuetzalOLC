@@ -170,10 +170,11 @@ export class native_function extends instruction {
                 }
             case "typeof":
                 return { value: type[value_data.type], type: type.STRING }
+            default:
+                error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Operacion no existente: ' + this.option));
+                return { value: null, type: type.NULL }
+
         }
-
-
-        return { value: null, type: type.NULL }
     }
 
     public plot(count: number): string {
