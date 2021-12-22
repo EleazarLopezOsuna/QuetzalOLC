@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
 const _array_1 = require("../literal/_array");
+const console_1 = require("./console");
 const type_1 = require("./type");
 const _symbol_1 = require("./_symbol");
 class environment {
@@ -61,6 +62,68 @@ class environment {
         }
         if (environment.previous != null) {
             this.modifySize_recursive(id, environment.previous, newValue);
+        }
+    }
+    push_recursive(id, environment, newValueTemp) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                let val = symbol_item.data;
+                if (val.value instanceof _array_1._array) {
+                    console_1._3dCode.actualTemp++;
+                    let originalPosition = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    let newPosition = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + originalPosition + ' = SP + ' + symbol_item.relative + ';//Get old array start\n';
+                    console_1._3dCode.output += 'T' + newPosition + ' = SP + ' + console_1._3dCode.relativePos + ';//Set new array start\n';
+                    symbol_item.relative = console_1._3dCode.relativePos;
+                    symbol_item.absolute = console_1._3dCode.absolutePos;
+                    for (let i = 0; i < symbol_item.size; i++) {
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + originalPosition + '];//Copy value\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + newPosition + '] = T' + console_1._3dCode.actualTemp + ';//Paste value\n';
+                        console_1._3dCode.relativePos++;
+                        console_1._3dCode.absolutePos++;
+                        console_1._3dCode.output += 'T' + originalPosition + ' = T' + originalPosition + ' + 1;\n';
+                        console_1._3dCode.output += 'T' + newPosition + ' = T' + newPosition + ' + 1;\n';
+                    }
+                    console_1._3dCode.output += 'STACK[(int)T' + newPosition + '] = T' + newValueTemp + ';//Paste value\n';
+                    console_1._3dCode.relativePos++;
+                    console_1._3dCode.absolutePos++;
+                    symbol_item.size++;
+                    val.value.size++;
+                    symbol_item.data = { value: val.value, type: val.type };
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item);
+                }
+            }
+            console.log(symbol_item);
+        }
+        if (environment.previous != null) {
+            this.push_recursive(id, environment.previous, newValueTemp);
+        }
+    }
+    pop_recursive(id, environment) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                let val = symbol_item.data;
+                if (val.value instanceof _array_1._array) {
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + symbol_item.relative + ';\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + ' + (symbol_item.size - 1) + ';\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];\n';
+                    symbol_item.size--;
+                    val.value.size--;
+                    symbol_item.data = { value: val.value, type: val.type };
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item);
+                }
+            }
+            console.log(symbol_item);
+        }
+        if (environment.previous != null) {
+            this.pop_recursive(id, environment.previous);
         }
     }
     get_maps_html(count) {

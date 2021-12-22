@@ -4590,6 +4590,7 @@ exports.array_access = array_access;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_native_function = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const error_1 = require("../system/error");
 const _array_1 = require("../literal/_array");
@@ -4606,8 +4607,10 @@ class array_native_function extends instruction_1.instruction {
             error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no es un array'));
             return type_1.type.NULL;
         }
+        let variable = this.id;
         switch (this.option) {
             case "pop":
+                environment.pop_recursive(variable.id, environment);
                 return return_data.type;
             case "push":
                 if (this.parameter == null) {
@@ -4619,7 +4622,8 @@ class array_native_function extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'El parametro tiene que ser del mismo tipo de dato que el array'));
                     return type_1.type.NULL;
                 }
-                return_data.value.body.push(this.parameter);
+                this.parameter.translate(environment);
+                environment.push_recursive(variable.id, environment, console_1._3dCode.actualTemp);
                 return parameter_data;
         }
         // Default
@@ -4677,7 +4681,7 @@ class array_native_function extends instruction_1.instruction {
 }
 exports.array_native_function = array_native_function;
 
-},{"../abstract/instruction":5,"../literal/_array":47,"../system/error":55,"../system/type":56}],32:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_array":47,"../system/console":53,"../system/error":55,"../system/type":56}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignation_array = void 0;
@@ -6789,6 +6793,7 @@ exports._3dCode = new console();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
 const _array_1 = require("../literal/_array");
+const console_1 = require("./console");
 const type_1 = require("./type");
 const _symbol_1 = require("./_symbol");
 class environment {
@@ -6848,6 +6853,68 @@ class environment {
         }
         if (environment.previous != null) {
             this.modifySize_recursive(id, environment.previous, newValue);
+        }
+    }
+    push_recursive(id, environment, newValueTemp) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                let val = symbol_item.data;
+                if (val.value instanceof _array_1._array) {
+                    console_1._3dCode.actualTemp++;
+                    let originalPosition = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    let newPosition = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + originalPosition + ' = SP + ' + symbol_item.relative + ';//Get old array start\n';
+                    console_1._3dCode.output += 'T' + newPosition + ' = SP + ' + console_1._3dCode.relativePos + ';//Set new array start\n';
+                    symbol_item.relative = console_1._3dCode.relativePos;
+                    symbol_item.absolute = console_1._3dCode.absolutePos;
+                    for (let i = 0; i < symbol_item.size; i++) {
+                        console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + originalPosition + '];//Copy value\n';
+                        console_1._3dCode.output += 'STACK[(int)T' + newPosition + '] = T' + console_1._3dCode.actualTemp + ';//Paste value\n';
+                        console_1._3dCode.relativePos++;
+                        console_1._3dCode.absolutePos++;
+                        console_1._3dCode.output += 'T' + originalPosition + ' = T' + originalPosition + ' + 1;\n';
+                        console_1._3dCode.output += 'T' + newPosition + ' = T' + newPosition + ' + 1;\n';
+                    }
+                    console_1._3dCode.output += 'STACK[(int)T' + newPosition + '] = T' + newValueTemp + ';//Paste value\n';
+                    console_1._3dCode.relativePos++;
+                    console_1._3dCode.absolutePos++;
+                    symbol_item.size++;
+                    val.value.size++;
+                    symbol_item.data = { value: val.value, type: val.type };
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item);
+                }
+            }
+            console.log(symbol_item);
+        }
+        if (environment.previous != null) {
+            this.push_recursive(id, environment.previous, newValueTemp);
+        }
+    }
+    pop_recursive(id, environment) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                let val = symbol_item.data;
+                if (val.value instanceof _array_1._array) {
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + symbol_item.relative + ';\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + ' + (symbol_item.size - 1) + ';\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];\n';
+                    symbol_item.size--;
+                    val.value.size--;
+                    symbol_item.data = { value: val.value, type: val.type };
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item);
+                }
+            }
+            console.log(symbol_item);
+        }
+        if (environment.previous != null) {
+            this.pop_recursive(id, environment.previous);
         }
     }
     get_maps_html(count) {
@@ -7033,7 +7100,7 @@ class environment {
 }
 exports.environment = environment;
 
-},{"../literal/_array":47,"./_symbol":52,"./type":56}],55:[function(require,module,exports){
+},{"../literal/_array":47,"./_symbol":52,"./console":53,"./type":56}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.error_arr = exports.error_type = exports.error = void 0;

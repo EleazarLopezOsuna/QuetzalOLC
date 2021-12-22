@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.array_native_function = void 0;
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const error_1 = require("../system/error");
 const _array_1 = require("../literal/_array");
@@ -18,8 +19,10 @@ class array_native_function extends instruction_1.instruction {
             error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no es un array'));
             return type_1.type.NULL;
         }
+        let variable = this.id;
         switch (this.option) {
             case "pop":
+                environment.pop_recursive(variable.id, environment);
                 return return_data.type;
             case "push":
                 if (this.parameter == null) {
@@ -31,7 +34,8 @@ class array_native_function extends instruction_1.instruction {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'El parametro tiene que ser del mismo tipo de dato que el array'));
                     return type_1.type.NULL;
                 }
-                return_data.value.body.push(this.parameter);
+                this.parameter.translate(environment);
+                environment.push_recursive(variable.id, environment, console_1._3dCode.actualTemp);
                 return parameter_data;
         }
         // Default

@@ -1,6 +1,6 @@
 import { environment } from "../system/environment";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _3dCode, _console } from "../system/console";
 import { instruction } from "../abstract/instruction";
 import { parameter } from "../expression/parameter";
 import { error, error_arr, error_type } from "../system/error";
@@ -17,8 +17,10 @@ export class array_native_function extends instruction {
             error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable no es un array'));
             return type.NULL
         }
+        let variable = this.id as variable_id
         switch (this.option) {
             case "pop":
+                environment.pop_recursive(variable.id, environment);
                 return return_data.type
             case "push":
                 if (this.parameter == null) {
@@ -30,7 +32,8 @@ export class array_native_function extends instruction {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'El parametro tiene que ser del mismo tipo de dato que el array'));
                     return type.NULL
                 }
-                return_data.value.body.push(this.parameter)
+                this.parameter.translate(environment);
+                environment.push_recursive(variable.id, environment, _3dCode.actualTemp);
                 return parameter_data
         }
         // Default

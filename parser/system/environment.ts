@@ -1,6 +1,6 @@
 import { declaration_function } from "../instruction/declaration_function";
 import { _array } from "../literal/_array";
-import { _console } from "./console";
+import { _console, _3dCode } from "./console";
 import { data, type } from "./type";
 import { _symbol, scope } from "./_symbol";
 
@@ -69,6 +69,70 @@ export class environment {
         }
         if (environment.previous != null) {
             this.modifySize_recursive(id, environment.previous, newValue);
+        }
+    }
+
+    public push_recursive(id: string, environment: environment, newValueTemp: number) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id)
+            if(symbol_item instanceof _symbol){
+                let val = symbol_item.data as data
+                if(val.value instanceof _array){
+                    _3dCode.actualTemp++;
+                    let originalPosition = _3dCode.actualTemp;
+                    _3dCode.actualTemp++;
+                    let newPosition = _3dCode.actualTemp;
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + originalPosition + ' = SP + ' + symbol_item.relative + ';//Get old array start\n';
+                    _3dCode.output += 'T' + newPosition + ' = SP + ' + _3dCode.relativePos + ';//Set new array start\n';
+                    symbol_item.relative = _3dCode.relativePos;
+                    symbol_item.absolute = _3dCode.absolutePos;
+                    for(let i = 0; i < symbol_item.size; i++){
+                        _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + originalPosition + '];//Copy value\n';
+                        _3dCode.output += 'STACK[(int)T' + newPosition + '] = T' + _3dCode.actualTemp + ';//Paste value\n';
+                        _3dCode.relativePos++;
+                        _3dCode.absolutePos++;
+                        _3dCode.output += 'T' + originalPosition + ' = T' + originalPosition + ' + 1;\n';
+                        _3dCode.output += 'T' + newPosition + ' = T' + newPosition + ' + 1;\n';
+                    }
+                    _3dCode.output += 'STACK[(int)T' + newPosition + '] = T' + newValueTemp + ';//Paste value\n';
+                    _3dCode.relativePos++;
+                    _3dCode.absolutePos++;
+                    symbol_item.size++;
+                    val.value.size++;
+                    symbol_item.data = {value: val.value, type: val.type}
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item)
+                }
+            }
+            console.log(symbol_item)
+        }
+        if (environment.previous != null) {
+            this.push_recursive(id, environment.previous, newValueTemp);
+        }
+    }
+
+    public pop_recursive(id: string, environment: environment) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id)
+            if(symbol_item instanceof _symbol){
+                let val = symbol_item.data as data
+                if(val.value instanceof _array){
+                    _3dCode.actualTemp++;
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + symbol_item.relative + ';\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + ' + (symbol_item.size - 1) + ';\n';
+                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];\n';
+                    symbol_item.size--;
+                    val.value.size--;
+                    symbol_item.data = {value: val.value, type: val.type}
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item)
+                }
+            }
+            console.log(symbol_item)
+        }
+        if (environment.previous != null) {
+            this.pop_recursive(id, environment.previous);
         }
     }
 
