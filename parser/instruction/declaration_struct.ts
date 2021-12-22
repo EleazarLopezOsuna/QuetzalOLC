@@ -2,7 +2,7 @@ import { expression } from "../abstract/expression";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _console, _3dCode } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 import { parameter } from "../expression/parameter";
@@ -10,13 +10,34 @@ import { _struct } from "../literal/_struct";
 
 export class declaration_struct extends instruction {
 
-    public translate(environment: environment): type {
-        if (this.value instanceof expression || this.value instanceof literal) {
-            let valueType = this.value.translate(environment);
-            return valueType
+    public translate(current_environment: environment): type {
+        // Save the variable 
+        if (current_environment.get_variable(this.variable_id).type != type.UNDEFINED) {
+            error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
         } else {
-
+            current_environment.save_variable(
+                this.variable_id,
+                { value: new _struct(this.value, this.line, this.column),
+                type: type.STRUCT },
+                _3dCode.absolutePos,
+                _3dCode.relativePos,
+                this.value.length)
+            _3dCode.absolutePos++;
+            _3dCode.relativePos++;
+            let envi = new environment(current_environment);
+            envi.name = this.variable_id;
+            let relativePos = _3dCode.relativePos;
+            _3dCode.relativePos = 0;
+            this.value.forEach(element => {
+                envi.save_variable(element.id, {value: null, type: element.native_type}, _3dCode.absolutePos, _3dCode.relativePos, 1);
+                _3dCode.absolutePos++;
+                _3dCode.relativePos++;
+            })
+            _3dCode.relativePos = relativePos;
+            _3dCode.environmentList.push(envi);
         }
+
+        // Default
         return type.NULL
     }
 

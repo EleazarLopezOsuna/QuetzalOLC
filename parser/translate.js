@@ -5415,10 +5415,10 @@ exports.declaration_list = declaration_list;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_struct = void 0;
-const expression_1 = require("../abstract/expression");
+const environment_1 = require("../system/environment");
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
-const literal_1 = require("../abstract/literal");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
 const _struct_1 = require("../literal/_struct");
 class declaration_struct extends instruction_1.instruction {
@@ -5427,13 +5427,29 @@ class declaration_struct extends instruction_1.instruction {
         this.variable_id = variable_id;
         this.value = value;
     }
-    translate(environment) {
-        if (this.value instanceof expression_1.expression || this.value instanceof literal_1.literal) {
-            let valueType = this.value.translate(environment);
-            return valueType;
+    translate(current_environment) {
+        // Save the variable 
+        if (current_environment.get_variable(this.variable_id).type != type_1.type.UNDEFINED) {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
         }
         else {
+            current_environment.save_variable(this.variable_id, { value: new _struct_1._struct(this.value, this.line, this.column),
+                type: type_1.type.STRUCT }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, this.value.length);
+            console_1._3dCode.absolutePos++;
+            console_1._3dCode.relativePos++;
+            let envi = new environment_1.environment(current_environment);
+            envi.name = this.variable_id;
+            let relativePos = console_1._3dCode.relativePos;
+            console_1._3dCode.relativePos = 0;
+            this.value.forEach(element => {
+                envi.save_variable(element.id, { value: null, type: element.native_type }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                console_1._3dCode.absolutePos++;
+                console_1._3dCode.relativePos++;
+            });
+            console_1._3dCode.relativePos = relativePos;
+            console_1._3dCode.environmentList.push(envi);
         }
+        // Default
         return type_1.type.NULL;
     }
     execute(environment) {
@@ -5468,7 +5484,7 @@ class declaration_struct extends instruction_1.instruction {
 }
 exports.declaration_struct = declaration_struct;
 
-},{"../abstract/expression":4,"../abstract/instruction":5,"../abstract/literal":6,"../literal/_struct":48,"../system/error":55,"../system/type":56}],40:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_struct":48,"../system/console":53,"../system/environment":54,"../system/error":55,"../system/type":56}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.declaration_struct_item = void 0;
