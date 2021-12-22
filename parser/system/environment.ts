@@ -9,9 +9,14 @@ export class environment {
     public symbol_map: Map<string, _symbol>;
     private function_map: Map<string, _symbol>;
     public name: string;
+    public next: environment | null;
 
     constructor(public previous: environment | null) {
         this.previous = previous;
+        if (this.previous != null) {
+            this.previous.next = this
+        }
+        this.next = null
         this.symbol_map = new Map<string, _symbol>();
         this.function_map = new Map<string, _symbol>();
         this.name = '';
@@ -46,20 +51,8 @@ export class environment {
         }
     }
 
-    public get_html(): string {
-        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
-        result += '<table class="table table-hover">\n';
-
-        result += '<thead>\n<tr>\n<th scope="col">#</th>\n'
-        result += '<th scope="col">Valor</th>\n';
-        result += '<th scope="col">ID</th>\n';
-        result += '<th scope="col">Tipo</th>\n';
-        result += '<th scope="col">Ambito</th>\n';
-        result += '</tr>\n';
-        result += '</thead>\n';
-        result += '<tbody>\n';
-
-        let count = 1;
+    private get_maps_html(count: number): string {
+        let result = ""
         this.symbol_map.forEach(element => {
             result += '<tr>\n';
             result += '<th scope="row">' + count + '</th>\n';
@@ -74,6 +67,27 @@ export class environment {
             result += '</tr>\n';
             count++;
         });
+        if (this.next != null) {
+            result += this.next.get_maps_html(count)
+        }
+        return result
+    }
+
+    public get_html(): string {
+        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
+        result += '<table class="table table-hover">\n';
+
+        result += '<thead>\n<tr>\n<th scope="col">#</th>\n'
+        result += '<th scope="col">Valor</th>\n';
+        result += '<th scope="col">ID</th>\n';
+        result += '<th scope="col">Tipo</th>\n';
+        result += '<th scope="col">Ambito</th>\n';
+        result += '</tr>\n';
+        result += '</thead>\n';
+        result += '<tbody>\n';
+
+        let count = 1;
+        result += this.get_maps_html(count)
         result += '</tbody>\n';
         return result += '</table></div>';
     }

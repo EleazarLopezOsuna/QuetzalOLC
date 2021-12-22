@@ -6761,6 +6761,10 @@ class environment {
     constructor(previous) {
         this.previous = previous;
         this.previous = previous;
+        if (this.previous != null) {
+            this.previous.next = this;
+        }
+        this.next = null;
         this.symbol_map = new Map();
         this.function_map = new Map();
         this.name = '';
@@ -6792,18 +6796,8 @@ class environment {
             this.remove_temp_recursive(environment.previous);
         }
     }
-    get_html() {
-        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
-        result += '<table class="table table-hover">\n';
-        result += '<thead>\n<tr>\n<th scope="col">#</th>\n';
-        result += '<th scope="col">Valor</th>\n';
-        result += '<th scope="col">ID</th>\n';
-        result += '<th scope="col">Tipo</th>\n';
-        result += '<th scope="col">Ambito</th>\n';
-        result += '</tr>\n';
-        result += '</thead>\n';
-        result += '<tbody>\n';
-        let count = 1;
+    get_maps_html(count) {
+        let result = "";
         this.symbol_map.forEach(element => {
             result += '<tr>\n';
             result += '<th scope="row">' + count + '</th>\n';
@@ -6818,6 +6812,24 @@ class environment {
             result += '</tr>\n';
             count++;
         });
+        if (this.next != null) {
+            result += this.next.get_maps_html(count);
+        }
+        return result;
+    }
+    get_html() {
+        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
+        result += '<table class="table table-hover">\n';
+        result += '<thead>\n<tr>\n<th scope="col">#</th>\n';
+        result += '<th scope="col">Valor</th>\n';
+        result += '<th scope="col">ID</th>\n';
+        result += '<th scope="col">Tipo</th>\n';
+        result += '<th scope="col">Ambito</th>\n';
+        result += '</tr>\n';
+        result += '</thead>\n';
+        result += '<tbody>\n';
+        let count = 1;
+        result += this.get_maps_html(count);
         result += '</tbody>\n';
         return result += '</table></div>';
     }
