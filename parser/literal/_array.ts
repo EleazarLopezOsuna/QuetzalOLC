@@ -5,6 +5,7 @@ import { data, type } from "../system/type";
 import { _3dCode } from "../system/console";
 import { literal } from "../abstract/literal";
 import { array_range } from "../expression/array_range";
+import { native } from "./native";
 
 export class _array extends literal {
     public dimensionSize;
@@ -42,7 +43,9 @@ export class _array extends literal {
             }
         }
         if (dimension_data.type != type.UNDEFINED) {
-            body_pointer[dimension_data.value] = expr
+            let new_data = expr.execute(environment)
+            body_pointer[dimension_data.value] = new native(new_data.value, new_data.type, this.line, this.column)
+            
         }
         return true
     }

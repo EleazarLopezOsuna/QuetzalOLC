@@ -5,6 +5,7 @@ const type_1 = require("../system/type");
 const console_1 = require("../system/console");
 const literal_1 = require("../abstract/literal");
 const array_range_1 = require("../expression/array_range");
+const native_1 = require("./native");
 class _array extends literal_1.literal {
     constructor(body, line, column) {
         super(line, column);
@@ -40,7 +41,8 @@ class _array extends literal_1.literal {
             }
         }
         if (dimension_data.type != type_1.type.UNDEFINED) {
-            body_pointer[dimension_data.value] = expr;
+            let new_data = expr.execute(environment);
+            body_pointer[dimension_data.value] = new native_1.native(new_data.value, new_data.type, this.line, this.column);
         }
         return true;
     }
