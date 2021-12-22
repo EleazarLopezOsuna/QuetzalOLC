@@ -5980,7 +5980,7 @@ class declaration_struct_item extends instruction_1.instruction {
 }
 exports.declaration_struct_item = declaration_struct_item;
 
-},{"../abstract/instruction":5,"../literal/_struct":50,"../literal/struct_item":52,"../system/error":57,"../system/type":58}],43:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/_struct":50,"../literal/native":51,"../literal/struct_item":52,"../system/console":55,"../system/error":57,"../system/type":58}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
