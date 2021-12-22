@@ -4,6 +4,7 @@ exports.native = void 0;
 const literal_1 = require("../abstract/literal");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
+const error_1 = require("../system/error");
 class native extends literal_1.literal {
     constructor(value, type, line, column) {
         super(line, column);
@@ -52,7 +53,7 @@ class native extends literal_1.literal {
             case type_1.type.FLOAT:
                 return { value: Number(this.value), type: type_1.type.FLOAT };
             case type_1.type.STRING:
-                return { value: this.get_string_value(this.value), type: type_1.type.STRING };
+                return { value: this.parse_string(this.get_string_value(this.value), environment), type: type_1.type.STRING };
             case type_1.type.CHAR:
                 return { value: this.get_string_value(this.value), type: type_1.type.CHAR };
             case type_1.type.NULL:
@@ -62,6 +63,18 @@ class native extends literal_1.literal {
             default:
                 return { value: this.value, type: type_1.type.STRING };
         }
+    }
+    parse_string(str, environment) {
+        const templateMatcher = /\$\s?([^{}\s]*)\s?/g;
+        let text = str.replace(templateMatcher, (substring, value, index) => {
+            let new_value_data = environment.get_variable(value);
+            if (new_value_data.type == type_1.type.UNDEFINED) {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no definida: ' + value));
+                return "";
+            }
+            return new_value_data.value;
+        });
+        return text;
     }
     plot(count) {
         let plot_val = this.value;

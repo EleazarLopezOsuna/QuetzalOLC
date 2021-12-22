@@ -2,6 +2,7 @@ import { literal } from "../abstract/literal";
 import { environment } from "../system/environment";
 import { data, type } from "../system/type";
 import { _3dCode } from "../system/console";
+import { error, error_arr, error_type } from "../system/error";
 
 export class native extends literal {
 
@@ -17,7 +18,7 @@ export class native extends literal {
                 _3dCode.actualTemp++;
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = HP;//Save start position\n';
                 let content = this.get_string_value(this.value);
-                if(content !== ""){
+                if (content !== "") {
                     for (let i = 0; i < content.length; i++) {
                         _3dCode.output += 'HEAP[(int)HP] = ' + content.charAt(i).charCodeAt(0) + ';//Save character ' + content.charAt(i) + ' in heap\n';
                         _3dCode.output += 'HP = HP + 1;//Increase HP\n';
@@ -53,7 +54,7 @@ export class native extends literal {
             case type.FLOAT:
                 return { value: Number(this.value), type: type.FLOAT };
             case type.STRING:
-                return { value: this.get_string_value(this.value), type: type.STRING };
+                return { value: this.parse_string(this.get_string_value(this.value), environment), type: type.STRING };
             case type.CHAR:
                 return { value: this.get_string_value(this.value), type: type.CHAR };
             case type.NULL:
@@ -63,6 +64,19 @@ export class native extends literal {
             default:
                 return { value: this.value, type: type.STRING };
         }
+    }
+
+    private parse_string(str: String, environment: environment):string {
+        const templateMatcher = /\$\s?([^{}\s]*)\s?/g;
+        let text = str.replace(templateMatcher, (substring, value, index) => {
+            let new_value_data = environment.get_variable(value);
+            if (new_value_data.type == type.UNDEFINED) {
+                error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable no definida: ' + value));
+                return ""
+            }
+            return new_value_data.value;
+        });
+        return text
     }
 
     public plot(count: number): string {
