@@ -130,16 +130,13 @@ export class print extends instruction {
             if (expr_data.value instanceof _array || expr_data.value instanceof struct_item) {
                 print_str = expr_data.value.to_string(environment)
             }
-            switch (this.type) {
-                case print_type.PRINT:
-                    _console.output += print_str
-                    break;
-                case print_type.PRINTLN:
-                    _console.output += print_str + "\n"
-                    break;
-            }
+            _console.output += print_str + " "
         });
-
+        switch (this.type) {
+            case print_type.PRINTLN:
+                _console.output += "\n"
+                break;
+        }
         // Default
         return { value: null, type: type.NULL }
     }

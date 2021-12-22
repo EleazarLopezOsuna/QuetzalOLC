@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._forin = void 0;
+exports._forof = void 0;
 const environment_1 = require("../system/environment");
 const type_1 = require("../system/type");
 const console_1 = require("../system/console");
@@ -9,7 +9,7 @@ const variable_id_1 = require("../literal/variable_id");
 const _array_1 = require("../literal/_array");
 const _break_1 = require("./_break");
 const _continue_1 = require("./_continue");
-class _forin extends instruction_1.instruction {
+class _forof extends instruction_1.instruction {
     constructor(id, operator, code, line, column) {
         super(line, column);
         this.id = id;
@@ -133,8 +133,9 @@ class _forin extends instruction_1.instruction {
         // Foreach value assign to variable
         if (this.operator instanceof _array_1._array) {
             // Execute the code foreach value
-            for (const key in this.operator.body) {
-                new_environment.save_variable(this.id, { value: key, type: type_1.type.INTEGER }, 0, 0, 0);
+            for (const key of this.operator.body) {
+                let key_data = key.execute(new_environment);
+                new_environment.save_variable(this.id, key_data, 0, 0, 0);
                 for (const instruction of this.code) {
                     let instruction_data = instruction.execute(new_environment);
                     if (new_environment.stop_flag) {
@@ -152,7 +153,7 @@ class _forin extends instruction_1.instruction {
         return { value: null, type: type_1.type.NULL };
     }
     plot(count) {
-        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") ForIn\"];";
+        let result = "node" + count + "[label=\"(" + this.line + "," + this.column + ") ForOf\"];";
         const this_count = count;
         const child_list = [this.operator];
         for (const instr of child_list) {
@@ -178,5 +179,5 @@ class _forin extends instruction_1.instruction {
         return result;
     }
 }
-exports._forin = _forin;
-//# sourceMappingURL=_forin.js.map
+exports._forof = _forof;
+//# sourceMappingURL=_forof.js.map

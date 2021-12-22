@@ -36,6 +36,7 @@
     const {unary_instruction, unary_instruction_type} = require('../instruction/unary_instruction');
     const {_for} = require('../instruction/_for');
     const {_forin} = require('../instruction/_forin');
+    const {_forof} = require('../instruction/_forof');
     const {declaration_array} = require('../instruction/declaration_array');
     const {declaration_struct} = require('../instruction/declaration_struct');
     const {declaration_struct_item} = require('../instruction/declaration_struct_item');
@@ -124,6 +125,7 @@ id          ([a-zA-Z_])[a-zA-Z0-9_ñÑ]*
 "break"                 return 'tk_break'
 "continue"              return 'tk_continue'
 "in"                    return 'tk_in'
+"of"                    return 'tk_of'
 "begin"                 return 'tk_begin'
 "end"                   return 'tk_end'
 "push"                  return 'tk_push'
@@ -549,6 +551,12 @@ pr_for
     }
     | tk_for tk_id tk_in pr_array tk_cbra_o pr_instructions tk_cbra_c {
         $$ = new _forin($2, $4, $6, @1.first_line, @1.first_column);
+    }
+    | tk_for tk_id tk_of pr_expr tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new _forof($2, $4, $6, @1.first_line, @1.first_column);
+    }
+    | tk_for tk_id tk_of pr_array tk_cbra_o pr_instructions tk_cbra_c {
+        $$ = new _forof($2, $4, $6, @1.first_line, @1.first_column);
     }
 ;
 
