@@ -22,9 +22,10 @@ class main extends instruction_1.instruction {
         console_1._3dCode.output += '}\n';
         return type_1.type.NULL;
     }
-    execute(environment) {
+    execute(current_environment) {
+        const new_environment = new environment_1.environment(current_environment);
         this.code.forEach(element => {
-            element.execute(environment);
+            element.execute(new_environment);
         });
         return { value: null, type: type_1.type.NULL };
     }

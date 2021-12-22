@@ -5305,7 +5305,7 @@ class declaration_list extends instruction_1.instruction {
             // if is equal null save the variable with the type declared
             if (item_data.type == type_1.type.NULL) {
                 // Save the variable 
-                if (environment.get_variable(item.variable_id).type != type_1.type.UNDEFINED) {
+                if (environment.exists(item.variable_id)) {
                     error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 }
                 else {
@@ -5328,7 +5328,7 @@ class declaration_list extends instruction_1.instruction {
                 }
                 else {
                     // Save the variable 
-                    if (environment.get_variable(item.variable_id).type != type_1.type.UNDEFINED) {
+                    if (environment.exists(item.variable_id)) {
                         error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                     }
                     else {
@@ -5531,9 +5531,10 @@ class main extends instruction_1.instruction {
         console_1._3dCode.output += '}\n';
         return type_1.type.NULL;
     }
-    execute(environment) {
+    execute(current_environment) {
+        const new_environment = new environment_1.environment(current_environment);
         this.code.forEach(element => {
-            element.execute(environment);
+            element.execute(new_environment);
         });
         return { value: null, type: type_1.type.NULL };
     }
@@ -6655,7 +6656,7 @@ window.plot = function (input) {
         let dot_string = "digraph G { node" + count + "[label=\"AST\"];";
         for (const instr of ast) {
             try {
-                dot_string += "node" + count + " -> " + "node" + count + "1;";
+                dot_string += "node1 -> " + "node" + count + "1;";
                 dot_string += instr.plot(Number(count + "1"));
                 count++;
             }
@@ -6797,6 +6798,10 @@ class environment {
     constructor(previous) {
         this.previous = previous;
         this.previous = previous;
+        if (this.previous != null) {
+            this.previous.next = this;
+        }
+        this.next = null;
         this.symbol_map = new Map();
         this.function_map = new Map();
         this.name = '';
@@ -6828,18 +6833,8 @@ class environment {
             this.remove_temp_recursive(environment.previous);
         }
     }
-    get_html() {
-        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
-        result += '<table class="table table-hover">\n';
-        result += '<thead>\n<tr>\n<th scope="col">#</th>\n';
-        result += '<th scope="col">Valor</th>\n';
-        result += '<th scope="col">ID</th>\n';
-        result += '<th scope="col">Tipo</th>\n';
-        result += '<th scope="col">Ambito</th>\n';
-        result += '</tr>\n';
-        result += '</thead>\n';
-        result += '<tbody>\n';
-        let count = 1;
+    get_maps_html(count) {
+        let result = "";
         this.symbol_map.forEach(element => {
             result += '<tr>\n';
             result += '<th scope="row">' + count + '</th>\n';
@@ -6854,6 +6849,24 @@ class environment {
             result += '</tr>\n';
             count++;
         });
+        if (this.next != null) {
+            result += this.next.get_maps_html(count);
+        }
+        return result;
+    }
+    get_html() {
+        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
+        result += '<table class="table table-hover">\n';
+        result += '<thead>\n<tr>\n<th scope="col">#</th>\n';
+        result += '<th scope="col">Valor</th>\n';
+        result += '<th scope="col">ID</th>\n';
+        result += '<th scope="col">Tipo</th>\n';
+        result += '<th scope="col">Ambito</th>\n';
+        result += '</tr>\n';
+        result += '</thead>\n';
+        result += '<tbody>\n';
+        let count = 1;
+        result += this.get_maps_html(count);
         result += '</tbody>\n';
         return result += '</table></div>';
     }
@@ -6870,6 +6883,10 @@ class environment {
             let return_function = symbol_item.data;
             return return_function;
         }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_function(id);
+        }
         return null;
     }
     save_variable(id, data, absolute, relative, size) {
@@ -6879,11 +6896,22 @@ class environment {
         }
         this.symbol_map.set(id, new _symbol_1._symbol(id, data, symbol_type, absolute, relative, size));
     }
+    exists(id) {
+        let symbol_item = this.symbol_map.get(id);
+        if (symbol_item instanceof _symbol_1._symbol) {
+            return true;
+        }
+        return false;
+    }
     get_variable(id) {
         let symbol_item = this.symbol_map.get(id);
         if (symbol_item instanceof _symbol_1._symbol) {
             let return_data = symbol_item.data;
             return return_data;
+        }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_variable(id);
         }
         return { value: null, type: type_1.type.UNDEFINED };
     }

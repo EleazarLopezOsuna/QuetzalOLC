@@ -9,9 +9,14 @@ export class environment {
     public symbol_map: Map<string, _symbol>;
     private function_map: Map<string, _symbol>;
     public name: string;
+    public next: environment | null;
 
     constructor(public previous: environment | null) {
         this.previous = previous;
+        if (this.previous != null) {
+            this.previous.next = this
+        }
+        this.next = null
         this.symbol_map = new Map<string, _symbol>();
         this.function_map = new Map<string, _symbol>();
         this.name = '';
@@ -45,7 +50,7 @@ export class environment {
             this.remove_temp_recursive(environment.previous);
         }
     }
-
+    
     public modifySize_recursive(id: string, environment: environment, newValue: number) {
         if (environment.symbol_map.has(id)) {
             let symbol_item = environment.symbol_map.get(id)
@@ -67,20 +72,8 @@ export class environment {
         }
     }
 
-    public get_html(): string {
-        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
-        result += '<table class="table table-hover">\n';
-
-        result += '<thead>\n<tr>\n<th scope="col">#</th>\n'
-        result += '<th scope="col">Valor</th>\n';
-        result += '<th scope="col">ID</th>\n';
-        result += '<th scope="col">Tipo</th>\n';
-        result += '<th scope="col">Ambito</th>\n';
-        result += '</tr>\n';
-        result += '</thead>\n';
-        result += '<tbody>\n';
-
-        let count = 1;
+    private get_maps_html(count: number): string {
+        let result = ""
         this.symbol_map.forEach(element => {
             result += '<tr>\n';
             result += '<th scope="row">' + count + '</th>\n';
@@ -95,6 +88,27 @@ export class environment {
             result += '</tr>\n';
             count++;
         });
+        if (this.next != null) {
+            result += this.next.get_maps_html(count)
+        }
+        return result
+    }
+
+    public get_html(): string {
+        let result = '<div class="table-wrapper-scroll-y my-custom-scrollbar">';
+        result += '<table class="table table-hover">\n';
+
+        result += '<thead>\n<tr>\n<th scope="col">#</th>\n'
+        result += '<th scope="col">Valor</th>\n';
+        result += '<th scope="col">ID</th>\n';
+        result += '<th scope="col">Tipo</th>\n';
+        result += '<th scope="col">Ambito</th>\n';
+        result += '</tr>\n';
+        result += '</thead>\n';
+        result += '<tbody>\n';
+
+        let count = 1;
+        result += this.get_maps_html(count)
         result += '</tbody>\n';
         return result += '</table></div>';
     }
@@ -113,6 +127,10 @@ export class environment {
             let return_function = symbol_item.data;
             return return_function as declaration_function
         }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_function(id)
+        }
         return null
     }
 
@@ -124,11 +142,23 @@ export class environment {
         this.symbol_map.set(id, new _symbol(id, data, symbol_type, absolute, relative, size));
     }
 
+    public exists(id: string): boolean {
+        let symbol_item = this.symbol_map.get(id)
+        if (symbol_item instanceof _symbol) {
+            return true
+        }
+        return false
+    }
+
     public get_variable(id: string): data {
         let symbol_item = this.symbol_map.get(id)
         if (symbol_item instanceof _symbol) {
             let return_data = symbol_item.data;
             return return_data as data
+        }
+        // variable doesnt exist
+        if (this.previous != null) {
+            return this.previous.get_variable(id)
         }
         return { value: null, type: type.UNDEFINED }
     }

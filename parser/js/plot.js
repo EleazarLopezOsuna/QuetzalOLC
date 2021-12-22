@@ -14,7 +14,7 @@ window.plot = function (input) {
         let dot_string = "digraph G { node" + count + "[label=\"AST\"];";
         for (const instr of ast) {
             try {
-                dot_string += "node" + count + " -> " + "node" + count + "1;";
+                dot_string += "node1 -> " + "node" + count + "1;";
                 dot_string += instr.plot(Number(count + "1"));
                 count++;
             }

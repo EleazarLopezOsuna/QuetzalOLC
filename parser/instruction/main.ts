@@ -22,9 +22,10 @@ export class main extends instruction {
         super(line, column);
     }
 
-    public execute(environment: environment): data {
+    public execute(current_environment: environment): data {
+        const new_environment = new environment(current_environment);
         this.code.forEach(element => {
-            element.execute(environment)
+            element.execute(new_environment)
         });
         return { value: null, type: type.NULL }
     }
