@@ -12,7 +12,29 @@ import { variable_id } from "../literal/variable_id";
 export class array_native_function extends instruction {
 
     public translate(environment: environment): type {
-        throw new Error("Method not implemented.");
+        const return_data = this.id.execute(environment)
+        if (!(return_data.value instanceof _array)) {
+            error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable no es un array'));
+            return type.NULL
+        }
+        switch (this.option) {
+            case "pop":
+                return return_data.type
+            case "push":
+                if (this.parameter == null) {
+                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'El push no puede venir vacio'));
+                    return type.NULL
+                }
+                const parameter_data = this.parameter.translate(environment)
+                if (parameter_data != return_data.type) {
+                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'El parametro tiene que ser del mismo tipo de dato que el array'));
+                    return type.NULL
+                }
+                return_data.value.body.push(this.parameter)
+                return parameter_data
+        }
+        // Default
+        return type.NULL
     }
 
     constructor(public id: literal, public option: string, public parameter: expression | literal | null, line: number, column: number) {

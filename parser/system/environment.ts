@@ -37,12 +37,33 @@ export class environment {
         return result;
     }
 
-    public remove_temp_recursive(environment: environment){
+    public remove_temp_recursive(environment: environment) {
         if (environment.symbol_map.has('temp_array_test')) {
             environment.symbol_map.delete('temp_array_test')
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             this.remove_temp_recursive(environment.previous);
+        }
+    }
+
+    public modifySize_recursive(id: string, environment: environment, newValue: number) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id)
+            if(symbol_item instanceof _symbol){
+                let val = symbol_item.data as data
+                if(val.value instanceof _array){
+                    symbol_item.size = newValue
+                    val.value.size = newValue
+                    val.value.body = []
+                    symbol_item.data = {value: val.value, type: val.type}
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item)
+                }
+            }
+            console.log(symbol_item)
+        }
+        if (environment.previous != null) {
+            this.modifySize_recursive(id, environment.previous, newValue);
         }
     }
 
@@ -124,7 +145,7 @@ export class environment {
                 return symbol_item;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_function_recursive(id, environment.previous);
         }
         return null
@@ -142,7 +163,7 @@ export class environment {
                 return symbol_item.scope;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_scope_recursive(id, environment.previous);
         }
         return null
@@ -156,7 +177,7 @@ export class environment {
                 return return_data as data
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_variable_recursive(id, environment.previous);
         }
         return { value: null, type: type.UNDEFINED }
@@ -174,7 +195,7 @@ export class environment {
                 return symbol_item.absolute;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_absolute_recursive(id, environment.previous);
         }
         return -1
@@ -193,7 +214,7 @@ export class environment {
                 return symbol_item.size;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_size_recursive(id, environment.previous);
         }
         return -1
@@ -211,7 +232,7 @@ export class environment {
                 return symbol_item.relative;
             }
         }
-        if(environment.previous != null){
+        if (environment.previous != null) {
             return this.get_relative_recursive(id, environment.previous);
         }
         return -1

@@ -488,6 +488,9 @@ pr_assignation
     | tk_id pr_index_list tk_equal pr_expr {
         $$ = new assignation_array($1, $2, $4, @1.first_line, @1.first_column);
     }
+    | tk_id tk_equal tk_bra_o tk_bra_c {
+        $$ = new assignation_array($1, null, null, @1.first_line,@1.first_column);
+    }
 ;
 
 /*
