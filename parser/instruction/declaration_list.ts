@@ -78,6 +78,7 @@ export class declaration_list extends instruction {
                 if (environment.exists(item.variable_id)) {
                     error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + item.variable_id));
                 } else {
+                    item_data.type = this.native_type
                     environment.save_variable(item.variable_id, item_data, _console.absolutePos, _console.relativePos, 1)
                     _console.absolutePos++;
                     _console.relativePos++;
@@ -88,7 +89,9 @@ export class declaration_list extends instruction {
             else {
                 // Checking both types
                 let checked = false
-                if (item_data.type == this.native_type) {
+                if (item_data.type == this.native_type
+                    || (this.native_type == type.FLOAT && item_data.type == type.INTEGER)) {
+                    item_data.type == this.native_type
                     checked = true
                 }
 

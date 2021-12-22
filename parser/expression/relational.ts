@@ -124,7 +124,6 @@ export class relational extends expression {
     public execute(environment: environment): data {
         const left_data = this.left.execute(environment);
         const right_data = this.right.execute(environment);
-
         switch (this.type) {
             case relational_type.EQUAL:
                 return { value: (left_data.value == right_data.value), type: type.BOOLEAN };

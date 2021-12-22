@@ -60,12 +60,11 @@ export class call extends instruction {
                 }
                 // execute the code in the new environmet
                 let return_data = { value: null, type: type.NULL }
+
                 function_to_execute.code.forEach(instr => {
-                    if (instr instanceof _return) {
+                    if (!new_environment.stop_flag) {
                         return_data = instr.execute(new_environment)
                         return;
-                    } else {
-                        instr.execute(new_environment)
                     }
                 });
                 // If the type is different to void check the return

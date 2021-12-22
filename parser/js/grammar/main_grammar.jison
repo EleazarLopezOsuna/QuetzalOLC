@@ -607,6 +607,9 @@ pr_if
     | tk_if tk_par_o pr_expr tk_par_c tk_cbra_o pr_instructions tk_cbra_c {
         $$ = new _if($3, $6, null, @1.first_line,@1.first_column);
     }   
+    | tk_if tk_par_o pr_expr tk_par_c pr_instruction {
+        $$ = new _if($3, [$5], null, @1.first_line,@1.first_column);
+    }   
 ;
 
 /*

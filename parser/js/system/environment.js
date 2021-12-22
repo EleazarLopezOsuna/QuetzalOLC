@@ -16,6 +16,7 @@ class environment {
         this.symbol_map = new Map();
         this.function_map = new Map();
         this.name = '';
+        this.stop_flag = false;
     }
     get_html_translation() {
         let result = '';
