@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
+const _array_1 = require("../literal/_array");
 const type_1 = require("./type");
 const _symbol_1 = require("./_symbol");
 class environment {
@@ -40,6 +41,26 @@ class environment {
         }
         if (environment.previous != null) {
             this.remove_temp_recursive(environment.previous);
+        }
+    }
+    modifySize_recursive(id, environment, newValue) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                let val = symbol_item.data;
+                if (val.value instanceof _array_1._array) {
+                    symbol_item.size = newValue;
+                    val.value.size = newValue;
+                    val.value.body = [];
+                    symbol_item.data = { value: val.value, type: val.type };
+                    environment.symbol_map.delete(id);
+                    environment.symbol_map.set(id, symbol_item);
+                }
+            }
+            console.log(symbol_item);
+        }
+        if (environment.previous != null) {
+            this.modifySize_recursive(id, environment.previous, newValue);
         }
     }
     get_maps_html(count) {

@@ -14,37 +14,43 @@ class assignation_array extends instruction_1.instruction {
         this.expr = expr;
     }
     translate(environment) {
-        let return_data = environment.get_variable_recursive(this.id, environment);
-        this.expr.translate(environment);
-        let exprTemp = console_1._3dCode.actualTemp;
-        let tempList = [];
-        if (return_data.type != type_1.type.UNDEFINED) {
-            if (return_data.value instanceof _array_1._array) {
-                for (let dimension of this.dimensions) {
-                    dimension.translate(environment);
-                    tempList.push(console_1._3dCode.actualTemp);
-                }
-                console_1._3dCode.actualTemp++;
-                let uno = console_1._3dCode.actualTemp;
-                console_1._3dCode.actualTemp++;
-                let dos = console_1._3dCode.actualTemp;
-                for (let i = 0; i < tempList.length; i++) {
-                    if (i == 0)
-                        console_1._3dCode.output += 'T' + uno + ' = T' + tempList[i] + ';\n';
-                    else {
-                        console_1._3dCode.output += 'T' + dos + ' = T' + uno + ' * ' + return_data.value.dimensionSize.get(i) + ';\n';
-                        console_1._3dCode.output += 'T' + uno + ' = T' + dos + ' + T' + tempList[i] + ';\n';
+        if (this.dimensions == null) {
+            let return_data = environment.get_variable_recursive(this.id, environment);
+            environment.modifySize_recursive(this.id, environment, 0);
+        }
+        else {
+            let return_data = environment.get_variable_recursive(this.id, environment);
+            this.expr.translate(environment);
+            let exprTemp = console_1._3dCode.actualTemp;
+            let tempList = [];
+            if (return_data.type != type_1.type.UNDEFINED) {
+                if (return_data.value instanceof _array_1._array) {
+                    for (let dimension of this.dimensions) {
+                        dimension.translate(environment);
+                        tempList.push(console_1._3dCode.actualTemp);
                     }
+                    console_1._3dCode.actualTemp++;
+                    let uno = console_1._3dCode.actualTemp;
+                    console_1._3dCode.actualTemp++;
+                    let dos = console_1._3dCode.actualTemp;
+                    for (let i = 0; i < tempList.length; i++) {
+                        if (i == 0)
+                            console_1._3dCode.output += 'T' + uno + ' = T' + tempList[i] + ';\n';
+                        else {
+                            console_1._3dCode.output += 'T' + dos + ' = T' + uno + ' * ' + return_data.value.dimensionSize.get(i) + ';\n';
+                            console_1._3dCode.output += 'T' + uno + ' = T' + dos + ' + T' + tempList[i] + ';\n';
+                        }
+                    }
+                    console_1._3dCode.actualTemp++;
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
+                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
+                    console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
                 }
-                console_1._3dCode.actualTemp++;
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + environment.get_relative_recursive(this.id, environment) + ';//Set array initial position\n';
-                console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
-                console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
+                else {
+                }
             }
             else {
             }
-        }
-        else {
         }
         return type_1.type.NULL;
     }

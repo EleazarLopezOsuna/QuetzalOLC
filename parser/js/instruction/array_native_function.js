@@ -13,7 +13,29 @@ class array_native_function extends instruction_1.instruction {
         this.parameter = parameter;
     }
     translate(environment) {
-        throw new Error("Method not implemented.");
+        const return_data = this.id.execute(environment);
+        if (!(return_data.value instanceof _array_1._array)) {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no es un array'));
+            return type_1.type.NULL;
+        }
+        switch (this.option) {
+            case "pop":
+                return return_data.type;
+            case "push":
+                if (this.parameter == null) {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'El push no puede venir vacio'));
+                    return type_1.type.NULL;
+                }
+                const parameter_data = this.parameter.translate(environment);
+                if (parameter_data != return_data.type) {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'El parametro tiene que ser del mismo tipo de dato que el array'));
+                    return type_1.type.NULL;
+                }
+                return_data.value.body.push(this.parameter);
+                return parameter_data;
+        }
+        // Default
+        return type_1.type.NULL;
     }
     execute(environment) {
         const return_data = this.id.execute(environment);
