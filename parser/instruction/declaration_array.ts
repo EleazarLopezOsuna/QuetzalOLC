@@ -14,7 +14,7 @@ export class declaration_array extends instruction {
     public translate(environment: environment): type {
         if (this.value == null) {
             if (environment.get_variable_recursive(this.variable_id, environment).type != type.UNDEFINED) {
-
+                error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             } else {
                 _3dCode.actualTemp++;
                 _3dCode.output += '//Array ' + this.variable_id + ' will be stored in stack, start position: ' + _3dCode.relativePos + ' of this context\n';

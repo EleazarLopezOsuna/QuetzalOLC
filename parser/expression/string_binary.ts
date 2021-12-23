@@ -39,7 +39,7 @@ export class string_binary extends expression {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
-
+                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' CONCAT ' + rightType));
                 }
                 break;
             case string_binary_type.REPEAT:
@@ -63,7 +63,7 @@ export class string_binary extends expression {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
-
+                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' REPEAT ' + rightType));
                 }
                 break;
             case string_binary_type.POSITION:
@@ -87,7 +87,7 @@ export class string_binary extends expression {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
-
+                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' POSITION ' + rightType));
                 }
                 break;
         }

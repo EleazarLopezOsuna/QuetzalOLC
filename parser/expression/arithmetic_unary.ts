@@ -26,7 +26,7 @@ export class arithmetic_unary extends expression {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = sqrt(T' + exprTemp + ');//Get sqrt\n';
                         return type.FLOAT;
                     default:
-
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: SQRT ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.COS:
@@ -37,7 +37,7 @@ export class arithmetic_unary extends expression {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get cos\n';
                         return type.FLOAT;
                     default:
-
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: COS ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.SIN:
@@ -47,7 +47,7 @@ export class arithmetic_unary extends expression {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sin\n';
                         return type.FLOAT;
                     default:
-
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: SIN ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.TAN:
@@ -57,7 +57,7 @@ export class arithmetic_unary extends expression {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get tan\n';
                         return type.FLOAT;
                     default:
-
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: TAN ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.LOG10:
@@ -67,7 +67,7 @@ export class arithmetic_unary extends expression {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get log10\n';
                         return type.FLOAT;
                     default:
-
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar: LOG10 ' + exprType));
                 }
                 break;
 

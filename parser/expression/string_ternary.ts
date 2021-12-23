@@ -42,7 +42,7 @@ export class string_ternary extends expression {
                     _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                     return type.STRING;
                 } else {
-
+                    error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar substring ' + firstType + ' & ' + secondType + ' & ' + thirdType));
                 }
                 break;
         }

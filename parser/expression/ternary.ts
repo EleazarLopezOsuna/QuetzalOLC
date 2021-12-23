@@ -32,7 +32,7 @@ export class ternary extends expression {
             _3dCode.output += 'L' + exitTag + ':\n';
             return trueType;
         } else {
-
+            error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar opreacion ternaria: ' + conditionType + ' & ' + trueType + ' & ' + falseType));
         }
         // Default
         return type.NULL

@@ -47,11 +47,9 @@ export class assignation_array extends instruction {
                     }
                     _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                     _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
-                } else {
-
                 }
             } else {
-
+                error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable no inicializada'));
             }
         }
         return type.NULL

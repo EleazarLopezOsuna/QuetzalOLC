@@ -42,6 +42,7 @@ export class string_unary extends expression {
                             return type.INTEGER
                         }
                 }
+                error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar length para: ' + exprType));
                 break;
             case string_unary_type.UPPERCASE:
                 switch (exprType) {
@@ -62,7 +63,7 @@ export class string_unary extends expression {
                         _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                         return type.STRING;
                     default:
-
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar uppercase para: ' + exprType));
                 }
                 break;
             case string_unary_type.LOWERCASE:
@@ -84,7 +85,7 @@ export class string_unary extends expression {
                         _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                         return type.STRING;
                     default:
-
+                        error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'No se puede operar lowecase para: ' + exprType));
                 }
                 break;
         }

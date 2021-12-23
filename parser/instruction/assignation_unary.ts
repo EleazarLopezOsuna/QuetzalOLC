@@ -23,10 +23,10 @@ export class assignation_unary extends instruction {
                 _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
                 _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + exprTemp + ';//Update value for variable ' + this.id + '\n';
             } else {
-
+                error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Tipo diferente, no se puede asignar'));
             }
         } else {
-
+            error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable no inicializada'));
         }
         // Default
         return type.NULL

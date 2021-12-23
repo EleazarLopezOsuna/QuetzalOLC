@@ -65,10 +65,10 @@ export class array_access extends instruction {
                 _3dCode.output += 'L' + lExit + ':\n';
                 return return_data.type
             } else {
-
+                error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable no es un array: ' + this.id));
             }
         } else {
-
+            error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'Variable no definida: ' + this.id));
         }
         return type.NULL
     }
