@@ -50,7 +50,7 @@ void main(){
     int resultado = toInt(val4);  //144917
     if(resultado == 144917){
         println("Aritmeticas 100");
-        aritmeticas = 1;
+        aritmeticas = 1.0;
     }
     String String_3 = " ";
     String String_4 = " ";
