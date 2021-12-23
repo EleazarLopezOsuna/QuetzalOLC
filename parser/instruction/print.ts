@@ -104,6 +104,78 @@ export class print extends instruction {
                     case type.FLOAT:
                         _3dCode.output += 'printf("%f", T' + _3dCode.actualTemp + ');//Print float\n';
                         break;
+                    case type.STRUCT:
+                        let eleVar = element as variable_id;
+                        let structType = environment.getStructType_recursive(eleVar.id, environment);
+                        const relativePos = environment.get_relative_recursive(eleVar.id, environment);
+                        let contador = 1;
+                        let itemData;
+                        _3dCode.actualTemp++;
+                        _3dCode.environmentList.forEach(envi => {
+                            if (envi.name === structType) {
+                                envi.symbol_map.forEach(item => {
+                                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
+                                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + ' + contador + ';\n';
+                                    _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];\n';
+                                    if(contador != 1){
+                                        _3dCode.output += 'printf("%c", 44);//Print integer\n';
+                                        _3dCode.output += 'printf("%c", 32);//Print integer\n';
+                                    }
+                                    itemData = item.data as data
+                                    switch (itemData.type) {
+                                        case type.BOOLEAN:
+                                            _3dCode.actualTag++
+                                            const trueTag = _3dCode.actualTag;
+                                            _3dCode.actualTag++
+                                            const falseTag = _3dCode.actualTag;
+                                            _3dCode.actualTag++
+                                            const exitTag = _3dCode.actualTag;
+                                            _3dCode.output += 'if(T' + _3dCode.actualTemp + ' == 0) goto L' + trueTag + ';//Check if False\n';
+                                            _3dCode.output += 'goto L' + falseTag + ';\n';
+                                            _3dCode.output += 'L' + trueTag + '://True tag\n';
+                                            _3dCode.output += 'printf("%c", 70);//Print F\n';
+                                            _3dCode.output += 'printf("%c", 97);//Print a\n';
+                                            _3dCode.output += 'printf("%c", 108);//Print l\n';
+                                            _3dCode.output += 'printf("%c", 115);//Print s\n';
+                                            _3dCode.output += 'printf("%c", 101);//Print e\n';
+                                            _3dCode.output += 'goto L' + exitTag + ';\n';
+                                            _3dCode.output += 'L' + falseTag + '://True tag\n';
+                                            _3dCode.output += 'printf("%c", 84);//Print T\n';
+                                            _3dCode.output += 'printf("%c", 114);//Print r\n';
+                                            _3dCode.output += 'printf("%c", 117);//Print u\n';
+                                            _3dCode.output += 'printf("%c", 101);//Print e\n';
+                                            _3dCode.output += 'goto L' + exitTag + ';\n';
+                                            _3dCode.output += 'L' + exitTag + ':\n';
+                                            break;
+                                        case type.CHAR:
+                                        case type.STRING:
+                                            const elementTemp = _3dCode.actualTemp;
+                                            _3dCode.actualTemp++;
+                                            const savedEnvironment = _3dCode.actualTemp;
+                                            _3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                                            _3dCode.output += 'SP = 3;//Set StringPrint environment\n';
+                                            _3dCode.actualTemp++;
+                                            _3dCode.output += 'T' + _3dCode.actualTemp + ' = ' + 'SP + 0;//Set string position\n';
+                                            _3dCode.output += 'STACK[(int)T' + _3dCode.actualTemp + '] = T' + elementTemp + ';//Save string\n';
+                                            _3dCode.output += 'StringPrint();//Call function\n';
+                                            _3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                                            break;
+                                        case type.INTEGER:
+                                            _3dCode.output += 'printf("%d", (int)T' + _3dCode.actualTemp + ');//Print integer\n';
+                                            break;
+                                        case type.FLOAT:
+                                            _3dCode.output += 'printf("%f", T' + _3dCode.actualTemp + ');//Print float\n';
+                                            break;
+                                        default:
+                                            console.log(elementType)
+                                            break;
+                                    }
+                                    contador++;
+                                })
+                                return
+                            }
+                        })
+                        break;
                     default:
                         console.log(elementType)
                         break;

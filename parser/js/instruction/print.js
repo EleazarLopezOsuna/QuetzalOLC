@@ -108,6 +108,78 @@ class print extends instruction_1.instruction {
                     case type_1.type.FLOAT:
                         console_1._3dCode.output += 'printf("%f", T' + console_1._3dCode.actualTemp + ');//Print float\n';
                         break;
+                    case type_1.type.STRUCT:
+                        let eleVar = element;
+                        let structType = environment.getStructType_recursive(eleVar.id, environment);
+                        const relativePos = environment.get_relative_recursive(eleVar.id, environment);
+                        let contador = 1;
+                        let itemData;
+                        console_1._3dCode.actualTemp++;
+                        console_1._3dCode.environmentList.forEach(envi => {
+                            if (envi.name === structType) {
+                                envi.symbol_map.forEach(item => {
+                                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
+                                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + ' + contador + ';\n';
+                                    console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];\n';
+                                    if (contador != 1) {
+                                        console_1._3dCode.output += 'printf("%c", 44);//Print integer\n';
+                                        console_1._3dCode.output += 'printf("%c", 32);//Print integer\n';
+                                    }
+                                    itemData = item.data;
+                                    switch (itemData.type) {
+                                        case type_1.type.BOOLEAN:
+                                            console_1._3dCode.actualTag++;
+                                            const trueTag = console_1._3dCode.actualTag;
+                                            console_1._3dCode.actualTag++;
+                                            const falseTag = console_1._3dCode.actualTag;
+                                            console_1._3dCode.actualTag++;
+                                            const exitTag = console_1._3dCode.actualTag;
+                                            console_1._3dCode.output += 'if(T' + console_1._3dCode.actualTemp + ' == 0) goto L' + trueTag + ';//Check if False\n';
+                                            console_1._3dCode.output += 'goto L' + falseTag + ';\n';
+                                            console_1._3dCode.output += 'L' + trueTag + '://True tag\n';
+                                            console_1._3dCode.output += 'printf("%c", 70);//Print F\n';
+                                            console_1._3dCode.output += 'printf("%c", 97);//Print a\n';
+                                            console_1._3dCode.output += 'printf("%c", 108);//Print l\n';
+                                            console_1._3dCode.output += 'printf("%c", 115);//Print s\n';
+                                            console_1._3dCode.output += 'printf("%c", 101);//Print e\n';
+                                            console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                                            console_1._3dCode.output += 'L' + falseTag + '://True tag\n';
+                                            console_1._3dCode.output += 'printf("%c", 84);//Print T\n';
+                                            console_1._3dCode.output += 'printf("%c", 114);//Print r\n';
+                                            console_1._3dCode.output += 'printf("%c", 117);//Print u\n';
+                                            console_1._3dCode.output += 'printf("%c", 101);//Print e\n';
+                                            console_1._3dCode.output += 'goto L' + exitTag + ';\n';
+                                            console_1._3dCode.output += 'L' + exitTag + ':\n';
+                                            break;
+                                        case type_1.type.CHAR:
+                                        case type_1.type.STRING:
+                                            const elementTemp = console_1._3dCode.actualTemp;
+                                            console_1._3dCode.actualTemp++;
+                                            const savedEnvironment = console_1._3dCode.actualTemp;
+                                            console_1._3dCode.output += 'T' + savedEnvironment + ' = SP;//Save environment\n';
+                                            console_1._3dCode.output += 'SP = 3;//Set StringPrint environment\n';
+                                            console_1._3dCode.actualTemp++;
+                                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = ' + 'SP + 0;//Set string position\n';
+                                            console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + elementTemp + ';//Save string\n';
+                                            console_1._3dCode.output += 'StringPrint();//Call function\n';
+                                            console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
+                                            break;
+                                        case type_1.type.INTEGER:
+                                            console_1._3dCode.output += 'printf("%d", (int)T' + console_1._3dCode.actualTemp + ');//Print integer\n';
+                                            break;
+                                        case type_1.type.FLOAT:
+                                            console_1._3dCode.output += 'printf("%f", T' + console_1._3dCode.actualTemp + ');//Print float\n';
+                                            break;
+                                        default:
+                                            console.log(elementType);
+                                            break;
+                                    }
+                                    contador++;
+                                });
+                                return;
+                            }
+                        });
+                        break;
                     default:
                         console.log(elementType);
                         break;
