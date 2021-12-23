@@ -17,8 +17,10 @@ class _graficarts extends instruction_1.instruction {
         console_1._3dCode.symbolTables += '</tr>\n';
         console_1._3dCode.symbolTables += '</thead>\n';
         console_1._3dCode.symbolTables += '<tbody>\n';
+        let count = 0;
         console_1._3dCode.environmentList.forEach(envi => {
-            console_1._3dCode.symbolTables += envi.get_html_translation();
+            console_1._3dCode.symbolTables += envi.get_html_translation(count);
+            count += envi.symbol_map.size;
         });
         console_1._3dCode.symbolTables += '</tbody>\n';
         console_1._3dCode.symbolTables += '</table>\n';

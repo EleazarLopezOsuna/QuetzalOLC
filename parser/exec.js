@@ -4324,8 +4324,10 @@ class _graficarts extends instruction_1.instruction {
         console_1._3dCode.symbolTables += '</tr>\n';
         console_1._3dCode.symbolTables += '</thead>\n';
         console_1._3dCode.symbolTables += '<tbody>\n';
+        let count = 0;
         console_1._3dCode.environmentList.forEach(envi => {
-            console_1._3dCode.symbolTables += envi.get_html_translation();
+            console_1._3dCode.symbolTables += envi.get_html_translation(count);
+            count += envi.symbol_map.size;
         });
         console_1._3dCode.symbolTables += '</tbody>\n';
         console_1._3dCode.symbolTables += '</table>\n';
@@ -7345,9 +7347,8 @@ class environment {
         this.name = '';
         this.stop_flag = false;
     }
-    get_html_translation() {
+    get_html_translation(count) {
         let result = '';
-        let count = 1;
         this.symbol_map.forEach(element => {
             result += '<tr>\n';
             result += '<th scope="row">' + count + '</th>\n';

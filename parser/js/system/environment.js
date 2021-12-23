@@ -18,9 +18,8 @@ class environment {
         this.name = '';
         this.stop_flag = false;
     }
-    get_html_translation() {
+    get_html_translation(count) {
         let result = '';
-        let count = 1;
         this.symbol_map.forEach(element => {
             result += '<tr>\n';
             result += '<th scope="row">' + count + '</th>\n';

@@ -24,9 +24,8 @@ export class environment {
         this.stop_flag = false;
     }
 
-    public get_html_translation(): string {
+    public get_html_translation(count: number): string {
         let result = ''
-        let count = 1;
         this.symbol_map.forEach(element => {
             result += '<tr>\n';
             result += '<th scope="row">' + count + '</th>\n';

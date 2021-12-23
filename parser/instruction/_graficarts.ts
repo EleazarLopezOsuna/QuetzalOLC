@@ -18,8 +18,10 @@ export class _graficarts extends instruction {
         _3dCode.symbolTables += '</tr>\n';
         _3dCode.symbolTables += '</thead>\n';
         _3dCode.symbolTables += '<tbody>\n';
+        let count = 0;
         _3dCode.environmentList.forEach(envi => {
-            _3dCode.symbolTables += envi.get_html_translation();
+            _3dCode.symbolTables += envi.get_html_translation(count);
+            count += envi.symbol_map.size;
         });
         _3dCode.symbolTables += '</tbody>\n';
         _3dCode.symbolTables += '</table>\n';
