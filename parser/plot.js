@@ -869,6 +869,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' + T' + rightTemp + ';\n';
                         return dominant_type;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' + ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.MINUS:
@@ -879,6 +880,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' - T' + rightTemp + ';\n';
                         return dominant_type;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' - ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.TIMES:
@@ -889,6 +891,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' * T' + rightTemp + ';\n';
                         return dominant_type;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' * ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.POWER:
@@ -913,6 +916,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                         return type_1.type.INTEGER;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' POW ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.MOD:
@@ -923,6 +927,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = (int)T' + leftTemp + ' % (int)T' + rightTemp + ';\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' MOD ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.DIV:
@@ -947,6 +952,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'L' + exitTag + ':\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' / ' + right_data));
                 }
                 break;
         }
@@ -1089,6 +1095,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sqrt(T' + exprTemp + ');//Get sqrt\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: SQRT ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.COS:
@@ -1099,6 +1106,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get cos\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: COS ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.SIN:
@@ -1109,6 +1117,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sin\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: SIN ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.TAN:
@@ -1119,6 +1128,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get tan\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: TAN ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.LOG10:
@@ -1129,6 +1139,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get log10\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: LOG10 ' + exprType));
                 }
                 break;
         }
@@ -1586,6 +1597,7 @@ class string_binary extends expression_1.expression {
                     return type_1.type.STRING;
                 }
                 else {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' CONCAT ' + rightType));
                 }
                 break;
             case string_binary_type.REPEAT:
@@ -1610,6 +1622,7 @@ class string_binary extends expression_1.expression {
                     return type_1.type.STRING;
                 }
                 else {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' REPEAT ' + rightType));
                 }
                 break;
             case string_binary_type.POSITION:
@@ -1634,6 +1647,7 @@ class string_binary extends expression_1.expression {
                     return type_1.type.STRING;
                 }
                 else {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' POSITION ' + rightType));
                 }
                 break;
         }
@@ -1755,6 +1769,7 @@ class string_ternary extends expression_1.expression {
                     return type_1.type.STRING;
                 }
                 else {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar substring ' + firstType + ' & ' + secondType + ' & ' + thirdType));
                 }
                 break;
         }
@@ -1849,6 +1864,7 @@ class string_unary extends expression_1.expression {
                             return type_1.type.INTEGER;
                         }
                 }
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar length para: ' + exprType));
                 break;
             case string_unary_type.UPPERCASE:
                 switch (exprType) {
@@ -1869,6 +1885,7 @@ class string_unary extends expression_1.expression {
                         console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                         return type_1.type.STRING;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar uppercase para: ' + exprType));
                 }
                 break;
             case string_unary_type.LOWERCASE:
@@ -1890,6 +1907,7 @@ class string_unary extends expression_1.expression {
                         console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                         return type_1.type.STRING;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar lowecase para: ' + exprType));
                 }
                 break;
         }
@@ -1994,6 +2012,7 @@ class ternary extends expression_1.expression {
             return trueType;
         }
         else {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar opreacion ternaria: ' + conditionType + ' & ' + trueType + ' & ' + falseType));
         }
         // Default
         return type_1.type.NULL;
@@ -2060,6 +2079,7 @@ class unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + exprTemp + ' = T' + exprTemp + ' * -1;\n';
                         return exprType;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar - para: ' + exprType));
                 }
                 break;
             case unary_type.LOGIC:
@@ -2084,6 +2104,7 @@ class unary extends expression_1.expression {
                         console_1._3dCode.output += 'L' + exitTag + ':\n';
                         return type_1.type.BOOLEAN;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar ! para: ' + exprType));
                 }
                 break;
         }
@@ -4781,9 +4802,11 @@ class array_access extends instruction_1.instruction {
                 return return_data.type;
             }
             else {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no es un array: ' + this.id));
             }
         }
         else {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no definida: ' + this.id));
         }
         return type_1.type.NULL;
     }
@@ -4990,10 +5013,9 @@ class assignation_array extends instruction_1.instruction {
                     console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + T' + uno + ';//Add index\n';
                     console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + ']' + ' = T' + exprTemp + ';//Get value\n';
                 }
-                else {
-                }
             }
             else {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no inicializada'));
             }
         }
         return type_1.type.NULL;
@@ -5094,9 +5116,11 @@ class assignation_unary extends instruction_1.instruction {
                 console_1._3dCode.output += 'STACK[(int)T' + console_1._3dCode.actualTemp + '] = T' + exprTemp + ';//Update value for variable ' + this.id + '\n';
             }
             else {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Tipo diferente, no se puede asignar'));
             }
         }
         else {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no inicializada'));
         }
         // Default
         return type_1.type.NULL;
@@ -5271,6 +5295,7 @@ class declaration_array extends instruction_1.instruction {
     translate(environment) {
         if (this.value == null) {
             if (environment.get_variable_recursive(this.variable_id, environment).type != type_1.type.UNDEFINED) {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             }
             else {
                 console_1._3dCode.actualTemp++;

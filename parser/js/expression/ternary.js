@@ -39,6 +39,7 @@ class ternary extends expression_1.expression {
             return trueType;
         }
         else {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar opreacion ternaria: ' + conditionType + ' & ' + trueType + ' & ' + falseType));
         }
         // Default
         return type_1.type.NULL;

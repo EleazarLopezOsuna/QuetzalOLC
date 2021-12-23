@@ -31,6 +31,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sqrt(T' + exprTemp + ');//Get sqrt\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: SQRT ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.COS:
@@ -41,6 +42,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = cos(T' + exprTemp + ');//Get cos\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: COS ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.SIN:
@@ -51,6 +53,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = sin(T' + exprTemp + ');//Get sin\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: SIN ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.TAN:
@@ -61,6 +64,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = tan(T' + exprTemp + ');//Get tan\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: TAN ' + exprType));
                 }
                 break;
             case arithmetic_unary_type.LOG10:
@@ -71,6 +75,7 @@ class arithmetic_unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = log10(T' + exprTemp + ');//Get log10\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: LOG10 ' + exprType));
                 }
                 break;
         }

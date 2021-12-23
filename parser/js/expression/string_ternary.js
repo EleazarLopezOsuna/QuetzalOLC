@@ -50,6 +50,7 @@ class string_ternary extends expression_1.expression {
                     return type_1.type.STRING;
                 }
                 else {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar substring ' + firstType + ' & ' + secondType + ' & ' + thirdType));
                 }
                 break;
         }

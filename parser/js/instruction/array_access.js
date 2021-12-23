@@ -69,9 +69,11 @@ class array_access extends instruction_1.instruction {
                 return return_data.type;
             }
             else {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no es un array: ' + this.id));
             }
         }
         else {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable no definida: ' + this.id));
         }
         return type_1.type.NULL;
     }

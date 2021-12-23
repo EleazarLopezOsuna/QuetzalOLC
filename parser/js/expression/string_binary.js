@@ -46,6 +46,7 @@ class string_binary extends expression_1.expression {
                     return type_1.type.STRING;
                 }
                 else {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' CONCAT ' + rightType));
                 }
                 break;
             case string_binary_type.REPEAT:
@@ -70,6 +71,7 @@ class string_binary extends expression_1.expression {
                     return type_1.type.STRING;
                 }
                 else {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' REPEAT ' + rightType));
                 }
                 break;
             case string_binary_type.POSITION:
@@ -94,6 +96,7 @@ class string_binary extends expression_1.expression {
                     return type_1.type.STRING;
                 }
                 else {
+                    error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + leftType + ' POSITION ' + rightType));
                 }
                 break;
         }

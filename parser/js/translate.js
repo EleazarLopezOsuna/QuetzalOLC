@@ -7,6 +7,11 @@ const error_1 = require("./system/error");
 window.translate = function (input) {
     console_1._3dCode.clean();
     try {
+        if (error_1.error_arr.length > 0) {
+            for (let i = 0; i < error_1.error_arr.length; i++) {
+                error_1.error_arr.pop();
+            }
+        }
         const ast = parser.parse(input);
         const main_environment = new environment_1.environment(null);
         main_environment.name = 'Global';
@@ -33,7 +38,7 @@ window.translate = function (input) {
                 console_1._3dCode.symbolTables += '</tr>\n';
                 console_1._3dCode.symbolTables += '</thead>\n';
                 console_1._3dCode.symbolTables += '<tbody>\n';
-                console_1._3dCode.symbolTables += envi.get_html_translation();
+                console_1._3dCode.symbolTables += envi.get_html_translation(0);
                 console_1._3dCode.symbolTables += '</tbody>\n';
                 console_1._3dCode.symbolTables += '</table>\n';
                 console_1._3dCode.symbolTables += '</div>\n';

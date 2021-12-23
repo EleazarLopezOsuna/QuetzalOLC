@@ -93,6 +93,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' + T' + rightTemp + ';\n';
                         return dominant_type;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' + ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.MINUS:
@@ -103,6 +104,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' - T' + rightTemp + ';\n';
                         return dominant_type;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' - ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.TIMES:
@@ -113,6 +115,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + leftTemp + ' * T' + rightTemp + ';\n';
                         return dominant_type;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' * ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.POWER:
@@ -137,6 +140,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'SP = T' + savedEnvironment + ';//Recover environment\n';
                         return type_1.type.INTEGER;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' POW ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.MOD:
@@ -147,6 +151,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = (int)T' + leftTemp + ' % (int)T' + rightTemp + ';\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' MOD ' + right_data));
                 }
                 break;
             case arithmetic_binary_type.DIV:
@@ -171,6 +176,7 @@ class arithmetic_binary extends expression_1.expression {
                         console_1._3dCode.output += 'L' + exitTag + ':\n';
                         return type_1.type.FLOAT;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar: ' + left_data + ' / ' + right_data));
                 }
                 break;
         }

@@ -27,6 +27,7 @@ class unary extends expression_1.expression {
                         console_1._3dCode.output += 'T' + exprTemp + ' = T' + exprTemp + ' * -1;\n';
                         return exprType;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar - para: ' + exprType));
                 }
                 break;
             case unary_type.LOGIC:
@@ -51,6 +52,7 @@ class unary extends expression_1.expression {
                         console_1._3dCode.output += 'L' + exitTag + ':\n';
                         return type_1.type.BOOLEAN;
                     default:
+                        error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'No se puede operar ! para: ' + exprType));
                 }
                 break;
         }

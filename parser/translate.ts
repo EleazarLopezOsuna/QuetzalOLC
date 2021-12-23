@@ -6,6 +6,11 @@ import { error_arr } from "./system/error";
 (<any>window).translate = function (input: string): string {
     _3dCode.clean();
     try {
+        if(error_arr.length > 0){
+            for(let i = 0; i < error_arr.length; i++){
+                error_arr.pop();
+            }
+        }
         const ast = parser.parse(input);
         const main_environment = new environment(null);
         main_environment.name = 'Global';
@@ -31,7 +36,7 @@ import { error_arr } from "./system/error";
                 _3dCode.symbolTables += '</tr>\n';
                 _3dCode.symbolTables += '</thead>\n';
                 _3dCode.symbolTables += '<tbody>\n';
-                _3dCode.symbolTables += envi.get_html_translation();
+                _3dCode.symbolTables += envi.get_html_translation(0);
                 _3dCode.symbolTables += '</tbody>\n';
                 _3dCode.symbolTables += '</table>\n';
                 _3dCode.symbolTables += '</div>\n';

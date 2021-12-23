@@ -1,118 +1,3206 @@
-int var1 = 10;
-int var2 = 20;
-double punteoBasicas = 0.0;
-double declaracion, asignacion, aritmeticas, relacionales, logicas, Print;
+#include <stdio.h>
+#include <math.h>
+float HEAP[100000000];
+float STACK[100000000];
+float HP;
+float SP;
+float mainStart;
+float T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43, T44, T45, T46, T47, T48, T49, T50, T51, T52, T53, T54, T55, T56, T57, T58, T59, T60, T61, T62, T63, T64, T65, T66, T67, T68, T69, T70, T71, T72, T73, T74, T75, T76, T77, T78, T79, T80, T81, T82, T83, T84, T85, T86, T87, T88, T89, T90, T91, T92, T93, T94, T95, T96, T97, T98, T99, T100, T101, T102, T103, T104, T105, T106, T107, T108, T109, T110, T111, T112, T113, T114, T115, T116, T117, T118, T119, T120, T121, T122, T123, T124, T125, T126, T127, T128, T129, T130, T131, T132, T133, T134, T135, T136, T137, T138, T139, T140, T141, T142, T143, T144, T145, T146, T147, T148, T149, T150, T151, T152, T153, T154, T155, T156, T157, T158, T159, T160, T161, T162, T163, T164, T165, T166, T167, T168, T169, T170, T171, T172, T173, T174, T175, T176, T177, T178, T179, T180, T181, T182, T183, T184, T185, T186, T187, T188, T189, T190, T191, T192, T193, T194, T195, T196, T197, T198, T199, T200, T201, T202, T203, T204, T205, T206, T207, T208, T209, T210, T211, T212, T213, T214, T215, T216, T217, T218, T219, T220, T221, T222, T223, T224, T225, T226, T227, T228, T229, T230, T231, T232, T233, T234, T235, T236, T237, T238, T239, T240, T241, T242, T243, T244, T245, T246, T247, T248, T249, T250, T251, T252, T253, T254, T255, T256, T257, T258, T259, T260, T261, T262, T263, T264, T265, T266, T267, T268, T269, T270, T271, T272, T273, T274, T275, T276, T277, T278, T279, T280, T281, T282, T283, T284, T285, T286, T287, T288, T289, T290, T291, T292, T293, T294, T295, T296, T297, T298, T299, T300, T301, T302, T303, T304, T305, T306, T307, T308, T309, T310, T311, T312, T313, T314, T315, T316, T317, T318, T319, T320, T321, T322, T323, T324, T325, T326, T327, T328, T329, T330, T331, T332, T333, T334, T335, T336, T337, T338, T339, T340, T341, T342, T343, T344, T345, T346, T347, T348, T349, T350, T351, T352, T353, T354, T355, T356, T357, T358, T359, T360, T361, T362, T363, T364, T365, T366, T367, T368, T369, T370, T371, T372, T373, T374, T375, T376, T377, T378, T379, T380, T381, T382, T383, T384, T385, T386, T387, T388, T389, T390, T391, T392, T393, T394, T395, T396, T397, T398, T399, T400, T401, T402, T403, T404, T405, T406, T407, T408, T409, T410, T411, T412, T413, T414, T415, T416, T417, T418, T419, T420, T421, T422, T423, T424, T425, T426, T427, T428, T429, T430, T431, T432, T433, T434, T435, T436, T437, T438, T439, T440, T441, T442, T443, T444, T445, T446, T447, T448, T449, T450, T451, T452, T453, T454, T455, T456, T457, T458, T459, T460, T461, T462, T463, T464, T465, T466, T467, T468, T469, T470, T471, T472, T473, T474, T475, T476, T477, T478, T479, T480, T481, T482, T483, T484, T485, T486, T487, T488, T489, T490, T491, T492, T493, T494, T495, T496, T497, T498, T499, T500, T501, T502, T503, T504, T505, T506, T507, T508, T509, T510, T511, T512, T513, T514, T515, T516, T517, T518, T519, T520, T521, T522, T523, T524, T525, T526, T527, T528, T529, T530, T531, T532, T533, T534, T535, T536, T537, T538, T539, T540, T541, T542, T543, T544, T545, T546, T547, T548, T549, T550, T551, T552, T553, T554, T555, T556, T557, T558, T559, T560, T561, T562, T563, T564, T565, T566, T567, T568, T569, T570, T571, T572, T573, T574, T575, T576, T577, T578, T579, T580, T581, T582, T583, T584, T585, T586, T587, T588, T589, T590, T591, T592, T593, T594, T595, T596, T597, T598, T599, T600, T601, T602, T603, T604, T605, T606, T607, T608, T609, T610, T611, T612, T613, T614, T615, T616, T617, T618, T619, T620, T621, T622, T623, T624, T625, T626, T627, T628, T629, T630, T631, T632, T633, T634, T635, T636, T637, T638, T639, T640, T641, T642, T643, T644, T645, T646, T647, T648, T649, T650, T651, T652, T653, T654, T655, T656, T657, T658, T659, T660, T661, T662, T663, T664, T665, T666, T667, T668, T669, T670, T671, T672, T673, T674, T675, T676, T677, T678, T679, T680, T681, T682, T683, T684, T685, T686, T687, T688, T689, T690, T691, T692, T693, T694, T695, T696, T697, T698, T699, T700, T701, T702, T703, T704, T705, T706, T707, T708, T709, T710, T711, T712, T713, T714, T715, T716, T717, T718, T719, T720, T721, T722, T723, T724, T725, T726, T727, T728, T729, T730, T731, T732, T733, T734, T735, T736, T737, T738, T739, T740, T741, T742, T743, T744, T745, T746, T747, T748, T749, T750, T751, T752, T753, T754, T755, T756, T757, T758, T759, T760, T761, T762, T763, T764, T765, T766, T767, T768, T769, T770, T771, T772, T773, T774, T775, T776, T777, T778, T779, T780, T781, T782, T783, T784, T785, T786, T787, T788, T789, T790, T791, T792, T793, T794, T795, T796, T797, T798, T799, T800, T801, T802, T803, T804, T805, T806, T807, T808, T809, T810, T811, T812, T813, T814;
+void StringConcat(){
+T0 = SP + 1;//Get stack position of first string
+T0 = STACK[(int)T0];//Get heap position of first string
+T1 = HP;//Save first position of new string
+L0://First loop tag
+T2 = HEAP[(int)T0];//Get character in heap
+if(T2 == 36) goto L1;//Check if character is end of string
+HEAP[(int)HP] = T2;//Save character in heap
+HP = HP + 1;//Increase heap
+T0 = T0 + 1;//Increase iterator
+goto L0;//Return to first loop
+L1://Exit of first loop
+T0 = SP + 2;//Get stack position of second string
+T0 = STACK[(int)T0];//Get heap position of second string
+L2://Second loop tag
+T2 = HEAP[(int)T0];//Get character in heap
+if(T2 == 36) goto L3;//Check if character is end of string
+HEAP[(int)HP] = T2;//Save character in heap
+HP = HP + 1;//Increase heap
+T0 = T0 + 1;//Increase iterator
+goto L2;//Return to second loop
+L3://Exist of second loop
+HEAP[(int)HP] = 36;//Add end of string in heap
+HP = HP + 1;//Increase heap
+T0 = SP + 0;//Set return position
+STACK[(int)T0] = T1;//Save start position of new string
+return;//Go back
+}
 
-int dimension = 3;
-String[] arreglo = ["Estudiante1", "Estudiante2", "Estudiante3"];
-int[] tablero = [0,0,0,0,0,0,0,0,0];
-boolean[] estado = [false, false, false, false, false, false, false, false, false];
+void StringPrint(){
+T0 = SP + 0;
+T0 = STACK[(int)T0];
+L0:
+T1 = HEAP[(int)T0];
+if(T1 == 36) goto L1;
+if(T1 == -1) goto L1;
+printf("%c", (int)T1);
+T0 = T0 + 1;
+goto L0;
+L1:
+return;
+}
+
+void StringLowerCase(){
+T0 = SP + 1;//Get stack position of string
+T0 = STACK[(int)T0];//Get heap position
+T1 = HP;//Save position of new string
+L0://Loop tag
+T2 = HEAP[(int)T0];//Get character in heap
+if(T2 == 36) goto L2;//Check if character is end of string
+if(T2 < 65) goto L1;//Check if character < A
+if(T2 > 90) goto L1;//Check if character > Z
+T2 = T2 + 32;//Lower case
+L1: //No need to lower case tag
+HEAP[(int)HP] = T2;//Save character in heap
+HP = HP + 1;//Increase hp
+T0 = T0 + 1;//Increase iterator
+goto L0;//Go back to loop
+L2://Exit tag
+HEAP[(int)HP] = 36;//Add end of string in heap
+HP = HP + 1;//Increase heap
+T0 = SP + 0;//Get return position
+STACK[(int)T0] = T1;//Save start position of new string
+return;//Go back
+}
+
+void StringUpperCase(){
+T0 = SP + 1;//Get stack position of string
+T0 = STACK[(int)T0];//Get heap position
+T1 = HP;//Save position of new string
+L0://Loop tag
+T2 = HEAP[(int)T0];//Get character in heap
+if(T2 == 36) goto L2;//Check if character is end of string
+if(T2 < 97) goto L1;//Check if character < a
+if(T2 > 122) goto L1;//Check if character > z
+T2 = T2 - 32;//Lower case
+L1: //No need to lower case tag
+HEAP[(int)HP] = T2;//Save character in heap
+HP = HP + 1;//Increase hp
+T0 = T0 + 1;//Increase iterator
+goto L0;//Go back to loop
+L2://Exit tag
+HEAP[(int)HP] = 36;//Add end of string in heap
+HP = HP + 1;//Increase heap
+T0 = SP + 0;//Get return position
+STACK[(int)T0] = T1;//Save start position of new string
+return;//Go back
+}
+
+void StringTimes(){
+T0 = SP + 1;//Get stack position of string
+T0 = STACK[(int)T0];//Get heap position of string
+T1 = SP + 2;//Get number position
+T1 = STACK[(int)T1];//Get number of times the string will repeat
+T2 = HP;//Save start position of new string
+L0://Loop tag
+if(T1 < 1) goto L3;//Check if finish
+L1://Second loop tag
+T3 = HEAP[(int)T0];//Get character in heap
+if(T3 == 36) goto L2;//Check if character is end of string
+HEAP[(int)HP] = T3;//Save character in heap
+HP = HP + 1;//Increase HP
+T0 = T0 + 1;//Increase iterator
+goto L1;//Go back to second loop
+L2://End of string tag
+T1 = T1 -1;//Update counter
+T0 = SP + 1;//Get stack position of string
+T0 = STACK[(int)T0];//Get heap position of string
+goto L0;//Go back to first loop
+L3://Exit tag
+HEAP[(int)HP] = 36;//Add end of string to new string
+HP = HP + 1;//Increase HP
+T0 = SP + 0;//Set return position
+STACK[(int)T0] = T2;//Set return
+return;//
+}
+
+void NumberPower(){
+T0 = SP + 1;//Get base index
+T0 = STACK[(int)T0];//Get base value
+T1 = SP + 2;//Get exponent index
+T1 = STACK[(int)T1];//Get exponent value
+T2 = 1;//Set initial value
+L0://Loop tag
+if(T1 < 1) goto L1;//Check if completed
+T2 = T2 * T0;//Previous value * Base
+T1 = T1 - 1;//Iterator decreses
+goto L0;//Go back to loop
+L1://Exit tag
+T0 = SP + 0;//Set return index
+STACK[(int)T0] = T2;//Set return value
+return;//Go back
+}
+
+void intToString(){
+T0 = SP + 1; //Get number position
+T0 = STACK[(int)T0]; //Get number
+T1 = T0; //Make a copy
+T2 = 1; //counter
+L0:
+if(T1 < 10) goto L1;
+T3 = (int)T1 % 10; //temp%10
+T1 = T1 - T3; //temp -= temp%10
+T1 = T1 / 10; //temp /= 10
+T2 = T2 * 10; //contador *= 10
+goto L0;
+L1:
+T3 = T1 + 48; //Get ascii for number
+HEAP[(int)HP] = T3;
+HP = HP + 1;
+if(T0 > 9) goto L2;
+goto L3;
+L2:
+T1 = (int)T0 % (int)T2; //num %= contador
+T0 = SP + 1; //Get number position
+STACK[(int)T0] = T1;
+intToString();
+L3:
+HEAP[(int)HP] = 36; //Set end of string
+HP = HP + 1; //Increase HP
+return;
+}
+
+void OutOfBounds(){
+printf("%c", 79); //O
+printf("%c", 117); //u
+printf("%c", 116); //t
+printf("%c", 32); // 
+printf("%c", 111); //o
+printf("%c", 102); //f
+printf("%c", 32); // 
+printf("%c", 66); //B
+printf("%c", 111); //o
+printf("%c", 117); //u
+printf("%c", 110); //n
+printf("%c", 100); //d
+printf("%c", 115); //s
+return;
+}
+
+void DivisionBy0(){
+printf("%c", 68); //D
+printf("%c", 105); //i
+printf("%c", 118); //v
+printf("%c", 105); //i
+printf("%c", 115); //s
+printf("%c", 105); //i
+printf("%c", 111); //o
+printf("%c", 110); //n
+printf("%c", 32); // 
+printf("%c", 98); //b
+printf("%c", 121); //y
+printf("%c", 32); // 
+printf("%c", 48); //0
+return;
+}
+
+void StringLength(){
+T0 = SP + 1;
+T0 = STACK[(int)T0];
+T2 = 0;
+L0:
+T1 = HEAP[(int)T0];
+if(T1 == 36) goto L1;
+T2 = T2 + 1;
+T0 = T0 + 1;
+goto L0;
+L1:
+T0 = SP + 0;
+STACK[(int)T0] = T2;
+return;
+}
+
+void StringPosition(){
+T0 = SP + 1;
+T0 = STACK[(int)T0];
+T2 = SP + 2;
+T2 = STACK[(int)T2];
+T3 = 0;
+L0:
+T1 = HEAP[(int)T0];
+if(T1 == 36) goto L1;
+if(T3 == T2) goto L2;
+T3 = T3 + 1;
+T0 = T0 + 1;
+goto L0;
+L1:
+OutOfBounds();
+T0 = SP + 0;
+HEAP[(int)HP] = -1;//Set error code
+STACK[(int)T0] = HP;
+HP = HP + 1;
+return;
+L2:
+T0 = SP + 0;
+HEAP[(int)HP] = T1;
+STACK[(int)T0] = HP;
+HP = HP + 1;
+HEAP[(int)HP] = 36;
+HP = HP + 1;
+return;
+}
+
+void StringExtract(){
+T0 = SP + 1;//Get String starting position
+T0 = STACK[(int)T0];
+T5 = SP;//Save actual environment
+SP = 18;//Set StringLength environment
+T2 = SP + 1;
+STACK[(int)T2] = T0;//Set string
+StringLength();//Call StringLength
+T0 = SP + 0;//Set return position
+T0 = STACK[(int)T0];//Get return value
+T0 = T0 - 1;//Max value for start or finish position
+SP = T5;//Get environment back
+T1 = SP + 1;//Get String starting position
+T1 = STACK[(int)T1];
+T2 = SP + 2;//Get start position
+T2 = STACK[(int)T2];
+T3 = SP + 3;//Get finish position
+T3 = STACK[(int)T3];
+T4 = HP;//Save new string start position
+if(T2 > T0) goto L0;//Check if index is greater than length
+if(T3 > T0) goto L0;//Check if index is greater than length
+T2 = T1 + T2;//Update start position
+T3 = T1 + T3;//Update finish position
+goto L1;
+L1:
+T5 = HEAP[(int)T2];//Get character in heap
+if(T2 > T3) goto L2;//End of extraction
+HEAP[(int)HP] = T5;//Save character in heap
+HP = HP + 1;//Increase hp
+T2 = T2 + 1;//Increase iterator
+goto L1;//Go back to loop
+L0:
+OutOfBounds();
+T0 = SP + 0;
+HEAP[(int)HP] = -1;//Set error code
+STACK[(int)T0] = HP;
+HP = HP + 1;
+return;
+L2:
+HEAP[(int)HP] = 36;//Add end of string to new string
+HP = HP + 1;//Increase HP
+T0 = SP + 0;//Set return position
+STACK[(int)T0] = T4;//Set return
+return;
+}
+
+void getTypeOf(){
+T0 = SP + 1;//Get String starting position
+T0 = STACK[(int)T0];
+T1 = HP;
+if(T0 == 0) goto L0;//Type String
+if(T0 == 1) goto L1;//Type Int
+if(T0 == 2) goto L2;//Type Float
+if(T0 == 3) goto L3;//Type Char
+if(T0 == 4) goto L4;//Type Boolean
+if(T0 == 5) goto L5;//Type Struct
+if(T0 == 6) goto L6;//Type Null
+L0:
+HEAP[(int)HP] = 83;//S
+HP = HP + 1;
+HEAP[(int)HP] = 84;//T
+HP = HP + 1;
+HEAP[(int)HP] = 82;//R
+HP = HP + 1;
+HEAP[(int)HP] = 73;//I
+HP = HP + 1;
+HEAP[(int)HP] = 78;//N
+HP = HP + 1;
+HEAP[(int)HP] = 71;//G
+HP = HP + 1;
+HEAP[(int)HP] = 36;//End of string
+HP = HP + 1;
+goto L7;
+L1:
+HEAP[(int)HP] = 73;//I
+HP = HP + 1;
+HEAP[(int)HP] = 78;//N
+HP = HP + 1;
+HEAP[(int)HP] = 84;//T
+HP = HP + 1;
+HEAP[(int)HP] = 69;//E
+HP = HP + 1;
+HEAP[(int)HP] = 71;//G
+HP = HP + 1;
+HEAP[(int)HP] = 69;//E
+HP = HP + 1;
+HEAP[(int)HP] = 82;//R
+HP = HP + 1;
+HEAP[(int)HP] = 36;//End of string
+HP = HP + 1;
+goto L7;
+L2:
+HEAP[(int)HP] = 70;//F
+HP = HP + 1;
+HEAP[(int)HP] = 76;//L
+HP = HP + 1;
+HEAP[(int)HP] = 79;//O
+HP = HP + 1;
+HEAP[(int)HP] = 65;//A
+HP = HP + 1;
+HEAP[(int)HP] = 84;//T
+HP = HP + 1;
+HEAP[(int)HP] = 36;//End of string
+HP = HP + 1;
+goto L7;
+L3:
+HEAP[(int)HP] = 67;//C
+HP = HP + 1;
+HEAP[(int)HP] = 72;//H
+HP = HP + 1;
+HEAP[(int)HP] = 65;//A
+HP = HP + 1;
+HEAP[(int)HP] = 82;//R
+HP = HP + 1;
+HEAP[(int)HP] = 36;//End of string
+HP = HP + 1;
+goto L7;
+L4:
+HEAP[(int)HP] = 66;//B
+HP = HP + 1;
+HEAP[(int)HP] = 79;//O
+HP = HP + 1;
+HEAP[(int)HP] = 79;//O
+HP = HP + 1;
+HEAP[(int)HP] = 76;//L
+HP = HP + 1;
+HEAP[(int)HP] = 69;//E
+HP = HP + 1;
+HEAP[(int)HP] = 65;//A
+HP = HP + 1;
+HEAP[(int)HP] = 78;//N
+HP = HP + 1;
+HEAP[(int)HP] = 36;//End of string
+HP = HP + 1;
+goto L7;
+L5:
+HEAP[(int)HP] = 83;//S
+HP = HP + 1;
+HEAP[(int)HP] = 84;//T
+HP = HP + 1;
+HEAP[(int)HP] = 82;//R
+HP = HP + 1;
+HEAP[(int)HP] = 85;//U
+HP = HP + 1;
+HEAP[(int)HP] = 67;//C
+HP = HP + 1;
+HEAP[(int)HP] = 84;//T
+HP = HP + 1;
+HEAP[(int)HP] = 36;//End of string
+HP = HP + 1;
+goto L7;
+L6:
+HEAP[(int)HP] = 78;//N
+HP = HP + 1;
+HEAP[(int)HP] = 85;//U
+HP = HP + 1;
+HEAP[(int)HP] = 76;//L
+HP = HP + 1;
+HEAP[(int)HP] = 76;//L
+HP = HP + 1;
+HEAP[(int)HP] = 36;//End of string
+HP = HP + 1;
+goto L7;
+L7:
+T0 = SP + 0;//Get return position
+STACK[(int)T0] = T1;//Save start position of new string
+return;
+}
+
+/*
+Algorithm:
+    iterator = string.length
+    position = iterator + string.position
+    while(iterator >= 0){
+        if(character == 45){
+            result = result * -1
+            position--
+            iterator--
+            continue
+        }
+        character = string.charAt(position)
+        character = character - 48
+        result = result + mul * character
+        mul = mul * 10
+        position--
+        iterator--
+    }
+*/
+void StringToInt(){
+T0 = SP + 1;//Get string stack position
+T0 = STACK[(int)T0];//Get string heap position
+T3 = SP;//Save environment
+SP = 18;//Set environment for StringLength function
+T1 = SP + 1;//Set string position
+STACK[(int)T1] = T0;//Save string positon
+StringLength();//Call function
+T1 = SP + 0;//Get return position
+T1 = STACK[(int)T1];//Get return value
+T1 = T1 - 1;//Get last character position
+SP = T3;//Get environment back
+T0 = SP + 1;//Get string stack position
+T0 = STACK[(int)T0];//Get string heap position
+T5 = T1;//Set iterator to string length
+T1 = T1 + T0;//Set real position for last character
+T2 = 1;//Set mul = 1
+T3 = 0;//Set result = 0
+L0://Loop tag
+if(T5 < 0) goto L1;//Check if none characters are left
+T0 = HEAP[(int)T1];//Get character
+if(T0 == 45) goto L2;//Check if character is -
+T0 = T0 - 48;//Transform character into digit
+T4 = T2 * T0;//mul*digit
+T3 = T3 + T4;//result = result + mul * digit
+T2 = T2 * 10;//mul = mul * 10
+T1 = T1 - 1;//Update character position
+T5 = T5 - 1;//Update iterator
+goto L0;//Go back to loop
+L2://Transform to negative
+T3 = T3 * -1;//result * -1
+T1 = T1 - 1;//position--
+T5 = T5 - 1;//iterator--
+goto L0;//Go back to loop
+L1:
+T0 = SP + 0;//Set return position
+STACK[(int)T0] = T3;//Set return to result
+return;
+}
+
+/*
+Algorithm:
+    iterator = string.length
+    position = iterator + string.position
+    while(iterator >= 0){
+        if(character == 46){
+            result = result / mul
+            mul = 1
+            position--
+            iterator--
+            continue
+        }
+        if(character == 45){
+            result = result * -1
+            position--
+            iterator--
+            continue
+        }
+        character = string.charAt(position)
+        character = character - 48
+        result = result + mul * character
+        mul = mul * 10
+        position--
+        iterator--
+    }
+*/
+void StringToFloat(){
+T0 = SP + 1;//Get string stack position
+T0 = STACK[(int)T0];//Get string heap position
+T3 = SP;//Save environment
+SP = 18;//Set environment for StringLength function
+T1 = SP + 1;//Set string position
+STACK[(int)T1] = T0;//Save string positon
+StringLength();//Call function
+T1 = SP + 0;//Get return position
+T1 = STACK[(int)T1];//Get return value
+T1 = T1 - 1;//Get last character position
+SP = T3;//Get environment back
+T0 = SP + 1;//Get string stack position
+T0 = STACK[(int)T0];//Get string heap position
+T5 = T1;//Set iterator to string length
+T1 = T1 + T0;//Set real position for last character
+T2 = 1;//Set mul = 1
+T3 = 0;//Set result = 0
+T6 = 0;//Set decimal value to 0
+L0://Loop tag
+if(T5 < 0) goto L1;//Check if none characters are left
+T0 = HEAP[(int)T1];//Get character
+if(T0 == 46) goto L2;//Check if character is .
+if(T0 == 45) goto L3;//Check if character is -
+T0 = T0 - 48;//Transform character into digit
+T4 = T2 * T0;//mul*digit
+T3 = T3 + T4;//result = result + mul * digit
+T2 = T2 * 10;//mul = mul * 10
+T1 = T1 - 1;//Update character position
+T5 = T5 - 1;//Update iterator
+goto L0;//Go back to loop
+L2://Transform result to decimal
+T3 = T3 / T2;//result = result / mul
+T2 = 1;//mul = 1
+T1 = T1 - 1;//position--
+T5 = T5 - 1;//iterator--
+goto L0;//Go back to loop
+L3://Transform to negative
+T3 = T3 * -1;//result * -1
+T1 = T1 - 1;//position--
+T5 = T5 - 1;//iterator--
+goto L0;//Go back to loop
+L1:
+T3 = T3 + T6;//result = result + decimal
+T0 = SP + 0;//Set return position
+STACK[(int)T0] = T3;//Set return to result
+return;
+}
+
+void floatToString(){
+T0 = SP + 1;
+T0 = STACK[(int)T0];//Get integer part
+SP = 14;//Change environment for intToString function
+T2 = SP + 1;
+STACK[(int)T2] = T0;//Save integer part
+T5 = HP;
+intToString();
+SP = 0;//Change environment for stringConcat
+T3 = SP + 1;
+T4 = SP + 2;
+STACK[(int)T3] = T5;//Save integer string
+T5 = HP;
+HEAP[(int)HP] = 46;
+HP = HP + 1;
+HEAP[(int)HP] = 36;
+HP = HP + 1;
+STACK[(int)T4] = T5;//Save dot string
+StringConcat();
+T3 = SP + 0;
+T5 = STACK[(int)T3];//Get new string position
+SP = 33;//Set environment back to floatToString
+T1 = SP + 2;
+T1 = STACK[(int)T1];//Get float part
+SP = 14;//Change environment for intToString
+T2 = SP + 1;
+STACK[(int)T2] = T1;//Save float part
+T4 = HP;
+intToString();
+SP = 0;
+T3 = SP + 1;
+T2 = SP + 2;
+STACK[(int)T3] = T5;
+STACK[(int)T2] = T4;
+StringConcat();
+T1 = SP + 0;
+T1 = STACK[(int)T1];//Get new string position
+SP = 33;//Set environment back to floatToString
+T0 = SP + 0;
+STACK[(int)T0] = T1;//Save return
+return;
+}
+
+void stringCompare(){
+T0 = SP + 1;//Set first string position
+T1 = SP + 2;//Set second string position
+T0 = STACK[(int)T0];//Get first string start position
+T1 = STACK[(int)T1];//Get second string start position
+L0://Loop tag
+T2 = HEAP[(int)T0];//Get character in first string
+T3 = HEAP[(int)T1];//Get character in second string
+if(T2 != T3) goto L1;//Characters are diferent
+if(T2 == 36) goto L2;//Both characters are end of string
+T0 = T0 + 1;//Get next character in first string
+T1 = T1 + 1;//Get next character in second string
+goto L0;//Go back to loop
+L1:
+T0 = SP + 0;//Set return position
+STACK[(int)T0] = 0;//Save false as return value
+goto L3;
+L2:
+T0 = SP + 0;//Set return position
+STACK[(int)T0] = 1;//Save true as return value
+goto L3;
+L3:
+return;
+}
+void printArray(){
+T2 = SP + 1;//Set array size position
+T3 = SP + 2;//Set array start position
+T4 = SP + 3;//Set array type position
+T2 = STACK[(int)T2];//Get array size position
+T3 = STACK[(int)T3];//Get array start position
+T4 = STACK[(int)T4];//Get array type position
+T5 = 0;//Set contador = 0
+printf("%c", 91);
+L0://Loop start
+if(T5 == T2) goto L1;//End of array
+if(T5 == 0) goto L2;
+printf("%c", 44);
+goto L2;
+L2:
+if(T4 == 0) goto L3;//Element is string or char
+if(T4 == 1) goto L4;//Element is int
+if(T4 == 2) goto L5;//Element is float
+L3:
+T6 = SP;
+SP = 3;
+T0 = STACK[(int)T3];//Get string start position
+STACK[(int)SP] = T0;
+StringPrint();
+SP = T6;
+goto L7;
+L4:
+T0 = STACK[(int)T3];//Get string start position
+printf("%d", (int)T0);
+goto L7;
+L5:
+T0 = STACK[(int)T3];//Get string start position
+printf("%f", T0);
+goto L7;
+L7:
+T3 = T3 + 1;//Update array position
+T5 = T5 + 1;//Update contador
+goto L0;//Go back to loop
+L1:
+printf("%c", 93);
+return;
+}
+void agregar(){
+T708 = SP + 1;//Setting position for parameter i
+T708 = SP + 2;//Setting position for parameter j
+T708 = SP + 3;//Setting position for parameter nota
+T709 = SP + 1;
+T710 = STACK[(int)T709];//Getting value of variable i
+T711 = mainStart + 9;
+T712 = STACK[(int)T711];//Getting value of variable dimension
+T713 = T710 * T712;
+T714 = SP + 2;
+T715 = STACK[(int)T714];//Getting value of variable j
+T716 = T713 + T715;
+T717 = T716;
+T719 = mainStart + 22;//Set array initial position
+T719 = T719 + T717;//Add index
+T720 = SP + 22;
+T720 = T720 + 9;
+if(T719 >= T720) goto L101;
+goto L100;
+L101:
+OutOfBounds();
+T721 = -1337.1337;//Set error
+goto L102;
+L100:
+T721 = STACK[(int)T719];//Get value
+goto L102;
+L102:
+if(T721 == 0) goto L103;//Expression is false
+goto L104;//Expression is true
+L103:
+T723 = 1;//Set value to 1 (true)
+goto L105;
+L104:
+T723 = 0;//Set value to 0 (false)
+goto L105;
+L105:
+if(T723) goto L106;
+goto L107;
+L106:
+T724 = SP + 3;
+T725 = STACK[(int)T724];//Getting value of variable nota
+T726 = SP + 1;
+T727 = STACK[(int)T726];//Getting value of variable i
+T728 = mainStart + 9;
+T729 = STACK[(int)T728];//Getting value of variable dimension
+T730 = T727 * T729;
+T731 = SP + 2;
+T732 = STACK[(int)T731];//Getting value of variable j
+T733 = T730 + T732;
+T734 = T733;
+T736 = mainStart + 13;//Set array initial position
+T736 = T736 + T734;//Add index
+STACK[(int)T736] = T725;//Get value
+T737 = 1;
+T738 = SP + 1;
+T739 = STACK[(int)T738];//Getting value of variable i
+T740 = mainStart + 9;
+T741 = STACK[(int)T740];//Getting value of variable dimension
+T742 = T739 * T741;
+T743 = SP + 2;
+T744 = STACK[(int)T743];//Getting value of variable j
+T745 = T742 + T744;
+T746 = T745;
+T748 = mainStart + 22;//Set array initial position
+T748 = T748 + T746;//Add index
+STACK[(int)T748] = T737;//Get value
+T749 = 1;
+T750 = SP + 0;//Set return position
+STACK[(int)T750] = T749;//Save return value
+return;
+goto L108;
+L107:
+L108:
+T751 = HP;//Save start position
+HEAP[(int)HP] = 80;//Save character P in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 117;//Save character u in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 112;//Save character p in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T752 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T753 = SP + 0;//Set string position
+STACK[(int)T753] = T751;//Save string
+StringPrint();//Call function
+SP = T752;//Recover environment
+printf("%c", 10);//Print new line
+T754 = 0;
+T755 = SP + 0;//Set return position
+STACK[(int)T755] = T754;//Save return value
+return;
+return;
+}
+
+void imprimirPromedio(){
+T756 = SP + 1;//Setting position for parameter estudiante
+T757 = SP + 1;
+T758 = STACK[(int)T757];//Getting value of variable estudiante
+T759 = mainStart + 9;
+T760 = STACK[(int)T759];//Getting value of variable dimension
+T761 = T758 * T760;
+T762 = 0;
+T763 = T761 + T762;
+T764 = T763;
+T766 = mainStart + 13;//Set array initial position
+T766 = T766 + T764;//Add index
+T767 = SP + 13;
+T767 = T767 + 9;
+if(T766 >= T767) goto L110;
+goto L109;
+L110:
+OutOfBounds();
+T768 = -1337.1337;//Set error
+goto L111;
+L109:
+T768 = STACK[(int)T766];//Get value
+goto L111;
+L111:
+T769 = SP + 1;
+T770 = STACK[(int)T769];//Getting value of variable estudiante
+T771 = mainStart + 9;
+T772 = STACK[(int)T771];//Getting value of variable dimension
+T773 = T770 * T772;
+T774 = 1;
+T775 = T773 + T774;
+T776 = T775;
+T778 = mainStart + 13;//Set array initial position
+T778 = T778 + T776;//Add index
+T779 = SP + 13;
+T779 = T779 + 9;
+if(T778 >= T779) goto L113;
+goto L112;
+L113:
+OutOfBounds();
+T780 = -1337.1337;//Set error
+goto L114;
+L112:
+T780 = STACK[(int)T778];//Get value
+goto L114;
+L114:
+T781 = T768 + T780;
+T782 = SP + 1;
+T783 = STACK[(int)T782];//Getting value of variable estudiante
+T784 = mainStart + 9;
+T785 = STACK[(int)T784];//Getting value of variable dimension
+T786 = T783 * T785;
+T787 = 2;
+T788 = T786 + T787;
+T789 = T788;
+T791 = mainStart + 13;//Set array initial position
+T791 = T791 + T789;//Add index
+T792 = SP + 13;
+T792 = T792 + 9;
+if(T791 >= T792) goto L116;
+goto L115;
+L116:
+OutOfBounds();
+T793 = -1337.1337;//Set error
+goto L117;
+L115:
+T793 = STACK[(int)T791];//Get value
+goto L117;
+L117:
+T794 = T781 + T793;
+T795 = 3;
+if(T795 == 0) goto L118;//Check if division by 0
+goto L119;
+L118://True tagn
+DivisionBy0();//Call division by 0 error
+goto L120;
+L119://False tag, operate division
+T796 = T794 / T795;
+goto L120;
+L120:
+T797 = SP + 2;
+STACK[(int)T797] = T796;//Save variable promedio
+T798 = HP;//Save start position
+HEAP[(int)HP] = 80;//Save character P in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 109;//Save character m in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 117;//Save character u in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T799 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T800 = SP + 0;//Set string position
+STACK[(int)T800] = T798;//Save string
+StringPrint();//Call function
+SP = T799;//Recover environment
+T801 = SP + 1;
+T802 = STACK[(int)T801];//Getting value of variable estudiante
+T803 = T802;
+T805 = mainStart + 10;//Set array initial position
+T805 = T805 + T803;//Add index
+T806 = SP + 10;
+T806 = T806 + 3;
+if(T805 >= T806) goto L122;
+goto L121;
+L122:
+OutOfBounds();
+T807 = -1337.1337;//Set error
+goto L123;
+L121:
+T807 = STACK[(int)T805];//Get value
+goto L123;
+L123:
+T808 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T809 = SP + 0;//Set string position
+STACK[(int)T809] = T807;//Save string
+StringPrint();//Call function
+SP = T808;//Recover environment
+T810 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T811 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T812 = SP + 0;//Set string position
+STACK[(int)T812] = T810;//Save string
+StringPrint();//Call function
+SP = T811;//Recover environment
+T813 = SP + 2;
+T814 = STACK[(int)T813];//Getting value of variable promedio
+printf("%f", T814);//Print float
+printf("%c", 10);//Print new line
+return;
+}
 
 void main(){
-    double val1 = 0.0;
-    double val2 = 0.0;
-    double val3 = 0.0;
-    double a = 0.0;
-    double b = 0.0;
-    println("El valor defecto de declacion es 0 = ", declaracion);
-    println("El valor defecto de asignacion es 0 = ", asignacion, " y de aritmeticas 0 = ", aritmeticas);
-    print("Probando ");
-    println("Manejo de Entornos");
-    if(declaracion == 0.0 && asignacion == 0.0 && aritmeticas == 0.0){
-        declaracion = declaracion + 0.50; 
-    }else{
-        declaracion = 0.0;
-    }
-    println("El valor de var1 global es 10 = ", var1);  //10
-    if(var1==10){
-        declaracion = declaracion + 0.25; 
-    }
-    int var1 = 5*5;
-    println("El valor de var1 local es ", var1);  //25
-    if(var1==25){
-        declaracion = declaracion + 0.25; 
-    }
-    punteoBasicas = -10.0;
-    var2 = 40;
-    if(punteoBasicas == (-10.0) && var2 == 40){
-        asignacion =  1.0;
-    }
-    println("Declaraciones = ", declaracion);
-    println("Asignaciones = ", asignacion);
-    /********************************
-     * VALIDACION DE OPERACIONES
-     * ******************************/
-
-    val1 = 7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 % 2) + 50 * (6 * 2); //142.0
-    val2 = pow(2,4) - 9 * (8 - 6 * (pow(3,2) - 6 * 5 - 7 * (9 + pow(7,3)) + 10) - 5 ) + 8 * (36 / 6 - 5 * ( 2 * 3)); //-133853.0
-    val3 = (pow(8,3) * pow(8,2) - sqrt(4) + tan(12) + sin(60) + 2) / 3; //10922.353109816746
-    double val4 = val1 - val2 + val3; //El resultado es 144917.35310981676
-    int resultado = toInt(val4);  //144917
-    if(resultado == 144917){
-        println("Aritmeticas 100");
-        aritmeticas = 1;
-    }
-    String String_3 = " ";
-    String String_4 = " ";
-    int int2_;
-    boolean TRUE = true;
-    boolean FALSE = false;
-    int2_ = 45;
-    int2_ = int2_ - 1;
-    String_3 = string(int2_ > 77 || FALSE) & "," & string(int2_ < 78 && TRUE) & "," & string(int2_ + 10 <= int2_ || FALSE) & "," & string(!!!!!!!!!!!! (int2_ + 10 >= int2_));
-    //println(int2_ > 77 || FALSE,",",int2_ < 78 && TRUE,",",int2_ + 10 <= int2_ || FALSE,",",!!!!!!!!!!!! (int2_ + 10 >= int2_));  ////false, true, false, true
-    String_4 = string(int2_ >= 77 || -1 < 100) & "," & string(int2_ > 78 && 100 + 0 == 100);
-    println(int2_ >= 77 || -1 < 100,",",int2_ > 78 && 100 + 0 == 100);  //true, false
-    String String_5 = "Calificacion "^3; 
-    String pruebasNativas = "ComPiLaDoReS2 TesT";
-
-    println("Logica 1" & " = " & String_3); //false,true,false,true
-    println("Logica 2" & " = " & String_4); //true,false
-    println("Cadena 5" & " = " & String_5); //Calificacion Calificacion Calificacion 
-    println(pruebasNativas.subString(0,11).toUppercase()," ",pruebasNativas.caracterOfPosition(12), " ", pruebasNativas.subString(14,pruebasNativas.length()-1).toLowercase());  // COMPILADORES 2 test
-    boolean relacionaes = (a == 0) != (44.3 < 44.4) == (pow(2,5) == 31 + 2 % 1);
-    relacionaes = relacionaes == (b == a) != ((532 > 532)) == (String_3 == "false,true,false,true") == (String_4 == "true,false");
-    if(relacionaes){
-        println("Relacionels 100");
-    }
-    else{
-        println("Relacionales 0");
-    }
-    //Notas estudiante 1
-    agregar(0,0, 90);
-    agregar(0,1, 95);
-    agregar(0,2, 92);
-
-    //Notas estudiante 2
-    agregar(1,0, 85);
-    agregar(1,1, 90);
-    agregar(1,2, 100);
-
-    //Notas estudiante 3
-    agregar(2,0, 20);
-    agregar(2,1, 100);
-    agregar(2,2, 100);
-
-    //Imprimir Promedios
-    imprimirPromedio(0); 
-    imprimirPromedio(1); 
-    imprimirPromedio(2); 
-
-    //Debe imprimir posicion ocupada 
-    agregar(2,0, -1);
-}
-
-boolean agregar(int i, int j, int nota){
-    if(!estado[i * dimension + j]){
-        tablero[i * dimension + j] = nota;
-        estado[i * dimension + j] = true;
-        return true;
-    }
-    println("Posicion ocupada");
-    return false;
-}
-
-int imprimirPromedio(int estudiante){
-    double promedio = (tablero[estudiante * dimension + 0] + tablero[estudiante * dimension + 1] + tablero[estudiante * dimension + 2])/3;
-    println("Promedio Estudiante " , arreglo[estudiante], " = ", promedio);
+SP = 74;
+mainStart = 74;
+T6 = 10;
+T7 = SP + 0;
+STACK[(int)T7] = T6;//Save variable var1
+T8 = 20;
+T9 = SP + 1;
+STACK[(int)T9] = T8;//Save variable var2
+T10 = 0.0;
+T11 = SP + 2;
+STACK[(int)T11] = T10;//Save variable punteoBasicas
+T12 = 3;
+STACK[(int)T12] = 0;//Save variable declaracion
+T13 = 4;
+STACK[(int)T13] = 0;//Save variable asignacion
+T14 = 5;
+STACK[(int)T14] = 0;//Save variable aritmeticas
+T15 = 6;
+STACK[(int)T15] = 0;//Save variable relacionales
+T16 = 7;
+STACK[(int)T16] = 0;//Save variable logicas
+T17 = 8;
+STACK[(int)T17] = 0;//Save variable Print
+T18 = 3;
+T19 = SP + 9;
+STACK[(int)T19] = T18;//Save variable dimension
+//Array arreglo will be stored in stack, start position: 10 of this context
+T20 = HP;//Save start position
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 117;//Save character u in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 49;//Save character 1 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T21 = SP + 10;
+STACK[(int)T21] = T20;//Save value in array, index 0
+T22 = HP;//Save start position
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 117;//Save character u in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 50;//Save character 2 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T23 = SP + 11;
+STACK[(int)T23] = T22;//Save value in array, index 1
+T24 = HP;//Save start position
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 117;//Save character u in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 51;//Save character 3 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T25 = SP + 12;
+STACK[(int)T25] = T24;//Save value in array, index 2
+//Array tablero will be stored in stack, start position: 13 of this context
+T26 = 0;
+T27 = SP + 13;
+STACK[(int)T27] = T26;//Save value in array, index 0
+T28 = 0;
+T29 = SP + 14;
+STACK[(int)T29] = T28;//Save value in array, index 1
+T30 = 0;
+T31 = SP + 15;
+STACK[(int)T31] = T30;//Save value in array, index 2
+T32 = 0;
+T33 = SP + 16;
+STACK[(int)T33] = T32;//Save value in array, index 3
+T34 = 0;
+T35 = SP + 17;
+STACK[(int)T35] = T34;//Save value in array, index 4
+T36 = 0;
+T37 = SP + 18;
+STACK[(int)T37] = T36;//Save value in array, index 5
+T38 = 0;
+T39 = SP + 19;
+STACK[(int)T39] = T38;//Save value in array, index 6
+T40 = 0;
+T41 = SP + 20;
+STACK[(int)T41] = T40;//Save value in array, index 7
+T42 = 0;
+T43 = SP + 21;
+STACK[(int)T43] = T42;//Save value in array, index 8
+//Array estado will be stored in stack, start position: 22 of this context
+T44 = 0;
+T45 = SP + 22;
+STACK[(int)T45] = T44;//Save value in array, index 0
+T46 = 0;
+T47 = SP + 23;
+STACK[(int)T47] = T46;//Save value in array, index 1
+T48 = 0;
+T49 = SP + 24;
+STACK[(int)T49] = T48;//Save value in array, index 2
+T50 = 0;
+T51 = SP + 25;
+STACK[(int)T51] = T50;//Save value in array, index 3
+T52 = 0;
+T53 = SP + 26;
+STACK[(int)T53] = T52;//Save value in array, index 4
+T54 = 0;
+T55 = SP + 27;
+STACK[(int)T55] = T54;//Save value in array, index 5
+T56 = 0;
+T57 = SP + 28;
+STACK[(int)T57] = T56;//Save value in array, index 6
+T58 = 0;
+T59 = SP + 29;
+STACK[(int)T59] = T58;//Save value in array, index 7
+T60 = 0;
+T61 = SP + 30;
+STACK[(int)T61] = T60;//Save value in array, index 8
+T62 = 0.0;
+T63 = SP + 31;
+STACK[(int)T63] = T62;//Save variable val1
+T64 = 0.0;
+T65 = SP + 32;
+STACK[(int)T65] = T64;//Save variable val2
+T66 = 0.0;
+T67 = SP + 33;
+STACK[(int)T67] = T66;//Save variable val3
+T68 = 0.0;
+T69 = SP + 34;
+STACK[(int)T69] = T68;//Save variable a
+T70 = 0.0;
+T71 = SP + 35;
+STACK[(int)T71] = T70;//Save variable b
+T72 = HP;//Save start position
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 118;//Save character v in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 102;//Save character f in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T73 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T74 = SP + 0;//Set string position
+STACK[(int)T74] = T72;//Save string
+StringPrint();//Call function
+SP = T73;//Recover environment
+T75 = mainStart + 3;
+T76 = STACK[(int)T75];//Getting value of variable declaracion
+printf("%f", T76);//Print float
+printf("%c", 10);//Print new line
+T77 = HP;//Save start position
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 118;//Save character v in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 102;//Save character f in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 103;//Save character g in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T78 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T79 = SP + 0;//Set string position
+STACK[(int)T79] = T77;//Save string
+StringPrint();//Call function
+SP = T78;//Recover environment
+T80 = mainStart + 4;
+T81 = STACK[(int)T80];//Getting value of variable asignacion
+printf("%f", T81);//Print float
+T82 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 121;//Save character y in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 109;//Save character m in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T83 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T84 = SP + 0;//Set string position
+STACK[(int)T84] = T82;//Save string
+StringPrint();//Call function
+SP = T83;//Recover environment
+T85 = mainStart + 5;
+T86 = STACK[(int)T85];//Getting value of variable aritmeticas
+printf("%f", T86);//Print float
+printf("%c", 10);//Print new line
+T87 = HP;//Save start position
+HEAP[(int)HP] = 80;//Save character P in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 98;//Save character b in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T88 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T89 = SP + 0;//Set string position
+STACK[(int)T89] = T87;//Save string
+StringPrint();//Call function
+SP = T88;//Recover environment
+T90 = HP;//Save start position
+HEAP[(int)HP] = 77;//Save character M in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 106;//Save character j in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T91 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T92 = SP + 0;//Set string position
+STACK[(int)T92] = T90;//Save string
+StringPrint();//Call function
+SP = T91;//Recover environment
+printf("%c", 10);//Print new line
+T93 = mainStart + 3;
+T94 = STACK[(int)T93];//Getting value of variable declaracion
+T95 = 0.0;
+T96 = T94 == T95;
+T97 = mainStart + 4;
+T98 = STACK[(int)T97];//Getting value of variable asignacion
+T99 = 0.0;
+T100 = T98 == T99;
+if(T96 == 0) goto L1;//Expression is false
+if(T100 == 0) goto L1;//Expression is false
+goto L2;//Expression is true
+L1:
+T102 = 0;//Set value to 0 (false)
+goto L3;
+L2:
+T102 = 1;//Set value to 1 (true)
+goto L3;
+L3:
+T103 = mainStart + 5;
+T104 = STACK[(int)T103];//Getting value of variable aritmeticas
+T105 = 0.0;
+T106 = T104 == T105;
+if(T102 == 0) goto L4;//Expression is false
+if(T106 == 0) goto L4;//Expression is false
+goto L5;//Expression is true
+L4:
+T108 = 0;//Set value to 0 (false)
+goto L6;
+L5:
+T108 = 1;//Set value to 1 (true)
+goto L6;
+L6:
+if(T108) goto L7;
+goto L8;
+L7:
+T109 = mainStart + 3;
+T110 = STACK[(int)T109];//Getting value of variable declaracion
+T111 = 0.50;
+T112 = T110 + T111;
+T113 = SP + 3;
+STACK[(int)T113] = T112;//Update value for variable declaracion
+goto L9;
+L8:
+T114 = 0.0;
+T115 = SP + 3;
+STACK[(int)T115] = T114;//Update value for variable declaracion
+L9:
+T116 = HP;//Save start position
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 118;//Save character v in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 118;//Save character v in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 49;//Save character 1 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 103;//Save character g in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 98;//Save character b in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 49;//Save character 1 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T117 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T118 = SP + 0;//Set string position
+STACK[(int)T118] = T116;//Save string
+StringPrint();//Call function
+SP = T117;//Recover environment
+T119 = mainStart + 0;
+T120 = STACK[(int)T119];//Getting value of variable var1
+printf("%d", (int)T120);//Print integer
+printf("%c", 10);//Print new line
+T121 = mainStart + 0;
+T122 = STACK[(int)T121];//Getting value of variable var1
+T123 = 10;
+T124 = T122 == T123;
+if(T124) goto L10;
+goto L11;
+L10:
+T125 = mainStart + 3;
+T126 = STACK[(int)T125];//Getting value of variable declaracion
+T127 = 0.25;
+T128 = T126 + T127;
+T129 = SP + 3;
+STACK[(int)T129] = T128;//Update value for variable declaracion
+goto L12;
+L11:
+L12:
+T130 = 5;
+T131 = 5;
+T132 = T130 * T131;
+T133 = SP + 36;
+STACK[(int)T133] = T132;//Save variable var1
+T134 = HP;//Save start position
+HEAP[(int)HP] = 69;//Save character E in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 118;//Save character v in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 118;//Save character v in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 49;//Save character 1 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T135 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T136 = SP + 0;//Set string position
+STACK[(int)T136] = T134;//Save string
+StringPrint();//Call function
+SP = T135;//Recover environment
+T137 = SP + 36;
+T138 = STACK[(int)T137];//Getting value of variable var1
+printf("%d", (int)T138);//Print integer
+printf("%c", 10);//Print new line
+T139 = SP + 36;
+T140 = STACK[(int)T139];//Getting value of variable var1
+T141 = 25;
+T142 = T140 == T141;
+if(T142) goto L13;
+goto L14;
+L13:
+T143 = mainStart + 3;
+T144 = STACK[(int)T143];//Getting value of variable declaracion
+T145 = 0.25;
+T146 = T144 + T145;
+T147 = SP + 3;
+STACK[(int)T147] = T146;//Update value for variable declaracion
+goto L15;
+L14:
+L15:
+T148 = 10.0;
+T148 = T148 * -1;
+T149 = SP + 2;
+STACK[(int)T149] = T148;//Update value for variable punteoBasicas
+T150 = 40;
+T151 = SP + 1;
+STACK[(int)T151] = T150;//Update value for variable var2
+T152 = mainStart + 2;
+T153 = STACK[(int)T152];//Getting value of variable punteoBasicas
+T154 = 10.0;
+T154 = T154 * -1;
+T155 = T153 == T154;
+T156 = mainStart + 1;
+T157 = STACK[(int)T156];//Getting value of variable var2
+T158 = 40;
+T159 = T157 == T158;
+if(T155 == 0) goto L16;//Expression is false
+if(T159 == 0) goto L16;//Expression is false
+goto L17;//Expression is true
+L16:
+T161 = 0;//Set value to 0 (false)
+goto L18;
+L17:
+T161 = 1;//Set value to 1 (true)
+goto L18;
+L18:
+if(T161) goto L19;
+goto L20;
+L19:
+T162 = 1.0;
+T163 = SP + 4;
+STACK[(int)T163] = T162;//Update value for variable asignacion
+goto L21;
+L20:
+L21:
+T164 = HP;//Save start position
+HEAP[(int)HP] = 68;//Save character D in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T165 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T166 = SP + 0;//Set string position
+STACK[(int)T166] = T164;//Save string
+StringPrint();//Call function
+SP = T165;//Recover environment
+T167 = mainStart + 3;
+T168 = STACK[(int)T167];//Getting value of variable declaracion
+printf("%f", T168);//Print float
+printf("%c", 10);//Print new line
+T169 = HP;//Save start position
+HEAP[(int)HP] = 65;//Save character A in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 103;//Save character g in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T170 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T171 = SP + 0;//Set string position
+STACK[(int)T171] = T169;//Save string
+StringPrint();//Call function
+SP = T170;//Recover environment
+T172 = mainStart + 4;
+T173 = STACK[(int)T172];//Getting value of variable asignacion
+printf("%f", T173);//Print float
+printf("%c", 10);//Print new line
+T174 = 7;
+T175 = 5;
+T176 = 10;
+T177 = 20;
+T178 = 5;
+if(T178 == 0) goto L22;//Check if division by 0
+goto L23;
+L22://True tagn
+DivisionBy0();//Call division by 0 error
+goto L24;
+L23://False tag, operate division
+T179 = T177 / T178;
+goto L24;
+L24:
+T180 = 2;
+T181 = T179 - T180;
+T182 = 4;
+T183 = 5;
+T184 = 2;
+T185 = 3;
+T186 = T184 * T185;
+T187 = T183 + T186;
+T188 = T182 * T187;
+T189 = T181 + T188;
+T190 = T176 * T189;
+T191 = T175 + T190;
+T192 = 8;
+T193 = 3;
+T194 = T192 * T193;
+T195 = 2;
+T196 = (int)T194 % (int)T195;
+T197 = T191 - T196;
+T198 = T174 - T197;
+T199 = 50;
+T200 = 6;
+T201 = 2;
+T202 = T200 * T201;
+T203 = T199 * T202;
+T204 = T198 + T203;
+T205 = SP + 31;
+STACK[(int)T205] = T204;//Update value for variable val1
+T206 = 2;
+T207 = 4;
+T208 = SP;//Save environment
+SP = 11;//Set NumberPower environment
+T209 = SP + 1;//Set base position
+STACK[(int)T209] = T206;//Save base
+T210 = SP + 2;//Set exponent position
+STACK[(int)T210] = T207;//Save exponent
+NumberPower();//Call function
+T211 = SP + 0;//Set return position
+T212 = STACK[(int)T211];//Get return value
+SP = T208;//Recover environment
+T213 = 9;
+T214 = 8;
+T215 = 6;
+T216 = 3;
+T217 = 2;
+T218 = SP;//Save environment
+SP = 11;//Set NumberPower environment
+T219 = SP + 1;//Set base position
+STACK[(int)T219] = T216;//Save base
+T220 = SP + 2;//Set exponent position
+STACK[(int)T220] = T217;//Save exponent
+NumberPower();//Call function
+T221 = SP + 0;//Set return position
+T222 = STACK[(int)T221];//Get return value
+SP = T218;//Recover environment
+T223 = 6;
+T224 = 5;
+T225 = T223 * T224;
+T226 = T222 - T225;
+T227 = 7;
+T228 = 9;
+T229 = 7;
+T230 = 3;
+T231 = SP;//Save environment
+SP = 11;//Set NumberPower environment
+T232 = SP + 1;//Set base position
+STACK[(int)T232] = T229;//Save base
+T233 = SP + 2;//Set exponent position
+STACK[(int)T233] = T230;//Save exponent
+NumberPower();//Call function
+T234 = SP + 0;//Set return position
+T235 = STACK[(int)T234];//Get return value
+SP = T231;//Recover environment
+T236 = T228 + T235;
+T237 = T227 * T236;
+T238 = T226 - T237;
+T239 = 10;
+T240 = T238 + T239;
+T241 = T215 * T240;
+T242 = T214 - T241;
+T243 = 5;
+T244 = T242 - T243;
+T245 = T213 * T244;
+T246 = T212 - T245;
+T247 = 8;
+T248 = 36;
+T249 = 6;
+if(T249 == 0) goto L25;//Check if division by 0
+goto L26;
+L25://True tagn
+DivisionBy0();//Call division by 0 error
+goto L27;
+L26://False tag, operate division
+T250 = T248 / T249;
+goto L27;
+L27:
+T251 = 5;
+T252 = 2;
+T253 = 3;
+T254 = T252 * T253;
+T255 = T251 * T254;
+T256 = T250 - T255;
+T257 = T247 * T256;
+T258 = T246 + T257;
+T259 = SP + 32;
+STACK[(int)T259] = T258;//Update value for variable val2
+T260 = 8;
+T261 = 3;
+T262 = SP;//Save environment
+SP = 11;//Set NumberPower environment
+T263 = SP + 1;//Set base position
+STACK[(int)T263] = T260;//Save base
+T264 = SP + 2;//Set exponent position
+STACK[(int)T264] = T261;//Save exponent
+NumberPower();//Call function
+T265 = SP + 0;//Set return position
+T266 = STACK[(int)T265];//Get return value
+SP = T262;//Recover environment
+T267 = 8;
+T268 = 2;
+T269 = SP;//Save environment
+SP = 11;//Set NumberPower environment
+T270 = SP + 1;//Set base position
+STACK[(int)T270] = T267;//Save base
+T271 = SP + 2;//Set exponent position
+STACK[(int)T271] = T268;//Save exponent
+NumberPower();//Call function
+T272 = SP + 0;//Set return position
+T273 = STACK[(int)T272];//Get return value
+SP = T269;//Recover environment
+T274 = T266 * T273;
+T275 = 4;
+T276 = sqrt(T275);//Get sqrt
+T277 = T274 - T276;
+T278 = 12;
+T279 = tan(T278);//Get tan
+T280 = T277 + T279;
+T281 = 60;
+T282 = sin(T281);//Get sin
+T283 = T280 + T282;
+T284 = 2;
+T285 = T283 + T284;
+T286 = 3;
+if(T286 == 0) goto L28;//Check if division by 0
+goto L29;
+L28://True tagn
+DivisionBy0();//Call division by 0 error
+goto L30;
+L29://False tag, operate division
+T287 = T285 / T286;
+goto L30;
+L30:
+T288 = SP + 33;
+STACK[(int)T288] = T287;//Update value for variable val3
+T289 = SP + 31;
+T290 = STACK[(int)T289];//Getting value of variable val1
+T291 = SP + 32;
+T292 = STACK[(int)T291];//Getting value of variable val2
+T293 = T290 - T292;
+T294 = SP + 33;
+T295 = STACK[(int)T294];//Getting value of variable val3
+T296 = T293 + T295;
+T297 = SP + 37;
+STACK[(int)T297] = T296;//Save variable val4
+T298 = SP + 37;
+T299 = STACK[(int)T298];//Getting value of variable val4
+T300 = (int)T299;//Change value to int
+T301 = SP + 38;
+STACK[(int)T301] = T300;//Save variable resultado
+T302 = SP + 38;
+T303 = STACK[(int)T302];//Getting value of variable resultado
+T304 = 144917;
+T305 = T303 == T304;
+if(T305) goto L31;
+goto L32;
+L31:
+T306 = HP;//Save start position
+HEAP[(int)HP] = 65;//Save character A in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 109;//Save character m in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 49;//Save character 1 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T307 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T308 = SP + 0;//Set string position
+STACK[(int)T308] = T306;//Save string
+StringPrint();//Call function
+SP = T307;//Recover environment
+printf("%c", 10);//Print new line
+T309 = 1.0;
+T310 = SP + 5;
+STACK[(int)T310] = T309;//Update value for variable aritmeticas
+goto L33;
+L32:
+L33:
+T311 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T312 = SP + 39;
+STACK[(int)T312] = T311;//Save variable String_3
+T313 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T314 = SP + 40;
+STACK[(int)T314] = T313;//Save variable String_4
+T315 = SP + 41;
+STACK[(int)T315] = 0;//Save variable int2_
+T316 = 1;
+T317 = SP + 42;
+STACK[(int)T317] = T316;//Save variable TRUE
+T318 = 0;
+T319 = SP + 43;
+STACK[(int)T319] = T318;//Save variable FALSE
+T320 = 45;
+T321 = SP + 41;
+STACK[(int)T321] = T320;//Update value for variable int2_
+T322 = SP + 41;
+T323 = STACK[(int)T322];//Getting value of variable int2_
+T324 = 1;
+T325 = T323 - T324;
+T326 = SP + 41;
+STACK[(int)T326] = T325;//Update value for variable int2_
+T327 = SP + 41;
+T328 = STACK[(int)T327];//Getting value of variable int2_
+T329 = 77;
+T330 = T328 > T329;
+T331 = SP + 43;
+T332 = STACK[(int)T331];//Getting value of variable FALSE
+if(T330 == 1) goto L34;//Expression is true
+if(T332 == 1) goto L34;//Expression is true
+goto L35;//Expression is true
+L34:
+T334 = 1;//Set value to 1 (true)
+goto L36;
+L35:
+T334 = 0;//Set value to 0 (false)
+goto L36;
+L36:
+T336 = HP;//Save start position
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T337 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T338 = SP + 1;//Set first String position
+STACK[(int)T338] = T335;//Save string
+T339 = SP + 2;//Set second String position
+STACK[(int)T339] = T336;//Save position
+StringConcat();//Call function
+T340 = SP + 0;//Set return position
+T341 = STACK[(int)T340];//Get return value
+SP = T337;//Recover environment
+T342 = SP + 41;
+T343 = STACK[(int)T342];//Getting value of variable int2_
+T344 = 78;
+T345 = T343 < T344;
+T346 = SP + 42;
+T347 = STACK[(int)T346];//Getting value of variable TRUE
+if(T345 == 0) goto L37;//Expression is false
+if(T347 == 0) goto L37;//Expression is false
+goto L38;//Expression is true
+L37:
+T349 = 0;//Set value to 0 (false)
+goto L39;
+L38:
+T349 = 1;//Set value to 1 (true)
+goto L39;
+L39:
+T351 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T352 = SP + 1;//Set first String position
+STACK[(int)T352] = T341;//Save string
+T353 = SP + 2;//Set second String position
+STACK[(int)T353] = T350;//Save position
+StringConcat();//Call function
+T354 = SP + 0;//Set return position
+T355 = STACK[(int)T354];//Get return value
+SP = T351;//Recover environment
+T356 = HP;//Save start position
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T357 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T358 = SP + 1;//Set first String position
+STACK[(int)T358] = T355;//Save string
+T359 = SP + 2;//Set second String position
+STACK[(int)T359] = T356;//Save position
+StringConcat();//Call function
+T360 = SP + 0;//Set return position
+T361 = STACK[(int)T360];//Get return value
+SP = T357;//Recover environment
+T362 = SP + 41;
+T363 = STACK[(int)T362];//Getting value of variable int2_
+T364 = 10;
+T365 = T363 + T364;
+T366 = SP + 41;
+T367 = STACK[(int)T366];//Getting value of variable int2_
+T368 = T365 <= T367;
+T369 = SP + 43;
+T370 = STACK[(int)T369];//Getting value of variable FALSE
+if(T368 == 1) goto L40;//Expression is true
+if(T370 == 1) goto L40;//Expression is true
+goto L41;//Expression is true
+L40:
+T372 = 1;//Set value to 1 (true)
+goto L42;
+L41:
+T372 = 0;//Set value to 0 (false)
+goto L42;
+L42:
+T374 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T375 = SP + 1;//Set first String position
+STACK[(int)T375] = T361;//Save string
+T376 = SP + 2;//Set second String position
+STACK[(int)T376] = T373;//Save position
+StringConcat();//Call function
+T377 = SP + 0;//Set return position
+T378 = STACK[(int)T377];//Get return value
+SP = T374;//Recover environment
+T379 = HP;//Save start position
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T380 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T381 = SP + 1;//Set first String position
+STACK[(int)T381] = T378;//Save string
+T382 = SP + 2;//Set second String position
+STACK[(int)T382] = T379;//Save position
+StringConcat();//Call function
+T383 = SP + 0;//Set return position
+T384 = STACK[(int)T383];//Get return value
+SP = T380;//Recover environment
+T385 = SP + 41;
+T386 = STACK[(int)T385];//Getting value of variable int2_
+T387 = 10;
+T388 = T386 + T387;
+T389 = SP + 41;
+T390 = STACK[(int)T389];//Getting value of variable int2_
+T391 = T388 >= T390;
+if(T391 == 0) goto L43;//Expression is false
+goto L44;//Expression is true
+L43:
+T393 = 1;//Set value to 1 (true)
+goto L45;
+L44:
+T393 = 0;//Set value to 0 (false)
+goto L45;
+L45:
+if(T393 == 0) goto L46;//Expression is false
+goto L47;//Expression is true
+L46:
+T395 = 1;//Set value to 1 (true)
+goto L48;
+L47:
+T395 = 0;//Set value to 0 (false)
+goto L48;
+L48:
+if(T395 == 0) goto L49;//Expression is false
+goto L50;//Expression is true
+L49:
+T397 = 1;//Set value to 1 (true)
+goto L51;
+L50:
+T397 = 0;//Set value to 0 (false)
+goto L51;
+L51:
+if(T397 == 0) goto L52;//Expression is false
+goto L53;//Expression is true
+L52:
+T399 = 1;//Set value to 1 (true)
+goto L54;
+L53:
+T399 = 0;//Set value to 0 (false)
+goto L54;
+L54:
+if(T399 == 0) goto L55;//Expression is false
+goto L56;//Expression is true
+L55:
+T401 = 1;//Set value to 1 (true)
+goto L57;
+L56:
+T401 = 0;//Set value to 0 (false)
+goto L57;
+L57:
+if(T401 == 0) goto L58;//Expression is false
+goto L59;//Expression is true
+L58:
+T403 = 1;//Set value to 1 (true)
+goto L60;
+L59:
+T403 = 0;//Set value to 0 (false)
+goto L60;
+L60:
+if(T403 == 0) goto L61;//Expression is false
+goto L62;//Expression is true
+L61:
+T405 = 1;//Set value to 1 (true)
+goto L63;
+L62:
+T405 = 0;//Set value to 0 (false)
+goto L63;
+L63:
+if(T405 == 0) goto L64;//Expression is false
+goto L65;//Expression is true
+L64:
+T407 = 1;//Set value to 1 (true)
+goto L66;
+L65:
+T407 = 0;//Set value to 0 (false)
+goto L66;
+L66:
+if(T407 == 0) goto L67;//Expression is false
+goto L68;//Expression is true
+L67:
+T409 = 1;//Set value to 1 (true)
+goto L69;
+L68:
+T409 = 0;//Set value to 0 (false)
+goto L69;
+L69:
+if(T409 == 0) goto L70;//Expression is false
+goto L71;//Expression is true
+L70:
+T411 = 1;//Set value to 1 (true)
+goto L72;
+L71:
+T411 = 0;//Set value to 0 (false)
+goto L72;
+L72:
+if(T411 == 0) goto L73;//Expression is false
+goto L74;//Expression is true
+L73:
+T413 = 1;//Set value to 1 (true)
+goto L75;
+L74:
+T413 = 0;//Set value to 0 (false)
+goto L75;
+L75:
+if(T413 == 0) goto L76;//Expression is false
+goto L77;//Expression is true
+L76:
+T415 = 1;//Set value to 1 (true)
+goto L78;
+L77:
+T415 = 0;//Set value to 0 (false)
+goto L78;
+L78:
+T417 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T418 = SP + 1;//Set first String position
+STACK[(int)T418] = T384;//Save string
+T419 = SP + 2;//Set second String position
+STACK[(int)T419] = T416;//Save position
+StringConcat();//Call function
+T420 = SP + 0;//Set return position
+T421 = STACK[(int)T420];//Get return value
+SP = T417;//Recover environment
+T422 = SP + 39;
+STACK[(int)T422] = T421;//Update value for variable String_3
+T423 = SP + 41;
+T424 = STACK[(int)T423];//Getting value of variable int2_
+T425 = 77;
+T426 = T424 >= T425;
+T427 = 1;
+T427 = T427 * -1;
+T428 = 100;
+T429 = T427 < T428;
+if(T426 == 1) goto L79;//Expression is true
+if(T429 == 1) goto L79;//Expression is true
+goto L80;//Expression is true
+L79:
+T431 = 1;//Set value to 1 (true)
+goto L81;
+L80:
+T431 = 0;//Set value to 0 (false)
+goto L81;
+L81:
+T433 = HP;//Save start position
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T434 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T435 = SP + 1;//Set first String position
+STACK[(int)T435] = T432;//Save string
+T436 = SP + 2;//Set second String position
+STACK[(int)T436] = T433;//Save position
+StringConcat();//Call function
+T437 = SP + 0;//Set return position
+T438 = STACK[(int)T437];//Get return value
+SP = T434;//Recover environment
+T439 = SP + 41;
+T440 = STACK[(int)T439];//Getting value of variable int2_
+T441 = 78;
+T442 = T440 > T441;
+T443 = 100;
+T444 = 0;
+T445 = T443 + T444;
+T446 = 100;
+T447 = T445 == T446;
+if(T442 == 0) goto L82;//Expression is false
+if(T447 == 0) goto L82;//Expression is false
+goto L83;//Expression is true
+L82:
+T449 = 0;//Set value to 0 (false)
+goto L84;
+L83:
+T449 = 1;//Set value to 1 (true)
+goto L84;
+L84:
+T451 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T452 = SP + 1;//Set first String position
+STACK[(int)T452] = T438;//Save string
+T453 = SP + 2;//Set second String position
+STACK[(int)T453] = T450;//Save position
+StringConcat();//Call function
+T454 = SP + 0;//Set return position
+T455 = STACK[(int)T454];//Get return value
+SP = T451;//Recover environment
+T456 = SP + 40;
+STACK[(int)T456] = T455;//Update value for variable String_4
+T457 = SP + 41;
+T458 = STACK[(int)T457];//Getting value of variable int2_
+T459 = 77;
+T460 = T458 >= T459;
+T461 = 1;
+T461 = T461 * -1;
+T462 = 100;
+T463 = T461 < T462;
+if(T460 == 1) goto L85;//Expression is true
+if(T463 == 1) goto L85;//Expression is true
+goto L86;//Expression is true
+L85:
+T465 = 1;//Set value to 1 (true)
+goto L87;
+L86:
+T465 = 0;//Set value to 0 (false)
+goto L87;
+L87:
+if(T465 == 0) goto L88;//Check if False
+goto L89;
+L88://True tag
+printf("%c", 70);//Print F
+printf("%c", 97);//Print a
+printf("%c", 108);//Print l
+printf("%c", 115);//Print s
+printf("%c", 101);//Print e
+goto L90;
+L89://True tag
+printf("%c", 84);//Print T
+printf("%c", 114);//Print r
+printf("%c", 117);//Print u
+printf("%c", 101);//Print e
+goto L90;
+L90:
+T466 = HP;//Save start position
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T467 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T468 = SP + 0;//Set string position
+STACK[(int)T468] = T466;//Save string
+StringPrint();//Call function
+SP = T467;//Recover environment
+T469 = SP + 41;
+T470 = STACK[(int)T469];//Getting value of variable int2_
+T471 = 78;
+T472 = T470 > T471;
+T473 = 100;
+T474 = 0;
+T475 = T473 + T474;
+T476 = 100;
+T477 = T475 == T476;
+if(T472 == 0) goto L91;//Expression is false
+if(T477 == 0) goto L91;//Expression is false
+goto L92;//Expression is true
+L91:
+T479 = 0;//Set value to 0 (false)
+goto L93;
+L92:
+T479 = 1;//Set value to 1 (true)
+goto L93;
+L93:
+if(T479 == 0) goto L94;//Check if False
+goto L95;
+L94://True tag
+printf("%c", 70);//Print F
+printf("%c", 97);//Print a
+printf("%c", 108);//Print l
+printf("%c", 115);//Print s
+printf("%c", 101);//Print e
+goto L96;
+L95://True tag
+printf("%c", 84);//Print T
+printf("%c", 114);//Print r
+printf("%c", 117);//Print u
+printf("%c", 101);//Print e
+goto L96;
+L96:
+printf("%c", 10);//Print new line
+T480 = HP;//Save start position
+HEAP[(int)HP] = 67;//Save character C in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 102;//Save character f in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T481 = 3;
+T482 = SP;//Save environment
+SP = 8;//Set StringConcat environment
+T483 = SP + 1;//Set first String position
+STACK[(int)T483] = T480;//Save string
+T484 = SP + 2;//Set second String position
+STACK[(int)T484] = T481;//Save position
+StringTimes();//Call function
+T485 = SP + 0;//Set return position
+T486 = STACK[(int)T485];//Get return value
+SP = T482;//Recover environment
+T487 = SP + 44;
+STACK[(int)T487] = T486;//Save variable String_5
+T488 = HP;//Save start position
+HEAP[(int)HP] = 67;//Save character C in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 109;//Save character m in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 80;//Save character P in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 76;//Save character L in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 68;//Save character D in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 82;//Save character R in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 83;//Save character S in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 50;//Save character 2 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 84;//Save character T in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 84;//Save character T in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T489 = SP + 45;
+STACK[(int)T489] = T488;//Save variable pruebasNativas
+T490 = HP;//Save start position
+HEAP[(int)HP] = 76;//Save character L in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 103;//Save character g in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 49;//Save character 1 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T491 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T492 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T493 = SP + 1;//Set first String position
+STACK[(int)T493] = T490;//Save string
+T494 = SP + 2;//Set second String position
+STACK[(int)T494] = T491;//Save position
+StringConcat();//Call function
+T495 = SP + 0;//Set return position
+T496 = STACK[(int)T495];//Get return value
+SP = T492;//Recover environment
+T497 = SP + 39;
+T498 = STACK[(int)T497];//Getting value of variable String_3
+T499 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T500 = SP + 1;//Set first String position
+STACK[(int)T500] = T496;//Save string
+T501 = SP + 2;//Set second String position
+STACK[(int)T501] = T498;//Save position
+StringConcat();//Call function
+T502 = SP + 0;//Set return position
+T503 = STACK[(int)T502];//Get return value
+SP = T499;//Recover environment
+T504 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T505 = SP + 0;//Set string position
+STACK[(int)T505] = T503;//Save string
+StringPrint();//Call function
+SP = T504;//Recover environment
+printf("%c", 10);//Print new line
+T506 = HP;//Save start position
+HEAP[(int)HP] = 76;//Save character L in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 103;//Save character g in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 50;//Save character 2 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T507 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T508 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T509 = SP + 1;//Set first String position
+STACK[(int)T509] = T506;//Save string
+T510 = SP + 2;//Set second String position
+STACK[(int)T510] = T507;//Save position
+StringConcat();//Call function
+T511 = SP + 0;//Set return position
+T512 = STACK[(int)T511];//Get return value
+SP = T508;//Recover environment
+T513 = SP + 40;
+T514 = STACK[(int)T513];//Getting value of variable String_4
+T515 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T516 = SP + 1;//Set first String position
+STACK[(int)T516] = T512;//Save string
+T517 = SP + 2;//Set second String position
+STACK[(int)T517] = T514;//Save position
+StringConcat();//Call function
+T518 = SP + 0;//Set return position
+T519 = STACK[(int)T518];//Get return value
+SP = T515;//Recover environment
+T520 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T521 = SP + 0;//Set string position
+STACK[(int)T521] = T519;//Save string
+StringPrint();//Call function
+SP = T520;//Recover environment
+printf("%c", 10);//Print new line
+T522 = HP;//Save start position
+HEAP[(int)HP] = 67;//Save character C in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 100;//Save character d in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 53;//Save character 5 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T523 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 61;//Save character = in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T524 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T525 = SP + 1;//Set first String position
+STACK[(int)T525] = T522;//Save string
+T526 = SP + 2;//Set second String position
+STACK[(int)T526] = T523;//Save position
+StringConcat();//Call function
+T527 = SP + 0;//Set return position
+T528 = STACK[(int)T527];//Get return value
+SP = T524;//Recover environment
+T529 = SP + 44;
+T530 = STACK[(int)T529];//Getting value of variable String_5
+T531 = SP;//Save environment
+SP = 0;//Set StringConcat environment
+T532 = SP + 1;//Set first String position
+STACK[(int)T532] = T528;//Save string
+T533 = SP + 2;//Set second String position
+STACK[(int)T533] = T530;//Save position
+StringConcat();//Call function
+T534 = SP + 0;//Set return position
+T535 = STACK[(int)T534];//Get return value
+SP = T531;//Recover environment
+T536 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T537 = SP + 0;//Set string position
+STACK[(int)T537] = T535;//Save string
+StringPrint();//Call function
+SP = T536;//Recover environment
+printf("%c", 10);//Print new line
+T538 = SP + 45;
+T539 = STACK[(int)T538];//Getting value of variable pruebasNativas
+T540 = 0;
+T541 = 11;
+T542 = SP;//Save environment
+SP = 23;//Set StringExtract environment
+T543 = SP + 1;//Set string position
+STACK[(int)T543] = T539;//Save string
+T544 = SP + 2;//Set start position
+STACK[(int)T544] = T540;//Save start position
+T545 = SP + 3;//Set end position
+STACK[(int)T545] = T541;//Save end position
+StringExtract();//Call function
+T546 = SP + 0;//Set return position
+T547 = STACK[(int)T546];//Get return value
+SP = T542;//Recover environment
+T548 = SP;//Save environment
+SP = 6;//Set StringConcat environment
+T549 = SP + 1;//Set first String position
+STACK[(int)T549] = T547;//Save string
+StringUpperCase();//Call function
+T550 = SP + 0;//Set return position
+T551 = STACK[(int)T550];//Get return value
+SP = T548;//Recover environment
+T552 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T553 = SP + 0;//Set string position
+STACK[(int)T553] = T551;//Save string
+StringPrint();//Call function
+SP = T552;//Recover environment
+T554 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T555 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T556 = SP + 0;//Set string position
+STACK[(int)T556] = T554;//Save string
+StringPrint();//Call function
+SP = T555;//Recover environment
+T557 = SP + 45;
+T558 = STACK[(int)T557];//Getting value of variable pruebasNativas
+T559 = 12;
+T560 = SP;//Save environment
+SP = 20;//Set StringPosition environment
+T561 = SP + 1;//Set String position
+STACK[(int)T561] = T558;//Save string
+T562 = SP + 2;//Set String position
+STACK[(int)T562] = T559;//Save position
+StringPosition();//Call function
+T563 = SP + 0;//Set return position
+T564 = STACK[(int)T563];//Get return value
+SP = T560;//Recover environment
+T565 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T566 = SP + 0;//Set string position
+STACK[(int)T566] = T564;//Save string
+StringPrint();//Call function
+SP = T565;//Recover environment
+T567 = HP;//Save start position
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T568 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T569 = SP + 0;//Set string position
+STACK[(int)T569] = T567;//Save string
+StringPrint();//Call function
+SP = T568;//Recover environment
+T570 = SP + 45;
+T571 = STACK[(int)T570];//Getting value of variable pruebasNativas
+T572 = 14;
+T573 = SP + 45;
+T574 = STACK[(int)T573];//Getting value of variable pruebasNativas
+T575 = SP;//Save environment
+SP = 18;//Set StringConcat environment
+T576 = SP + 1;//Set first String position
+STACK[(int)T576] = T574;//Save string
+StringLength();//Call function
+T577 = SP + 0;//Set return position
+T578 = STACK[(int)T577];//Get return value
+SP = T575;//Recover environment
+T579 = 1;
+T580 = T578 - T579;
+T581 = SP;//Save environment
+SP = 23;//Set StringExtract environment
+T582 = SP + 1;//Set string position
+STACK[(int)T582] = T571;//Save string
+T583 = SP + 2;//Set start position
+STACK[(int)T583] = T572;//Save start position
+T584 = SP + 3;//Set end position
+STACK[(int)T584] = T580;//Save end position
+StringExtract();//Call function
+T585 = SP + 0;//Set return position
+T586 = STACK[(int)T585];//Get return value
+SP = T581;//Recover environment
+T587 = SP;//Save environment
+SP = 4;//Set StringConcat environment
+T588 = SP + 1;//Set first String position
+STACK[(int)T588] = T586;//Save string
+StringLowerCase();//Call function
+T589 = SP + 0;//Set return position
+T590 = STACK[(int)T589];//Get return value
+SP = T587;//Recover environment
+T591 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T592 = SP + 0;//Set string position
+STACK[(int)T592] = T590;//Save string
+StringPrint();//Call function
+SP = T591;//Recover environment
+printf("%c", 10);//Print new line
+T593 = SP + 34;
+T594 = STACK[(int)T593];//Getting value of variable a
+T595 = 0;
+T596 = T594 == T595;
+T597 = 44.3;
+T598 = 44.4;
+T599 = T597 < T598;
+T600 = T596 != T599;
+T601 = 2;
+T602 = 5;
+T603 = SP;//Save environment
+SP = 11;//Set NumberPower environment
+T604 = SP + 1;//Set base position
+STACK[(int)T604] = T601;//Save base
+T605 = SP + 2;//Set exponent position
+STACK[(int)T605] = T602;//Save exponent
+NumberPower();//Call function
+T606 = SP + 0;//Set return position
+T607 = STACK[(int)T606];//Get return value
+SP = T603;//Recover environment
+T608 = 31;
+T609 = 2;
+T610 = 1;
+T611 = (int)T609 % (int)T610;
+T612 = T608 + T611;
+T613 = T607 == T612;
+T614 = T600 == T613;
+T615 = SP + 46;
+STACK[(int)T615] = T614;//Save variable relacionaes
+T616 = SP + 46;
+T617 = STACK[(int)T616];//Getting value of variable relacionaes
+T618 = SP + 35;
+T619 = STACK[(int)T618];//Getting value of variable b
+T620 = SP + 34;
+T621 = STACK[(int)T620];//Getting value of variable a
+T622 = T619 == T621;
+T623 = T617 == T622;
+T624 = 532;
+T625 = 532;
+T626 = T624 > T625;
+T627 = T623 != T626;
+T628 = SP + 39;
+T629 = STACK[(int)T628];//Getting value of variable String_3
+T630 = HP;//Save start position
+HEAP[(int)HP] = 102;//Save character f in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 117;//Save character u in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 102;//Save character f in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 117;//Save character u in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T631 = SP;//Save environment
+SP = 36;//Set new environment
+T632 = SP + 1;//Set first string position
+STACK[(int)T632] = T629;//Save first string
+T632 = SP + 2;//Set second string position
+STACK[(int)T632] = T630;//Save second string
+stringCompare();//Call function stringCompare
+T632 = SP + 0;//Set return position
+T632 = STACK[(int)T632];//Get return value
+SP = T631;//Get environment back
+T633 = T627 == T632;
+T634 = SP + 40;
+T635 = STACK[(int)T634];//Getting value of variable String_4
+T636 = HP;//Save start position
+HEAP[(int)HP] = 116;//Save character t in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 114;//Save character r in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 117;//Save character u in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 44;//Save character , in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 102;//Save character f in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T637 = SP;//Save environment
+SP = 36;//Set new environment
+T638 = SP + 1;//Set first string position
+STACK[(int)T638] = T635;//Save first string
+T638 = SP + 2;//Set second string position
+STACK[(int)T638] = T636;//Save second string
+stringCompare();//Call function stringCompare
+T638 = SP + 0;//Set return position
+T638 = STACK[(int)T638];//Get return value
+SP = T637;//Get environment back
+T639 = T633 == T638;
+T640 = SP + 46;
+STACK[(int)T640] = T639;//Update value for variable relacionaes
+T641 = SP + 46;
+T642 = STACK[(int)T641];//Getting value of variable relacionaes
+if(T642) goto L97;
+goto L98;
+L97:
+T643 = HP;//Save start position
+HEAP[(int)HP] = 82;//Save character R in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 49;//Save character 1 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T644 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T645 = SP + 0;//Set string position
+STACK[(int)T645] = T643;//Save string
+StringPrint();//Call function
+SP = T644;//Recover environment
+printf("%c", 10);//Print new line
+goto L99;
+L98:
+T646 = HP;//Save start position
+HEAP[(int)HP] = 82;//Save character R in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 99;//Save character c in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 105;//Save character i in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 111;//Save character o in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 110;//Save character n in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 97;//Save character a in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 108;//Save character l in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 101;//Save character e in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 115;//Save character s in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 32;//Save character   in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 48;//Save character 0 in heap
+HP = HP + 1;//Increase HP
+HEAP[(int)HP] = 36;//Save end of string in heap
+HP = HP + 1;//Increase HP
+T647 = SP;//Save environment
+SP = 3;//Set StringPrint environment
+T648 = SP + 0;//Set string position
+STACK[(int)T648] = T646;//Save string
+StringPrint();//Call function
+SP = T647;//Recover environment
+printf("%c", 10);//Print new line
+L99:
+T650 = 0;
+T651 = 0;
+T652 = 90;
+SP = SP + 47;//Set SP at the end
+T649 = SP + 1;
+STACK[(int)T649] = T650;//Save parameter
+T649 = SP + 2;
+STACK[(int)T649] = T651;//Save parameter
+T649 = SP + 3;
+STACK[(int)T649] = T652;//Save parameter
+agregar();//Call function agregar
+T653 = SP + 0;//Set return position
+T653 = STACK[(int)T653];//Get return value
+SP = SP - 47;//Get SP back
+T655 = 0;
+T656 = 1;
+T657 = 95;
+SP = SP + 47;//Set SP at the end
+T654 = SP + 1;
+STACK[(int)T654] = T655;//Save parameter
+T654 = SP + 2;
+STACK[(int)T654] = T656;//Save parameter
+T654 = SP + 3;
+STACK[(int)T654] = T657;//Save parameter
+agregar();//Call function agregar
+T658 = SP + 0;//Set return position
+T658 = STACK[(int)T658];//Get return value
+SP = SP - 47;//Get SP back
+T660 = 0;
+T661 = 2;
+T662 = 92;
+SP = SP + 47;//Set SP at the end
+T659 = SP + 1;
+STACK[(int)T659] = T660;//Save parameter
+T659 = SP + 2;
+STACK[(int)T659] = T661;//Save parameter
+T659 = SP + 3;
+STACK[(int)T659] = T662;//Save parameter
+agregar();//Call function agregar
+T663 = SP + 0;//Set return position
+T663 = STACK[(int)T663];//Get return value
+SP = SP - 47;//Get SP back
+T665 = 1;
+T666 = 0;
+T667 = 85;
+SP = SP + 47;//Set SP at the end
+T664 = SP + 1;
+STACK[(int)T664] = T665;//Save parameter
+T664 = SP + 2;
+STACK[(int)T664] = T666;//Save parameter
+T664 = SP + 3;
+STACK[(int)T664] = T667;//Save parameter
+agregar();//Call function agregar
+T668 = SP + 0;//Set return position
+T668 = STACK[(int)T668];//Get return value
+SP = SP - 47;//Get SP back
+T670 = 1;
+T671 = 1;
+T672 = 90;
+SP = SP + 47;//Set SP at the end
+T669 = SP + 1;
+STACK[(int)T669] = T670;//Save parameter
+T669 = SP + 2;
+STACK[(int)T669] = T671;//Save parameter
+T669 = SP + 3;
+STACK[(int)T669] = T672;//Save parameter
+agregar();//Call function agregar
+T673 = SP + 0;//Set return position
+T673 = STACK[(int)T673];//Get return value
+SP = SP - 47;//Get SP back
+T675 = 1;
+T676 = 2;
+T677 = 100;
+SP = SP + 47;//Set SP at the end
+T674 = SP + 1;
+STACK[(int)T674] = T675;//Save parameter
+T674 = SP + 2;
+STACK[(int)T674] = T676;//Save parameter
+T674 = SP + 3;
+STACK[(int)T674] = T677;//Save parameter
+agregar();//Call function agregar
+T678 = SP + 0;//Set return position
+T678 = STACK[(int)T678];//Get return value
+SP = SP - 47;//Get SP back
+T680 = 2;
+T681 = 0;
+T682 = 20;
+SP = SP + 47;//Set SP at the end
+T679 = SP + 1;
+STACK[(int)T679] = T680;//Save parameter
+T679 = SP + 2;
+STACK[(int)T679] = T681;//Save parameter
+T679 = SP + 3;
+STACK[(int)T679] = T682;//Save parameter
+agregar();//Call function agregar
+T683 = SP + 0;//Set return position
+T683 = STACK[(int)T683];//Get return value
+SP = SP - 47;//Get SP back
+T685 = 2;
+T686 = 1;
+T687 = 100;
+SP = SP + 47;//Set SP at the end
+T684 = SP + 1;
+STACK[(int)T684] = T685;//Save parameter
+T684 = SP + 2;
+STACK[(int)T684] = T686;//Save parameter
+T684 = SP + 3;
+STACK[(int)T684] = T687;//Save parameter
+agregar();//Call function agregar
+T688 = SP + 0;//Set return position
+T688 = STACK[(int)T688];//Get return value
+SP = SP - 47;//Get SP back
+T690 = 2;
+T691 = 2;
+T692 = 100;
+SP = SP + 47;//Set SP at the end
+T689 = SP + 1;
+STACK[(int)T689] = T690;//Save parameter
+T689 = SP + 2;
+STACK[(int)T689] = T691;//Save parameter
+T689 = SP + 3;
+STACK[(int)T689] = T692;//Save parameter
+agregar();//Call function agregar
+T693 = SP + 0;//Set return position
+T693 = STACK[(int)T693];//Get return value
+SP = SP - 47;//Get SP back
+T695 = 0;
+SP = SP + 47;//Set SP at the end
+T694 = SP + 1;
+STACK[(int)T694] = T695;//Save parameter
+imprimirPromedio();//Call function imprimirPromedio
+T696 = SP + 0;//Set return position
+T696 = STACK[(int)T696];//Get return value
+SP = SP - 47;//Get SP back
+T698 = 1;
+SP = SP + 47;//Set SP at the end
+T697 = SP + 1;
+STACK[(int)T697] = T698;//Save parameter
+imprimirPromedio();//Call function imprimirPromedio
+T699 = SP + 0;//Set return position
+T699 = STACK[(int)T699];//Get return value
+SP = SP - 47;//Get SP back
+T701 = 2;
+SP = SP + 47;//Set SP at the end
+T700 = SP + 1;
+STACK[(int)T700] = T701;//Save parameter
+imprimirPromedio();//Call function imprimirPromedio
+T702 = SP + 0;//Set return position
+T702 = STACK[(int)T702];//Get return value
+SP = SP - 47;//Get SP back
+T704 = 2;
+T705 = 0;
+T706 = 1;
+T706 = T706 * -1;
+SP = SP + 47;//Set SP at the end
+T703 = SP + 1;
+STACK[(int)T703] = T704;//Save parameter
+T703 = SP + 2;
+STACK[(int)T703] = T705;//Save parameter
+T703 = SP + 3;
+STACK[(int)T703] = T706;//Save parameter
+agregar();//Call function agregar
+T707 = SP + 0;//Set return position
+T707 = STACK[(int)T707];//Get return value
+SP = SP - 47;//Get SP back
+return;
 }

@@ -17,6 +17,7 @@ class declaration_array extends instruction_1.instruction {
     translate(environment) {
         if (this.value == null) {
             if (environment.get_variable_recursive(this.variable_id, environment).type != type_1.type.UNDEFINED) {
+                error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'Variable ya inicializada: ' + this.variable_id));
             }
             else {
                 console_1._3dCode.actualTemp++;
