@@ -2,7 +2,7 @@ import { expression } from "../abstract/expression";
 import { environment } from "../system/environment";
 import { error, error_arr, error_type } from "../system/error";
 import { data, type } from "../system/type";
-import { _console } from "../system/console";
+import { _console, _3dCode } from "../system/console";
 import { literal } from "../abstract/literal";
 import { instruction } from "../abstract/instruction";
 import { _array } from "../literal/_array";
@@ -14,8 +14,33 @@ import { struct_item } from "../literal/struct_item";
 export class struct_access extends instruction {
 
     public translate(environment: environment): type {
-
-        return type.NULL
+        if (this.id instanceof variable_id) {
+            const tipoStruct = environment.getStructType_recursive(this.id.id, environment);
+            const relativePos = environment.get_relative_recursive(this.id.id, environment);
+            let contador = 1;
+            let returnData = {value: null, type: type.NULL};
+            _3dCode.environmentList.forEach(envi => {
+                if (envi.name === tipoStruct) {
+                    envi.symbol_map.forEach(element => {
+                        if (element.id == this.property) {
+                            _3dCode.actualTemp++;
+                            _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
+                            _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + ' + contador + ';\n';
+                            _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];\n';
+                            returnData = element.data as data
+                            console.log(returnData)
+                            return;
+                        }
+                        contador++;
+                    })
+                    return
+                }
+            })
+            return returnData.type;
+        } else {
+            error_arr.push(new error(this.line, this.column, error_type.SEMANTICO, 'La variable no es un struct'));
+            return type.NULL
+        }
     }
 
     constructor(public id: variable_id | struct_access, public property: string, line: number, column: number) {

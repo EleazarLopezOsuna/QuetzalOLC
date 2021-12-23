@@ -70,18 +70,26 @@ class environment {
             let symbol_item = environment.symbol_map.get(id);
             if (symbol_item instanceof _symbol_1._symbol) {
                 let val = symbol_item.data;
-                if (val.value instanceof _array_1._array) {
-                    symbol_item.structName = structName;
-                    symbol_item.data = { value: val.value, type: val.type };
-                    environment.symbol_map.delete(id);
-                    environment.symbol_map.set(id, symbol_item);
-                }
+                symbol_item.structName = structName;
+                environment.symbol_map.delete(id);
+                environment.symbol_map.set(id, symbol_item);
             }
-            console.log(symbol_item);
         }
         if (environment.previous != null) {
             this.setStructType_recursive(id, structName, environment.previous);
         }
+    }
+    getStructType_recursive(id, environment) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.structName;
+            }
+        }
+        if (environment.previous != null) {
+            return this.getStructType_recursive(id, environment.previous);
+        }
+        return '';
     }
     push_recursive(id, environment, newValueTemp) {
         if (environment.symbol_map.has(id)) {

@@ -5842,6 +5842,7 @@ class declaration_struct_item extends instruction_1.instruction {
                     if (element instanceof native_1.native) {
                         if (element.type == type_1.type.NULL) {
                             environment.save_variable(this.variable_id, { value: null, type: type_1.type.STRUCT }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                            environment.setStructType_recursive(this.variable_id, this.struct_id_array[0], environment);
                             let newVariableRelative = console_1._3dCode.relativePos;
                             console_1._3dCode.absolutePos++;
                             console_1._3dCode.relativePos++;
@@ -5887,6 +5888,7 @@ class declaration_struct_item extends instruction_1.instruction {
                         return type_1.type.NULL;
                     }
                     environment.save_variable(this.variable_id, { value: null, type: type_1.type.STRUCT }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                    environment.setStructType_recursive(this.variable_id, this.struct_id_array[0], environment);
                     let newVariableRelative = console_1._3dCode.relativePos;
                     console_1._3dCode.absolutePos++;
                     console_1._3dCode.relativePos++;
@@ -6525,7 +6527,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.struct_access = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
+const variable_id_1 = require("../literal/variable_id");
 const struct_item_1 = require("../literal/struct_item");
 class struct_access extends instruction_1.instruction {
     constructor(id, property, line, column) {
@@ -6534,7 +6538,34 @@ class struct_access extends instruction_1.instruction {
         this.property = property;
     }
     translate(environment) {
-        return type_1.type.NULL;
+        if (this.id instanceof variable_id_1.variable_id) {
+            const tipoStruct = environment.getStructType_recursive(this.id.id, environment);
+            const relativePos = environment.get_relative_recursive(this.id.id, environment);
+            let contador = 1;
+            let returnData = { value: null, type: type_1.type.NULL };
+            console_1._3dCode.environmentList.forEach(envi => {
+                if (envi.name === tipoStruct) {
+                    envi.symbol_map.forEach(element => {
+                        if (element.id == this.property) {
+                            console_1._3dCode.actualTemp++;
+                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
+                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + ' + contador + ';\n';
+                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];\n';
+                            returnData = element.data;
+                            console.log(returnData);
+                            return;
+                        }
+                        contador++;
+                    });
+                    return;
+                }
+            });
+            return returnData.type;
+        }
+        else {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La variable no es un struct'));
+            return type_1.type.NULL;
+        }
     }
     execute(environment) {
         const struct_data = this.id.execute(environment);
@@ -6574,7 +6605,7 @@ class struct_access extends instruction_1.instruction {
 }
 exports.struct_access = struct_access;
 
-},{"../abstract/instruction":5,"../literal/struct_item":52,"../system/error":57,"../system/type":58}],48:[function(require,module,exports){
+},{"../abstract/instruction":5,"../literal/struct_item":52,"../literal/variable_id":53,"../system/console":55,"../system/error":57,"../system/type":58}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unary_instruction = exports.unary_instruction_type = void 0;
@@ -7232,7 +7263,12 @@ class _symbol {
             result += "<td>" + this.id + "</td>" + "<td>" + type_1.type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
         }
         else {
-            result += "<td>" + this.id + "</td>" + "<td>" + type_1.type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            if (this.structName == '') {
+                result += "<td>" + this.id + "</td>" + "<td>" + type_1.type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            }
+            else {
+                result += "<td>" + this.id + "</td>" + "<td>" + this.structName + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            }
         }
         return result;
     }
@@ -7361,18 +7397,26 @@ class environment {
             let symbol_item = environment.symbol_map.get(id);
             if (symbol_item instanceof _symbol_1._symbol) {
                 let val = symbol_item.data;
-                if (val.value instanceof _array_1._array) {
-                    symbol_item.structName = structName;
-                    symbol_item.data = { value: val.value, type: val.type };
-                    environment.symbol_map.delete(id);
-                    environment.symbol_map.set(id, symbol_item);
-                }
+                symbol_item.structName = structName;
+                environment.symbol_map.delete(id);
+                environment.symbol_map.set(id, symbol_item);
             }
-            console.log(symbol_item);
         }
         if (environment.previous != null) {
             this.setStructType_recursive(id, structName, environment.previous);
         }
+    }
+    getStructType_recursive(id, environment) {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id);
+            if (symbol_item instanceof _symbol_1._symbol) {
+                return symbol_item.structName;
+            }
+        }
+        if (environment.previous != null) {
+            return this.getStructType_recursive(id, environment.previous);
+        }
+        return '';
     }
     push_recursive(id, environment, newValueTemp) {
         if (environment.symbol_map.has(id)) {

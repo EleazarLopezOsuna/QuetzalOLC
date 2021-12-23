@@ -54,7 +54,12 @@ class _symbol {
             result += "<td>" + this.id + "</td>" + "<td>" + type_1.type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
         }
         else {
-            result += "<td>" + this.id + "</td>" + "<td>" + type_1.type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            if (this.structName == '') {
+                result += "<td>" + this.id + "</td>" + "<td>" + type_1.type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            }
+            else {
+                result += "<td>" + this.id + "</td>" + "<td>" + this.structName + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            }
         }
         return result;
     }

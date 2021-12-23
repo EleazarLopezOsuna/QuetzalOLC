@@ -10,7 +10,7 @@ export class environment {
     private function_map: Map<string, _symbol>;
     public name: string;
     public next: environment | null;
-    public stop_flag:boolean;
+    public stop_flag: boolean;
 
     constructor(public previous: environment | null) {
         this.previous = previous;
@@ -52,17 +52,17 @@ export class environment {
             this.remove_temp_recursive(environment.previous);
         }
     }
-    
+
     public modifySize_recursive(id: string, environment: environment, newValue: number) {
         if (environment.symbol_map.has(id)) {
             let symbol_item = environment.symbol_map.get(id)
-            if(symbol_item instanceof _symbol){
+            if (symbol_item instanceof _symbol) {
                 let val = symbol_item.data as data
-                if(val.value instanceof _array){
+                if (val.value instanceof _array) {
                     symbol_item.size = newValue
                     val.value.size = newValue
                     val.value.body = []
-                    symbol_item.data = {value: val.value, type: val.type}
+                    symbol_item.data = { value: val.value, type: val.type }
                     environment.symbol_map.delete(id);
                     environment.symbol_map.set(id, symbol_item)
                 }
@@ -77,28 +77,37 @@ export class environment {
     public setStructType_recursive(id: string, structName: string, environment: environment) {
         if (environment.symbol_map.has(id)) {
             let symbol_item = environment.symbol_map.get(id)
-            if(symbol_item instanceof _symbol){
+            if (symbol_item instanceof _symbol) {
                 let val = symbol_item.data as data
-                if(val.value instanceof _array){
-                    symbol_item.structName = structName
-                    symbol_item.data = {value: val.value, type: val.type}
-                    environment.symbol_map.delete(id);
-                    environment.symbol_map.set(id, symbol_item)
-                }
+                symbol_item.structName = structName
+                environment.symbol_map.delete(id);
+                environment.symbol_map.set(id, symbol_item)
             }
-            console.log(symbol_item)
         }
         if (environment.previous != null) {
             this.setStructType_recursive(id, structName, environment.previous);
         }
     }
 
+    public getStructType_recursive(id: string, environment: environment): string {
+        if (environment.symbol_map.has(id)) {
+            let symbol_item = environment.symbol_map.get(id)
+            if (symbol_item instanceof _symbol) {
+                return symbol_item.structName
+            }
+        }
+        if (environment.previous != null) {
+            return this.getStructType_recursive(id, environment.previous);
+        }
+        return ''
+    }
+
     public push_recursive(id: string, environment: environment, newValueTemp: number) {
         if (environment.symbol_map.has(id)) {
             let symbol_item = environment.symbol_map.get(id)
-            if(symbol_item instanceof _symbol){
+            if (symbol_item instanceof _symbol) {
                 let val = symbol_item.data as data
-                if(val.value instanceof _array){
+                if (val.value instanceof _array) {
                     _3dCode.actualTemp++;
                     let originalPosition = _3dCode.actualTemp;
                     _3dCode.actualTemp++;
@@ -108,7 +117,7 @@ export class environment {
                     _3dCode.output += 'T' + newPosition + ' = SP + ' + _3dCode.relativePos + ';//Set new array start\n';
                     symbol_item.relative = _3dCode.relativePos;
                     symbol_item.absolute = _3dCode.absolutePos;
-                    for(let i = 0; i < symbol_item.size; i++){
+                    for (let i = 0; i < symbol_item.size; i++) {
                         _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + originalPosition + '];//Copy value\n';
                         _3dCode.output += 'STACK[(int)T' + newPosition + '] = T' + _3dCode.actualTemp + ';//Paste value\n';
                         _3dCode.relativePos++;
@@ -121,7 +130,7 @@ export class environment {
                     _3dCode.absolutePos++;
                     symbol_item.size++;
                     val.value.size++;
-                    symbol_item.data = {value: val.value, type: val.type}
+                    symbol_item.data = { value: val.value, type: val.type }
                     environment.symbol_map.delete(id);
                     environment.symbol_map.set(id, symbol_item)
                 }
@@ -136,16 +145,16 @@ export class environment {
     public pop_recursive(id: string, environment: environment) {
         if (environment.symbol_map.has(id)) {
             let symbol_item = environment.symbol_map.get(id)
-            if(symbol_item instanceof _symbol){
+            if (symbol_item instanceof _symbol) {
                 let val = symbol_item.data as data
-                if(val.value instanceof _array){
+                if (val.value instanceof _array) {
                     _3dCode.actualTemp++;
                     _3dCode.output += 'T' + _3dCode.actualTemp + ' = SP + ' + symbol_item.relative + ';\n';
                     _3dCode.output += 'T' + _3dCode.actualTemp + ' = T' + _3dCode.actualTemp + ' + ' + (symbol_item.size - 1) + ';\n';
                     _3dCode.output += 'T' + _3dCode.actualTemp + ' = STACK[(int)T' + _3dCode.actualTemp + '];\n';
                     symbol_item.size--;
                     val.value.size--;
-                    symbol_item.data = {value: val.value, type: val.type}
+                    symbol_item.data = { value: val.value, type: val.type }
                     environment.symbol_map.delete(id);
                     environment.symbol_map.set(id, symbol_item)
                 }

@@ -45,6 +45,7 @@ class declaration_struct_item extends instruction_1.instruction {
                     if (element instanceof native_1.native) {
                         if (element.type == type_1.type.NULL) {
                             environment.save_variable(this.variable_id, { value: null, type: type_1.type.STRUCT }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                            environment.setStructType_recursive(this.variable_id, this.struct_id_array[0], environment);
                             let newVariableRelative = console_1._3dCode.relativePos;
                             console_1._3dCode.absolutePos++;
                             console_1._3dCode.relativePos++;
@@ -90,6 +91,7 @@ class declaration_struct_item extends instruction_1.instruction {
                         return type_1.type.NULL;
                     }
                     environment.save_variable(this.variable_id, { value: null, type: type_1.type.STRUCT }, console_1._3dCode.absolutePos, console_1._3dCode.relativePos, 1);
+                    environment.setStructType_recursive(this.variable_id, this.struct_id_array[0], environment);
                     let newVariableRelative = console_1._3dCode.relativePos;
                     console_1._3dCode.absolutePos++;
                     console_1._3dCode.relativePos++;

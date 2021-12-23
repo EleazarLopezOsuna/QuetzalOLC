@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.struct_access = void 0;
 const error_1 = require("../system/error");
 const type_1 = require("../system/type");
+const console_1 = require("../system/console");
 const instruction_1 = require("../abstract/instruction");
+const variable_id_1 = require("../literal/variable_id");
 const struct_item_1 = require("../literal/struct_item");
 class struct_access extends instruction_1.instruction {
     constructor(id, property, line, column) {
@@ -12,7 +14,34 @@ class struct_access extends instruction_1.instruction {
         this.property = property;
     }
     translate(environment) {
-        return type_1.type.NULL;
+        if (this.id instanceof variable_id_1.variable_id) {
+            const tipoStruct = environment.getStructType_recursive(this.id.id, environment);
+            const relativePos = environment.get_relative_recursive(this.id.id, environment);
+            let contador = 1;
+            let returnData = { value: null, type: type_1.type.NULL };
+            console_1._3dCode.environmentList.forEach(envi => {
+                if (envi.name === tipoStruct) {
+                    envi.symbol_map.forEach(element => {
+                        if (element.id == this.property) {
+                            console_1._3dCode.actualTemp++;
+                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = SP + ' + relativePos + ';\n';
+                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = T' + console_1._3dCode.actualTemp + ' + ' + contador + ';\n';
+                            console_1._3dCode.output += 'T' + console_1._3dCode.actualTemp + ' = STACK[(int)T' + console_1._3dCode.actualTemp + '];\n';
+                            returnData = element.data;
+                            console.log(returnData);
+                            return;
+                        }
+                        contador++;
+                    });
+                    return;
+                }
+            });
+            return returnData.type;
+        }
+        else {
+            error_1.error_arr.push(new error_1.error(this.line, this.column, error_1.error_type.SEMANTICO, 'La variable no es un struct'));
+            return type_1.type.NULL;
+        }
     }
     execute(environment) {
         const struct_data = this.id.execute(environment);

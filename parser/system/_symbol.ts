@@ -11,7 +11,7 @@ export enum scope {
 }
 
 export class _symbol {
-    public structName:string;
+    public structName: string;
 
     constructor(public id: any, public data: data | declaration_function, public scope: scope, public absolute: number, public relative: number, public size: number) {
         this.structName = ''
@@ -51,7 +51,11 @@ export class _symbol {
             result += "<td>" + this.id + "</td>" + "<td>" + type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
         }
         else {
-            result += "<td>" + this.id + "</td>" + "<td>" + type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            if (this.structName == '') {
+                result += "<td>" + this.id + "</td>" + "<td>" + type[this.data.type] + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            } else {
+                result += "<td>" + this.id + "</td>" + "<td>" + this.structName + "</td>" + "<td>" + this.absolute + "</td>" + "<td>" + this.relative + "</td>" + "<td>" + environment.name + "</td>\n";
+            }
         }
         return result;
     }
